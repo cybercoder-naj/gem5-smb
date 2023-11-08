@@ -156,6 +156,33 @@ parser.add_argument(
     help="",
 )
 
+parser.add_argument(
+    "--exit-on-checkpoint",
+    action="store_true",
+    default=False,
+    help="Exit from the simulation loop when doing a checkpoint.",
+)
+
+parser.add_argument(
+    "--exit-on-dump-stats",
+    action="store_true",
+    default=False,
+    help="Exit from the simulation loop when doing a dump stats.",
+)
+
+parser.add_argument(
+    "--exit-on-dump-reset-stats",
+    action="store_true",
+    default=False,
+    help="Exit from the simulation loop when doing a dump reset stats.",
+)
+
+parser.add_argument(
+    "--exit-on-reset-stats",
+    action="store_true",
+    default=False,
+    help="Exit from the simulation loop when doing a reset stats.",
+)
 
 
 args = parser.parse_args()
@@ -247,7 +274,12 @@ board = TwoDisksX86Board(
     memory=memory,
     cache_hierarchy=cache_hierarchy,
     secondary_disk=sec_disk,
-    root_disk_name="/dev/hda"
+    root_disk_name="/dev/hda",
+
+    exit_on_checkpoint=args.exit_on_checkpoint,
+    exit_on_dump_stats=args.exit_on_dump_stats,
+    exit_on_dump_reset_stats=args.exit_on_dump_reset_stats,
+    exit_on_reset_stats=args.exit_on_reset_stats
 )
 
 board.set_kernel_disk_workload(
