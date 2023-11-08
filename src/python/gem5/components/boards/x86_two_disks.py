@@ -51,12 +51,22 @@ class TwoDisksX86Board(AbstractSystemBoard, KernelDiskWorkload):
         cache_hierarchy: AbstractCacheHierarchy,
         secondary_disk: AbstractResource,
         root_disk_name: str, 
+
+        exit_on_checkpoint: bool = False,
+        exit_on_dump_stats: bool = False,
+        exit_on_dump_reset_stats: bool = False,
+        exit_on_reset_stats: bool = False
     ) -> None:
         super().__init__(
             clk_freq=clk_freq,
             processor=processor,
             memory=memory,
             cache_hierarchy=cache_hierarchy,
+
+            exit_on_checkpoint=exit_on_checkpoint,
+            exit_on_dump_stats=exit_on_dump_stats,
+            exit_on_dump_reset_stats=exit_on_dump_reset_stats,
+            exit_on_reset_stats=exit_on_reset_stats
         )
         
         self._secondary_disk = secondary_disk
