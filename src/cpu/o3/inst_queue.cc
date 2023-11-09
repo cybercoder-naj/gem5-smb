@@ -856,8 +856,13 @@ InstructionQueue::scheduleReadyInsts()
                     // upon the execution completing.
                     execution->setFreeFU();
                 } else {
-                    // Add the FU onto the list of FU's to be freed next cycle.
-                    fuPool->freeUnitNextCycle(idx);
+                    // If pipelined, get instruction throughput to
+                    // set cycle for release
+                    int issueLat = fuPool->getOpIssueLatency(op_class);
+                    if(issueLat != 1)
+                        fuPool->freeUnitXCycles(idx, issueLat);
+                    else
+                        fuPool->freeUnitNextCycle(idx);
                 }
             }
 
