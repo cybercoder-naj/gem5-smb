@@ -1363,10 +1363,22 @@ Commit::updateComInstStats(const DynInstPtr &inst)
 
         if (inst->isLoad()) {
             cpu->commitStats[tid]->numLoadInsts++;
+            if (inst->isRMW()) {
+                cpu->commitStats[tid]->numRMWLoadInsts++;
+            }
+            if (inst->isRMWA()) {
+                cpu->commitStats[tid]->numRMWALoadInsts++;
+            }
         }
 
         if (inst->isStore()) {
             cpu->commitStats[tid]->numStoreInsts++;
+            if (inst->isRMW()) {
+                cpu->commitStats[tid]->numRMWStoreInsts++;
+            }
+            if (inst->isRMWA()) {
+                cpu->commitStats[tid]->numRMWAStoreInsts++;
+            }
         }
     }
 
