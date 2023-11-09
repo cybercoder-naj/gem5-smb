@@ -43,16 +43,16 @@ class Icelake_Combined(FUDesc):
                OpDesc(opClass='InstPrefetch', opLat=1),
                #Integer instructions
                OpDesc(opClass='IntAlu', opLat=1),
-               OpDesc(opClass='IntMult', opLat=4, pipelined=True),	# (integer vector multiplication: 5 // integer multiplication: 3)
-               OpDesc(opClass='IntDiv', opLat=11, pipelined=True),		# divss
-               OpDesc(opClass='IprAccess', opLat=3, pipelined=True), 	# ?
+               OpDesc(opClass='IntMult', opLat=4, pipelined=True, issueLat=2),      # (integer vector multiplication: 5 // integer multiplication: 3)
+               OpDesc(opClass='IntDiv', opLat=11, pipelined=True, issueLat=3),              # divss
+               OpDesc(opClass='IprAccess', opLat=3, pipelined=True),    # ?
                #Floating point instructions
                #OpDesc(opClass='VectorNop', opLat=1, pipelined=True),
                OpDesc(opClass='FloatAdd', opLat=4, pipelined=True),
                OpDesc(opClass='FloatCmp', opLat=4, pipelined=True),
                OpDesc(opClass='FloatCvt', opLat=4, pipelined=True),
-               OpDesc(opClass='FloatDiv', opLat=11, pipelined=True),
-               OpDesc(opClass='FloatSqrt', opLat=12, pipelined=True),
+               OpDesc(opClass='FloatDiv', opLat=11, pipelined=True, issueLat=3),
+               OpDesc(opClass='FloatSqrt', opLat=12, pipelined=True, issueLat=3),
                OpDesc(opClass='FloatMult', opLat=4, pipelined=True),
                OpDesc(opClass='FloatMultAcc', opLat=4, pipelined=True),
                OpDesc(opClass='FloatMisc', opLat=4, pipelined=True),
@@ -65,14 +65,14 @@ class Icelake_Combined(FUDesc):
                OpDesc(opClass='SimdMisc', opLat=1, pipelined=True),
                OpDesc(opClass='SimdMult', opLat=4, pipelined=True),
                OpDesc(opClass='SimdMultAcc', opLat=4, pipelined=True),
-               OpDesc(opClass='SimdDiv', opLat=18, pipelined=True),
+               OpDesc(opClass='SimdDiv', opLat=18, pipelined=True, issueLat=10),
                OpDesc(opClass='SimdShift', opLat=1, pipelined=True),
                OpDesc(opClass='SimdShiftAcc', opLat=1, pipelined=True),
-               OpDesc(opClass='SimdSqrt', opLat=20, pipelined=True),
+               OpDesc(opClass='SimdSqrt', opLat=20, pipelined=True, issueLat=12),
 #               OpDesc(opClass='VectorIntReciprocal', opLat=7, pipelined=True),
-               OpDesc(opClass='SimdReduceAdd', opLat=5, pipelined=True),
-               OpDesc(opClass='SimdReduceAlu', opLat=5, pipelined=True),
-               OpDesc(opClass='SimdReduceCmp', opLat=5, pipelined=True),
+               OpDesc(opClass='SimdReduceAdd', opLat=5, pipelined=True, issueLat=2),
+               OpDesc(opClass='SimdReduceAlu', opLat=5, pipelined=True, issueLat=2),
+               OpDesc(opClass='SimdReduceCmp', opLat=5, pipelined=True, issueLat=2),
                OpDesc(opClass='SimdFloatAdd', opLat=4, pipelined=True),
                OpDesc(opClass='SimdFloatAlu', opLat=4, pipelined=True),
                OpDesc(opClass='SimdFloatCmp', opLat=4, pipelined=True),
@@ -80,11 +80,11 @@ class Icelake_Combined(FUDesc):
                OpDesc(opClass='SimdFloatMisc', opLat=1, pipelined=True),
                OpDesc(opClass='SimdFloatMult', opLat=5, pipelined=True),
                OpDesc(opClass='SimdFloatMultAcc', opLat=5, pipelined=True),
-               OpDesc(opClass='SimdFloatDiv', opLat=18, pipelined=True),
-               OpDesc(opClass='SimdFloatSqrt', opLat=20, pipelined=True),
+               OpDesc(opClass='SimdFloatDiv', opLat=18, pipelined=True, issueLat=10),
+               OpDesc(opClass='SimdFloatSqrt', opLat=20, pipelined=True, issueLat=12),
 #               OpDesc(opClass='VectorFloatReciprocal', opLat=7, pipelined=True),
-               OpDesc(opClass='SimdFloatReduceAdd', opLat=5, pipelined=True),
-               OpDesc(opClass='SimdFloatReduceCmp', opLat=5, pipelined=True),
+               OpDesc(opClass='SimdFloatReduceAdd', opLat=5, pipelined=True, issueLat=2),
+               OpDesc(opClass='SimdFloatReduceCmp', opLat=5, pipelined=True, issueLat=2),
                OpDesc(opClass='SimdPredAlu', opLat=5, pipelined=True)]
     count = 3
 
