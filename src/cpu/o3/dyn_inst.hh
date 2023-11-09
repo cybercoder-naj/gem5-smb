@@ -574,6 +574,8 @@ class DynInst : public ExecContext, public RefCounted
     bool isQuiesce() const { return staticInst->isQuiesce(); }
     bool isUnverifiable() const { return staticInst->isUnverifiable(); }
     bool isSyscall() const { return staticInst->isSyscall(); }
+    bool isRMW() const { return staticInst->isRMW(); }
+    bool isRMWA() const { return staticInst->isRMWA(); }
     bool isMacroop() const { return staticInst->isMacroop(); }
     bool isMicroop() const { return staticInst->isMicroop(); }
     bool isDelayedCommit() const { return staticInst->isDelayedCommit(); }
