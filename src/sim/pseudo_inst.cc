@@ -378,7 +378,7 @@ m5checkpoint(ThreadContext *tc, Tick delay, Tick period)
         exitSimLoop("checkpoint", 0, when, repeat);
 
         if (tc->getCpuPtr()->system->params().exit_on_checkpoint) {
-            m5exit(tc, delay);
+            m5exit(tc, delay + 1);
         }
     }
 }
