@@ -221,13 +221,13 @@ let {{
             micropc = 0
             for op in self.microops:
                 flags = ["IsMicroop"]
+                if self.rmw:
+                    flags.append('IsRMW')
+                if self.rmwa:
+                    flags.append('IsRMWA')
+
                 if micropc == 0:
                     flags.append("IsFirstMicroop")
-
-                    if self.rmw:
-                        flags.append('IsRMW')
-                    if self.rmwa:
-                        flags.append('IsRMWA')
 
                     if self.serialize_before:
                         flags.append("IsSerializing")
