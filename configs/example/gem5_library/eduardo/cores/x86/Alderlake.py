@@ -108,9 +108,12 @@ class Alderlake_FUP(FUPool):
               Alderlake_Load(),
               Alderlake_Store()]
 
+class Alderlake_RAS(ReturnAddrStack):
+    numEntries = 64
+    
 # Predictor
 class Alderlake_TAGE(TAGE_SC_L_64KB):
-    RASSize = 64
+    ras = Alderlake_RAS()
 
 # JMCG: I'm not sure about fetchwidth 8 and commit 8
 # https://chipsandcheese.com/2022/02/11/going-armchair-quarterback-on-golden-coves-caches/
@@ -214,7 +217,7 @@ class Alderlake_L2Cache(Cache):
 #   size = '512KB'
 #   assoc = 8
     write_buffers = 8
-    prefetch_on_access = True
+    #prefetch_on_access = True
     tag_latency = 4
     data_latency = 10
     response_latency = 10
@@ -230,7 +233,7 @@ class Alderlake_L3Cache(Cache):
 #   size = '2MB' # Per Core
 #   assoc = 16
     write_buffers = 8
-    prefetch_on_access = True
+    #prefetch_on_access = True
     clusivity = 'mostly_excl'
     tag_latency = 5
     data_latency = 45
