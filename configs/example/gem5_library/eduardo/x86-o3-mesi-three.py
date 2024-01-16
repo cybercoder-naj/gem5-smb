@@ -239,6 +239,10 @@ else:
         ckpts.sort()
         
         print(f"Found Checkpoints: {ckpts}")
+
+        if (args.checkpoint_num >= len(ckpts)):
+            print(f"Checkpoint requested '{args.checkpoint_num}' exceeds the amunt of checkpoints found '{len(ckpts)}'")
+            exit(1)
         
         ckpt=CheckpointResource(local_path=ckpts[args.checkpoint_num][:-6])
         print(f"Using Checkpoint: {ckpts[args.checkpoint_num][:-6]}");
