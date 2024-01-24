@@ -1,6 +1,8 @@
 import os
 import argparse
 
+import m5
+
 from gem5.utils.requires import requires
 from gem5.components.memory.single_channel import SingleChannelDDR3_1600
 from gem5.components.cachehierarchies.ruby.mesi_three_level_cache_hierarchy import MESIThreeLevelCacheHierarchy
@@ -184,6 +186,12 @@ parser.add_argument(
     help="Exit from the simulation loop when doing a reset stats.",
 )
 
+parser.add_argument(
+    "--warmup-ticks",
+    type=int,
+    default=0,
+    help="",
+)
 
 args = parser.parse_args()
 
@@ -301,6 +309,17 @@ simulator = Simulator(
     full_system=True,    
 )
 
+# Warmup if needed
+if (args.warmup_ticks > 0):
+    print("Starting warmup for {} ticks".format(args.warmup_ticks))
+    simulator.run(args.warmup_ticks)
+    print("Warmup Done, reseting stats")
+    m5.stats.reset()
+    print("Running after warmup")
+else:
+    print("Starting simulation")
+
+# Run until the end
 simulator.run()
 
 print(
