@@ -190,10 +190,22 @@ parser.add_argument(
     "--warmup-ticks",
     type=int,
     default=0,
-    help="",
+    help="Reset stats after the specified amount of ticks.",
+)
+
+parser.add_argument(
+    "--warmup-insts",
+    type=int,
+    default=0,
+    help="Reset stats after the specified amount of instructions."
 )
 
 args = parser.parse_args()
+
+# Check that both warmups are not enabled at the same time
+if ((args.warmup_ticks != 0) and (args.warmup_insts != 0)):
+    print("--warmup-ticks and --warmup-insts cannot be enabled both at the same time")
+    exit(1)
 
 ##########################
 # Requiements to run
@@ -313,6 +325,23 @@ def warmup_done():
     print("We should't come here...")
     yield True
 
+def warmup_done_inst():
+    first = 0
+    while True:
+        if (first == 0):
+            print("Warmup Done @ tick {} because {}.".format(
+                simulator.get_current_tick(), simulator.get_last_exit_event_cause()))
+            m5.stats.reset()
+            print("Running after warmup @ {}.".format(m5.curTick()))
+            first = 1
+        else:
+            # Wi will arrive here once per core
+            first = first + 1
+            if (first > args.num_cpus):
+                print("MAX_INSTS ticked more than the amount of cores, this should never happen.")
+                yield True
+        yield False
+
 def handle_exit():
     print("Exiting gem5...")
     yield True
@@ -322,6 +351,7 @@ simulator = Simulator(
     full_system=True,    
     on_exit_event={
         ExitEvent.SCHEDULED_TICK: warmup_done(),
+        ExitEvent.MAX_INSTS: warmup_done_inst(),
         ExitEvent.EXIT : handle_exit(),
     },
 )
@@ -330,9 +360,11 @@ simulator._instantiate()
 print("Starting at Tick {}".format(simulator.get_current_tick()))
 
 # Warmup if needed
-if (args.warmup_ticks > 0):
+if (args.warmup_insts > 0):
+    print("Starting warmup for {} insts".format(args.warmup_insts))
+    simulator.schedule_max_insts(args.warmup_insts)
+elif (args.warmup_ticks > 0):
     print("Starting warmup for {} ticks".format(args.warmup_ticks))
-    #m5.setMaxTick(simulator.get_current_tick() + args.warmup_ticks)
     m5.scheduleTickExitFromCurrent(args.warmup_ticks)
 else:
     print("Starting simulation")
