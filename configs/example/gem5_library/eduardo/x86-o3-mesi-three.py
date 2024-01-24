@@ -300,7 +300,6 @@ board = TwoDisksX86Board(
     secondary_disk=sec_disk,
     root_disk_name="/dev/hda",
 
-    exit_on_checkpoint=args.exit_on_checkpoint,
     exit_on_dump_stats=args.exit_on_dump_stats,
     exit_on_dump_reset_stats=args.exit_on_dump_reset_stats,
     exit_on_reset_stats=args.exit_on_reset_stats

@@ -52,7 +52,6 @@ class TwoDisksX86Board(AbstractSystemBoard, KernelDiskWorkload):
         secondary_disk: AbstractResource,
         root_disk_name: str, 
 
-        exit_on_checkpoint: bool = False,
         exit_on_dump_stats: bool = False,
         exit_on_dump_reset_stats: bool = False,
         exit_on_reset_stats: bool = False
@@ -63,7 +62,6 @@ class TwoDisksX86Board(AbstractSystemBoard, KernelDiskWorkload):
             memory=memory,
             cache_hierarchy=cache_hierarchy,
 
-            exit_on_checkpoint=exit_on_checkpoint,
             exit_on_dump_stats=exit_on_dump_stats,
             exit_on_dump_reset_stats=exit_on_dump_reset_stats,
             exit_on_reset_stats=exit_on_reset_stats

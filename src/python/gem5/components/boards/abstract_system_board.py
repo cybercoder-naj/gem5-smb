@@ -50,14 +50,12 @@ class AbstractSystemBoard(System, AbstractBoard):
         memory: "AbstractMemorySystem",
         cache_hierarchy: "AbstractCacheHierarchy",
 
-        exit_on_checkpoint: bool = False,
         exit_on_dump_stats: bool = False,
         exit_on_dump_reset_stats: bool = False,
         exit_on_reset_stats: bool = False
     ):
         System.__init__(
             self,
-            exit_on_checkpoint=exit_on_checkpoint,
             exit_on_dump_stats=exit_on_dump_stats,
             exit_on_dump_reset_stats=exit_on_dump_reset_stats,
             exit_on_reset_stats=exit_on_reset_stats

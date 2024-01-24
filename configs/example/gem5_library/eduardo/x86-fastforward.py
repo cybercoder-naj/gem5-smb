@@ -1,5 +1,8 @@
 import os
 import argparse
+from pathlib import Path
+
+import m5
 
 from gem5.utils.requires import requires
 from gem5.components.memory.single_channel import SingleChannelDDR3_1600
@@ -210,7 +213,6 @@ board = TwoDisksX86Board(
     secondary_disk=sec_disk,
     root_disk_name="/dev/hda",
 
-    exit_on_checkpoint=args.exit_on_checkpoint,
     exit_on_dump_stats=args.exit_on_dump_stats,
     exit_on_dump_reset_stats=args.exit_on_dump_reset_stats,
     exit_on_reset_stats=args.exit_on_reset_stats
@@ -227,9 +229,19 @@ board.set_kernel_disk_workload(
 # Run the simulator
 ##########################
 
+def handle_checkpoint():
+    while True:
+        print("Doing checkpoint")
+        checkpoint_dir = Path(m5.options.outdir)
+        m5.checkpoint((checkpoint_dir / f"cpt.{str(m5.curTick())}").as_posix())
+        yield args.exit_on_checkpoint
+
 simulator = Simulator(
     board=board,
-    full_system=True,    
+    full_system=True,
+    on_exit_event={
+        ExitEvent.CHECKPOINT: handle_checkpoint(),
+    },
 )
 
 simulator.run()
