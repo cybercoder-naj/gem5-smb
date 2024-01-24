@@ -304,22 +304,39 @@ board.set_kernel_disk_workload(
 # Run the simulator
 ##########################
 
+def warmup_done():
+    print("Warmup Done @ tick {} because {}.".format(
+        simulator.get_current_tick(), simulator.get_last_exit_event_cause()))
+    m5.stats.reset()
+    print("Running after warmup @ {}.".format(m5.curTick()))
+    yield False
+    print("We should't come here...")
+    yield True
+
+def handle_exit():
+    print("Exiting gem5...")
+    yield True
+
 simulator = Simulator(
     board=board,
     full_system=True,    
+    on_exit_event={
+        ExitEvent.SCHEDULED_TICK: warmup_done(),
+        ExitEvent.EXIT : handle_exit(),
+    },
 )
+
+simulator._instantiate()
+print("Starting at Tick {}".format(simulator.get_current_tick()))
 
 # Warmup if needed
 if (args.warmup_ticks > 0):
     print("Starting warmup for {} ticks".format(args.warmup_ticks))
-    simulator.run(args.warmup_ticks)
-    print("Warmup Done, reseting stats")
-    m5.stats.reset()
-    print("Running after warmup")
+    #m5.setMaxTick(simulator.get_current_tick() + args.warmup_ticks)
+    m5.scheduleTickExitFromCurrent(args.warmup_ticks)
 else:
     print("Starting simulation")
 
-# Run until the end
 simulator.run()
 
 print(
