@@ -155,12 +155,6 @@ class System(SimObject):
         "memory-mapped m5ops. Set to 0 to disable.",
     )
 
-    exit_on_checkpoint = Param.Bool(
-        False,
-        "Exit from the simulation loop when "
-        "doing a checkpoint.",
-    )
-
     exit_on_dump_stats = Param.Bool(
         False,
         "Exit from the simulation loop when "
