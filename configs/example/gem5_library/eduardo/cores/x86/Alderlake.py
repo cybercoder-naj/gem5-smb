@@ -108,12 +108,17 @@ class Alderlake_FUP(FUPool):
               Alderlake_Load(),
               Alderlake_Store()]
 
+class Alderlake_BTB(AssociativeBTB):
+    useTagCompression = False
+    numEntries = "8192"
+
 class Alderlake_RAS(ReturnAddrStack):
     numEntries = 64
     
 # Predictor
-class Alderlake_TAGE(TAGE_SC_L_64KB):
+class Alderlake_TAGE(LTAGE):
     ras = Alderlake_RAS()
+    btb = Alderlake_BTB()
 
 # JMCG: I'm not sure about fetchwidth 8 and commit 8
 # https://chipsandcheese.com/2022/02/11/going-armchair-quarterback-on-golden-coves-caches/
