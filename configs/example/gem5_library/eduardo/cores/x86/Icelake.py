@@ -108,10 +108,17 @@ class Icelake_FUP(FUPool):
               Icelake_Load(),
               Icelake_Store()]
 
+class Icelake_BTB(AssociativeBTB):
+    useTagCompression = False
+    numEntries = "8192"
 
+class Icelake_RAS(ReturnAddrStack):
+    numEntries = 64
+ 
 # Predictor
-class Icelake_TAGE(TAGE_SC_L_64KB):
-    RASSize = 64
+class Icelake_TAGE(LTAGE):
+    ras = Icelake_RAS()
+    btb = Icelake_BTB()
 
 class Icelake_CPU(DerivO3CPU):
     LQEntries = 128
