@@ -200,6 +200,14 @@ parser.add_argument(
     help="Reset stats after the specified amount of instructions."
 )
 
+parser.add_argument(
+    "--max-insts",
+    type=int,
+    default=0,
+    help="Limit execution to the specified amount of ticks."
+)
+
+
 args = parser.parse_args()
 
 # Check that both warmups are not enabled at the same time
@@ -326,19 +334,33 @@ def warmup_done():
 
 def warmup_done_inst():
     first = 0
+    doing_warmup = args.warmup_insts > 0
     while True:
-        if (first == 0):
-            print("Warmup Done @ tick {} because {}.".format(
-                simulator.get_current_tick(), simulator.get_last_exit_event_cause()))
-            m5.stats.reset()
-            print("Running after warmup @ {}.".format(m5.curTick()))
-            first = 1
-        else:
-            # Wi will arrive here once per core
-            first = first + 1
-            if (first > args.num_cpus):
-                print("MAX_INSTS ticked more than the amount of cores, this should never happen.")
-                yield True
+        while doing_warmup:
+            if (first == 0):
+                print("Warmup Done @ tick {} because {}.".format(
+                    simulator.get_current_tick(), simulator.get_last_exit_event_cause()))
+                m5.stats.reset()
+                print("Running after warmup @ {}.".format(m5.curTick()))
+                first = 1
+            else:
+                # Wi will arrive here once per core
+                first = first + 1
+                if (first > args.num_cpus):
+                    print("MAX_INSTS ticked more than the amount of cores, this should never happen.")
+                    yield True
+            if (first == args.num_cpus):
+                doing_warmup = False
+            yield False
+        
+        if (args.max_insts > 0):
+            print("Instruction Limit reached @ tick {}, dumping stats...".format(
+                    simulator.get_current_tick()))
+            m5.stats.dump()
+            print("Done running @ tick {} because {}.".format(
+                    simulator.get_current_tick(), simulator.get_last_exit_event_cause()))
+            yield True
+
         yield False
 
 def handle_exit():
@@ -367,6 +389,10 @@ elif (args.warmup_ticks > 0):
     m5.scheduleTickExitFromCurrent(args.warmup_ticks)
 else:
     print("Starting simulation")
+
+if (args.max_insts > 0):
+    print("Exit after {} insts".format(args.max_insts))
+    simulator.schedule_max_insts(args.max_insts)
 
 simulator.run()
 
