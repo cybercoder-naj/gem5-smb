@@ -41,7 +41,7 @@
 #include "base/logging.hh"
 #include "base/types.hh"
 #include "cpu/pred/btb.hh"
-#include "mem/cache/prefetch/associative_set.hh"
+#include "mem/cache/replacement_policies/base.hh"
 #include "params/AssociativeBTB.hh"
 
 namespace gem5
@@ -67,26 +67,25 @@ class AssociativeBTB : public BranchTargetBuffer
 
   protected:
 
-    struct BTBEntry : public TaggedEntry
+    struct BTBEntry : ReplaceableEntry
     {
-        BTBEntry()
-            : pc(MaxAddr), target(nullptr), tid(0), valid(false),
-              accesses(0), inst(nullptr) {}
-        /** The entry's tag. */
-        Addr pc = 0;
+         /** The entry's tag. */
+        Addr tag = 0;
 
         /** The entry's target. */
-        PCStateBase * target;
+        std::unique_ptr<PCStateBase> target;
 
         /** The entry's thread id. */
         ThreadID tid;
 
         /** Whether or not the entry is valid. */
-        bool valid;
+        bool valid = false;
 
-        unsigned accesses;
+        /** Pointer to the static branch instruction at this address */
+        StaticInstPtr inst = nullptr;
 
-        StaticInstPtr inst;
+        /** Saved to detect conflicts */
+        Addr pc = 0;
     };
 
 
@@ -94,7 +93,10 @@ class AssociativeBTB : public BranchTargetBuffer
      *  @param inst_PC The branch to look up.
      *  @return Returns the index into the BTB.
      */
-    uint64_t getIndex(ThreadID tid, Addr instPC);
+    uint64_t getIndex(Addr instPC, ThreadID tid);
+
+    inline Addr getTag(Addr instPC);
+    BTBEntry* findEntry(Addr instPC, ThreadID tid);
 
     /** Internal update call */
     void updateEntry(BTBEntry* &entry, ThreadID tid, Addr instPC,
@@ -102,7 +104,10 @@ class AssociativeBTB : public BranchTargetBuffer
                     StaticInstPtr inst);
 
     /** The actual BTB. */
-    AssociativeSet<BTBEntry> btb;
+    std::vector<BTBEntry> btb;
+    
+    /** Replacement Policy */
+    replacement_policy::Base* rp;
 
     /** The number of entries in the BTB. */
     const unsigned numEntries;
@@ -117,9 +122,8 @@ class AssociativeBTB : public BranchTargetBuffer
 
     /** Helper to avoid recomputation for every lookup */
     const uint64_t numSets;
-    const uint64_t setShift;
-    const uint64_t setMask;
-    const uint64_t tagShift;
+    uint64_t tagShiftAmt;
+    uint64_t tagMask;
 
     /** Number of bits to shift PC when calculating index. */
     const uint64_t instShiftAmt;
@@ -127,17 +131,22 @@ class AssociativeBTB : public BranchTargetBuffer
     /** Log2 NumThreads used for hashing threadid */
     const unsigned log2NumThreads;
 
-    /** The number of BTB index bits and mask. */
-    uint64_t idxBits;
+    /** The number of BTB index mask. */
     uint64_t idxMask;
-
 
     struct AssociativeBTBStats : public statistics::Group
     {
         AssociativeBTBStats(AssociativeBTB *parent);
 
-        statistics::SparseHistogram accesses;
         statistics::Scalar conflict;
+
+      statistics::Vector2d replace_map;
+      statistics::Vector2d hit_map;
+      statistics::Vector replace_vector;
+      statistics::Vector hit_vector;
+
+      statistics::Vector replace_way_vector;
+      statistics::Vector hit_way_vector;
     } assocStats;
 
 };
