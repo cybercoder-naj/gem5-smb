@@ -276,6 +276,11 @@ class TAGE(BranchPredictor):
 
     tage = Param.TAGEBase(TAGEBase(), "Tage object")
 
+class TAGE_EMILIO(BranchPredictor):
+    type = "TAGE_EMILIO"
+    cxx_class = "gem5::branch_prediction::TAGE_EMILIO"
+    cxx_header = "cpu/pred/tage_sc_l_emilio.hh"
+
 
 class LTAGE_TAGE(TAGEBase):
     nHistoryTables = 12
