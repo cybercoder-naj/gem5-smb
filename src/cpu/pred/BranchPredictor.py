@@ -101,14 +101,8 @@ class AssociativeBTB(BranchTargetBuffer):
     cxx_class = "gem5::branch_prediction::AssociativeBTB"
     cxx_header = "cpu/pred/associative_btb.hh"
     
-    numEntries = Param.MemorySize("4096", "Number of entries of BTB entries")
+    numEntries = Param.Unsigned(4096, "Number of entries of BTB entries")
     assoc = Param.Unsigned(8, "Associativity of the BTB")
-    indexing_policy = Param.BaseIndexingPolicy(
-        SetAssociative(
-            entry_size=1, assoc=Parent.assoc, size=Parent.numEntries
-        ),
-        "Indexing policy of the BTB",
-    )
     replacement_policy = Param.BaseReplacementPolicy(
         LRURP(), "Replacement policy of the table"
     )

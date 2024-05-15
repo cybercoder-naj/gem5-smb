@@ -40,7 +40,6 @@
 #include "base/intmath.hh"
 #include "base/trace.hh"
 #include "debug/BTB.hh"
-#include "mem/cache/prefetch/associative_set_impl.hh"
 
 namespace gem5
 {
@@ -50,31 +49,33 @@ namespace branch_prediction
 
 AssociativeBTB::AssociativeBTB(const AssociativeBTBParams &p)
     : BranchTargetBuffer(p),
-        btb(p.assoc, p.numEntries, p.indexing_policy,
-                p.replacement_policy),
+        rp(p.replacement_policy),
         numEntries(p.numEntries),
         assoc(p.assoc),
         tagBits(p.tagBits), compressedTags(p.useTagCompression),
         numSets(numEntries/assoc),
-        setShift(0), setMask(numSets-1),
-        tagShift(floorLog2(numSets)),
         instShiftAmt(p.instShiftAmt),
         log2NumThreads(floorLog2(p.numThreads)),
         assocStats(this)
 {
-    // The number of entries is divided into n ways.
-    uint64_t setBits = floorLog2(numSets);
-
     if (!isPowerOf2(numSets)) {
         fatal("Number of sets is not a power of 2!");
     }
 
-    idxBits = tagBits + setBits;
-    idxMask = (idxBits < 64) ? (1ULL << idxBits) - 1 : (uint64_t)(-1);
+    btb.resize(numEntries);
+    for (unsigned i = 0; i < numEntries; ++i) {
+        btb[i].valid = false;
+        btb[i].setPosition(i / assoc, i % assoc);
+        btb[i].replacementData = rp->instantiateEntry();
+    }
+
+    idxMask = numSets - 1; 
+    tagMask = (1 << tagBits) - 1;
+    tagShiftAmt = instShiftAmt + floorLog2(numSets);
 
     DPRINTF(BTB, "BTB: Creating Associative BTB (entries:%i, assoc:%i, "
-                "tagBits:%i/comp:%i, idx mask:%x, numSets:%i)\n",
-                numEntries, assoc, tagBits, compressedTags, idxMask, numSets);
+                "tagBits:%i/comp:%i, idx mask:%x, numSets:%i, instShiftAmt:%i)\n",
+                numEntries, assoc, tagBits, compressedTags, idxMask, numSets, instShiftAmt);
 }
 
 void
@@ -82,77 +83,84 @@ AssociativeBTB::memInvalidate()
 {
     DPRINTF(BTB, "BTB: Invalidate all entries\n");
 
-    for (auto &entry : btb) {
-        entry.invalidate();
+    for (unsigned i = 0; i < numEntries; ++i) {
+        btb[i].valid = false;
+        btb[i].setPosition(i / assoc, i % assoc);
+        btb[i].replacementData = rp->instantiateEntry();
+        rp->reset(btb[i].replacementData);
     }
 }
 
 uint64_t
-AssociativeBTB::getIndex(ThreadID tid, Addr instPC)
+AssociativeBTB::getIndex(Addr instPC, ThreadID tid)
 {
-    /**
-     * Compute the index into the BTB.
-     * - Shift PC over by the word offset
-     * - Mask the address to use only the specified number of TAG bits
-     *   plus the bits to for the set index.
-     *
-     *  64                          0
-     *  | xxx |   TAG    |  Set  |bb|
-     *         \_____BTB idx____/
-     *
-     * The TID will be hashed with as MSBs of the PC
-     */
-    uint64_t idx = (instPC >> instShiftAmt)
-                 ^ (tid << (idxBits - log2NumThreads -1));
+    // Need to shift PC over by the word offset.
+    return ((instPC >> instShiftAmt)
+            ^ (tid << (tagShiftAmt - instShiftAmt - log2NumThreads))
+            )
+            & idxMask;
+}
 
-    if (compressedTags) {
-        /* For compressed tags the lower 8bit of the tag remain the original
-         * the upper bits of the PC are hased together to form the upper
-         * 8 bits of the tag.
-         * Details https://ieeexplore.ieee.org/document/9528930
-         */
-        uint64_t tag = (idx >> tagShift);
+inline
+Addr
+AssociativeBTB::getTag(Addr instPC)
+{
+    return (instPC >> tagShiftAmt) & tagMask;
+}
 
-        uint64_t upper = (tag>>16) ^ (tag>>24) ^ (tag>>32)
-                                   ^ (tag>>40) ^ (tag>>48);
-        tag ^= upper << 8;
-        idx = (tag << tagShift) | (idx & setMask);
+AssociativeBTB::BTBEntry*
+AssociativeBTB::findEntry(Addr instPC, ThreadID tid)
+{
+    unsigned btb_set_idx = getIndex(instPC, tid);
+    Addr inst_tag = getTag(instPC);
+    DPRINTF(BTB, "BTB::%s: PC:%#x set_idx:%lx inst_tag:%lx\n", __func__, instPC, btb_set_idx, inst_tag);
+
+    assert(((btb_set_idx * assoc) + assoc) <= numEntries);
+
+    for (unsigned i = 0; i < assoc; ++i) {
+        unsigned btb_idx = btb_set_idx * assoc + i;
+        if (btb[btb_idx].valid
+            && inst_tag == btb[btb_idx].tag
+            && btb[btb_idx].tid == tid) {
+            return &btb[btb_idx];
+        }
     }
-    return idx & idxMask;
+
+    return nullptr;
 }
 
 bool
 AssociativeBTB::valid(ThreadID tid, Addr instPC)
 {
-    uint64_t idx = getIndex(tid, instPC);
-    BTBEntry * entry = btb.findEntry(idx, /* unused */ false);
+    BTBEntry * entry = findEntry(instPC, tid);
 
-    if (entry != nullptr && entry->tid == tid) {
+    if (entry != nullptr) {
         return true;
     }
     return false;
 }
 
-// @todo Create some sort of return struct that has both whether or not the
-// address is valid, and also the address.  For now will just use addr = 0 to
-// represent invalid entry.
 const PCStateBase *
 AssociativeBTB::lookup(ThreadID tid, Addr instPC, BranchType type)
 {
     stats.lookups[type]++;
+    DPRINTF(BTB, "BTB::%s: Looking for entry. PC:%#x\n", __func__, instPC);
 
-    uint64_t idx = getIndex(tid, instPC);
-    BTBEntry * entry = btb.findEntry(idx, /* unused */ false);
+    BTBEntry * entry = findEntry(instPC, tid);
 
-    if (entry != nullptr && entry->tid == tid) {
+    if (entry != nullptr) {
+        DPRINTF(BTB, "BTB::%s: Entry found for PC:%#x, real PC:%lx set:%lx way:%lx\n", __func__, instPC, entry->pc, entry->getSet(), entry->getWay());
         // PC is different -> conflict hit.
         if (entry->pc != instPC) {
             assocStats.conflict++;
         }
 
-        entry->accesses++;
-        btb.accessEntry(entry);
-        return entry->target;
+        rp->touch(entry->replacementData);
+
+        assocStats.hit_map[entry->getSet()][entry->getWay()]++;
+        assocStats.hit_vector[entry->getSet()]++;
+        assocStats.hit_way_vector[entry->getWay()]++;
+        return entry->target.get();
     }
     stats.misses[type]++;
     return nullptr;
@@ -161,10 +169,9 @@ AssociativeBTB::lookup(ThreadID tid, Addr instPC, BranchType type)
 const StaticInstPtr
 AssociativeBTB::getInst(ThreadID tid, Addr instPC)
 {
-    uint64_t idx = getIndex(tid, instPC);
-    BTBEntry * entry = btb.findEntry(idx, /* unused */ false);
+    BTBEntry * entry = findEntry(instPC, tid);
 
-    if (entry != nullptr && entry->tid == tid) {
+    if (entry != nullptr) {
         return entry->inst;
     }
     return nullptr;
@@ -175,8 +182,7 @@ AssociativeBTB::update(ThreadID tid, Addr instPC,
                     const PCStateBase &target,
                     BranchType type, StaticInstPtr inst)
 {
-    uint64_t idx = getIndex(tid, instPC);
-    BTBEntry * entry = btb.findEntry(idx, /* unused */ false);
+    BTBEntry * entry = findEntry(instPC, tid);
 
     updateEntry(entry, tid, instPC, target, type, inst);
 }
@@ -190,50 +196,87 @@ AssociativeBTB::updateEntry(BTBEntry* &entry, ThreadID tid, Addr instPC,
         stats.updates[type]++;
     }
 
-    uint64_t idx = getIndex(tid, instPC);
+    if (entry != nullptr) {
+        DPRINTF(BTB, "BTB::%s: Updated existing entry. PC:%#x set:%lx way:%lx\n",
+                     __func__, instPC, entry->getSet(), entry->getWay());
 
-    if (entry != nullptr && entry->tid == tid) {
-        DPRINTF(BTB, "BTB::%s: Updated existing entry. PC:%#x, idx:%#x \n",
-                     __func__, instPC, idx);
-        btb.accessEntry(entry);
-        entry->accesses++;
+        rp->touch(entry->replacementData);
+
         if (entry->pc != instPC)
             assocStats.conflict++;
 
     } else {
-        uint64_t set = (idx >> setShift) & setMask;
-        DPRINTF(BTB, "BTB::%s: Replace entry. PC:%#x, idx:%#x, set:%i\n",
-                     __func__, instPC, idx, set);
         stats.evictions++;
-        entry = btb.findVictim(idx);
-        assert(entry != nullptr);
-        btb.insertEntry(idx, false, entry);
 
-        // Measure the number of accesses.
-        assocStats.accesses.sample(entry->accesses == 0 ? 0
-                                : floorLog2(entry->accesses));
-        entry->accesses = 0;
+        std::vector<ReplaceableEntry*> candidates;
+        unsigned btb_set_idx = getIndex(instPC, tid);
+        for (unsigned i = 0; i < assoc; ++i) {
+          unsigned btb_idx = btb_set_idx * assoc + i;
+          candidates.push_back(&(btb[btb_idx]));
+        }
+        entry = dynamic_cast<BTBEntry*>(rp->getVictim(candidates));
+
+        assert(entry != nullptr);
+        
+        DPRINTF(BTB, "BTB::%s: Replace entry. PC:%#x set:%lx way:%lx\n",
+                     __func__, instPC,entry->getSet(), entry->getWay());
+
+        assocStats.replace_map[entry->getSet()][entry->getWay()]++;
+        assocStats.replace_vector[entry->getSet()]++;
+        assocStats.replace_way_vector[entry->getWay()]++;
+
+        rp->reset(entry->replacementData);
+        rp->touch(entry->replacementData);
     }
 
-    entry->pc = instPC;
-    entry->tid = tid;
+    entry->tag = getTag(instPC);
     set(entry->target, &target);
+    entry->tid = tid;
+    entry->valid = true;
     entry->inst = inst;
+    entry->pc = instPC;
 }
 
 
 AssociativeBTB::AssociativeBTBStats::AssociativeBTBStats(
                                                 AssociativeBTB *parent)
     : statistics::Group(parent),
-    ADD_STAT(accesses, statistics::units::Count::get(),
-             "Distribution of accesses (log2) per allocated entry."),
     ADD_STAT(conflict, statistics::units::Ratio::get(),
-             "Number of conflicts. Tag hit but PC different.")
+             "Number of conflicts. Tag hit but PC different."),
+  ADD_STAT(replace_map, statistics::units::Count::get(), "Distribution of replaces"),
+  ADD_STAT(hit_map, statistics::units::Count::get(), "Distribution of hits"),
+  ADD_STAT(replace_vector, statistics::units::Count::get(), "Distribution of replaces (sets)"),
+  ADD_STAT(hit_vector, statistics::units::Count::get(), "Distribution of hits (sets)"),
+  ADD_STAT(replace_way_vector, statistics::units::Count::get(), "Distribution of replaces (ways)"),
+  ADD_STAT(hit_way_vector, statistics::units::Count::get(), "Distribution of hits (ways)")
+
 {
     using namespace statistics;
-    accesses
-        .init(8)
-        .flags(pdf);
+
+  replace_map
+    .init(parent->numEntries / parent->assoc, parent->assoc)
+    .flags(statistics::none | statistics::oneline);
+
+  hit_map
+    .init(parent->numEntries / parent->assoc, parent->assoc)
+    .flags(statistics::none | statistics::oneline);
+
+  replace_vector
+    .init(parent->numEntries / parent->assoc)
+    .flags(statistics::none);
+
+  hit_vector
+    .init(parent->numEntries / parent->assoc)
+    .flags(statistics::none);
+
+  replace_way_vector
+    .init(parent->assoc)
+    .flags(statistics::none);
+
+  hit_way_vector
+    .init(parent->assoc)
+    .flags(statistics::none);
+
 }
 
 
