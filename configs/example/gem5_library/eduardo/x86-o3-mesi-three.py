@@ -33,6 +33,13 @@ parser.add_argument(
 )
 
 parser.add_argument(
+    "--cpu-name",
+    type=str,
+    help="CPU Python class name (only if using full cpu paths)",
+    default="",
+)
+
+parser.add_argument(
     "--num-cpus",
     type=int,
     help="Num of cores to simulate",
@@ -291,7 +298,25 @@ cache_hierarchy = MESIThreeLevelCacheHierarchy (
     num_l3_banks=args.l3_banks,
 )
 
-custom_cpu = getattr(importlib.import_module("cores.x86." + args.cpu), args.cpu + "_CPU")
+if (".py" not in args.cpu):
+    custom_cpu = getattr(importlib.import_module("cores.x86." + args.cpu), args.cpu + "_CPU")
+    print(f"Using {custom_cpu} from internal cores")
+
+else:
+    module_name = args.cpu[args.cpu.rfind("/")+1:args.cpu.rfind(".py")]
+    
+    if (args.cpu_name == ""):
+        cpu_name = module_name
+    else:
+        cpu_name = args.cpu_name
+
+    spec = importlib.util.spec_from_file_location(module_name, args.cpu)
+    loaded_module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(loaded_module)
+    custom_cpu = getattr(loaded_module, cpu_name + "_CPU")
+
+    print(f"Using {custom_cpu} from {args.cpu}")
+
 processor = CustomProcessor(
     isa=ISA.X86,
     cputype=custom_cpu,
