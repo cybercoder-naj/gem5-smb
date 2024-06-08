@@ -51,6 +51,7 @@
 #include "cpu/inst_seq.hh"
 #include "cpu/o3/dyn_inst_ptr.hh"
 #include "cpu/o3/limits.hh"
+#include "cpu/o3/cpu.hh"
 #include "cpu/o3/store_set.hh"
 #include "debug/MemDepUnit.hh"
 
@@ -153,7 +154,7 @@ class MemDepUnit
 
     /** Indicates an ordering violation between a store and a younger load. */
     void violation(const DynInstPtr &store_inst,
-                   const DynInstPtr &violating_load);
+                   const DynInstPtr &violating_load, BranchHistory branchHistory);
 
     /** Issues the given instruction */
     void issue(const DynInstPtr &inst);

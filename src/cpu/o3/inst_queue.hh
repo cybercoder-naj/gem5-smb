@@ -263,7 +263,8 @@ class InstructionQueue
     void cacheUnblocked();
 
     /** Indicates an ordering violation between a store and a load. */
-    void violation(const DynInstPtr &store, const DynInstPtr &faulting_load);
+    void violation(const DynInstPtr &store, const DynInstPtr &faulting_load,
+                   BranchHistory branchHistory);
 
     /**
      * Squashes instructions for a thread. Squashing information is obtained

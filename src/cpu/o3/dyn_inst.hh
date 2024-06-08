@@ -140,6 +140,9 @@ class DynInst : public ExecContext, public RefCounted
     /** InstRecord that tracks this instructions. */
     trace::InstRecord *traceData = nullptr;
 
+    /** Track whether the instruction squashed specifically due to a branch misprediction (for PHAST) */
+    bool squashedDueToBranch = false;
+
   protected:
     enum Status
     {
@@ -353,6 +356,12 @@ class DynInst : public ExecContext, public RefCounted
     /** Store queue index. */
     ssize_t sqIdx = -1;
     typename LSQUnit::SQIterator sqIt;
+
+    /** Store seqnum this load received its data from, if any */
+    InstSeqNum forwardedFrom = 0;
+
+    /** Youngest store this load violated with */
+    DynInstPtr violatingStore = nullptr;
 
 
     /////////////////////// TLB Miss //////////////////////

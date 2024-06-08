@@ -44,6 +44,7 @@
 #include <algorithm>
 #include <set>
 #include <string>
+#include <sys/types.h>
 
 #include "base/compiler.hh"
 #include "base/loader/symtab.hh"
@@ -63,6 +64,7 @@
 #include "debug/ExecFaulting.hh"
 #include "debug/HtmCpu.hh"
 #include "debug/O3PipeView.hh"
+#include "inst_queue.hh"
 #include "params/BaseO3CPU.hh"
 #include "sim/faults.hh"
 #include "sim/full_system.hh"
@@ -748,6 +750,7 @@ Commit::commit()
     std::list<ThreadID>::iterator end = activeThreads->end();
 
     int num_squashing_threads = 0;
+    bool squashedDueToBranch;
 
     while (threads != end) {
         ThreadID tid = *threads++;
@@ -788,10 +791,12 @@ Commit::commit()
                     tid,
                     fromIEW->mispredictInst[tid]->pcState().instAddr(),
                     fromIEW->squashedSeqNum[tid]);
+                squashedDueToBranch = true;
             } else {
                 DPRINTF(Commit,
                     "[tid:%i] Squashing due to order violation [sn:%llu]\n",
                     tid, fromIEW->squashedSeqNum[tid]);
+                squashedDueToBranch = false;
             }
 
             DPRINTF(Commit, "[tid:%i] Redirecting to PC %#x\n",
@@ -811,7 +816,7 @@ Commit::commit()
             // number as the youngest instruction in the ROB.
             youngestSeqNum[tid] = squashed_inst;
 
-            rob->squash(squashed_inst, tid);
+            rob->squash(squashed_inst, tid, squashedDueToBranch);
             changedROBNumEntries[tid] = true;
 
             toIEW->commitInfo[tid].doneSeqNum = squashed_inst;
@@ -958,6 +963,23 @@ Commit::commitInsts()
 
             rob->retireHead(commit_thread);
 
+            // PHAST training
+            // only want to report a violation when we're not on a misspeculated path
+            if (!head_inst->squashedDueToBranch) {
+                DynInstPtr violating_store = head_inst->violatingStore;
+
+                IEWStage->InstructionQueue->violation(violating_store, head_inst, branchHistory);
+
+                // we have a violation before any branches have been executed
+                // if (branchHistory.size() == 0) return;
+                // auto br_it = branchHistory.rbegin();
+                // do {
+
+                // } while (br_it != branchHistory.rend() )
+                //search branch history
+                //voila
+            }
+
             ++stats.commitSquashedInsts;
             // Notify potential listeners that this instruction is squashed
             ppSquash->notify(head_inst);
@@ -976,6 +998,20 @@ Commit::commitInsts()
                     ->committedInstType[head_inst->opClass()]++;
                 stats.committedInstType[tid][head_inst->opClass()]++;
                 ppCommit->notify(head_inst);
+
+                //record committed branch history
+
+                if (head_inst->isControl() && !head_inst->isUncondCtrl()) {
+                    uint64_t target = head_inst->isIndirectCtrl() ? head_inst->branchTarget()->instAddr() : nullptr;
+                    branchInfo branch_info = {
+                        head_inst->isIndirectCtrl(),
+                        head_inst->pcState().branching(),
+                        target,
+                        head_inst->seqNum,
+                    };
+                    branchHistory.push_back(branch_info);
+                    if (branchHistory.size() == MAX_PHAST_HISTORY_LENGTH + 1) branchHistory.pop_front();
+                }
 
                 // hardware transactional memory
 

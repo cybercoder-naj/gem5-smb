@@ -83,6 +83,17 @@ class Process;
 namespace o3
 {
 
+/**  History of committed branches */
+typedef struct branchInfo {
+bool indirect;
+bool taken;
+uint64_t target;
+InstSeqNum seqNum;
+} branchInfo;
+
+typedef std::deque<branchInfo> BranchHistory;
+
+
 class ThreadContext;
 
 /**

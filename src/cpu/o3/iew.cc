@@ -1293,9 +1293,6 @@ IEW::executeInsts()
 
                 fetchRedirect[tid] = true;
 
-                // Tell the instruction queue that a violation has occured.
-                instQueue.violation(inst, violator);
-
                 // Squash.
                 squashDueToMemOrder(violator, tid);
 
