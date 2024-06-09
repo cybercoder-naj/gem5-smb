@@ -732,6 +732,20 @@ Decode::decodeInsts(ThreadID tid)
                 break;
             }
         }
+
+        //Record decoded branches for memdep predictions
+        if (inst->isControl() && !inst->isUncondCtrl()) {
+            uint64_t target = inst->isIndirectCtrl() ? inst->branchTarget()->instAddr() : nullptr;
+            branchInfo branch_info = {
+                inst->isIndirectCtrl(),
+                inst->readPredTaken(),
+                target,
+                inst->seqNum,
+            };
+            decodedBranchHistory.push_back(branch_info);
+            if (decodedBranchHistory.size() == MAX_PHAST_HISTORY_LENGTH + 1)
+                decodedBranchHistory.pop_front();
+        }
     }
 
     // If we didn't process all instructions, then we will need to block

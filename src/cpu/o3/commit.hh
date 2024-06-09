@@ -133,7 +133,7 @@ class Commit
 
     #define MAX_PHAST_HISTORY_LENGTH 32;
 
-    BranchHistory branchHistory;
+    BranchHistory committedBranchHistory;
 
     /** Mark the thread as processing a trap. */
     void processTrapEvent(ThreadID tid);

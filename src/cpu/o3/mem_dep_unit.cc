@@ -187,7 +187,7 @@ MemDepUnit::insertBarrierSN(const DynInstPtr &barr_inst)
 }
 
 void
-MemDepUnit::insert(const DynInstPtr &inst)
+MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
 {
     ThreadID tid = inst->threadNumber;
 
@@ -220,7 +220,7 @@ MemDepUnit::insert(const DynInstPtr &inst)
                                 std::begin(storeBarrierSNs),
                                 std::end(storeBarrierSNs));
     } else {
-        InstSeqNum dep = depPred.checkInst(inst->pcState().instAddr());
+        InstSeqNum dep = depPred.checkInst(inst->pcState().instAddr(), branchHistory);
         if (dep != 0)
             producing_stores.push_back(dep);
     }
@@ -575,8 +575,7 @@ MemDepUnit::violation(const DynInstPtr &store_inst,
             " load: %#x, store: %#x\n", violating_load->pcState().instAddr(),
             store_inst->pcState().instAddr());
     // Tell the memory dependence unit of the violation.
-    depPred.violation(store_inst->pcState().instAddr(),
-            violating_load->pcState().instAddr(), branchHistory);
+    depPred.violation(store_inst, violating_load, branchHistory);
 }
 
 void

@@ -122,7 +122,7 @@ class MemDepUnit
     void setIQ(InstructionQueue *iq_ptr);
 
     /** Inserts a memory instruction. */
-    void insert(const DynInstPtr &inst);
+    void insert(const DynInstPtr &inst, BranchHistory branchHistory);
 
     /** Inserts a non-speculative memory instruction. */
     void insertNonSpec(const DynInstPtr &inst);

@@ -966,18 +966,8 @@ Commit::commitInsts()
             // PHAST training
             // only want to report a violation when we're not on a misspeculated path
             if (!head_inst->squashedDueToBranch) {
-                DynInstPtr violating_store = head_inst->violatingStore;
-
-                IEWStage->InstructionQueue->violation(violating_store, head_inst, branchHistory);
-
-                // we have a violation before any branches have been executed
-                // if (branchHistory.size() == 0) return;
-                // auto br_it = branchHistory.rbegin();
-                // do {
-
-                // } while (br_it != branchHistory.rend() )
-                //search branch history
-                //voila
+                IEWStage->InstructionQueue->violation(head_inst->violating_store,
+                                                      head_inst, committedBranchHistory);
             }
 
             ++stats.commitSquashedInsts;
@@ -1009,8 +999,9 @@ Commit::commitInsts()
                         target,
                         head_inst->seqNum,
                     };
-                    branchHistory.push_back(branch_info);
-                    if (branchHistory.size() == MAX_PHAST_HISTORY_LENGTH + 1) branchHistory.pop_front();
+                    committedBranchHistory.push_back(branch_info);
+                    if (committedBranchHistory.size() == MAX_PHAST_HISTORY_LENGTH + 1)
+                        committedBranchHistory.pop_front();
                 }
 
                 // hardware transactional memory

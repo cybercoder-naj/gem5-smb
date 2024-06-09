@@ -30,6 +30,7 @@
 #define __CPU_O3_PHAST_HH__
 
 #include "base/types.hh"
+#include "cpu.hh"
 #include "cpu/inst_seq.hh"
 
 using namespace std;
@@ -62,7 +63,7 @@ class PHAST
 
     /** Records a memory ordering violation between the younger load
     * and the older store. */
-    void violation(Addr store_PC, Addr load_PC, BranchHistory branchHistory);
+    void violation(DynInstPtr store, DynInstPtr load, BranchHistory branchHistory);
 
     /** Inserts a load into the PHAST predictor.  This does nothing but
     * is included in case other predictors require a similar function.
@@ -77,7 +78,7 @@ class PHAST
     * any store.  @return Returns the sequence number of the store
     * instruction this PC is dependent upon.  Returns 0 if none.
     */
-    InstSeqNum checkInst(Addr PC);
+    InstSeqNum checkInst(Addr PC, BranchHistory branchHistory);
 
     /** Records this PC/sequence number as issued. */
     void issued(Addr issued_PC, InstSeqNum issued_seq_num, bool is_store);

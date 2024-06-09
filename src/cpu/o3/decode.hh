@@ -294,6 +294,9 @@ class Decode
      */
     bool squashAfterDelaySlot[MaxThreads];
 
+    /** History of decoded branches used for PHAST memdep predictions */
+    BranchHistory decodedBranchHistory;
+
     struct DecodeStats : public statistics::Group
     {
         DecodeStats(CPU *cpu);
