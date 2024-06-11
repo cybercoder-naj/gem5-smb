@@ -742,9 +742,9 @@ Decode::decodeInsts(ThreadID tid)
                 target,
                 inst->seqNum,
             };
-            decodedBranchHistory.push_back(branch_info);
+            decodedBranchHistory.push_front(branch_info);
             if (decodedBranchHistory.size() == MAX_PHAST_HISTORY_LENGTH + 1)
-                decodedBranchHistory.pop_front();
+                decodedBranchHistory.pop_back();
         }
     }
 

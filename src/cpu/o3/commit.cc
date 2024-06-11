@@ -999,9 +999,9 @@ Commit::commitInsts()
                         target,
                         head_inst->seqNum,
                     };
-                    committedBranchHistory.push_back(branch_info);
+                    committedBranchHistory.push_front(branch_info);
                     if (committedBranchHistory.size() == MAX_PHAST_HISTORY_LENGTH + 1)
-                        committedBranchHistory.pop_front();
+                        committedBranchHistory.pop_back();
                 }
 
                 // hardware transactional memory

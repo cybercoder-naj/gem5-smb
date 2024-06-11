@@ -91,6 +91,8 @@ uint64_t target;
 InstSeqNum seqNum;
 } branchInfo;
 
+/** Rolling branch history. Always pushed at the front, popped at the back.
+ *  So, branchHistory[n] = nth oldest branch. branchHistory[0] = newest branch. */
 typedef std::deque<branchInfo> BranchHistory;
 
 
