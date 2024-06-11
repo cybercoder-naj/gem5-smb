@@ -53,13 +53,13 @@ class PHAST
     PHAST() { };
 
     /** Creates PHAST predictor with given table sizes. */
-    PHAST(uint64_t max_history_length, uint64_t entries_per_table, uint64_t set_bits, uint64_t tag_bits, uint64_t max_counter_value, uint64_t associativity);
+    PHAST(uint64_t_t max_history_length, uint64_t_t entries_per_table, uint64_t_t set_bits, uint64_t_t tag_bits, uint64_t_t max_counter_value, uint64_t_t associativity);
 
     /** Default destructor. */
     ~PHAST();
 
     /** Initializes the PHAST predictor with the given table sizes. */
-    void init(uint64_t max_history_length, uint64_t entries_per_table, uint64_t set_bits, uint64_t tag_bits, uint64_t max_counter_value, uint64_t associativity);
+    void init(uint64_t_t max_history_length, uint64_t_t entries_per_table, uint64_t_t set_bits, uint64_t_t tag_bits, uint64_t_t max_counter_value, uint64_t_t associativity);
 
     /** Records a memory ordering violation between the younger load
     * and the older store. */
@@ -78,7 +78,7 @@ class PHAST
     * any store.  @return Returns the sequence number of the store
     * instruction this PC is dependent upon.  Returns 0 if none.
     */
-    InstSeqNum checkInst(Addr PC, BranchHistory branchHistory);
+    InstSeqNum checkInst(DynInstPtr load, BranchHistory branchHistory);
 
     /** Records this PC/sequence number as issued. */
     void issued(Addr issued_PC, InstSeqNum issued_seq_num, bool is_store);
@@ -102,46 +102,46 @@ class PHAST
         Conflictive,
     };
 
-    uint64 generateBranchHash(unsigned begin_dist, unsigned num_branches, unsigned index);
+    uint64_t generateBranchHash(unsigned begin_dist, unsigned num_branches, unsigned index);
 
-    uint64 foldHistory(std::bitset<BITSETSIZE> h, int bits, unsigned _set_bits, unsigned _tag_bits);
+    uint64_t foldHistory(std::bitset<BITSETSIZE> h, int bits, unsigned _set_bits, unsigned _tag_bits);
 
     class SimplBlockCache {
         struct ENTRY {
-            uint64_t tag;
-            uint32_t distance;
-            uint32_t lru;
-            uint32_t counter;
+            uint64_t_t tag;
+            InstSeqNum dep_store;
+            uint32_t_t lru;
+            uint32_t_t counter;
         };
 
-        uint32_t SET_BITS;
-        uint32_t TAG_BITS;
-        uint32_t WAYS;
+        uint32_t_t SET_BITS;
+        uint32_t_t TAG_BITS;
+        uint32_t_t WAYS;
         //table has (1 << SET_BITS) sets which each have WAYS slots (total entries = sets * ways)
         std::vector<std::vector<ENTRY>> cache;
-        uint64_t lru__counter;
+        uint64_t_t lru__counter;
         unsigned max_counter_value;
 
-        uint64 xorFold(uint64 pc, uint64 history, unsigned size) const;
+        uint64_t xorFold(uint64_t pc, uint64_t history, unsigned size) const;
 
-        uint64 getIndex(Addr pc, uint64 history) const;
+        uint64_t getIndex(Addr pc, uint64_t history) const;
 
-        uint64 getTag(Addr pc, uint64 history) const;
+        uint64_t getTag(Addr pc, uint64_t history) const;
 
-        ENTRY* findEntry(Addr pc, uint64 history);
+        ENTRY* findEntry(Addr pc, uint64_t history);
 
-        ENTRY* getLRUEntry(uint64 set);
+        ENTRY* getLRUEntry(uint64_t set);
 
         void updateLRU(ENTRY* entry);
 
         public:
             int init(unsigned max_ctr, unsigned set_bits, unsigned tag_bits, unsigned ways);
 
-            uint32 predict(Addr pc, uint64 history);
+            uint32_t predict(Addr pc, uint64_t history);
 
-            void update(Addr pc, uint64 history, uint32 distance);
+            void update(Addr pc, uint64_t history, InstSeqNum dep_store);
 
-            void updateCommit(Addr pc, uint64 history, bool predictionWrong);
+            void updateCommit(Addr pc, uint64_t history, bool predictionWrong);
 
             unsigned getSetBits() { return SET_BITS; }
 
