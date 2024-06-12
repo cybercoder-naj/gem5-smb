@@ -41,6 +41,7 @@ namespace gem5
 namespace o3
 {
 
+//TODO
 #define BITSETSIZE 500
 
 class SimplBlockCache;
@@ -53,13 +54,13 @@ class PHAST
     PHAST() { };
 
     /** Creates PHAST predictor with given table sizes. */
-    PHAST(uint64_t_t max_history_length, uint64_t_t entries_per_table, uint64_t_t set_bits, uint64_t_t tag_bits, uint64_t_t max_counter_value, uint64_t_t associativity);
+    PHAST(uint64_t max_history_length, uint64_t entries_per_table, uint64_t set_bits, uint64_t tag_bits, uint64_t max_counter_value, uint64_t associativity);
 
     /** Default destructor. */
     ~PHAST();
 
     /** Initializes the PHAST predictor with the given table sizes. */
-    void init(uint64_t_t max_history_length, uint64_t_t entries_per_table, uint64_t_t set_bits, uint64_t_t tag_bits, uint64_t_t max_counter_value, uint64_t_t associativity);
+    void init(uint64_t max_history_length, uint64_t entries_per_table, uint64_t set_bits, uint64_t tag_bits, uint64_t max_counter_value, uint64_t associativity);
 
     /** Records a memory ordering violation between the younger load
     * and the older store. */
@@ -88,7 +89,9 @@ class PHAST
 
   private:
 
-    std::vector<unsigned> history_sizes;
+    unsigned maxBranches;
+
+    std::vector<unsigned> historySizes;
 
     std::vector<SimplBlockCache> paths;
 
@@ -108,19 +111,19 @@ class PHAST
 
     class SimplBlockCache {
         struct ENTRY {
-            uint64_t_t tag;
+            uint64_t tag;
             InstSeqNum dep_store;
-            uint32_t_t lru;
-            uint32_t_t counter;
+            uint32_t lru;
+            uint32_t counter;
         };
 
-        uint32_t_t SET_BITS;
-        uint32_t_t TAG_BITS;
-        uint32_t_t WAYS;
+        uint32_t setBits;
+        uint32_t tagBits;
+        uint32_t ways;
+        uint64_t lruCounter;
+        unsigned maxCounterValue;
         //table has (1 << SET_BITS) sets which each have WAYS slots (total entries = sets * ways)
         std::vector<std::vector<ENTRY>> cache;
-        uint64_t_t lru__counter;
-        unsigned max_counter_value;
 
         uint64_t xorFold(uint64_t pc, uint64_t history, unsigned size) const;
 
@@ -135,7 +138,7 @@ class PHAST
         void updateLRU(ENTRY* entry);
 
         public:
-            int init(unsigned max_ctr, unsigned set_bits, unsigned tag_bits, unsigned ways);
+            int init(unsigned max_ctr, unsigned set_bits, unsigned tag_bits, unsigned _ways);
 
             uint32_t predict(Addr pc, uint64_t history);
 
@@ -143,9 +146,9 @@ class PHAST
 
             void updateCommit(Addr pc, uint64_t history, bool predictionWrong);
 
-            unsigned getSetBits() { return SET_BITS; }
+            unsigned getSetBits() { return setBits; }
 
-            unsigned getTagBits() { return TAG_BITS; }
+            unsigned getTagBits() { return tagBits; }
     };
 
 };

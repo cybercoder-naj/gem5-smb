@@ -31,6 +31,7 @@
 #include "base/intmath.hh"
 #include "base/logging.hh"
 #include "base/trace.hh"
+#include <cmath>
 
 namespace gem5
 {
@@ -38,11 +39,45 @@ namespace gem5
 namespace o3
 {
 
+PHAST::PHAST(uint64_t max_history_length, uint64_t entries_per_table, uint64_t set_bits, uint64_t tag_bits, uint64_t associativity) {
+
+    assert(!isPowerOf2(max_history_length) && "Invalid max history length!\n");
+
+    historySizes.push_back(0);
+    for (unsigned i=2; i <= max_history_length; i <<= 1)
+        historySizes.push_back(i);
+
+    //TODO
+    maxBranches = 0;
+    //FIXME: parametise this
+    SELECTED_TARGET_MASK = (1 << ) - 1;
+    //FIXME: parametise this
+    MAX_COUNTER = (1 << ) - 1;
+
+    num_tables = historySizes.size();
+    paths = std::vector<SimplBlockCache>();
+    paths.reserve(num_tables);
+
+    unsigned num_entries = 0;
+    for (unsigned i = 0; i < num_tables; ++i) {
+        num_entries += paths[i].init(max_counter_value, set_bits, tag_bits, associativity);
+    }
+
+}
+
+
 PHAST::~PHAST()
 {
 }
 
-InstSeqNum checkInst(DynInstPtr load, BranchHistory branchHistory) {
+void insertLoad(Addr load_PC, InstSeqNum load_seq_num) {
+    return;
+}
+
+void insertStore(Addr store_PC, InstSeqNum store_seq_num, ThreadID tid) {
+}
+
+InstSeqNum PHAST::checkInst(DynInstPtr load, BranchHistory branchHistory) {
     InstSeqNum dep_store = 0;
 
     auto begin = branchHistory.begin();
@@ -54,8 +89,8 @@ InstSeqNum checkInst(DynInstPtr load, BranchHistory branchHistory) {
 
     uint64_t hash;
     InstSeqNum seq_num;
-    for (unsigned i = 0; i <= max_branches && i < history_sizes.size(); i++) {
-        hash = generateBranchHash(history_sizes[i], i, begin);
+    for (unsigned i = 0; i <= maxBranches && i < historySizes.size(); i++) {
+        hash = generateBranchHash(historySizes[i], i, begin);
         seq_num = paths[i].predict(load->pcState()->instAddr(), hash);
         if (seq_num != 0) {
             dep_store = seq_num;
@@ -65,7 +100,7 @@ InstSeqNum checkInst(DynInstPtr load, BranchHistory branchHistory) {
     return dep_store;
 }
 
-void PHAST::violation(DynInstPtr store, DynInstPtr load, unsigned store_distance, BranchHistory branchHistory) {
+void PHAST::violation(DynInstPtr store, DynInstPtr load, BranchHistory branchHistory) {
     uint64_t first_jump = 0;
     uint64_t path_hash = 0;
     unsigned hist_items = 0;
@@ -89,18 +124,18 @@ void PHAST::violation(DynInstPtr store, DynInstPtr load, unsigned store_distance
 
     //truncate num branches to first power of two
     unsigned path_index = 0;
-    for (unsigned i = history_sizes.size(); i-- > 0;) {
-        unsigned size = history_sizes[i];
+    for (unsigned i = historySizes.size(); i-- > 0;) {
+        unsigned size = historySizes[i];
         if ((num_branches & size) == size) {
             path_index = size;
             break;
         }
     }
 
-    path_hash = generateBranchHash(num_branches, path_index, branchHistory);
+    path_hash = generateBranchHash(num_branches, path_index, branchHistory.begin());
 
     paths[path_index].update(load->pcState().instAddr(), path_hash, store_distance);
-    max_branches = max(max_branches, path_index);
+    maxBranches = max(maxBranches, path_index);
 }
 
 uint64_t PHAST::generateBranchHash(unsigned num_branches, unsigned path_index, BranchHistory::iterator branchHistory) {
@@ -131,8 +166,8 @@ uint64_t PHAST::generateBranchHash(unsigned num_branches, unsigned path_index, B
     return foldHistory(h, bits, paths[index].getSetBits(), paths[index].getTagBits());
 }
 
-uint64_t PHAST::foldHistory(bitset<BITSETSIZE> h, int bits, unsigned _set_bits, unsigned _tag_bits) {
-    int width = _set_bits + _tag_bits;
+uint64_t PHAST::foldHistory(bitset<BITSETSIZE> h, int bits, unsigned _setBits, unsigned _tagBits) {
+    int width = _setBits + _tagBits;
     bitset<BITSETSIZE> mask((1ULL << width) - 1);
     uint64 hash = 0;
 
@@ -147,6 +182,28 @@ uint64_t PHAST::foldHistory(bitset<BITSETSIZE> h, int bits, unsigned _set_bits, 
     return hash;
 }
 
+int PHAST::SimplBlockCache::init(unsigned max_ctr, unsigned set_bits, unsigned tag_bits, unsigned _ways) {
+    tagBits = tag_bits;
+    setBits = set_bits;
+    ways = _ways;
+    lruCounter = 0;
+    maxCounterValue = max_ctr;
+
+    cache = std::vector<std::vector<ENTRY>>(1 << SETBITS);
+
+    for (uint64_t i = 0; i < (1ULL << SETBITS); i++) {
+        cache[i] = vector<ENTRY>(WAYS);
+
+        for (uint32_t j = 0; j < WAYS; j++) {
+            cache[i][j].tag = 0;
+            cache[i][j].dep_store = 0;
+            cache[i][j].lru = 0;
+            cache[i][j].counter = 0;
+        }
+    }
+    return (1 << SETBITS) * WAYS;
+}
+
 uint64_t PHAST::SimplBlockCache::xorFold(uint64_t pc, uint64_t history, unsigned size) const {
     uint64_t mask = (1 << size) - 1;
     uint64_t fold = (history & mask);
@@ -155,8 +212,8 @@ uint64_t PHAST::SimplBlockCache::xorFold(uint64_t pc, uint64_t history, unsigned
     history = (history >> size);
 
     while (history) {
-    fold = (fold ^ (history & mask));
-    history = (history >> size);
+        fold = (fold ^ (history & mask));
+        history = (history >> size);
     }
 
     return fold;
@@ -165,13 +222,13 @@ uint64_t PHAST::SimplBlockCache::xorFold(uint64_t pc, uint64_t history, unsigned
 uint64_t PHAST::SimplBlockCache::getIndex(Addr pc, uint64_t history) const {
     uint64_t ldPC = pc.getAddress();
     ldPC = (ldPC ^ (ldPC >> 2) ^ (ldPC >> 5));
-    uint64_t index = xorFold(0, (ldPC ^ history), SET_BITS);
+    uint64_t index = xorFold(0, (ldPC ^ history), SETBITS);
     return index;
 }
 uint64_t PHAST::SimplBlockCache::getTag(Addr pc, uint64_t history) const {
     uint64_t ldPC = pc.getAddress();
     ldPC = (ldPC ^ (ldPC >> 3) ^ (ldPC >> 7));
-    uint64_t tag = xorFold(0, (ldPC ^ history), TAG_BITS);
+    uint64_t tag = xorFold(0, (ldPC ^ history), TAGBITS);
     return tag;
 }
 
@@ -179,21 +236,21 @@ ENTRY* PHAST::SimplBlockCache::findEntry(Addr pc, uint64_t history) {
     uint64_t set = getIndex(pc, history);
     uint64_t tag = getTag(pc, history);
     for (uint32_t i = 0; i < WAYS; i++) {
-    if (cache[set][i].tag == tag) {
-        return &(cache[set][i]);
+        if (cache[set][i].tag == tag) {
+            return &(cache[set][i]);
+        }
     }
-    }
-    return NULL;
+    return nullptr;
 }
 
 ENTRY* PHAST::SimplBlockCache::getLRUEntry(uint64_t set) {
     uint32_t lru_way = 0;
     uint64_t lru_value = cache[set][lru_way].lru;
     for (uint32_t i = 0; i < WAYS; i++) {
-    if (cache[set][i].lru < lru_value) {
-        lru_way = i;
-        lru_value = cache[set][lru_way].lru;
-    }
+        if (cache[set][i].lru < lru_value) {
+            lru_way = i;
+            lru_value = cache[set][lru_way].lru;
+        }
     }
     return &(cache[set][lru_way]);
 }
@@ -203,34 +260,10 @@ void PHAST::SimplBlockCache::updateLRU(ENTRY* entry) {
     lru_counter++;
 }
 
-public:
-int PHAST::SimplBlockCache::init(unsigned max_ctr, unsigned set_bits, unsigned tag_bits, unsigned ways) {
-    TAG_BITS = tag_bits;
-    SET_BITS = set_bits;
-    WAYS = ways;
-
-    cache = vector<vector<ENTRY>>(1 << SET_BITS);
-
-    std::cout << "GPHAST sets: " << (1 << SET_BITS) << " ways: " << WAYS << " tag_bits: " << TAG_BITS << std::endl;
-    for (uint64_t i = 0; i < (1ULL << SET_BITS); i++) {
-    cache[i] = vector<ENTRY>(WAYS);
-
-    for (uint32_t j = 0; j < WAYS; j++) {
-        cache[i][j].tag = 0;
-        cache[i][j].distance = 0;
-        cache[i][j].lru = 0;
-        cache[i][j].counter = 0;
-    }
-    }
-    lru_counter = 0;
-    max_counter_value = max_ctr;
-    return (1 << SET_BITS) * WAYS;
-}
-
 uint32_t PHAST::SimplBlockCache::predict(Addr pc, uint64_t history) {
     auto entry = findEntry(pc, history);
-    if (entry == NULL || entry->counter == 0 || entry->distance == 0) { // no prediction for this PC
-    return 0;
+    if (entry == nullptr || entry->counter == 0 || entry->dep_store == 0) { // no prediction for this PC
+        return 0;
     }
 
     updateLRU(entry);
@@ -240,7 +273,7 @@ uint32_t PHAST::SimplBlockCache::predict(Addr pc, uint64_t history) {
 
 void PHAST::SimplBlockCache::update(Addr pc, uint64_t history, InstSeqNum dep_store) {
     auto entry = findEntry(pc, history);
-    if (entry == NULL) {
+    if (entry == nullptr) {
         // no prediction for this entry so far, so allocate one
         entry = getLRUEntry(getIndex(pc, history));
         entry->tag = getTag(pc, history);
