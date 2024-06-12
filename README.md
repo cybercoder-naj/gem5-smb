@@ -1,3 +1,8 @@
+> [!IMPORTANT]  
+> This fork of the gem5 repository is maintained by the CAPS-Group of the University of Murcia (Spain)
+> 
+> In the case of using the full simulator or parts of code that were not from the original gem5, additional citation to this repository is required (https://github.com/CAPS-UMU/gem5).
+
 # The gem5 Simulator
 
 This is the repository for the gem5 simulator. It contains the full source code
@@ -9,15 +14,6 @@ microarchitecture. It is primarily used to evaluate new hardware designs,
 system software changes, and compile-time and run-time system optimizations.
 
 The main website can be found at <http://www.gem5.org>.
-
-## Testing status
-
-**Note**: These regard tests run on the develop branch of gem5:
-<https://github.com/gem5/gem5/tree/develop>.
-
-[![Daily Tests](https://github.com/gem5/gem5/actions/workflows/daily-tests.yaml/badge.svg)](https://github.com/gem5/gem5/actions/workflows/daily-tests.yaml)
-[![Weekly Tests](https://github.com/gem5/gem5/actions/workflows/weekly-tests.yaml/badge.svg)](https://github.com/gem5/gem5/actions/workflows/weekly-tests.yaml)
-[![Compiler Tests](https://github.com/gem5/gem5/actions/workflows/compiler-tests.yaml/badge.svg)](https://github.com/gem5/gem5/actions/workflows/compiler-tests.yaml)
 
 ## Getting started
 
