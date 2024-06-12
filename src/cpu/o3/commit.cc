@@ -916,6 +916,8 @@ Commit::commitInsts()
 
     DynInstPtr head_inst;
 
+    bool updatedMemDep = false;
+
     // Commit as many instructions as possible until the commit bandwidth
     // limit is reached, or it becomes impossible to commit any more.
     while (num_committed < commitWidth) {
@@ -965,9 +967,11 @@ Commit::commitInsts()
 
             // PHAST training
             // only want to report a violation when we're not on a misspeculated path
-            if (!head_inst->squashedDueToBranch) {
+            // FIXME: we're not checking if this is a load or store!
+            if (!head_inst->squashedDueToBranch && !updatedMemDep && head_inst->isLoad()) {
                 IEWStage->InstructionQueue->violation(head_inst->violating_store,
                                                       head_inst, committedBranchHistory);
+                updatedMemDep = true;
             }
 
             ++stats.commitSquashedInsts;
