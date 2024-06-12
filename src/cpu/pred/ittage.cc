@@ -1,5 +1,6 @@
 //
 // Created by xim on 5/8/21.
+// Modified by Eduardo José Gómez Hernández (2024)
 //
 
 #include "cpu/pred/ittage.hh"
