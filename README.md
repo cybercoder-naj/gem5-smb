@@ -1,7 +1,14 @@
+# Main Changes
+
 > [!IMPORTANT]  
 > This fork of the gem5 repository is maintained by the CAPS-Group of the University of Murcia (Spain)
 > 
 > In the case of using the full simulator or parts of code that were not from the original gem5, additional citation to this repository is required (https://github.com/CAPS-UMU/gem5).
+
+- Fixed TAGE_SC_L_64K (based on https://github.com/useredsa/spec_tage_scl) now it is called TAGE_EMILIO
+- Added (and fixed) the AssociativeBTB (based on https://github.com/dhschall/gem5-fdp)
+- Ported ITTAGE indirect target predictor (from https://github.com/OpenXiangShan/GEM5)
+- Several correctness and preformance fixes
 
 # The gem5 Simulator
 
