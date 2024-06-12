@@ -357,12 +357,17 @@ class DynInst : public ExecContext, public RefCounted
     ssize_t sqIdx = -1;
     typename LSQUnit::SQIterator sqIt;
 
-    /** Store seqnum this load received its data from, if any */
-    InstSeqNum forwardedFrom = 0;
-
-    /** Youngest store this load violated with */
-    DynInstPtr violatingStore = nullptr;
-
+    /** Info needed for each load for PHAST */
+    typedef struct memDepInfo {
+        /** Store this load received its data from, if any */
+        InstSeqNum forwardedFrom = 0;
+        /** Youngest store this load violated with */
+        Addr violatingStorePC;
+        InstSeqNum violatingStoreSeqNum;
+        ssize_t violatingStoreQueueIdx = -1;
+        /** VAddr of store this load was predicted dependent on */
+        Addr predStoreAddr = 0;
+    } memDepInfo;
 
     /////////////////////// TLB Miss //////////////////////
     /**

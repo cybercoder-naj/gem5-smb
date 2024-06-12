@@ -76,10 +76,10 @@ class PHAST
     void insertStore(Addr store_PC, InstSeqNum store_seq_num, ThreadID tid);
 
     /** Checks if the instruction with the given PC is dependent upon
-    * any store.  @return Returns the sequence number of the store
-    * instruction this PC is dependent upon.  Returns 0 if none.
+    * any store.  @return Returns the store queue index of the store
+    * instruction this PC is dependent upon.  Returns -1 if none.
     */
-    InstSeqNum checkInst(DynInstPtr load, BranchHistory branchHistory);
+    ssize_t checkInst(DynInstPtr load, BranchHistory branchHistory);
 
     /** Records this PC/sequence number as issued. */
     void issued(Addr issued_PC, InstSeqNum issued_seq_num, bool is_store);
@@ -105,14 +105,14 @@ class PHAST
         Conflictive,
     };
 
-    uint64_t generateBranchHash(unsigned begin_dist, unsigned num_branches, unsigned index);
+    uint64_t generateBranchHash(unsigned num_branches, unsigned path_index, BranchHistory::iterator branchHistory);
 
     uint64_t foldHistory(std::bitset<BITSETSIZE> h, int bits, unsigned _set_bits, unsigned _tag_bits);
 
     class SimplBlockCache {
         struct ENTRY {
             uint64_t tag;
-            InstSeqNum dep_store;
+            ssize_t sq_idx;
             uint32_t lru;
             uint32_t counter;
         };
@@ -142,7 +142,7 @@ class PHAST
 
             uint32_t predict(Addr pc, uint64_t history);
 
-            void update(Addr pc, uint64_t history, InstSeqNum dep_store);
+            void update(Addr pc, uint64_t history, ssize_t sq_idx);
 
             void updateCommit(Addr pc, uint64_t history, bool predictionWrong);
 

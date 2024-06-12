@@ -967,7 +967,6 @@ Commit::commitInsts()
 
             // PHAST training
             // only want to report a violation when we're not on a misspeculated path
-            // FIXME: we're not checking if this is a load or store!
             if (!head_inst->squashedDueToBranch && !updatedMemDep && head_inst->isLoad()) {
                 IEWStage->InstructionQueue->violation(head_inst->violating_store,
                                                       head_inst, committedBranchHistory);

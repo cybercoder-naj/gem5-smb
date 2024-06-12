@@ -77,8 +77,8 @@ void insertLoad(Addr load_PC, InstSeqNum load_seq_num) {
 void insertStore(Addr store_PC, InstSeqNum store_seq_num, ThreadID tid) {
 }
 
-InstSeqNum PHAST::checkInst(DynInstPtr load, BranchHistory branchHistory) {
-    InstSeqNum dep_store = 0;
+ssize_t PHAST::checkInst(DynInstPtr load, BranchHistory branchHistory) {
+    ssize_t sq_idx = -1;
 
     auto begin = branchHistory.begin();
     InstSeqNum branch_seq_num = load->seqNum;
@@ -88,16 +88,16 @@ InstSeqNum PHAST::checkInst(DynInstPtr load, BranchHistory branchHistory) {
     }
 
     uint64_t hash;
-    InstSeqNum seq_num;
+    ssize_t tmp_idx;
     for (unsigned i = 0; i <= maxBranches && i < historySizes.size(); i++) {
         hash = generateBranchHash(historySizes[i], i, begin);
-        seq_num = paths[i].predict(load->pcState()->instAddr(), hash);
-        if (seq_num != 0) {
-            dep_store = seq_num;
+        tmp_idx = paths[i].predict(load->pcState()->instAddr(), hash);
+        if (tmp_idx != -1) {
+            sq_idx = tmp_idx
         }
     }
 
-    return dep_store;
+    return sq_idx;
 }
 
 void PHAST::violation(DynInstPtr store, DynInstPtr load, BranchHistory branchHistory) {
@@ -196,7 +196,7 @@ int PHAST::SimplBlockCache::init(unsigned max_ctr, unsigned set_bits, unsigned t
 
         for (uint32_t j = 0; j < WAYS; j++) {
             cache[i][j].tag = 0;
-            cache[i][j].dep_store = 0;
+            cache[i][j].sq_idx = -1;
             cache[i][j].lru = 0;
             cache[i][j].counter = 0;
         }
@@ -260,28 +260,28 @@ void PHAST::SimplBlockCache::updateLRU(ENTRY* entry) {
     lru_counter++;
 }
 
-uint32_t PHAST::SimplBlockCache::predict(Addr pc, uint64_t history) {
+ssize_t PHAST::SimplBlockCache::predict(Addr pc, uint64_t history) {
     auto entry = findEntry(pc, history);
-    if (entry == nullptr || entry->counter == 0 || entry->dep_store == 0) { // no prediction for this PC
+    if (entry == nullptr || entry->counter == 0 || entry->sq_idx == -1) { // no prediction for this PC
         return 0;
     }
 
     updateLRU(entry);
 
-    return entry->dep_store;
+    return entry->sq_idx;
 }
 
-void PHAST::SimplBlockCache::update(Addr pc, uint64_t history, InstSeqNum dep_store) {
+void PHAST::SimplBlockCache::update(Addr pc, uint64_t history, ssize_t sq_idx) {
     auto entry = findEntry(pc, history);
     if (entry == nullptr) {
         // no prediction for this entry so far, so allocate one
         entry = getLRUEntry(getIndex(pc, history));
         entry->tag = getTag(pc, history);
-        entry->dep_store = dep_store;
+        entry->sq_idx = sq_idx;
         entry->counter = max_counter_value;
         updateLRU(entry);
     } else {
-        entry->dep_store = dep_store;
+        entry->sq_idx = sq_idx;
         entry->counter = max_counter_value;
         updateLRU(entry);
     }

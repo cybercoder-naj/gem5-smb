@@ -570,8 +570,11 @@ LSQUnit::checkViolations(typename LoadQueue::iterator& loadIt,
                 DPRINTF(LSQUnit, "Detected fault with inst [sn:%lli] and "
                         "[sn:%lli] at address %#x\n",
                         inst->seqNum, ld_inst->seqNum, ld_eff_addr1);
+
                 memDepViolator = ld_inst;
-                ld_inst->violatingStore = inst;
+                ld_inst->memDepInfo.violatingStorePC = inst->pcState()->instAddr;
+                ld_inst->memDepInfo.violatingStoreSeqNum = inst->seqNum;
+                ld_inst->memDepInfo.violatingStoreQueueIndex = inst->sqIdx;
 
                 ++stats.memOrderViolation;
 
