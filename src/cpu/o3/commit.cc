@@ -1007,6 +1007,11 @@ Commit::commitInsts()
                         committedBranchHistory.pop_back();
                 }
 
+                //update memdep predictor
+                if (head_inst->isLoad()) {
+                    IEWStage->InstructionQueue->memDepUnit[tid].commit(head_inst);
+                }
+
                 // hardware transactional memory
 
                 // update nesting depth

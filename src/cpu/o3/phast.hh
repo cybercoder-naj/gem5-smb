@@ -85,7 +85,8 @@ class PHAST
     void issued(Addr issued_PC, InstSeqNum issued_seq_num, bool is_store);
 
     //TODO: add to memdep interface
-    void commit_load(Addr load_pc, InstSeqNum load_seq_num, Addr store_pc, bool is_dspec = true, bool has_stalled = true, LoadExecutionType exec_type = LoadExecutionType::NotSpec);
+    /** Updates predictor at load commit */
+    void commit(DynInstPtr inst);
 
   private:
 
@@ -98,12 +99,6 @@ class PHAST
     unsigned maxHistory;
 
     unsigned entriesPerTable;
-
-    enum LoadExecutionType {
-        NotSpec,
-        FalseDependence,
-        Conflictive,
-    };
 
     uint64_t generateBranchHash(unsigned num_branches, unsigned path_index, BranchHistory::iterator branchHistory);
 

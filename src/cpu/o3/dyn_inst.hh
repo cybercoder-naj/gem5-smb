@@ -368,6 +368,8 @@ class DynInst : public ExecContext, public RefCounted
         /** Memory location of store this load was predicted dependent on */
         Addr predStoreAddr = 0;
         int predStoreSize;
+        unsigned predBranchHistLength;
+        uint64_t predictorHash;
     } memDepInfo;
 
     /////////////////////// TLB Miss //////////////////////

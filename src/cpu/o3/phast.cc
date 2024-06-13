@@ -86,9 +86,13 @@ std::ptrdiff_t PHAST::checkInst(DynInstPtr load, BranchHistory branchHistory) {
         hash = generateBranchHash(historySizes[i], i, begin);
         tmp_distance = paths[i].predict(load->pcState()->instAddr(), hash);
         if (tmp_distance != -1) {
-            distance = tmp_distance
+            distance = tmp_distance;
+            branch_history_length = i;
+            load->memDepInfo.predBranchHistLength = i;
+            load->memDepInfo.predictorHash = hash;
         }
     }
+
 
     return distance;
 }
@@ -129,6 +133,38 @@ void PHAST::violation(DynInstPtr store, DynInstPtr load, BranchHistory branchHis
 
     paths[path_index].update(load->pcState().instAddr(), path_hash, load->memDepInfo->storeQueueDistance);
     maxBranches = max(maxBranches, path_index);
+}
+
+void commit(DynInstPtr inst) {
+
+    if (inst->isStore()) return;
+
+    if (!inst->memDepInfo.predStoreAddr) return;
+
+    bool misprediction;
+    Addr ld_s = inst->effAddr;
+    Addr ld_e = ld_s + inst->effSize;
+    Addr st_s = inst->memDepInfo.predStoreAddr;
+    Addr st_e = st_s + inst->memDepInfo.predStoreSize;
+    bool store_has_lower_limit = ld_s >= st_s;
+    bool store_has_upper_limit = ld_e <= st_e;
+    bool lower_load_has_store_part = ld_s < st_e;
+    bool upper_load_has_store_part = ld_e > st_s;
+
+    if ((store_has_lower_limit && store_has_upper_limit) ||
+        (store_has_lower_limit && lower_load_has_store_part) ||
+        (store_has_upper_limit && upper_load_has_store_part) ||
+        (lower_load_has_store_part && upper_load_has_store_part))
+        misprediction = false;
+    else
+        misprediction = true;
+
+    int branch_history = inst->memDepInfo.predBranchHistLength;
+
+    paths[branch_history].updateCommit(inst->pcState()->instAddr(),
+                                       inst->memDepInfo.predictorHash,
+                                       misprediction);
+
 }
 
 uint64_t PHAST::generateBranchHash(unsigned num_branches, unsigned path_index, BranchHistory::iterator branchHistory) {

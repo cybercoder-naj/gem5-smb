@@ -272,8 +272,8 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
 
             inst_entry->memDeps = store_entries.size();
         } else { //PHAST predicted dependence
-            auto sq_idx = inst_entry->sqIt - inst_entry->memDepInfo.storeQueueDistance;
-            DynInstPtr store_entry = iqPtr->iewStage->ldstQueue;
+            auto sq_it = inst_entry->sqIt - inst_entry->memDepInfo.storeQueueDistance;
+            DynInstPtr store_entry = *sq_it;
             store_entry->dependInsts.push_back(inst_entry);
 
             inst_entry->memDepInfo.predStoreAddr = store_entry->effAddr;
