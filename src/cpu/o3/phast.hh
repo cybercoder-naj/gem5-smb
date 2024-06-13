@@ -66,27 +66,23 @@ class PHAST
     * and the older store. */
     void violation(DynInstPtr store, DynInstPtr load, BranchHistory branchHistory);
 
-    /** Inserts a load into the PHAST predictor.  This does nothing but
-    * is included in case other predictors require a similar function.
-    */
-    void insertLoad(Addr load_PC, InstSeqNum load_seq_num) { return;}
-
-    /** Inserts a store into the PHAST predictor.  Updates the
-    * LFST if the store has a valid SSID. */
-    void insertStore(Addr store_PC, InstSeqNum store_seq_num, ThreadID tid) { return;}
-
     /** Checks if the instruction with the given PC is dependent upon
     * any store.  @return Returns the relative SQ distance of the store
     * instruction this PC is dependent upon.  Returns -1 if none.
     */
     std::ptrdiff_t checkInst(DynInstPtr load, BranchHistory branchHistory);
 
-    /** Records this PC/sequence number as issued. */
-    void issued(Addr issued_PC, InstSeqNum issued_seq_num, bool is_store);
-
-    //TODO: add to memdep interface
     /** Updates predictor at load commit */
     void commit(DynInstPtr inst);
+
+    /** Clears all tables */
+    void clear();
+
+    /** mem_dep_unit interface methods that don't do anything in PHAST */
+    void squash(InstSeqNum squashed_num, ThreadID tid) { return; }
+    void issued(Addr issued_PC, InstSeqNum issued_seq_num, bool is_store) { return; }
+    void insertStore(Addr store_PC, InstSeqNum store_seq_num, ThreadID tid) { return; }
+    void insertLoad(Addr load_PC, InstSeqNum load_seq_num) { return;}
 
   private:
 
@@ -105,7 +101,7 @@ class PHAST
     uint64_t foldHistory(std::bitset<BITSETSIZE> h, int bits, unsigned _set_bits, unsigned _tag_bits);
 
     class SimplBlockCache {
-        struct ENTRY {
+        struct Entry {
             uint64_t tag;
             std::ptrdiff_t distance;
             uint32_t lru;
@@ -114,11 +110,10 @@ class PHAST
 
         uint32_t setBits;
         uint32_t tagBits;
-        uint32_t ways;
+        uint32_t associativity;
         uint64_t lruCounter;
         unsigned maxCounterValue;
-        //table has (1 << SET_BITS) sets which each have WAYS slots (total entries = sets * ways)
-        std::vector<std::vector<ENTRY>> cache;
+        std::vector<std::vector<Entry>> cache;
 
         uint64_t xorFold(uint64_t pc, uint64_t history, unsigned size) const;
 
@@ -126,14 +121,16 @@ class PHAST
 
         uint64_t getTag(Addr pc, uint64_t history) const;
 
-        ENTRY* findEntry(Addr pc, uint64_t history);
+        Entry* findEntry(Addr pc, uint64_t history);
 
-        ENTRY* getLRUEntry(uint64_t set);
+        Entry* getLRUEntry(uint64_t set);
 
-        void updateLRU(ENTRY* entry);
+        void updateLRU(Entry* entry);
+
+        void clear();
 
         public:
-            int init(unsigned max_ctr, unsigned set_bits, unsigned tag_bits, unsigned _ways);
+            int init(unsigned max_ctr, unsigned set_bits, unsigned tag_bits, unsigned associativity);
 
             std::ptrdiff_t predict(Addr pc, uint64_t history);
 

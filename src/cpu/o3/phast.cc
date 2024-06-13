@@ -58,13 +58,11 @@ PHAST::PHAST(uint64_t max_history_length, uint64_t entries_per_table, uint64_t s
     paths = std::vector<SimplBlockCache>();
     paths.reserve(num_tables);
 
-    unsigned num_entries = 0;
     for (unsigned i = 0; i < num_tables; ++i) {
-        num_entries += paths[i].init(max_counter_value, set_bits, tag_bits, associativity);
+        paths[i].init(max_counter_value, set_bits, tag_bits, associativity);
     }
 
 }
-
 
 PHAST::~PHAST()
 {
@@ -92,7 +90,6 @@ std::ptrdiff_t PHAST::checkInst(DynInstPtr load, BranchHistory branchHistory) {
             load->memDepInfo.predictorHash = hash;
         }
     }
-
 
     return distance;
 }
@@ -211,26 +208,35 @@ uint64_t PHAST::foldHistory(bitset<BITSETSIZE> h, int bits, unsigned _setBits, u
     return hash;
 }
 
-int PHAST::SimplBlockCache::init(unsigned max_ctr, unsigned set_bits, unsigned tag_bits, unsigned _ways) {
+void PHAST::clear() {
+   maxBranches = 0;
+
+    for (unsigned i = 0; i < paths.size(); ++i) {
+        paths[i].clear();
+    }
+
+}
+
+int PHAST::SimplBlockCache::init(unsigned max_ctr, unsigned set_bits, unsigned tag_bits, unsigned _associativity) {
     tagBits = tag_bits;
     setBits = set_bits;
-    ways = _ways;
+    associativity = associativity;
     lruCounter = 0;
     maxCounterValue = max_ctr;
 
-    cache = std::vector<std::vector<ENTRY>>(1 << SETBITS);
+    cache = std::vector<std::vector<Entry>>(1 << setBits);
 
-    for (uint64_t i = 0; i < (1ULL << SETBITS); i++) {
-        cache[i] = vector<ENTRY>(WAYS);
+    for (uint64_t i = 0; i < (1ULL << setBits); i++) {
+        cache[i] = vector<Entry>(associativity);
 
-        for (uint32_t j = 0; j < WAYS; j++) {
+        for (uint32_t j = 0; j < associativity; j++) {
             cache[i][j].tag = 0;
             cache[i][j].distance = 0;
             cache[i][j].lru = 0;
             cache[i][j].counter = 0;
         }
     }
-    return (1 << SETBITS) * WAYS;
+    return (1 << setBits) * associativity;
 }
 
 uint64_t PHAST::SimplBlockCache::xorFold(uint64_t pc, uint64_t history, unsigned size) const {
@@ -251,20 +257,20 @@ uint64_t PHAST::SimplBlockCache::xorFold(uint64_t pc, uint64_t history, unsigned
 uint64_t PHAST::SimplBlockCache::getIndex(Addr pc, uint64_t history) const {
     uint64_t ldPC = pc.getAddress();
     ldPC = (ldPC ^ (ldPC >> 2) ^ (ldPC >> 5));
-    uint64_t index = xorFold(0, (ldPC ^ history), SETBITS);
+    uint64_t index = xorFold(0, (ldPC ^ history), setBits);
     return index;
 }
 uint64_t PHAST::SimplBlockCache::getTag(Addr pc, uint64_t history) const {
     uint64_t ldPC = pc.getAddress();
     ldPC = (ldPC ^ (ldPC >> 3) ^ (ldPC >> 7));
-    uint64_t tag = xorFold(0, (ldPC ^ history), TAGBITS);
+    uint64_t tag = xorFold(0, (ldPC ^ history), tagBits);
     return tag;
 }
 
-ENTRY* PHAST::SimplBlockCache::findEntry(Addr pc, uint64_t history) {
+Entry* PHAST::SimplBlockCache::findEntry(Addr pc, uint64_t history) {
     uint64_t set = getIndex(pc, history);
     uint64_t tag = getTag(pc, history);
-    for (uint32_t i = 0; i < WAYS; i++) {
+    for (uint32_t i = 0; i < associativity; i++) {
         if (cache[set][i].tag == tag) {
             return &(cache[set][i]);
         }
@@ -272,10 +278,10 @@ ENTRY* PHAST::SimplBlockCache::findEntry(Addr pc, uint64_t history) {
     return nullptr;
 }
 
-ENTRY* PHAST::SimplBlockCache::getLRUEntry(uint64_t set) {
+Entry* PHAST::SimplBlockCache::getLRUEntry(uint64_t set) {
     uint32_t lru_way = 0;
     uint64_t lru_value = cache[set][lru_way].lru;
-    for (uint32_t i = 0; i < WAYS; i++) {
+    for (uint32_t i = 0; i < associativity; i++) {
         if (cache[set][i].lru < lru_value) {
             lru_way = i;
             lru_value = cache[set][lru_way].lru;
@@ -284,7 +290,7 @@ ENTRY* PHAST::SimplBlockCache::getLRUEntry(uint64_t set) {
     return &(cache[set][lru_way]);
 }
 
-void PHAST::SimplBlockCache::updateLRU(ENTRY* entry) {
+void PHAST::SimplBlockCache::updateLRU(Entry* entry) {
     entry->lru = lru_counter;
     lru_counter++;
 }
@@ -331,6 +337,19 @@ void PHAST::SimplBlockCache::updateCommit(Addr pc, uint64_t history, bool predic
     }
 
     updateLRU(entry);
+}
+
+void PHAST::SimplBlockCache::clear() {
+
+    for (uint64_t i = 0; i < (1ULL << setBits); i++) {
+        for (uint32_t j = 0; j < associativity; j++) {
+            cache[i][j].tag = 0;
+            cache[i][j].distance = 0;
+            cache[i][j].lru = 0;
+            cache[i][j].counter = 0;
+        }
+    }
+
 }
 
 } // namespace o3

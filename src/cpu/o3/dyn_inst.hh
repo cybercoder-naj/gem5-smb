@@ -76,10 +76,10 @@ namespace o3
 //it's needed across O3
 /**  History of committed branches */
 typedef struct branchInfo {
-bool indirect;
-bool taken;
-uint64_t target;
-InstSeqNum seqNum;
+    bool indirect;
+    bool taken;
+    uint64_t target;
+    InstSeqNum seqNum;
 } branchInfo;
 
 /** Rolling branch history. Always pushed at the front, popped at the back.
