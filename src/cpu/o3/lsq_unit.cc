@@ -564,7 +564,7 @@ LSQUnit::checkViolations(typename LoadQueue::iterator& loadIt,
                 if (memDepViolator && ld_inst->seqNum > memDepViolator->seqNum)
                     break;
                 // Check this load hasn't already forwarded from a younger store
-                if (inst->seqNum < ld_inst->forwardedFrom)
+                if (inst->seqNum < ld_inst->memDepInfo.forwardedFrom)
                     break;
 
                 DPRINTF(LSQUnit, "Detected fault with inst [sn:%lli] and "
@@ -572,8 +572,8 @@ LSQUnit::checkViolations(typename LoadQueue::iterator& loadIt,
                         inst->seqNum, ld_inst->seqNum, ld_eff_addr1);
 
                 memDepViolator = ld_inst;
-                ld_inst->memDepInfo.violatingStorePC = inst->pcState()->instAddr;
-                ld_inst->memDepInfo.violatingStoreSeqNum = inst->seqNum;
+                ld_inst->memDepInfo.violatingStoreSeqNum = std::max(inst->seqNum,
+                                                                    ld_inst->memDepInfo.violatingStoreSeqNum);
                 ld_inst->memDepInfo.storeQueueDistance = ld_inst->sqIt - inst->sqIt;
 
                 ++stats.memOrderViolation;
@@ -1477,7 +1477,7 @@ LSQUnit::read(LSQRequest *request, ssize_t load_idx)
                         "addr %#x\n", store_it._idx,
                         request->mainReq()->getVaddr());
 
-                load_inst->forwardedFrom = store_it->seqNum;
+                load_inst->memDepInfo.forwardedFrom = store_it->seqNum;
 
                 PacketPtr data_pkt = new Packet(request->mainReq(),
                         MemCmd::ReadReq);
@@ -1568,7 +1568,7 @@ LSQUnit::read(LSQRequest *request, ssize_t load_idx)
                         "Store idx %i to load addr %#x\n",
                         store_it._idx, request->mainReq()->getVaddr());
 
-                load_inst->forwardedFrom = store_it->seqNum;
+                load_inst->memDepInfo.forwardedFrom = store_it->seqNum;
 
                 // Must discard the request.
                 request->discard();

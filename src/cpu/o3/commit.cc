@@ -967,8 +967,9 @@ Commit::commitInsts()
 
             // PHAST training
             // only want to report a violation when we're not on a misspeculated path
-            if (!head_inst->squashedDueToBranch && !updatedMemDep && head_inst->isLoad()) {
-                IEWStage->InstructionQueue->violation(head_inst->violating_store,
+            if (!head_inst->squashedDueToBranch && !updatedMemDep
+                && head_inst->isLoad() && head_inst->memDepInfo.violatingStorePC) {
+                IEWStage->InstructionQueue->violation(head_inst->memDepInfo.violatingStoreSeqNum,
                                                       head_inst, committedBranchHistory);
                 updatedMemDep = true;
             }

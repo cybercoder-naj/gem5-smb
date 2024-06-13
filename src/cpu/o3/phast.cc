@@ -119,7 +119,7 @@ std::ptrdiff_t PHAST::checkInst(DynInstPtr load, BranchHistory branchHistory) {
     return distance;
 }
 
-void PHAST::violation(DynInstPtr store, DynInstPtr load, BranchHistory branchHistory) {
+void PHAST::violation(InstSeqNum store_seq_num, DynInstPtr load, BranchHistory branchHistory) {
     uint64_t first_jump = 0;
     uint64_t path_hash = 0;
     unsigned hist_items = 0;
@@ -128,20 +128,21 @@ void PHAST::violation(DynInstPtr store, DynInstPtr load, BranchHistory branchHis
     int hs_idx = 0;
 
     //corner case of a violation before any branches
+    //FIXME: original code sets num branches to 0 if there are no inflight branches, so
+    //do we have to track which committed branches aren't too old??
     if (branchHistory.empty()) return;
 
-    //branch history passed from commit, so we know the first branch will
-    //be older than the load. just need to search for the store.
+    //taking branch history from commit so first branch is always older than the load
     auto br_it = branchHistory.begin();
     InstSeqNum branch_seq_num;
     do {
         branch_seq_num = br_it->seqNum;
         br_it++;
-    } while (br_it != branchHistory.end() && store->seqNum > branch_seq_num);
+    } while (br_it != branchHistory.end() && store_seq_num > branch_seq_num);
 
     unsigned num_branches = (unsigned)std::distance(branchHistory.begin(), br_it);
 
-    //truncate num branches to first power of two
+    //quantise num branches to first lowest path size
     unsigned path_index = 0;
     for (unsigned i = historySizes.size(); i-- > 0;) {
         unsigned size = historySizes[i];
@@ -154,7 +155,7 @@ void PHAST::violation(DynInstPtr store, DynInstPtr load, BranchHistory branchHis
     path_hash = generateBranchHash(num_branches, path_index, branchHistory.begin());
 
     paths[path_index].update(load->pcState().instAddr(), path_hash, load->memDepInfo->storeQueueDistance);
-    maxBranches = max(maxBranches, path_index);
+    maxBranches = std::max(maxBranches, path_index);
 }
 
 void commit(DynInstPtr inst) {

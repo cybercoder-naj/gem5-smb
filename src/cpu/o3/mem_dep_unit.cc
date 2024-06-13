@@ -577,14 +577,14 @@ MemDepUnit::squash(const InstSeqNum &squashed_num, ThreadID tid)
 }
 
 void
-MemDepUnit::violation(const DynInstPtr &store_inst,
+MemDepUnit::violation(InstSeqNum store_seq_num,
         const DynInstPtr &violating_load, BranchHistory branchHistory)
 {
     DPRINTF(MemDepUnit, "Passing violating PCs to store sets,"
             " load: %#x, store: %#x\n", violating_load->pcState().instAddr(),
             store_inst->pcState().instAddr());
     // Tell the memory dependence unit of the violation.
-    depPred.violation(store_inst, violating_load, branchHistory);
+    depPred.violation(store_seq_num, violating_load, branchHistory);
 }
 
 void

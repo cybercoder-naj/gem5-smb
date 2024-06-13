@@ -379,12 +379,13 @@ class DynInst : public ExecContext, public RefCounted
         /** Store this load received its data from, if any */
         InstSeqNum forwardedFrom = 0;
         /** Youngest store this load violated with */
-        Addr violatingStorePC;
         InstSeqNum violatingStoreSeqNum;
+        /** Relative offset into the SQ for dependent store*/
         std::ptrdiff_t storeQueueDistance;
         /** Memory location of store this load was predicted dependent on */
         Addr predStoreAddr = 0;
         int predStoreSize;
+        /** Predicted information validated at commit */
         unsigned predBranchHistLength;
         uint64_t predictorHash;
     } memDepInfo;

@@ -63,7 +63,7 @@ class PHAST
 
     /** Records a memory ordering violation between the younger load
     * and the older store. */
-    void violation(DynInstPtr store, DynInstPtr load, BranchHistory branchHistory);
+    void violation(InstSeqNum store_seq_num, DynInstPtr load, BranchHistory branchHistory);
 
     /** Checks if the instruction with the given PC is dependent upon
     * any store.  @return Returns the relative SQ distance of the store
