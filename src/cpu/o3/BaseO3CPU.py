@@ -147,13 +147,11 @@ class BaseO3CPU(BaseCPU):
         "Should dependency violations be checked for "
         "loads & stores or just stores",
     )
-    store_set_clear_period = Param.Unsigned(
-        250000,
-        "Number of load/store insts before the dep predictor "
-        "should be invalidated",
-    )
-    LFSTSize = Param.Unsigned(1024, "Last fetched store table size")
-    SSITSize = Param.Unsigned(1024, "Store set ID table size")
+
+    phast_max_history_length = Param.Unsigned(32, "Number of tables")
+    phast_num_rows = Param.Unsigned(128, "Number of rows per table")
+    phast_associativity = Param.Unsigned(4, "Number of entries per row")
+    phast_tag_bits = Param.Unsigned(16, "Size of entry tags")
 
     numRobs = Param.Unsigned(1, "Number of Reorder Buffers")
 

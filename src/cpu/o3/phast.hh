@@ -54,13 +54,13 @@ class PHAST
     PHAST() { };
 
     /** Creates PHAST predictor with given table sizes. */
-    PHAST(uint64_t max_history_length, uint64_t entries_per_table, uint64_t set_bits, uint64_t tag_bits, uint64_t max_counter_value, uint64_t associativity);
+    PHAST(uint64_t max_history_length, uint64_t set_bits, uint64_t tag_bits, uint64_t counter_bits, uint64_t associativity);
 
     /** Default destructor. */
     ~PHAST();
 
     /** Initializes the PHAST predictor with the given table sizes. */
-    void init(uint64_t max_history_length, uint64_t entries_per_table, uint64_t set_bits, uint64_t tag_bits, uint64_t max_counter_value, uint64_t associativity);
+    void init(uint64_t max_history_length, uint64_t set_bits, uint64_t tag_bits, uint64_t counter_bits, uint64_t associativity);
 
     /** Records a memory ordering violation between the younger load
     * and the older store. */
@@ -113,6 +113,8 @@ class PHAST
         uint32_t associativity;
         uint64_t lruCounter;
         unsigned maxCounterValue;
+        unsigned selectedTargetBits;
+        uint64_t selectedTargetMask;
         std::vector<std::vector<Entry>> cache;
 
         uint64_t xorFold(uint64_t pc, uint64_t history, unsigned size) const;
@@ -130,7 +132,7 @@ class PHAST
         void clear();
 
         public:
-            int init(unsigned max_ctr, unsigned set_bits, unsigned tag_bits, unsigned associativity);
+            int init(unsigned counter_bits, unsigned set_bits, unsigned tag_bits, unsigned associativity);
 
             std::ptrdiff_t predict(Addr pc, uint64_t history);
 

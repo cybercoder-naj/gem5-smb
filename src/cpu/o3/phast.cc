@@ -39,33 +39,58 @@ namespace gem5
 namespace o3
 {
 
-PHAST::PHAST(uint64_t max_history_length, uint64_t entries_per_table, uint64_t set_bits, uint64_t tag_bits, uint64_t associativity) {
+PHAST::PHAST(uint64_t max_history_length, uint64_t num_rows, uint64_t associativity, uint64_t tag_bits) {
 
-    assert(!isPowerOf2(max_history_length) && "Invalid max history length!\n");
+    assert(isPowerOf2(max_history_length) && "Invalid max history length!\n");
+    assert(isPowerOf2(num_rows) && "Invalid number of rows per table!\n");
 
     historySizes.push_back(0);
     for (unsigned i=2; i <= max_history_length; i <<= 1)
         historySizes.push_back(i);
 
-    //TODO
     maxBranches = 0;
-    //FIXME: parametise this
-    SELECTED_TARGET_MASK = (1 << ) - 1;
-    //FIXME: parametise this
-    MAX_COUNTER = (1 << ) - 1;
+    selectedTargetBits = 5;
+    selectedTargetMask = (1 << selectedTargetBits) - 1;
+
+    unsigned set_bits = log((double)num_rows, 2);
 
     num_tables = historySizes.size();
     paths = std::vector<SimplBlockCache>();
     paths.reserve(num_tables);
 
     for (unsigned i = 0; i < num_tables; ++i) {
-        paths[i].init(max_counter_value, set_bits, tag_bits, associativity);
+        paths[i].init(counter_bits, set_bits, tag_bits, associativity);
     }
 
 }
 
 PHAST::~PHAST()
 {
+}
+
+PHAST::init(uint64_t max_history_length, uint64_t num_rows, uint64_t associativity, uint64_t tag_bits) {
+
+    assert(isPowerOf2(max_history_length) && "Invalid max history length!\n");
+    assert(isPowerOf2(num_rows) && "Invalid number of rows per table!\n");
+
+    historySizes.push_back(0);
+    for (unsigned i=2; i <= max_history_length; i <<= 1)
+        historySizes.push_back(i);
+
+    maxBranches = 0;
+    selectedTargetBits = 5;
+    selectedTargetMask = (1 << selectedTargetBits) - 1;
+
+    unsigned set_bits = log((double)num_rows, 2);
+
+    num_tables = historySizes.size();
+    paths = std::vector<SimplBlockCache>();
+    paths.reserve(num_tables);
+
+    for (unsigned i = 0; i < num_tables; ++i) {
+        paths[i].init(counter_bits, set_bits, tag_bits, associativity);
+    }
+
 }
 
 std::ptrdiff_t PHAST::checkInst(DynInstPtr load, BranchHistory branchHistory) {
@@ -168,7 +193,7 @@ uint64_t PHAST::generateBranchHash(unsigned num_branches, unsigned path_index, B
     deque<uint64_t> tmp_path;
     tmp_path.clear();
     int bits = 60;
-    bitset<BITSETSIZE> h = branchHistory[num_branches].target & SELECTED_TARGET_MASK;  // This is the +1 branch.
+    bitset<BITSETSIZE> h = branchHistory[num_branches].target & selectedTargetMask;  // This is the +1 branch.
     tmp_path.push_back(branchHistory[num_branches].target);
 
     //TODO: does reversing the order change the hash?
@@ -180,11 +205,11 @@ uint64_t PHAST::generateBranchHash(unsigned num_branches, unsigned path_index, B
             ++hist_items;
             ++bits;
             tmp_path.push_back(branchHistory[pos].taken);
-        } else if (SELECTED_TARGET_MASK != 0) {
-            h <<= SELECTED_TARGET_BITS;
-            h ^= (branchHistory[pos].target & SELECTED_TARGET_MASK);
+        } else if (selectedTargetMask != 0) {
+            h <<= selectedTargetBits;
+            h ^= (branchHistory[pos].target & selectedTargetMask);
             ++hist_items;
-            bits += SELECTED_TARGET_BITS;
+            bits += selectedTargetBits;
             tmp_path.push_back(branchHistory[pos].target);
         }
     }
@@ -217,12 +242,12 @@ void PHAST::clear() {
 
 }
 
-int PHAST::SimplBlockCache::init(unsigned max_ctr, unsigned set_bits, unsigned tag_bits, unsigned _associativity) {
+int PHAST::SimplBlockCache::init(unsigned counter_bits, unsigned set_bits, unsigned tag_bits, unsigned associativity) {
     tagBits = tag_bits;
     setBits = set_bits;
     associativity = associativity;
+    maxCounterValue = (1 << counter_bits) - 1;
     lruCounter = 0;
-    maxCounterValue = max_ctr;
 
     cache = std::vector<std::vector<Entry>>(1 << setBits);
 
@@ -313,11 +338,11 @@ void PHAST::SimplBlockCache::update(Addr pc, uint64_t history, std::ptrdiff_t di
         entry = getLRUEntry(getIndex(pc, history));
         entry->tag = getTag(pc, history);
         entry->distance = distance;
-        entry->counter = max_counter_value;
+        entry->counter = maxCountervalue;
         updateLRU(entry);
     } else {
         entry->distance = distance;
-        entry->counter = max_counter_value;
+        entry->counter = maxCountervalue;
         updateLRU(entry);
     }
 }
