@@ -51,7 +51,6 @@
 #include "cpu/inst_seq.hh"
 #include "cpu/o3/dyn_inst_ptr.hh"
 #include "cpu/o3/limits.hh"
-#include "cpu/o3/cpu.hh"
 #include "cpu/o3/store_set.hh"
 #include "debug/MemDepUnit.hh"
 

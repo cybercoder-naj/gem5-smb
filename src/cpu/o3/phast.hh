@@ -53,13 +53,13 @@ class PHAST
     PHAST() { };
 
     /** Creates PHAST predictor with given table sizes. */
-    PHAST(uint64_t max_history_length, uint64_t set_bits, uint64_t tag_bits, uint64_t counter_bits, uint64_t associativity);
+    PHAST(uint64_t num_rows, uint64_t associativity, uint64_t tag_bits, uint64_t max_counter_value);
 
     /** Default destructor. */
     ~PHAST();
 
     /** Initializes the PHAST predictor with the given table sizes. */
-    void init(uint64_t max_history_length, uint64_t set_bits, uint64_t tag_bits, uint64_t counter_bits, uint64_t associativity);
+    void init(uint64_t num_rows, uint64_t associativity, uint64_t tag_bits, uint64_t max_counter_value);
 
     /** Records a memory ordering violation between the younger load
     * and the older store. */

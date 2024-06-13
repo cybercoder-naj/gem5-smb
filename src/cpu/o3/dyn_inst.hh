@@ -72,8 +72,7 @@ class Packet;
 namespace o3
 {
 
-//no particular reasoning to put this here other than
-//it's needed across O3
+//no particular reasoning to put this here other than it's needed across O3
 /**  History of committed branches */
 typedef struct branchInfo {
     bool indirect;
@@ -86,8 +85,8 @@ typedef struct branchInfo {
  *  So, branchHistory[n] = nth oldest branch, branchHistory[0] = newest branch. */
 typedef std::deque<branchInfo> BranchHistory;
 
-//NOTE: this is dependent on the PHAST max history length being 32
-#define MAX_BRANCH_HISTORY 63
+//unclear on what exactly this should be, setting it to double the max history length + 1 for now
+#define MAX_BRANCH_HISTORY 66
 
 class DynInst : public ExecContext, public RefCounted
 {
