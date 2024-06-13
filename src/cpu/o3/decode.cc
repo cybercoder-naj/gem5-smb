@@ -333,6 +333,11 @@ Decode::squash(const DynInstPtr &inst, ThreadID tid)
         skidBuffer[tid].pop();
     }
 
+    //revert branch history
+    while (!decodedBranchHistory.empty() && squash_seq_num < decodedBranchHistory.front()) {
+        decodedBranchHistory.pop_front();
+    }
+
     // Squash instructions up until this one
     cpu->removeInstsUntil(squash_seq_num, tid);
 }

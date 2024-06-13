@@ -159,6 +159,9 @@ class MemDepUnit
     /** Issues the given instruction */
     void issue(const DynInstPtr &inst);
 
+    /** Commits the given instruction */
+    void commit(const DynInstPtr &inst);
+
     /** Debugging function to dump the lists of instructions. */
     void dumpLists();
 
@@ -242,7 +245,7 @@ class MemDepUnit
      *  this unit what instruction the newly added instruction is dependent
      *  upon.
      */
-    StoreSet depPred;
+    PHAST depPred;
 
     /** Sequence numbers of outstanding load barriers. */
     std::unordered_set<InstSeqNum> loadBarrierSNs;

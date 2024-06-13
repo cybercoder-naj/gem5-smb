@@ -596,6 +596,15 @@ MemDepUnit::issue(const DynInstPtr &inst)
     depPred.issued(inst->pcState().instAddr(), inst->seqNum, inst->isStore());
 }
 
+void
+MemDepUnit::commit(const DynInstPtr &inst)
+{
+    DPRINTF(MemDepUnit, "Committing instruction PC %#x [sn:%lli].\n",
+            inst->pcState().instAddr(), inst->seqNum);
+
+    depPred.commit(inst);
+}
+
 MemDepUnit::MemDepEntryPtr &
 MemDepUnit::findInHash(const DynInstConstPtr &inst)
 {
