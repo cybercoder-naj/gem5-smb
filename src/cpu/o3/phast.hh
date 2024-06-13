@@ -69,17 +69,17 @@ class PHAST
     /** Inserts a load into the PHAST predictor.  This does nothing but
     * is included in case other predictors require a similar function.
     */
-    void insertLoad(Addr load_PC, InstSeqNum load_seq_num);
+    void insertLoad(Addr load_PC, InstSeqNum load_seq_num) { return;}
 
     /** Inserts a store into the PHAST predictor.  Updates the
     * LFST if the store has a valid SSID. */
-    void insertStore(Addr store_PC, InstSeqNum store_seq_num, ThreadID tid);
+    void insertStore(Addr store_PC, InstSeqNum store_seq_num, ThreadID tid) { return;}
 
     /** Checks if the instruction with the given PC is dependent upon
-    * any store.  @return Returns the store queue index of the store
+    * any store.  @return Returns the relative SQ distance of the store
     * instruction this PC is dependent upon.  Returns -1 if none.
     */
-    ssize_t checkInst(DynInstPtr load, BranchHistory branchHistory);
+    std::ptrdiff_t checkInst(DynInstPtr load, BranchHistory branchHistory);
 
     /** Records this PC/sequence number as issued. */
     void issued(Addr issued_PC, InstSeqNum issued_seq_num, bool is_store);
@@ -112,7 +112,7 @@ class PHAST
     class SimplBlockCache {
         struct ENTRY {
             uint64_t tag;
-            ssize_t sq_idx;
+            std::ptrdiff_t distance;
             uint32_t lru;
             uint32_t counter;
         };
@@ -140,9 +140,9 @@ class PHAST
         public:
             int init(unsigned max_ctr, unsigned set_bits, unsigned tag_bits, unsigned _ways);
 
-            uint32_t predict(Addr pc, uint64_t history);
+            std::ptrdiff_t predict(Addr pc, uint64_t history);
 
-            void update(Addr pc, uint64_t history, ssize_t sq_idx);
+            void update(Addr pc, uint64_t history, std::ptrdiff_t distance);
 
             void updateCommit(Addr pc, uint64_t history, bool predictionWrong);
 

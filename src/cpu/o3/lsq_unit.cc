@@ -574,7 +574,7 @@ LSQUnit::checkViolations(typename LoadQueue::iterator& loadIt,
                 memDepViolator = ld_inst;
                 ld_inst->memDepInfo.violatingStorePC = inst->pcState()->instAddr;
                 ld_inst->memDepInfo.violatingStoreSeqNum = inst->seqNum;
-                ld_inst->memDepInfo.violatingStoreQueueIndex = inst->sqIdx;
+                ld_inst->memDepInfo.storeQueueDistance = ld_inst->sqIt - inst->sqIt;
 
                 ++stats.memOrderViolation;
 

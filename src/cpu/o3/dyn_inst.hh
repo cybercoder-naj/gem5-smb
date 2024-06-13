@@ -364,9 +364,10 @@ class DynInst : public ExecContext, public RefCounted
         /** Youngest store this load violated with */
         Addr violatingStorePC;
         InstSeqNum violatingStoreSeqNum;
-        ssize_t violatingStoreQueueIdx = -1;
-        /** VAddr of store this load was predicted dependent on */
+        std::ptrdiff_t storeQueueDistance;
+        /** Memory location of store this load was predicted dependent on */
         Addr predStoreAddr = 0;
+        int predStoreSize;
     } memDepInfo;
 
     /////////////////////// TLB Miss //////////////////////

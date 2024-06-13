@@ -207,6 +207,7 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
     // Check any barriers and the dependence predictor for any
     // producing memrefs/stores.
     std::vector<InstSeqNum>  producing_stores;
+    std::ptrdiff_t distance = 0;
     if ((inst->isLoad() || inst->isAtomic()) && hasLoadBarrier()) {
         DPRINTF(MemDepUnit, "%d load barriers in flight\n",
                 loadBarrierSNs.size());
@@ -220,9 +221,7 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
                                 std::begin(storeBarrierSNs),
                                 std::end(storeBarrierSNs));
     } else {
-        InstSeqNum dep = depPred.checkInst(inst, branchHistory);
-        if (dep != 0)
-            producing_stores.push_back(dep);
+        distance = depPred.checkInst(inst, branchHistory);
     }
 
     std::vector<MemDepEntryPtr> store_entries;
@@ -241,7 +240,7 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
 
     // If no store entry, then instruction can issue as soon as the registers
     // are ready.
-    if (store_entries.empty()) {
+    if (store_entries.empty() && !distance) {
         DPRINTF(MemDepUnit, "No dependency for inst PC "
                 "%s [sn:%lli].\n", inst->pcState(), inst->seqNum);
 
@@ -267,10 +266,20 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
         inst->clearCanIssue();
 
         // Add this instruction to the list of dependents.
-        for (auto store_entry : store_entries)
+        if (!distance) {
+            for (auto store_entry : store_entries)
+                store_entry->dependInsts.push_back(inst_entry);
+
+            inst_entry->memDeps = store_entries.size();
+        } else { //PHAST predicted dependence
+            auto sq_idx = inst_entry->sqIt - inst_entry->memDepInfo.storeQueueDistance;
+            DynInstPtr store_entry = iqPtr->iewStage->ldstQueue;
             store_entry->dependInsts.push_back(inst_entry);
 
-        inst_entry->memDeps = store_entries.size();
+            inst_entry->memDepInfo.predStoreAddr = store_entry->effAddr;
+            inst_entry->memDepInfo.predStoreSize = sq_idx->size();
+            inst_entry->memDeps = 1;
+        }
 
         if (inst->isLoad()) {
             ++stats.conflictingLoads;

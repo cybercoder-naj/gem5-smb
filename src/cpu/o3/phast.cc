@@ -70,15 +70,8 @@ PHAST::~PHAST()
 {
 }
 
-void insertLoad(Addr load_PC, InstSeqNum load_seq_num) {
-    return;
-}
-
-void insertStore(Addr store_PC, InstSeqNum store_seq_num, ThreadID tid) {
-}
-
-ssize_t PHAST::checkInst(DynInstPtr load, BranchHistory branchHistory) {
-    ssize_t sq_idx = -1;
+std::ptrdiff_t PHAST::checkInst(DynInstPtr load, BranchHistory branchHistory) {
+    std::ptrdiff_t distance = -1;
 
     auto begin = branchHistory.begin();
     InstSeqNum branch_seq_num = load->seqNum;
@@ -88,16 +81,16 @@ ssize_t PHAST::checkInst(DynInstPtr load, BranchHistory branchHistory) {
     }
 
     uint64_t hash;
-    ssize_t tmp_idx;
+    std::ptrdiff_t tmp_distance;
     for (unsigned i = 0; i <= maxBranches && i < historySizes.size(); i++) {
         hash = generateBranchHash(historySizes[i], i, begin);
-        tmp_idx = paths[i].predict(load->pcState()->instAddr(), hash);
-        if (tmp_idx != -1) {
-            sq_idx = tmp_idx
+        tmp_distance = paths[i].predict(load->pcState()->instAddr(), hash);
+        if (tmp_distance != -1) {
+            distance = tmp_distance
         }
     }
 
-    return sq_idx;
+    return distance;
 }
 
 void PHAST::violation(DynInstPtr store, DynInstPtr load, BranchHistory branchHistory) {
@@ -134,7 +127,7 @@ void PHAST::violation(DynInstPtr store, DynInstPtr load, BranchHistory branchHis
 
     path_hash = generateBranchHash(num_branches, path_index, branchHistory.begin());
 
-    paths[path_index].update(load->pcState().instAddr(), path_hash, store_distance);
+    paths[path_index].update(load->pcState().instAddr(), path_hash, load->memDepInfo->storeQueueDistance);
     maxBranches = max(maxBranches, path_index);
 }
 
@@ -196,7 +189,7 @@ int PHAST::SimplBlockCache::init(unsigned max_ctr, unsigned set_bits, unsigned t
 
         for (uint32_t j = 0; j < WAYS; j++) {
             cache[i][j].tag = 0;
-            cache[i][j].sq_idx = -1;
+            cache[i][j].distance = 0;
             cache[i][j].lru = 0;
             cache[i][j].counter = 0;
         }
@@ -260,28 +253,28 @@ void PHAST::SimplBlockCache::updateLRU(ENTRY* entry) {
     lru_counter++;
 }
 
-ssize_t PHAST::SimplBlockCache::predict(Addr pc, uint64_t history) {
+std::ptrdiff_t PHAST::SimplBlockCache::predict(Addr pc, uint64_t history) {
     auto entry = findEntry(pc, history);
-    if (entry == nullptr || entry->counter == 0 || entry->sq_idx == -1) { // no prediction for this PC
+    if (entry == nullptr || entry->counter == 0 || entry->distance == 0) { // no prediction for this PC
         return 0;
     }
 
     updateLRU(entry);
 
-    return entry->sq_idx;
+    return entry->distance;
 }
 
-void PHAST::SimplBlockCache::update(Addr pc, uint64_t history, ssize_t sq_idx) {
+void PHAST::SimplBlockCache::update(Addr pc, uint64_t history, std::ptrdiff_t distance) {
     auto entry = findEntry(pc, history);
     if (entry == nullptr) {
         // no prediction for this entry so far, so allocate one
         entry = getLRUEntry(getIndex(pc, history));
         entry->tag = getTag(pc, history);
-        entry->sq_idx = sq_idx;
+        entry->distance = distance;
         entry->counter = max_counter_value;
         updateLRU(entry);
     } else {
-        entry->sq_idx = sq_idx;
+        entry->distance = distance;
         entry->counter = max_counter_value;
         updateLRU(entry);
     }
