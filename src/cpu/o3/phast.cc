@@ -39,27 +39,26 @@ namespace gem5
 namespace o3
 {
 
-PHAST::PHAST(uint64_t max_history_length, uint64_t num_rows, uint64_t associativity, uint64_t tag_bits) {
+PHAST::PHAST(uint64_t num_rows, uint64_t associativity, uint64_t tag_bits, uint64_t max_counter_value) {
 
-    assert(isPowerOf2(max_history_length) && "Invalid max history length!\n");
+    assert(isPowerOf2(max_counter) && "Invalid counter bits value!\n");
     assert(isPowerOf2(num_rows) && "Invalid number of rows per table!\n");
 
-    historySizes.push_back(0);
-    for (unsigned i=2; i <= max_history_length; i <<= 1)
-        historySizes.push_back(i);
+    //TODO: paramertise this with a string and parse it into a list
+    historySizes.assign({0, 2, 4, 6, 8, 12, 16, 32});
 
     maxBranches = 0;
     selectedTargetBits = 5;
     selectedTargetMask = (1 << selectedTargetBits) - 1;
 
-    unsigned set_bits = log((double)num_rows, 2);
+    unsigned set_bits = (unsigned)log((double)num_rows, 2);
 
     num_tables = historySizes.size();
     paths = std::vector<SimplBlockCache>();
     paths.reserve(num_tables);
 
     for (unsigned i = 0; i < num_tables; ++i) {
-        paths[i].init(counter_bits, set_bits, tag_bits, associativity);
+        paths[i].init(max_counter_value, set_bits, tag_bits, associativity);
     }
 
 }
@@ -68,27 +67,26 @@ PHAST::~PHAST()
 {
 }
 
-PHAST::init(uint64_t max_history_length, uint64_t num_rows, uint64_t associativity, uint64_t tag_bits) {
+PHAST::init(uint64_t num_rows, uint64_t associativity, uint64_t tag_bits, uint64_t max_counter_value) {
 
-    assert(isPowerOf2(max_history_length) && "Invalid max history length!\n");
+    assert(isPowerOf2(max_counter) && "Invalid counter bits value!\n");
     assert(isPowerOf2(num_rows) && "Invalid number of rows per table!\n");
 
-    historySizes.push_back(0);
-    for (unsigned i=2; i <= max_history_length; i <<= 1)
-        historySizes.push_back(i);
+    //TODO: paramertise this with a string and parse it into a list
+    historySizes.assign({0, 2, 4, 6, 8, 12, 16, 32});
 
     maxBranches = 0;
     selectedTargetBits = 5;
     selectedTargetMask = (1 << selectedTargetBits) - 1;
 
-    unsigned set_bits = log((double)num_rows, 2);
+    unsigned set_bits = (unsigned)log((double)num_rows, 2);
 
     num_tables = historySizes.size();
     paths = std::vector<SimplBlockCache>();
     paths.reserve(num_tables);
 
     for (unsigned i = 0; i < num_tables; ++i) {
-        paths[i].init(counter_bits, set_bits, tag_bits, associativity);
+        paths[i].init(max_counter_value, set_bits, tag_bits, associativity);
     }
 
 }
@@ -242,11 +240,12 @@ void PHAST::clear() {
 
 }
 
-int PHAST::SimplBlockCache::init(unsigned counter_bits, unsigned set_bits, unsigned tag_bits, unsigned associativity) {
+int PHAST::SimplBlockCache::init(unsigned max_counter_value, unsigned set_bits, unsigned tag_bits, unsigned associativity) {
+
     tagBits = tag_bits;
     setBits = set_bits;
     associativity = associativity;
-    maxCounterValue = (1 << counter_bits) - 1;
+    maxCounterValue = max_counter_value;
     lruCounter = 0;
 
     cache = std::vector<std::vector<Entry>>(1 << setBits);
@@ -261,7 +260,10 @@ int PHAST::SimplBlockCache::init(unsigned counter_bits, unsigned set_bits, unsig
             cache[i][j].counter = 0;
         }
     }
+
+    //num entries for this path
     return (1 << setBits) * associativity;
+
 }
 
 uint64_t PHAST::SimplBlockCache::xorFold(uint64_t pc, uint64_t history, unsigned size) const {

@@ -148,10 +148,10 @@ class BaseO3CPU(BaseCPU):
         "loads & stores or just stores",
     )
 
-    phast_max_history_length = Param.Unsigned(32, "Number of tables")
     phast_num_rows = Param.Unsigned(128, "Number of rows per table")
     phast_associativity = Param.Unsigned(4, "Number of entries per row")
     phast_tag_bits = Param.Unsigned(16, "Size of entry tags")
+    phast_max_counter = Param.Unsigned(4, "Max confidence counter value")
 
     numRobs = Param.Unsigned(1, "Number of Reorder Buffers")
 
