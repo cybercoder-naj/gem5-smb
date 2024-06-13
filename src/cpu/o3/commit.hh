@@ -131,8 +131,6 @@ class Commit
     /** To probe when an instruction is squashed */
     ProbePointArg<DynInstPtr> *ppSquash;
 
-    #define MAX_PHAST_HISTORY_LENGTH 32;
-
     BranchHistory committedBranchHistory;
 
     /** Mark the thread as processing a trap. */

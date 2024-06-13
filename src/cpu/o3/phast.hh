@@ -41,7 +41,6 @@ namespace gem5
 namespace o3
 {
 
-//TODO
 #define BITSETSIZE 500
 
 class SimplBlockCache;

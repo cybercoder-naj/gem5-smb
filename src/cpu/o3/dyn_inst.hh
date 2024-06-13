@@ -86,7 +86,8 @@ typedef struct branchInfo {
  *  So, branchHistory[n] = nth oldest branch, branchHistory[0] = newest branch. */
 typedef std::deque<branchInfo> BranchHistory;
 
-
+//NOTE: this is dependent on the PHAST max history length being 32
+#define MAX_BRANCH_HISTORY 63
 
 class DynInst : public ExecContext, public RefCounted
 {

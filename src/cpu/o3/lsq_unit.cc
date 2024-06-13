@@ -1568,6 +1568,8 @@ LSQUnit::read(LSQRequest *request, ssize_t load_idx)
                         "Store idx %i to load addr %#x\n",
                         store_it._idx, request->mainReq()->getVaddr());
 
+                load_inst->forwardedFrom = store_it->seqNum;
+
                 // Must discard the request.
                 request->discard();
                 load_entry.setRequest(nullptr);

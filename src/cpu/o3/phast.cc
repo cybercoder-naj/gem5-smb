@@ -196,7 +196,6 @@ uint64_t PHAST::generateBranchHash(unsigned num_branches, unsigned path_index, B
     bitset<BITSETSIZE> h = branchHistory[num_branches].target & selectedTargetMask;  // This is the +1 branch.
     tmp_path.push_back(branchHistory[num_branches].target);
 
-    //TODO: does reversing the order change the hash?
     unsigned hist_items = 0;
     for (auto pos = branchHistory; pos != branchHistory.end() && hist_items < num_branches; pos++) {
         if (!branchHistory[pos].indirect) {

@@ -993,7 +993,6 @@ Commit::commitInsts()
                 ppCommit->notify(head_inst);
 
                 //record committed branch history
-
                 if (head_inst->isControl() && !head_inst->isUncondCtrl()) {
                     uint64_t target = head_inst->isIndirectCtrl() ? head_inst->branchTarget()->instAddr() : nullptr;
                     branchInfo branch_info = {
@@ -1003,7 +1002,7 @@ Commit::commitInsts()
                         head_inst->seqNum,
                     };
                     committedBranchHistory.push_front(branch_info);
-                    if (committedBranchHistory.size() == MAX_PHAST_HISTORY_LENGTH + 1)
+                    if (committedBranchHistory.size() == MAX_BRANCH_HISTORY)
                         committedBranchHistory.pop_back();
                 }
 
