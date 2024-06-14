@@ -358,7 +358,7 @@ class DynInst : public ExecContext, public RefCounted
     typename LSQUnit::SQIterator sqIt;
 
     /** Info needed for each load for PHAST */
-    typedef struct memDepInfo {
+    struct memDepInfo {
         /** Store this load received its data from, if any */
         InstSeqNum forwardedFrom = 0;
         /** Youngest store this load violated with */

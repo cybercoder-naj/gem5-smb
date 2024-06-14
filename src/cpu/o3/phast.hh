@@ -31,6 +31,7 @@
 
 #include "base/types.hh"
 #include "cpu/inst_seq.hh"
+#include "cpu/o3/dyn_inst_ptr.hh"
 
 using namespace std;
 
@@ -45,7 +46,7 @@ namespace o3
 class PHAST
 {
 
-    class SimplBlockCache;
+  class SimplBlockCache;
 
   public:
     /** Default constructor.  init() must be called prior to use. */

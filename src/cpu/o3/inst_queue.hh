@@ -101,6 +101,11 @@ class InstructionQueue
     // Typedef of iterator through the list of instructions.
     typedef typename std::list<DynInstPtr>::iterator ListIt;
 
+    /** The memory dependence unit, which tracks/predicts memory dependences
+     *  between instructions.
+     */
+    MemDepUnit memDepUnit[MaxThreads];
+
     /** FU completion event class. */
     class FUCompletion : public Event
     {
@@ -294,11 +299,6 @@ class InstructionQueue
 
     /** Pointer to IEW stage. */
     IEW *iewStage;
-
-    /** The memory dependence unit, which tracks/predicts memory dependences
-     *  between instructions.
-     */
-    MemDepUnit memDepUnit[MaxThreads];
 
     /** The queue to the execute stage.  Issued instructions will be written
      *  into it.

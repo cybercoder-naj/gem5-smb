@@ -1167,7 +1167,7 @@ InstructionQueue::violation(InstSeqNum store_seq_num, const DynInstPtr &faulting
                             BranchHistory branchHistory)
 {
     iqIOStats.intInstQueueWrites++;
-    memDepUnit[store->threadNumber].violation(store_seq_num, store_seq_num, faulting_load, branchHistory);
+    memDepUnit[faulting_load->threadNumber].violation(store_seq_num, faulting_load, branchHistory);
 }
 
 void

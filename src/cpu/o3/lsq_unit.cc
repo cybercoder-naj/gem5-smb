@@ -1477,7 +1477,7 @@ LSQUnit::read(LSQRequest *request, ssize_t load_idx)
                         "addr %#x\n", store_it._idx,
                         request->mainReq()->getVaddr());
 
-                load_inst->memDepInfo.forwardedFrom = store_it->seqNum;
+                load_inst->memDepInfo.forwardedFrom = store_it->instruction()->seqNum;
 
                 PacketPtr data_pkt = new Packet(request->mainReq(),
                         MemCmd::ReadReq);
@@ -1568,7 +1568,7 @@ LSQUnit::read(LSQRequest *request, ssize_t load_idx)
                         "Store idx %i to load addr %#x\n",
                         store_it._idx, request->mainReq()->getVaddr());
 
-                load_inst->memDepInfo.forwardedFrom = store_it->seqNum;
+                load_inst->memDepInfo.forwardedFrom = store_it->instruction()->seqNum;
 
                 // Must discard the request.
                 request->discard();

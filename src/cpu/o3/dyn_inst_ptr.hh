@@ -43,6 +43,7 @@
 #define __CPU_O3_DYN_INST_PTR_HH__
 
 #include "base/refcnt.hh"
+#include <deque>
 
 namespace gem5
 {

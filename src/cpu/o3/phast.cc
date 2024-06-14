@@ -125,10 +125,8 @@ void PHAST::violation(InstSeqNum store_seq_num, DynInstPtr load, BranchHistory b
     int bits = 60;
     int hs_idx = 0;
 
-    //corner case of a violation before any branches
-    //FIXME: original code sets num branches to 0 if there are no inflight branches, so
-    //do we have to track which committed branches aren't too old??
-    if (branchHistory.empty()) return;
+    //corner case of a violation before any branches or no +1 branch
+    if (branchHistory.empty() || branchHistory.back()->seqNum > branch_seq_num) return;
 
     //taking branch history from commit so first branch is always older than the load
     auto br_it = branchHistory.begin();
