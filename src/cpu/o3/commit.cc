@@ -968,10 +968,10 @@ Commit::commitInsts()
 
             // PHAST training
             // only want to report a violation when we're not on a misspeculated path
-            if (!head_inst->squashedDueToBranch && !updatedMemDep
-                && head_inst->isLoad() && head_inst->memDepInfo.violatingStorePC) {
-                IEWStage->InstructionQueue->violation(head_inst->memDepInfo.violatingStoreSeqNum,
-                                                      head_inst, committedBranchHistory);
+            if (head_inst->squashedDueToMemOrder && !updatedMemDep
+                && head_inst->isLoad() && head_inst->memDepInfo.violatingStoreSeqNum) {
+                iewStage->instQueue.violation(head_inst->memDepInfo.violatingStoreSeqNum,
+                                              head_inst, committedBranchHistory);
                 updatedMemDep = true;
             }
 
@@ -996,7 +996,7 @@ Commit::commitInsts()
 
                 //record committed branch history
                 if (head_inst->isControl() && !head_inst->isUncondCtrl()) {
-                    uint64_t target = head_inst->isIndirectCtrl() ? head_inst->branchTarget()->instAddr() : nullptr;
+                    uint64_t target = head_inst->isIndirectCtrl() ? head_inst->branchTarget()->instAddr() : 0;
                     branchInfo branch_info = {
                         head_inst->isIndirectCtrl(),
                         head_inst->pcState().branching(),
@@ -1010,7 +1010,7 @@ Commit::commitInsts()
 
                 //update memdep predictor
                 if (head_inst->isLoad()) {
-                    IEWStage->InstructionQueue->memDepUnit[tid].commit(head_inst);
+                    iewStage->instQueue.memDepUnit[tid].commit(head_inst);
                 }
 
                 // hardware transactional memory

@@ -334,7 +334,7 @@ Decode::squash(const DynInstPtr &inst, ThreadID tid)
     }
 
     //revert branch history
-    while (!decodedBranchHistory.empty() && squash_seq_num < decodedBranchHistory.front()->seqNum) {
+    while (!decodedBranchHistory.empty() && squash_seq_num < decodedBranchHistory.front().seqNum) {
         decodedBranchHistory.pop_front();
     }
 
@@ -740,7 +740,7 @@ Decode::decodeInsts(ThreadID tid)
 
         //Record decoded branches for memdep predictions
         if (inst->isControl() && !inst->isUncondCtrl()) {
-            uint64_t target = inst->isIndirectCtrl() ? inst->branchTarget()->instAddr() : nullptr;
+            uint64_t target = inst->isIndirectCtrl() ? inst->branchTarget()->instAddr() : 0;
             branchInfo branch_info = {
                 inst->isIndirectCtrl(),
                 inst->readPredTaken(),
