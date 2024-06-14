@@ -30,7 +30,6 @@
 #define __CPU_O3_PHAST_HH__
 
 #include "base/types.hh"
-#include "cpu.hh"
 #include "cpu/inst_seq.hh"
 
 using namespace std;
@@ -43,10 +42,10 @@ namespace o3
 
 #define BITSETSIZE 500
 
-class SimplBlockCache;
-
 class PHAST
 {
+
+    class SimplBlockCache;
 
   public:
     /** Default constructor.  init() must be called prior to use. */

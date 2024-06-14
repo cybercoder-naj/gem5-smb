@@ -306,7 +306,7 @@ ROB::numFreeEntries(ThreadID tid)
 }
 
 void
-ROB::doSquash(ThreadID tid, bool squashedDueToBranch)
+ROB::doSquash(ThreadID tid, bool squashedDueToMemOrder)
 {
     stats.writes++;
     DPRINTF(ROB, "[tid:%i] Squashing instructions until [sn:%llu].\n",
@@ -361,8 +361,8 @@ ROB::doSquash(ThreadID tid, bool squashedDueToBranch)
             if ((*squashIt[tid])->isRMWA()) {
                 stats.squashedRMWALoads++;
             }
-            if (squashedDueToBranch) {
-                (*squashIt[tid])->squashedDueToBranch = true;
+            if (squashedDueToMemOrder) {
+                (*squashIt[tid])->squashedDueToMemOrder = true;
             }
         }
         
@@ -493,7 +493,7 @@ ROB::updateTail()
 
 
 void
-ROB::squash(InstSeqNum squash_num, ThreadID tid, bool squashedDueToBranch)
+ROB::squash(InstSeqNum squash_num, ThreadID tid, bool squashedDueToMemOrder)
 {
     if (isEmpty(tid)) {
         DPRINTF(ROB, "Does not need to squash due to being empty "
@@ -517,7 +517,7 @@ ROB::squash(InstSeqNum squash_num, ThreadID tid, bool squashedDueToBranch)
 
         squashIt[tid] = tail_thread;
 
-        doSquash(tid, squashedDueToBranch);
+        doSquash(tid, squashedDueToMemOrder);
     }
 }
 

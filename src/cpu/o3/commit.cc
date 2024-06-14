@@ -49,6 +49,7 @@
 #include "base/compiler.hh"
 #include "base/loader/symtab.hh"
 #include "base/logging.hh"
+#include "commit.hh"
 #include "cpu/base.hh"
 #include "cpu/checker/cpu.hh"
 #include "cpu/exetrace.hh"
@@ -498,7 +499,7 @@ Commit::squashAll(ThreadID tid)
     // Hopefully nothing breaks.)
     youngestSeqNum[tid] = lastCommitedSeqNum[tid];
 
-    rob->squash(squashed_inst, tid);
+    rob->squash(squashed_inst, tid, false);
     changedROBNumEntries[tid] = true;
 
     // Send back the sequence number of the squashed instruction.
@@ -600,14 +601,15 @@ Commit::tick()
         // this cycle.
         committedStores[tid] = false;
 
-        if (commitStatus[tid] == ROBSquashing) {
+        if (commitStatus[tid] == ROBSquashing || commitStatus[tid] == ROBSquashingDueToMemOrder) {
 
             if (rob->isDoneSquashing(tid)) {
                 commitStatus[tid] = Running;
             } else {
                 DPRINTF(Commit,"[tid:%i] Still Squashing, cannot commit any"
                         " insts this cycle.\n", tid);
-                rob->doSquash(tid);
+                bool squashingDueToMemOrder = commitStatus[tid] == ROBSquashingDueToMemOrder ? true : false;
+                rob->doSquash(tid, squashingDueToMemOrder);
                 toIEW->commitInfo[tid].robSquashing = true;
                 wroteToTimeBuffer = true;
             }
@@ -750,7 +752,7 @@ Commit::commit()
     std::list<ThreadID>::iterator end = activeThreads->end();
 
     int num_squashing_threads = 0;
-    bool squashedDueToBranch;
+    bool squashedDueToMemOrder = false;
 
     while (threads != end) {
         ThreadID tid = *threads++;
@@ -791,18 +793,17 @@ Commit::commit()
                     tid,
                     fromIEW->mispredictInst[tid]->pcState().instAddr(),
                     fromIEW->squashedSeqNum[tid]);
-                squashedDueToBranch = true;
             } else {
                 DPRINTF(Commit,
                     "[tid:%i] Squashing due to order violation [sn:%llu]\n",
                     tid, fromIEW->squashedSeqNum[tid]);
-                squashedDueToBranch = false;
+                squashedDueToMemOrder = true;
             }
 
             DPRINTF(Commit, "[tid:%i] Redirecting to PC %#x\n",
                     tid, *fromIEW->pc[tid]);
 
-            commitStatus[tid] = ROBSquashing;
+            commitStatus[tid] = squashedDueToMemOrder ? ROBSquashingDueToMemOrder : ROBSquashing;
 
             // If we want to include the squashing instruction in the squash,
             // then use one older sequence number.
@@ -816,7 +817,7 @@ Commit::commit()
             // number as the youngest instruction in the ROB.
             youngestSeqNum[tid] = squashed_inst;
 
-            rob->squash(squashed_inst, tid, squashedDueToBranch);
+            rob->squash(squashed_inst, tid, squashedDueToMemOrder);
             changedROBNumEntries[tid] = true;
 
             toIEW->commitInfo[tid].doneSeqNum = squashed_inst;
@@ -843,7 +844,7 @@ Commit::commit()
             set(toIEW->commitInfo[tid].pc, fromIEW->pc[tid]);
         }
 
-        if (commitStatus[tid] == ROBSquashing) {
+        if (commitStatus[tid] == ROBSquashing || commitStatus[tid] == ROBSquashingDueToMemOrder) {
             num_squashing_threads++;
         }
     }

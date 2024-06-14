@@ -141,12 +141,11 @@ void PHAST::violation(InstSeqNum store_seq_num, DynInstPtr load, BranchHistory b
     unsigned num_branches = (unsigned)std::distance(branchHistory.begin(), br_it);
 
     //quantise num branches to first lowest path size
-    //FIXME: mistakenly assumes all paths are a power of 2
-    unsigned path_index = 0;
+    unsigned path_index;
     for (unsigned i = historySizes.size(); i-- > 0;) {
         unsigned size = historySizes[i];
-        if ((num_branches & size) == size) {
-            path_index = size;
+        if (num_branches > size) {
+            path_index = i;
             break;
         }
     }

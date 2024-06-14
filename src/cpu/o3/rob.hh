@@ -199,12 +199,12 @@ class ROB
     { return threadEntries[tid] == 0; }
 
     /** Executes the squash, marking squashed instructions. */
-    void doSquash(ThreadID tid, bool squashedDueToBranch);
+    void doSquash(ThreadID tid, bool squashedDueToMemOrder);
 
     /** Squashes all instructions younger than the given sequence number for
      *  the specific thread.
      */
-    void squash(InstSeqNum squash_num, ThreadID tid, bool squashedDueToBranch);
+    void squash(InstSeqNum squash_num, ThreadID tid, bool squashedDueToMemOrder);
 
     /** Updates the head instruction with the new oldest instruction. */
     void updateHead();

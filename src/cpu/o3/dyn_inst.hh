@@ -72,22 +72,6 @@ class Packet;
 namespace o3
 {
 
-//no particular reasoning to put this here other than it's needed across O3
-/**  History of committed branches */
-typedef struct branchInfo {
-    bool indirect;
-    bool taken;
-    uint64_t target;
-    InstSeqNum seqNum;
-} branchInfo;
-
-/** Rolling branch history. Always pushed at the front, popped at the back.
- *  So, branchHistory[n] = nth oldest branch, branchHistory[0] = newest branch. */
-typedef std::deque<branchInfo> BranchHistory;
-
-//unclear on what exactly this should be, setting it to double the max history length + 1 for now
-#define MAX_BRANCH_HISTORY 66
-
 class DynInst : public ExecContext, public RefCounted
 {
   private:
@@ -156,8 +140,8 @@ class DynInst : public ExecContext, public RefCounted
     /** InstRecord that tracks this instructions. */
     trace::InstRecord *traceData = nullptr;
 
-    /** Track whether the instruction squashed specifically due to a branch misprediction (for PHAST) */
-    bool squashedDueToBranch = false;
+    /** Track whether the instruction squashed specifically due to a memory order violation */
+    bool squashedDueToMemOrder = false;
 
   protected:
     enum Status

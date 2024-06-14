@@ -110,6 +110,7 @@ class Commit
         Running,
         Idle,
         ROBSquashing,
+        ROBSquashingDueToMemOrder,
         TrapPending,
         FetchTrapPending,
         SquashAfterPending, //< Committing instructions before a squash.
