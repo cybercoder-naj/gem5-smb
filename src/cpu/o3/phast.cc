@@ -39,7 +39,6 @@ namespace o3
 
 PHAST::PHAST(uint64_t num_rows, uint64_t associativity, uint64_t tag_bits, uint64_t max_counter_value) {
 
-    assert(isPowerOf2(max_counter) && "Invalid counter bits value!\n");
     assert(isPowerOf2(num_rows) && "Invalid number of rows per table!\n");
 
     //TODO: paramertise this with a string and parse it into a list
@@ -67,7 +66,6 @@ PHAST::~PHAST()
 
 void PHAST::init(uint64_t num_rows, uint64_t associativity, uint64_t tag_bits, uint64_t max_counter_value) {
 
-    assert(isPowerOf2(max_counter) && "Invalid counter bits value!\n");
     assert(isPowerOf2(num_rows) && "Invalid number of rows per table!\n");
 
     //TODO: paramertise this with a string and parse it into a list
@@ -104,7 +102,7 @@ PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchH
     uint64_t hash;
     std::ptrdiff_t tmp_distance;
     for (unsigned i = 0; i <= maxBranches && i < historySizes.size(); i++) {
-        hash = generateBranchHash(historySizes[i], i, begin);
+        hash = generateBranchHash(historySizes[i], i, begin, branchHistory.end());
         tmp_distance = paths[i].predict(load_pc, hash);
         if (tmp_distance) {
             prediction.storeQueueDistance = tmp_distance;
@@ -144,7 +142,7 @@ void PHAST::violation(Addr load_pc, InstSeqNum store_seq_num, std::ptrdiff_t sto
         }
     }
 
-    path_hash = generateBranchHash(num_branches, path_index, branchHistory.begin());
+    path_hash = generateBranchHash(num_branches, path_index, branchHistory.begin(), branchHistory.end());
 
     paths[path_index].update(load_pc, path_hash, storeQueueDistance);
     maxBranches = std::max(maxBranches, path_index);
@@ -178,15 +176,15 @@ void PHAST::commit(Addr load_pc, Addr load_addr, unsigned load_size, Addr store_
 
 }
 
-uint64_t PHAST::generateBranchHash(unsigned num_branches, unsigned path_index, BranchHistory::iterator branchHistory) {
+uint64_t PHAST::generateBranchHash(unsigned num_branches, unsigned path_index, BranchHistory::iterator branchHistoryBegin, BranchHistory::iterator branchHistoryEnd) {
     std::deque<uint64_t> tmp_path;
     tmp_path.clear();
     int bits = 60;
-    bitset<BITSETSIZE> h = branchHistory[num_branches].target & selectedTargetMask;  // This is the +1 branch.
-    tmp_path.push_back(branchHistory[num_branches].target);
+    bitset<BITSETSIZE> h = branchHistoryBegin[num_branches].target & selectedTargetMask;  // This is the +1 branch.
+    tmp_path.push_back(branchHistoryBegin[num_branches].target);
 
     unsigned hist_items = 0;
-    for (auto br_it = branchHistory; br_it != BranchHistory::iterator() && hist_items < num_branches; br_it++) {
+    for (auto br_it = branchHistoryBegin; br_it != branchHistoryEnd && hist_items < num_branches; br_it++) {
         if (!br_it->indirect) {
             h <<= 1;
             h[0] = br_it->taken;
