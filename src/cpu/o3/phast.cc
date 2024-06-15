@@ -158,6 +158,8 @@ void commit(DynInstPtr inst) {
 
     if (inst->isStore()) return;
 
+    //TODO: in real hardware, would it still have to perform a lookup?
+    //i.e., should we still increment a counter for power estimation purposes
     if (!inst->memDepInfo.predStoreAddr) return;
 
     bool misprediction;

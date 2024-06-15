@@ -202,6 +202,8 @@ class Decode
      */
     unsigned squash(ThreadID tid);
 
+    BranchHistory getBranchHistory() { return decodedBranchHistory; }
+
   private:
     // Interfaces to objects outside of decode.
     /** CPU interface. */
@@ -295,6 +297,7 @@ class Decode
     bool squashAfterDelaySlot[MaxThreads];
 
     /** History of decoded branches used for PHAST memdep predictions */
+    //TODO: track for each thread
     BranchHistory decodedBranchHistory;
 
     struct DecodeStats : public statistics::Group

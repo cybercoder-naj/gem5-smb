@@ -44,6 +44,9 @@
 
 #include "base/refcnt.hh"
 #include <deque>
+#include <cstdint>
+
+typedef uint64_t InstSeqNum;
 
 namespace gem5
 {

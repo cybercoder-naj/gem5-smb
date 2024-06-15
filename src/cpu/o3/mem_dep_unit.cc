@@ -97,7 +97,7 @@ MemDepUnit::init(const BaseO3CPUParams &params, ThreadID tid, CPU *cpu)
     id = tid;
 
     depPred.init(params.phast_num_rows, params.phast_associativity,
-                 params.phast_tag_bits, params.max_counter);
+                 params.phast_tag_bits, params.phast_max_counter);
 
     std::string stats_group_name = csprintf("MemDepUnit__%i", tid);
     cpu->addStatGroup(stats_group_name.c_str(), &stats);
@@ -272,13 +272,17 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
 
             inst_entry->memDeps = store_entries.size();
         } else { //PHAST predicted dependence
-            auto sq_it = inst_entry->sqIt - inst_entry->memDepInfo.storeQueueDistance;
-            DynInstPtr store_entry = *sq_it;
-            store_entry->dependInsts.push_back(inst_entry);
+            auto sq_it = inst->sqIt - inst->memDepInfo.storeQueueDistance;
+            DynInstPtr store_inst = sq_it->instruction();
+            MemDepHashIt hash_it = memDepHash.find(store_inst);
 
-            inst_entry->memDepInfo.predStoreAddr = store_entry->effAddr;
-            inst_entry->memDepInfo.predStoreSize = sq_idx->size();
-            inst_entry->memDeps = 1;
+            if (hash_it != memDepHash.end()) {
+                auto store_entry = (*hash_it).second;
+                store_entry->dependInsts.push_back(inst_entry);
+                inst->memDepInfo.predStoreAddr = store_inst->effAddr;
+                inst->memDepInfo.predStoreSize = sq_it->size();
+                inst_entry->memDeps = 1;
+            } else { DPRINTF(MemDepUnit, "Dependency predicted but store queue entry tracked in MDP\n"); }
         }
 
         if (inst->isLoad()) {
@@ -581,8 +585,8 @@ MemDepUnit::violation(InstSeqNum store_seq_num,
         const DynInstPtr &violating_load, BranchHistory branchHistory)
 {
     DPRINTF(MemDepUnit, "Passing violating PCs to store sets,"
-            " load: %#x, store: %#x\n", violating_load->pcState().instAddr(),
-            store_inst->pcState().instAddr());
+            " load: %#x, store seq num: %#d\n", violating_load->pcState().instAddr(),
+            store_seq_num);
     // Tell the memory dependence unit of the violation.
     depPred.violation(store_seq_num, violating_load, branchHistory);
 }
