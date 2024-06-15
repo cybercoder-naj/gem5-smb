@@ -28,9 +28,6 @@
 
 #include "cpu/o3/phast.hh"
 
-#include "base/intmath.hh"
-#include "base/logging.hh"
-#include "base/trace.hh"
 #include <cmath>
 
 namespace gem5
@@ -47,13 +44,13 @@ PHAST::PHAST(uint64_t num_rows, uint64_t associativity, uint64_t tag_bits, uint6
     //TODO: paramertise this with a string and parse it into a list
     historySizes.assign({0, 2, 4, 6, 8, 12, 16, 32});
 
+    unsigned set_bits = (unsigned)log2((double)num_rows);
+
     maxBranches = 0;
     selectedTargetBits = 5;
     selectedTargetMask = (1 << selectedTargetBits) - 1;
 
-    unsigned set_bits = (unsigned)log((double)num_rows, 2);
-
-    num_tables = historySizes.size();
+    unsigned num_tables = historySizes.size();
     paths = std::vector<SimplBlockCache>();
     paths.reserve(num_tables);
 
@@ -67,7 +64,7 @@ PHAST::~PHAST()
 {
 }
 
-PHAST::init(uint64_t num_rows, uint64_t associativity, uint64_t tag_bits, uint64_t max_counter_value) {
+void PHAST::init(uint64_t num_rows, uint64_t associativity, uint64_t tag_bits, uint64_t max_counter_value) {
 
     assert(isPowerOf2(max_counter) && "Invalid counter bits value!\n");
     assert(isPowerOf2(num_rows) && "Invalid number of rows per table!\n");
@@ -79,9 +76,9 @@ PHAST::init(uint64_t num_rows, uint64_t associativity, uint64_t tag_bits, uint64
     selectedTargetBits = 5;
     selectedTargetMask = (1 << selectedTargetBits) - 1;
 
-    unsigned set_bits = (unsigned)log((double)num_rows, 2);
+    unsigned set_bits = (unsigned)log2((double)num_rows);
 
-    num_tables = historySizes.size();
+    unsigned num_tables = historySizes.size();
     paths = std::vector<SimplBlockCache>();
     paths.reserve(num_tables);
 
@@ -91,12 +88,14 @@ PHAST::init(uint64_t num_rows, uint64_t associativity, uint64_t tag_bits, uint64
 
 }
 
-std::ptrdiff_t PHAST::checkInst(DynInstPtr load, BranchHistory branchHistory) {
-    std::ptrdiff_t distance = -1;
+PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchHistory branchHistory) {
+
+    struct PredictionResult prediction;
+    prediction.storeQueueDistance = 0;
 
     auto begin = branchHistory.begin();
-    InstSeqNum branch_seq_num = load->seqNum;
-    while (begin != branchHistory.end() && load->seqNum > branch_seq_num) {
+    InstSeqNum branch_seq_num = load_seq_num;
+    while (begin != branchHistory.end() && load_seq_num > branch_seq_num) {
         branch_seq_num = begin->seqNum;
         begin++;
     }
@@ -105,28 +104,24 @@ std::ptrdiff_t PHAST::checkInst(DynInstPtr load, BranchHistory branchHistory) {
     std::ptrdiff_t tmp_distance;
     for (unsigned i = 0; i <= maxBranches && i < historySizes.size(); i++) {
         hash = generateBranchHash(historySizes[i], i, begin);
-        tmp_distance = paths[i].predict(load->pcState()->instAddr(), hash);
-        if (tmp_distance != -1) {
-            distance = tmp_distance;
-            branch_history_length = i;
-            load->memDepInfo.predBranchHistLength = i;
-            load->memDepInfo.predictorHash = hash;
+        tmp_distance = paths[i].predict(load_pc, hash);
+        if (tmp_distance) {
+            prediction.storeQueueDistance = tmp_distance;
+            prediction.predBranchHistLength = i;
+            prediction.predictorHash = hash;
         }
     }
 
-    return distance;
+    return prediction;
 }
 
-void PHAST::violation(InstSeqNum store_seq_num, DynInstPtr load, BranchHistory branchHistory) {
-    uint64_t first_jump = 0;
+void PHAST::violation(Addr load_pc, InstSeqNum store_seq_num, std::ptrdiff_t storeQueueDistance,
+                      BranchHistory branchHistory) {
     uint64_t path_hash = 0;
-    unsigned hist_items = 0;
     bitset<BITSETSIZE> h(0);
-    int bits = 60;
-    int hs_idx = 0;
 
     //corner case of a violation before any branches or no +1 branch
-    if (branchHistory.empty() || branchHistory.back()->seqNum > branch_seq_num) return;
+    if (branchHistory.empty() || branchHistory.back().seqNum > store_seq_num) return;
 
     //taking branch history from commit so first branch is always older than the load
     auto br_it = branchHistory.begin();
@@ -150,23 +145,21 @@ void PHAST::violation(InstSeqNum store_seq_num, DynInstPtr load, BranchHistory b
 
     path_hash = generateBranchHash(num_branches, path_index, branchHistory.begin());
 
-    paths[path_index].update(load->pcState().instAddr(), path_hash, load->memDepInfo->storeQueueDistance);
+    paths[path_index].update(load_pc, path_hash, storeQueueDistance);
     maxBranches = std::max(maxBranches, path_index);
 }
 
-void commit(DynInstPtr inst) {
-
-    if (inst->isStore()) return;
+void PHAST::commit(Addr load_pc, Addr load_addr, unsigned load_size, Addr store_addr, unsigned store_size, unsigned branch_history_length, uint64_t predictor_hash) {
 
     //TODO: in real hardware, would it still have to perform a lookup?
     //i.e., should we still increment a counter for power estimation purposes
-    if (!inst->memDepInfo.predStoreAddr) return;
+    if (!store_addr) return;
 
     bool misprediction;
-    Addr ld_s = inst->effAddr;
-    Addr ld_e = ld_s + inst->effSize;
-    Addr st_s = inst->memDepInfo.predStoreAddr;
-    Addr st_e = st_s + inst->memDepInfo.predStoreSize;
+    Addr ld_s = load_addr;
+    Addr ld_e = ld_s + load_size;
+    Addr st_s = store_addr;
+    Addr st_e = st_s + store_size;
     bool store_has_lower_limit = ld_s >= st_s;
     bool store_has_upper_limit = ld_e <= st_e;
     bool lower_load_has_store_part = ld_s < st_e;
@@ -180,11 +173,7 @@ void commit(DynInstPtr inst) {
     else
         misprediction = true;
 
-    int branch_history = inst->memDepInfo.predBranchHistLength;
-
-    paths[branch_history].updateCommit(inst->pcState()->instAddr(),
-                                       inst->memDepInfo.predictorHash,
-                                       misprediction);
+    paths[branch_history_length].updateCommit(load_pc, predictor_hash, misprediction);
 
 }
 
@@ -218,7 +207,7 @@ uint64_t PHAST::generateBranchHash(unsigned num_branches, unsigned path_index, B
 uint64_t PHAST::foldHistory(bitset<BITSETSIZE> h, int bits, unsigned _setBits, unsigned _tagBits) {
     int width = _setBits + _tagBits;
     bitset<BITSETSIZE> mask((1ULL << width) - 1);
-    uint64 hash = 0;
+    uint64_t hash = 0;
 
     while (bits >= width) {
         hash ^= (h & mask).to_ullong();
@@ -282,19 +271,17 @@ uint64_t PHAST::SimplBlockCache::xorFold(uint64_t pc, uint64_t history, unsigned
 }
 
 uint64_t PHAST::SimplBlockCache::getIndex(Addr pc, uint64_t history) const {
-    uint64_t ldPC = pc.getAddress();
-    ldPC = (ldPC ^ (ldPC >> 2) ^ (ldPC >> 5));
-    uint64_t index = xorFold(0, (ldPC ^ history), setBits);
+    pc = (pc ^ (pc >> 2) ^ (pc >> 5));
+    uint64_t index = xorFold(0, (pc ^ history), setBits);
     return index;
 }
 uint64_t PHAST::SimplBlockCache::getTag(Addr pc, uint64_t history) const {
-    uint64_t ldPC = pc.getAddress();
-    ldPC = (ldPC ^ (ldPC >> 3) ^ (ldPC >> 7));
-    uint64_t tag = xorFold(0, (ldPC ^ history), tagBits);
+    pc = (pc ^ (pc >> 3) ^ (pc >> 7));
+    uint64_t tag = xorFold(0, (pc ^ history), tagBits);
     return tag;
 }
 
-Entry* PHAST::SimplBlockCache::findEntry(Addr pc, uint64_t history) {
+Entry *PHAST::SimplBlockCache::findEntry(Addr pc, uint64_t history) {
     uint64_t set = getIndex(pc, history);
     uint64_t tag = getTag(pc, history);
     for (uint32_t i = 0; i < associativity; i++) {
@@ -305,7 +292,7 @@ Entry* PHAST::SimplBlockCache::findEntry(Addr pc, uint64_t history) {
     return nullptr;
 }
 
-Entry* PHAST::SimplBlockCache::getLRUEntry(uint64_t set) {
+Entry *PHAST::SimplBlockCache::getLRUEntry(uint64_t set) {
     uint32_t lru_way = 0;
     uint64_t lru_value = cache[set][lru_way].lru;
     for (uint32_t i = 0; i < associativity; i++) {
@@ -318,8 +305,8 @@ Entry* PHAST::SimplBlockCache::getLRUEntry(uint64_t set) {
 }
 
 void PHAST::SimplBlockCache::updateLRU(Entry* entry) {
-    entry->lru = lru_counter;
-    lru_counter++;
+    entry->lru = lruCounter;
+    lruCounter++;
 }
 
 std::ptrdiff_t PHAST::SimplBlockCache::predict(Addr pc, uint64_t history) {
@@ -340,11 +327,11 @@ void PHAST::SimplBlockCache::update(Addr pc, uint64_t history, std::ptrdiff_t di
         entry = getLRUEntry(getIndex(pc, history));
         entry->tag = getTag(pc, history);
         entry->distance = distance;
-        entry->counter = maxCountervalue;
+        entry->counter = maxCounterValue;
         updateLRU(entry);
     } else {
         entry->distance = distance;
-        entry->counter = maxCountervalue;
+        entry->counter = maxCounterValue;
         updateLRU(entry);
     }
 }
@@ -360,7 +347,7 @@ void PHAST::SimplBlockCache::updateCommit(Addr pc, uint64_t history, bool predic
             --entry->counter;
         }
     } else {
-        entry->counter = max_counter_value;
+        entry->counter = maxCounterValue;
     }
 
     updateLRU(entry);

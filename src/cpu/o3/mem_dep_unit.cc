@@ -207,7 +207,8 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
     // Check any barriers and the dependence predictor for any
     // producing memrefs/stores.
     std::vector<InstSeqNum>  producing_stores;
-    std::ptrdiff_t distance = 0;
+    PredictionResult prediction;
+    prediction.storeQueueDistance = 0;
     if ((inst->isLoad() || inst->isAtomic()) && hasLoadBarrier()) {
         DPRINTF(MemDepUnit, "%d load barriers in flight\n",
                 loadBarrierSNs.size());
@@ -221,7 +222,7 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
                                 std::begin(storeBarrierSNs),
                                 std::end(storeBarrierSNs));
     } else {
-        distance = depPred.checkInst(inst, branchHistory);
+        prediction = depPred.checkInst(inst->pcState().instAddr(), inst->seqNum, branchHistory);
     }
 
     std::vector<MemDepEntryPtr> store_entries;
@@ -240,7 +241,7 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
 
     // If no store entry, then instruction can issue as soon as the registers
     // are ready.
-    if (store_entries.empty() && !distance) {
+    if (store_entries.empty() && !prediction.storeQueueDistance) {
         DPRINTF(MemDepUnit, "No dependency for inst PC "
                 "%s [sn:%lli].\n", inst->pcState(), inst->seqNum);
 
@@ -266,16 +267,18 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
         inst->clearCanIssue();
 
         // Add this instruction to the list of dependents.
-        if (!distance) {
+        if (!prediction.storeQueueDistance) {
             for (auto store_entry : store_entries)
                 store_entry->dependInsts.push_back(inst_entry);
 
             inst_entry->memDeps = store_entries.size();
         } else { //PHAST predicted dependence
-            auto sq_it = inst->sqIt - inst->memDepInfo.storeQueueDistance;
+            inst->memDepInfo.predBranchHistLength = prediction.predBranchHistLength;
+            inst->memDepInfo.predictorHash = prediction.predictorHash;
+            auto sq_it = inst->sqIt - prediction.storeQueueDistance;
             DynInstPtr store_inst = sq_it->instruction();
-            MemDepHashIt hash_it = memDepHash.find(store_inst);
 
+            MemDepHashIt hash_it = memDepHash.find(store_inst);
             if (hash_it != memDepHash.end()) {
                 auto store_entry = (*hash_it).second;
                 store_entry->dependInsts.push_back(inst_entry);
@@ -283,6 +286,7 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
                 inst->memDepInfo.predStoreSize = sq_it->size();
                 inst_entry->memDeps = 1;
             } else { DPRINTF(MemDepUnit, "Dependency predicted but store queue entry tracked in MDP\n"); }
+
         }
 
         if (inst->isLoad()) {
@@ -588,7 +592,8 @@ MemDepUnit::violation(InstSeqNum store_seq_num,
             " load: %#x, store seq num: %#d\n", violating_load->pcState().instAddr(),
             store_seq_num);
     // Tell the memory dependence unit of the violation.
-    depPred.violation(store_seq_num, violating_load, branchHistory);
+    depPred.violation(violating_load->pcState().instAddr(), store_seq_num,
+                      violating_load->memDepInfo.storeQueueDistance, branchHistory);
 }
 
 void
@@ -606,7 +611,11 @@ MemDepUnit::commit(const DynInstPtr &inst)
     DPRINTF(MemDepUnit, "Committing instruction PC %#x [sn:%lli].\n",
             inst->pcState().instAddr(), inst->seqNum);
 
-    depPred.commit(inst);
+    if (inst->isStore()) return;
+
+    depPred.commit(inst->pcState().instAddr(), inst->effAddr,
+                   inst->effSize, inst->memDepInfo.predStoreAddr, inst->memDepInfo.predStoreSize,
+                   inst->memDepInfo.predBranchHistLength, inst->memDepInfo.predictorHash);
 }
 
 MemDepUnit::MemDepEntryPtr &

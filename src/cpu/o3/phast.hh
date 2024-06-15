@@ -32,6 +32,13 @@
 #include "base/types.hh"
 #include "cpu/inst_seq.hh"
 #include "cpu/o3/dyn_inst_ptr.hh"
+#include "base/intmath.hh"
+#include "base/logging.hh"
+#include "base/trace.hh"
+#include <cstdint>
+#include <vector>
+#include <deque>
+#include <bitset>
 
 using namespace std;
 
@@ -40,6 +47,27 @@ namespace gem5
 
 namespace o3
 {
+
+struct MemDepInfo {
+    /** Store this load received its data from, if any */
+    InstSeqNum forwardedFrom = 0;
+    /** Youngest store this load violated with */
+    InstSeqNum violatingStoreSeqNum;
+    /** Relative offset into the SQ for dependent store*/
+    std::ptrdiff_t storeQueueDistance;
+    /** Memory location of store this load was predicted dependent on */
+    Addr predStoreAddr = 0;
+    int predStoreSize;
+    /** Predicted information validated at commit */
+    unsigned predBranchHistLength;
+    uint64_t predictorHash;
+};
+
+struct PredictionResult {
+    std::ptrdiff_t storeQueueDistance;
+    unsigned predBranchHistLength;
+    uint64_t predictorHash;
+};
 
 #define BITSETSIZE 500
 
@@ -63,16 +91,16 @@ class PHAST
 
     /** Records a memory ordering violation between the younger load
     * and the older store. */
-    void violation(InstSeqNum store_seq_num, DynInstPtr load, BranchHistory branchHistory);
+    void violation(Addr load_pc, InstSeqNum store_seq_num, std::ptrdiff_t storeQueueDistance, BranchHistory branchHistory);
 
     /** Checks if the instruction with the given PC is dependent upon
     * any store.  @return Returns the relative SQ distance of the store
     * instruction this PC is dependent upon.  Returns -1 if none.
     */
-    std::ptrdiff_t checkInst(DynInstPtr load, BranchHistory branchHistory);
+    PredictionResult checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchHistory branchHistory);
 
     /** Updates predictor at load commit */
-    void commit(DynInstPtr inst);
+    void commit(Addr load_pc, Addr load_addr, unsigned load_size, Addr store_addr, unsigned store_size, unsigned branch_history_length, uint64_t predictor_hash);
 
     /** Clears all tables */
     void clear();
@@ -82,6 +110,10 @@ class PHAST
     void issued(Addr issued_PC, InstSeqNum issued_seq_num, bool is_store) { return; }
     void insertStore(Addr store_PC, InstSeqNum store_seq_num, ThreadID tid) { return; }
     void insertLoad(Addr load_PC, InstSeqNum load_seq_num) { return;}
+
+    unsigned selectedTargetBits;
+
+    uint64_t selectedTargetMask;
 
   private:
 
@@ -112,8 +144,6 @@ class PHAST
         uint32_t associativity;
         uint64_t lruCounter;
         unsigned maxCounterValue;
-        unsigned selectedTargetBits;
-        uint64_t selectedTargetMask;
         std::vector<std::vector<Entry>> cache;
 
         uint64_t xorFold(uint64_t pc, uint64_t history, unsigned size) const;
@@ -128,8 +158,6 @@ class PHAST
 
         void updateLRU(Entry* entry);
 
-        void clear();
-
         public:
             int init(unsigned counter_bits, unsigned set_bits, unsigned tag_bits, unsigned associativity);
 
@@ -138,6 +166,9 @@ class PHAST
             void update(Addr pc, uint64_t history, std::ptrdiff_t distance);
 
             void updateCommit(Addr pc, uint64_t history, bool predictionWrong);
+
+            void clear();
+
 
             unsigned getSetBits() { return setBits; }
 

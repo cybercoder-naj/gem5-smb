@@ -75,6 +75,7 @@ namespace o3
 
 class CPU;
 class InstructionQueue;
+class PHAST;
 
 /**
  * Memory dependency unit class.  This holds the memory dependence predictor.
