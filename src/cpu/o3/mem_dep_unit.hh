@@ -47,12 +47,20 @@
 #include <unordered_map>
 #include <unordered_set>
 
+// #include "base/statistics.hh"
+// #include "cpu/inst_seq.hh"
+// #include "cpu/o3/dyn_inst_ptr.hh"
+// #include "cpu/o3/limits.hh"
+// #include "cpu/o3/phast.hh"
+// #include "debug/MemDepUnit.hh"
 #include "base/statistics.hh"
 #include "cpu/inst_seq.hh"
 #include "cpu/o3/dyn_inst_ptr.hh"
 #include "cpu/o3/limits.hh"
 #include "cpu/o3/phast.hh"
 #include "debug/MemDepUnit.hh"
+#include "mem/packet.hh"
+#include "mem/port.hh"
 
 namespace gem5
 {
@@ -73,9 +81,9 @@ struct BaseO3CPUParams;
 namespace o3
 {
 
+class PHAST;
 class CPU;
 class InstructionQueue;
-class PHAST;
 
 /**
  * Memory dependency unit class.  This holds the memory dependence predictor.
@@ -164,6 +172,54 @@ class MemDepUnit
 
     /** Debugging function to dump the lists of instructions. */
     void dumpLists();
+
+    struct MemDepUnitStats : public statistics::Group
+    {
+        MemDepUnitStats(statistics::Group *parent);
+        /** Stat for number of inserted loads. */
+        statistics::Scalar insertedLoads;
+        /** Stat for number of inserted stores. */
+        statistics::Scalar insertedStores;
+        /** Stat for number of conflicting loads that had to wait for a
+         *  store. */
+        statistics::Scalar conflictingLoads;
+        /** Stat for number of conflicting stores that had to wait for a
+         *  store. */
+        statistics::Scalar conflictingStores;
+        /**  Number of predictions made by MDP */
+        statistics::Scalar predictions;
+        /**  Sorry for this. Need to track reads/writes for each
+         *  specific branch len table for power usage estimation. */
+        statistics::Scalar readsPath1;
+        statistics::Scalar readsPath2;
+        statistics::Scalar readsPath3;
+        statistics::Scalar readsPath4;
+        statistics::Scalar readsPath5;
+        statistics::Scalar readsPath6;
+        statistics::Scalar readsPath7;
+        statistics::Scalar readsPath8;
+        statistics::Scalar writesPath1;
+        statistics::Scalar writesPath2;
+        statistics::Scalar writesPath3;
+        statistics::Scalar writesPath4;
+        statistics::Scalar writesPath5;
+        statistics::Scalar writesPath6;
+        statistics::Scalar writesPath7;
+        statistics::Scalar writesPath8;
+    } stats;
+
+    statistics::Scalar *pathReads[8] = {
+        &stats.readsPath1, &stats.readsPath2,
+        &stats.readsPath3, &stats.readsPath4,
+        &stats.readsPath5, &stats.readsPath6,
+        &stats.readsPath7, &stats.readsPath8
+    };
+    statistics::Scalar *pathWrites[8] = {
+        &stats.writesPath1, &stats.writesPath2,
+        &stats.writesPath3, &stats.writesPath4,
+        &stats.writesPath5, &stats.writesPath6,
+        &stats.writesPath7, &stats.writesPath8
+    };
 
   private:
 
@@ -267,20 +323,6 @@ class MemDepUnit
 
     /** The thread id of this memory dependence unit. */
     int id;
-    struct MemDepUnitStats : public statistics::Group
-    {
-        MemDepUnitStats(statistics::Group *parent);
-        /** Stat for number of inserted loads. */
-        statistics::Scalar insertedLoads;
-        /** Stat for number of inserted stores. */
-        statistics::Scalar insertedStores;
-        /** Stat for number of conflicting loads that had to wait for a
-         *  store. */
-        statistics::Scalar conflictingLoads;
-        /** Stat for number of conflicting stores that had to wait for a
-         *  store. */
-        statistics::Scalar conflictingStores;
-    } stats;
 };
 
 } // namespace o3

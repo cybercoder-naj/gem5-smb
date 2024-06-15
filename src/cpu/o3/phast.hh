@@ -29,12 +29,21 @@
 #ifndef __CPU_O3_PHAST_HH__
 #define __CPU_O3_PHAST_HH__
 
+// #include "base/types.hh"
+// #include "cpu/inst_seq.hh"
+// #include "cpu/o3/dyn_inst_ptr.hh"
+// #include "cpu/o3/mem_dep_unit.hh"
+// #include "base/intmath.hh"
+// #include "base/logging.hh"
+// #include "base/trace.hh"
+#include "base/statistics.hh"
 #include "base/types.hh"
 #include "cpu/inst_seq.hh"
 #include "cpu/o3/dyn_inst_ptr.hh"
-#include "base/intmath.hh"
-#include "base/logging.hh"
-#include "base/trace.hh"
+#include "cpu/o3/limits.hh"
+#include "debug/MemDepUnit.hh"
+#include "mem/packet.hh"
+#include "mem/port.hh"
 #include <cstdint>
 #include <vector>
 #include <deque>
@@ -71,6 +80,8 @@ struct PredictionResult {
 
 #define BITSETSIZE 500
 
+class MemDepUnit;
+
 class PHAST
 {
 
@@ -82,13 +93,13 @@ class PHAST
     PHAST() { };
 
     /** Creates PHAST predictor with given table sizes. */
-    PHAST(uint64_t num_rows, uint64_t associativity, uint64_t tag_bits, uint64_t max_counter_value);
+    PHAST(uint64_t num_rows, uint64_t associativity, uint64_t tag_bits, uint64_t max_counter_value, MemDepUnit *memDepUnit);
 
     /** Default destructor. */
     ~PHAST();
 
     /** Initializes the PHAST predictor with the given table sizes. */
-    void init(uint64_t num_rows, uint64_t associativity, uint64_t tag_bits, uint64_t max_counter_value);
+    void init(uint64_t num_rows, uint64_t associativity, uint64_t tag_bits, uint64_t max_counter_value, MemDepUnit *memDepUnit);
 
     /** Records a memory ordering violation between the younger load
     * and the older store. */
@@ -127,6 +138,8 @@ class PHAST
     unsigned maxHistory;
 
     unsigned entriesPerTable;
+
+    MemDepUnit *memDepUnit;
 
     uint64_t generateBranchHash(unsigned num_branches, unsigned path_index, BranchHistory::iterator branchHistoryBegin, BranchHistory::iterator branchHistoryEnd);
 

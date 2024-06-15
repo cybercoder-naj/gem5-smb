@@ -52,14 +52,14 @@ int MemDepUnit::MemDepEntry::memdep_insert = 0;
 int MemDepUnit::MemDepEntry::memdep_erase = 0;
 #endif
 
-MemDepUnit::MemDepUnit() : iqPtr(NULL), stats(nullptr) {}
+MemDepUnit::MemDepUnit() : stats(nullptr), iqPtr(NULL) {}
 
 MemDepUnit::MemDepUnit(const BaseO3CPUParams &params)
     : _name(params.name + ".memdepunit"),
+      stats(nullptr),
       depPred(params.phast_num_rows, params.phast_associativity,
-              params.phast_tag_bits, params.phast_max_counter),
-      iqPtr(NULL),
-      stats(nullptr)
+              params.phast_tag_bits, params.phast_max_counter, this),
+      iqPtr(NULL)
 {
     DPRINTF(MemDepUnit, "Creating MemDepUnit object.\n");
 }
@@ -97,7 +97,7 @@ MemDepUnit::init(const BaseO3CPUParams &params, ThreadID tid, CPU *cpu)
     id = tid;
 
     depPred.init(params.phast_num_rows, params.phast_associativity,
-                 params.phast_tag_bits, params.phast_max_counter);
+                 params.phast_tag_bits, params.phast_max_counter, this);
 
     std::string stats_group_name = csprintf("MemDepUnit__%i", tid);
     cpu->addStatGroup(stats_group_name.c_str(), &stats);
@@ -112,7 +112,41 @@ MemDepUnit::MemDepUnitStats::MemDepUnitStats(statistics::Group *parent)
       ADD_STAT(conflictingLoads, statistics::units::Count::get(),
                "Number of conflicting loads."),
       ADD_STAT(conflictingStores, statistics::units::Count::get(),
-               "Number of conflicting stores.")
+               "Number of conflicting stores."),
+      ADD_STAT(predictions, statistics::units::Count::get(),
+               "Number of MDP predictions."),
+      ADD_STAT(readsPath1, statistics::units::Count::get(),
+               "Number of reads to path table 1."),
+      ADD_STAT(readsPath2, statistics::units::Count::get(),
+               "Number of reads to path table 2."),
+      ADD_STAT(readsPath3, statistics::units::Count::get(),
+               "Number of reads to path table 3."),
+      ADD_STAT(readsPath4, statistics::units::Count::get(),
+               "Number of reads to path table 4."),
+      ADD_STAT(readsPath5, statistics::units::Count::get(),
+               "Number of reads to path table 5."),
+      ADD_STAT(readsPath6, statistics::units::Count::get(),
+               "Number of reads to path table 6."),
+      ADD_STAT(readsPath7, statistics::units::Count::get(),
+               "Number of reads to path table 7."),
+      ADD_STAT(readsPath8, statistics::units::Count::get(),
+               "Number of reads to path table 8."),
+      ADD_STAT(writesPath1, statistics::units::Count::get(),
+               "Number of writes to path table 1."),
+      ADD_STAT(writesPath2, statistics::units::Count::get(),
+               "Number of writes to path table 2."),
+      ADD_STAT(writesPath3, statistics::units::Count::get(),
+               "Number of writes to path table 3."),
+      ADD_STAT(writesPath4, statistics::units::Count::get(),
+               "Number of writes to path table 4."),
+      ADD_STAT(writesPath5, statistics::units::Count::get(),
+               "Number of writes to path table 5."),
+      ADD_STAT(writesPath6, statistics::units::Count::get(),
+               "Number of writes to path table 6."),
+      ADD_STAT(writesPath7, statistics::units::Count::get(),
+               "Number of writes to path table 7."),
+      ADD_STAT(writesPath8, statistics::units::Count::get(),
+               "Number of writes to path table 8.")
 {
 }
 
@@ -223,6 +257,7 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
                                 std::end(storeBarrierSNs));
     } else {
         prediction = depPred.checkInst(inst->pcState().instAddr(), inst->seqNum, branchHistory);
+        ++stats.predictions;
     }
 
     std::vector<MemDepEntryPtr> store_entries;
