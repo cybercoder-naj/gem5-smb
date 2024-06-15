@@ -74,9 +74,10 @@ struct PredictionResult {
 class PHAST
 {
 
-  class SimplBlockCache;
-
   public:
+
+    class SimplBlockCache;
+
     /** Default constructor.  init() must be called prior to use. */
     PHAST() { };
 
@@ -130,6 +131,8 @@ class PHAST
     uint64_t generateBranchHash(unsigned num_branches, unsigned path_index, BranchHistory::iterator branchHistory);
 
     uint64_t foldHistory(std::bitset<BITSETSIZE> h, int bits, unsigned _set_bits, unsigned _tag_bits);
+
+    public:
 
     class SimplBlockCache {
         struct Entry {

@@ -27,6 +27,7 @@
  */
 
 #include "cpu/o3/phast.hh"
+#include "dyn_inst_ptr.hh"
 
 #include <cmath>
 
@@ -178,30 +179,30 @@ void PHAST::commit(Addr load_pc, Addr load_addr, unsigned load_size, Addr store_
 }
 
 uint64_t PHAST::generateBranchHash(unsigned num_branches, unsigned path_index, BranchHistory::iterator branchHistory) {
-    deque<uint64_t> tmp_path;
+    std::deque<uint64_t> tmp_path;
     tmp_path.clear();
     int bits = 60;
     bitset<BITSETSIZE> h = branchHistory[num_branches].target & selectedTargetMask;  // This is the +1 branch.
     tmp_path.push_back(branchHistory[num_branches].target);
 
     unsigned hist_items = 0;
-    for (auto pos = branchHistory; pos != branchHistory.end() && hist_items < num_branches; pos++) {
-        if (!branchHistory[pos].indirect) {
+    for (auto br_it = branchHistory; br_it != BranchHistory::iterator() && hist_items < num_branches; br_it++) {
+        if (!br_it->indirect) {
             h <<= 1;
-            h[0] = branchHistory[pos].taken;
+            h[0] = br_it->taken;
             ++hist_items;
             ++bits;
-            tmp_path.push_back(branchHistory[pos].taken);
+            tmp_path.push_back(br_it->taken);
         } else if (selectedTargetMask != 0) {
             h <<= selectedTargetBits;
-            h ^= (branchHistory[pos].target & selectedTargetMask);
+            h ^= (br_it->target & selectedTargetMask);
             ++hist_items;
             bits += selectedTargetBits;
-            tmp_path.push_back(branchHistory[pos].target);
+            tmp_path.push_back(br_it->target);
         }
     }
 
-    return foldHistory(h, bits, paths[index].getSetBits(), paths[index].getTagBits());
+    return foldHistory(h, bits, paths[path_index].getSetBits(), paths[path_index].getTagBits());
 }
 
 uint64_t PHAST::foldHistory(bitset<BITSETSIZE> h, int bits, unsigned _setBits, unsigned _tagBits) {
@@ -240,7 +241,7 @@ int PHAST::SimplBlockCache::init(unsigned max_counter_value, unsigned set_bits, 
     cache = std::vector<std::vector<Entry>>(1 << setBits);
 
     for (uint64_t i = 0; i < (1ULL << setBits); i++) {
-        cache[i] = vector<Entry>(associativity);
+        cache[i] = std::vector<Entry>(associativity);
 
         for (uint32_t j = 0; j < associativity; j++) {
             cache[i][j].tag = 0;
@@ -281,7 +282,7 @@ uint64_t PHAST::SimplBlockCache::getTag(Addr pc, uint64_t history) const {
     return tag;
 }
 
-Entry *PHAST::SimplBlockCache::findEntry(Addr pc, uint64_t history) {
+PHAST::SimplBlockCache::Entry *PHAST::SimplBlockCache::findEntry(Addr pc, uint64_t history) {
     uint64_t set = getIndex(pc, history);
     uint64_t tag = getTag(pc, history);
     for (uint32_t i = 0; i < associativity; i++) {
@@ -292,7 +293,7 @@ Entry *PHAST::SimplBlockCache::findEntry(Addr pc, uint64_t history) {
     return nullptr;
 }
 
-Entry *PHAST::SimplBlockCache::getLRUEntry(uint64_t set) {
+PHAST::SimplBlockCache::Entry *PHAST::SimplBlockCache::getLRUEntry(uint64_t set) {
     uint32_t lru_way = 0;
     uint64_t lru_value = cache[set][lru_way].lru;
     for (uint32_t i = 0; i < associativity; i++) {
