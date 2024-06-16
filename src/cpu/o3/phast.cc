@@ -66,6 +66,8 @@ PHAST::PHAST(uint64_t num_rows, uint64_t associativity, uint64_t tag_bits, uint6
         paths[i].init(max_counter_value, set_bits, tag_bits, associativity);
     }
 
+    // std::string stats_group_name = csprintf("PHAST__%i", memDepUnit->id);
+    // memDepUnit->cp->addStatGroup(stats_group_name.c_str(), &(memDepUnit->stats));
 }
 
 PHAST::~PHAST()
@@ -96,6 +98,8 @@ void PHAST::init(uint64_t num_rows, uint64_t associativity, uint64_t tag_bits, u
         paths[i].init(max_counter_value, set_bits, tag_bits, associativity);
     }
 
+    // std::string stats_group_name = csprintf("PHAST__%i", memDepUnit->id);
+    // memDepUnit->cp->addStatGroup(stats_group_name.c_str(), &(memDepUnit->stats));
 }
 
 PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchHistory branchHistory) {
@@ -105,7 +109,7 @@ PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchH
 
     auto begin = branchHistory.begin();
     InstSeqNum branch_seq_num = load_seq_num;
-    while (begin != branchHistory.end() && load_seq_num > branch_seq_num) {
+    while (begin != branchHistory.end() && load_seq_num < branch_seq_num) {
         branch_seq_num = begin->seqNum;
         begin++;
     }
@@ -117,7 +121,7 @@ PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchH
         tmp_distance = paths[i].predict(load_pc, hash);
         if (tmp_distance) {
             //don't need to increment reads as all paths are read on prediction
-            *(memDepUnit->pathWrites[i]) += 1;
+            //*(memDepUnit->pathWrites[i]) += 1;
             prediction.storeQueueDistance = tmp_distance;
             prediction.predBranchHistLength = i;
             prediction.predictorHash = hash;
@@ -130,11 +134,6 @@ PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchH
 void PHAST::violation(Addr load_pc, InstSeqNum store_seq_num, std::ptrdiff_t storeQueueDistance,
                       BranchHistory branchHistory) {
 
-    uint64_t path_hash = 0;
-    bitset<BITSETSIZE> h(0);
-
-    std::cout << "Branch history length: " << branchHistory.size() << "\n";
-
     //corner case of a violation before any branches or no +1 branch
     if (branchHistory.empty() || branchHistory.back().seqNum > store_seq_num) return;
 
@@ -144,29 +143,30 @@ void PHAST::violation(Addr load_pc, InstSeqNum store_seq_num, std::ptrdiff_t sto
     do {
         branch_seq_num = br_it->seqNum;
         br_it++;
-    } while (br_it != branchHistory.end() && store_seq_num > branch_seq_num);
+    } while (br_it != branchHistory.end() && store_seq_num < branch_seq_num);
 
     unsigned num_branches = (unsigned)std::distance(branchHistory.begin(), br_it);
 
     //quantise num branches to first lowest path size
+    //TODO: should the num of branches we hash also be quantised?
     unsigned path_index;
     for (unsigned i = historySizes.size(); i-- > 0;) {
         unsigned size = historySizes[i];
-        if (num_branches > size) {
+        if (num_branches >= size) {
             path_index = i;
             break;
         }
     }
 
-    path_hash = generateBranchHash(num_branches, path_index, branchHistory.begin(), branchHistory.end());
+    uint64_t path_hash = generateBranchHash(num_branches, path_index, branchHistory.begin(), branchHistory.end());
     paths[path_index].update(load_pc, path_hash, storeQueueDistance);
     maxBranches = std::max(maxBranches, path_index);
-    *(memDepUnit->pathReads[path_index]) += 1;
-    *(memDepUnit->pathWrites[path_index]) += 1;
+    // *(memDepUnit->pathReads[path_index]) += 1;
+    // *(memDepUnit->pathWrites[path_index]) += 1;
 
 }
 
-void PHAST::commit(Addr load_pc, Addr load_addr, unsigned load_size, Addr store_addr, unsigned store_size, unsigned branch_history_length, uint64_t predictor_hash) {
+void PHAST::commit(Addr load_pc, Addr load_addr, unsigned load_size, Addr store_addr, unsigned store_size, unsigned path_index, uint64_t predictor_hash) {
 
     //TODO: in real hardware, would it still have to perform a lookup?
     //i.e., should we still increment a counter for power estimation purposes
@@ -190,9 +190,9 @@ void PHAST::commit(Addr load_pc, Addr load_addr, unsigned load_size, Addr store_
     else
         misprediction = true;
 
-    paths[branch_history_length].updateCommit(load_pc, predictor_hash, misprediction);
-    *(memDepUnit->pathReads[branch_history_length]) += 1;
-    *(memDepUnit->pathWrites[branch_history_length]) += 1;
+    paths[path_index].updateCommit(load_pc, predictor_hash, misprediction);
+    // *(memDepUnit->pathReads[path_index]) += 1;
+    // *(memDepUnit->pathWrites[path_index]) += 1;
 
 }
 
@@ -261,13 +261,6 @@ int PHAST::SimplBlockCache::init(unsigned max_counter_value, unsigned set_bits, 
 
     for (uint64_t i = 0; i < (1ULL << setBits); i++) {
         cache[i].resize(associativity, {0,0,0,0});
-
-        // for (uint32_t j = 0; j < associativity; j++) {
-        //     cache[i][j].tag = 0;
-        //     cache[i][j].distance = 0;
-        //     cache[i][j].lru = 0;
-        //     cache[i][j].counter = 0;
-        // }
     }
 
     //num entries for this path

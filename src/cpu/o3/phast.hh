@@ -29,13 +29,6 @@
 #ifndef __CPU_O3_PHAST_HH__
 #define __CPU_O3_PHAST_HH__
 
-// #include "base/types.hh"
-// #include "cpu/inst_seq.hh"
-// #include "cpu/o3/dyn_inst_ptr.hh"
-// #include "cpu/o3/mem_dep_unit.hh"
-// #include "base/intmath.hh"
-// #include "base/logging.hh"
-// #include "base/trace.hh"
 #include "base/statistics.hh"
 #include "base/types.hh"
 #include "cpu/inst_seq.hh"
@@ -112,7 +105,7 @@ class PHAST
     PredictionResult checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchHistory branchHistory);
 
     /** Updates predictor at load commit */
-    void commit(Addr load_pc, Addr load_addr, unsigned load_size, Addr store_addr, unsigned store_size, unsigned branch_history_length, uint64_t predictor_hash);
+    void commit(Addr load_pc, Addr load_addr, unsigned load_size, Addr store_addr, unsigned store_size, unsigned path_index, uint64_t predictor_hash);
 
     /** Clears all tables */
     void clear();
@@ -129,6 +122,7 @@ class PHAST
 
   private:
 
+    //performance optimisation
     unsigned maxBranches;
 
     std::vector<unsigned> historySizes;

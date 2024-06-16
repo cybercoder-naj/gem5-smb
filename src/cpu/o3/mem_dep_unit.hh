@@ -173,6 +173,8 @@ class MemDepUnit
     /** Debugging function to dump the lists of instructions. */
     void dumpLists();
 
+    /** The thread id of this memory dependence unit. */
+    int id;
     struct MemDepUnitStats : public statistics::Group
     {
         MemDepUnitStats(statistics::Group *parent);
@@ -220,6 +222,8 @@ class MemDepUnit
         &stats.writesPath5, &stats.writesPath6,
         &stats.writesPath7, &stats.writesPath8
     };
+
+    CPU *cp;
 
   private:
 
@@ -321,8 +325,6 @@ class MemDepUnit
     /** Pointer to the IQ. */
     InstructionQueue *iqPtr;
 
-    /** The thread id of this memory dependence unit. */
-    int id;
 };
 
 } // namespace o3
