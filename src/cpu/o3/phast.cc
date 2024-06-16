@@ -60,7 +60,7 @@ PHAST::PHAST(uint64_t num_rows, uint64_t associativity, uint64_t tag_bits, uint6
 
     unsigned num_tables = historySizes.size();
     paths = std::vector<SimplBlockCache>();
-    paths.reserve(num_tables);
+    paths.resize(num_tables, SimplBlockCache());
 
     for (unsigned i = 0; i < num_tables; ++i) {
         paths[i].init(max_counter_value, set_bits, tag_bits, associativity);
@@ -90,7 +90,7 @@ void PHAST::init(uint64_t num_rows, uint64_t associativity, uint64_t tag_bits, u
 
     unsigned num_tables = historySizes.size();
     paths = std::vector<SimplBlockCache>();
-    paths.reserve(num_tables);
+    paths.resize(num_tables, SimplBlockCache());
 
     for (unsigned i = 0; i < num_tables; ++i) {
         paths[i].init(max_counter_value, set_bits, tag_bits, associativity);
@@ -132,6 +132,8 @@ void PHAST::violation(Addr load_pc, InstSeqNum store_seq_num, std::ptrdiff_t sto
 
     uint64_t path_hash = 0;
     bitset<BITSETSIZE> h(0);
+
+    std::cout << "Branch history length: " << branchHistory.size() << "\n";
 
     //corner case of a violation before any branches or no +1 branch
     if (branchHistory.empty() || branchHistory.back().seqNum > store_seq_num) return;
@@ -254,17 +256,18 @@ int PHAST::SimplBlockCache::init(unsigned max_counter_value, unsigned set_bits, 
     maxCounterValue = max_counter_value;
     lruCounter = 0;
 
-    cache = std::vector<std::vector<Entry>>(1 << setBits);
+    cache = std::vector<std::vector<Entry>>();
+    cache.resize((1 << setBits), std::vector<Entry>());
 
     for (uint64_t i = 0; i < (1ULL << setBits); i++) {
-        cache[i] = std::vector<Entry>(associativity);
+        cache[i].resize(associativity, {0,0,0,0});
 
-        for (uint32_t j = 0; j < associativity; j++) {
-            cache[i][j].tag = 0;
-            cache[i][j].distance = 0;
-            cache[i][j].lru = 0;
-            cache[i][j].counter = 0;
-        }
+        // for (uint32_t j = 0; j < associativity; j++) {
+        //     cache[i][j].tag = 0;
+        //     cache[i][j].distance = 0;
+        //     cache[i][j].lru = 0;
+        //     cache[i][j].counter = 0;
+        // }
     }
 
     //num entries for this path
