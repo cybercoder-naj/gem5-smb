@@ -66,8 +66,8 @@ PHAST::PHAST(uint64_t num_rows, uint64_t associativity, uint64_t tag_bits, uint6
         paths[i].init(max_counter_value, set_bits, tag_bits, associativity);
     }
 
-    // std::string stats_group_name = csprintf("PHAST__%i", memDepUnit->id);
-    // memDepUnit->cp->addStatGroup(stats_group_name.c_str(), &(memDepUnit->stats));
+    std::string stats_group_name = csprintf("PHAST__%i", memDepUnit->id);
+    memDepUnit->cp->addStatGroup(stats_group_name.c_str(), &(memDepUnit->stats));
 }
 
 PHAST::~PHAST()
@@ -98,8 +98,8 @@ void PHAST::init(uint64_t num_rows, uint64_t associativity, uint64_t tag_bits, u
         paths[i].init(max_counter_value, set_bits, tag_bits, associativity);
     }
 
-    // std::string stats_group_name = csprintf("PHAST__%i", memDepUnit->id);
-    // memDepUnit->cp->addStatGroup(stats_group_name.c_str(), &(memDepUnit->stats));
+    std::string stats_group_name = csprintf("PHAST__%i", memDepUnit->id);
+    memDepUnit->cp->addStatGroup(stats_group_name.c_str(), &(memDepUnit->stats));
 }
 
 PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchHistory branchHistory) {
@@ -120,7 +120,8 @@ PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchH
         hash = generateBranchHash(historySizes[i], i, begin, branchHistory.end());
         tmp_distance = paths[i].predict(load_pc, hash);
         if (tmp_distance) {
-            //don't need to increment reads as all paths are read on prediction
+            // don't need to increment reads as all paths are read on prediction
+            ++(memDepUnit->stats).predictions;
             //*(memDepUnit->pathWrites[i]) += 1;
             prediction.storeQueueDistance = tmp_distance;
             prediction.predBranchHistLength = i;

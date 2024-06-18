@@ -95,13 +95,13 @@ MemDepUnit::init(const BaseO3CPUParams &params, ThreadID tid, CPU *cpu)
 
     _name = csprintf("%s.memDep%d", params.name, tid);
     id = tid;
+    cp = cpu;
 
     depPred.init(params.phast_num_rows, params.phast_associativity,
                  params.phast_tag_bits, params.phast_max_counter, this);
 
     std::string stats_group_name = csprintf("MemDepUnit__%i", tid);
     cpu->addStatGroup(stats_group_name.c_str(), &stats);
-    cp = cpu;
 }
 
 MemDepUnit::MemDepUnitStats::MemDepUnitStats(statistics::Group *parent)
