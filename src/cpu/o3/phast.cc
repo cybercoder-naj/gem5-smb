@@ -117,7 +117,7 @@ PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchH
     uint64_t hash;
     std::ptrdiff_t tmp_distance;
     for (unsigned i = 0; i <= maxBranches && i < historySizes.size(); i++) {
-        hash = generateBranchHash(historySizes[i], i, begin, branchHistory.end());
+        hash = generateBranchHash(historySizes[i], begin, branchHistory.end());
         tmp_distance = paths[i].predict(load_pc, hash);
         if (tmp_distance) {
             // don't need to increment reads as all paths are read on prediction
@@ -149,20 +149,20 @@ void PHAST::violation(Addr load_pc, InstSeqNum store_seq_num, std::ptrdiff_t sto
 
     //quantise num branches to first lowest path size
     //TODO: should the num of branches we hash also be quantised?
-    unsigned path_index;
+    //unsigned path_index;
     for (unsigned i = historySizes.size(); i-- > 0;) {
         unsigned size = historySizes[i];
         if (num_branches >= size) {
-            path_index = i;
+            num_branches = i;
             break;
         }
     }
 
-    uint64_t path_hash = generateBranchHash(num_branches, path_index, branchHistory.begin(), branchHistory.end());
-    paths[path_index].update(load_pc, path_hash, storeQueueDistance);
-    maxBranches = std::max(maxBranches, path_index);
-    ++(*(memDepUnit->pathReads[path_index]));
-    ++(*(memDepUnit->pathWrites[path_index]));
+    uint64_t path_hash = generateBranchHash(num_branches, branchHistory.begin(), branchHistory.end());
+    paths[num_branches].update(load_pc, path_hash, storeQueueDistance);
+    maxBranches = std::max(maxBranches, num_branches);
+    ++(*(memDepUnit->pathReads[num_branches]));
+    ++(*(memDepUnit->pathWrites[num_branches]));
 
 }
 
@@ -196,7 +196,7 @@ void PHAST::commit(Addr load_pc, Addr load_addr, unsigned load_size, Addr store_
 
 }
 
-uint64_t PHAST::generateBranchHash(unsigned num_branches, unsigned path_index, BranchHistory::iterator branchHistoryBegin, BranchHistory::iterator branchHistoryEnd) {
+uint64_t PHAST::generateBranchHash(unsigned num_branches, BranchHistory::iterator branchHistoryBegin, BranchHistory::iterator branchHistoryEnd) {
     std::deque<uint64_t> tmp_path;
     tmp_path.clear();
     int bits = 60;
@@ -220,7 +220,7 @@ uint64_t PHAST::generateBranchHash(unsigned num_branches, unsigned path_index, B
         }
     }
 
-    return foldHistory(h, bits, paths[path_index].getSetBits(), paths[path_index].getTagBits());
+    return foldHistory(h, bits, paths[num_branches].getSetBits(), paths[num_branches].getTagBits());
 }
 
 uint64_t PHAST::foldHistory(bitset<BITSETSIZE> h, int bits, unsigned _setBits, unsigned _tagBits) {
@@ -240,7 +240,7 @@ uint64_t PHAST::foldHistory(bitset<BITSETSIZE> h, int bits, unsigned _setBits, u
 }
 
 void PHAST::clear() {
-   maxBranches = 0;
+   	maxBranches = 0;
 
     for (unsigned i = 0; i < paths.size(); ++i) {
         paths[i].clear();
