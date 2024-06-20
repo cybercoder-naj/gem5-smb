@@ -1312,8 +1312,6 @@ IEW::executeInsts()
                         inst->physEffAddr);
                 DPRINTF(IEW, "Violation will not be handled because "
                         "already squashing\n");
-
-                ++iewStats.memOrderViolationEvents;
             }
         }
     }

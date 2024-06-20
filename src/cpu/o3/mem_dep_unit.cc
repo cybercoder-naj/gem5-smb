@@ -56,9 +56,9 @@ MemDepUnit::MemDepUnit() : stats(nullptr), iqPtr(NULL) {}
 
 MemDepUnit::MemDepUnit(const BaseO3CPUParams &params)
     : _name(params.name + ".memdepunit"),
-      stats(nullptr),
       depPred(params.phast_num_rows, params.phast_associativity,
               params.phast_tag_bits, params.phast_max_counter, this),
+      stats(nullptr),
       iqPtr(NULL)
 {
     DPRINTF(MemDepUnit, "Creating MemDepUnit object.\n");

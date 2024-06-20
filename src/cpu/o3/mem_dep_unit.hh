@@ -211,16 +211,16 @@ class MemDepUnit
     } stats;
 
     statistics::Scalar *pathReads[8] = {
-        &stats.readsPath1, &stats.readsPath2,
-        &stats.readsPath3, &stats.readsPath4,
-        &stats.readsPath5, &stats.readsPath6,
-        &stats.readsPath7, &stats.readsPath8
+        &(stats.readsPath1), &(stats.readsPath2),
+        &(stats.readsPath3), &(stats.readsPath4),
+        &(stats.readsPath5), &(stats.readsPath6),
+        &(stats.readsPath7), &(stats.readsPath8)
     };
     statistics::Scalar *pathWrites[8] = {
-        &stats.writesPath1, &stats.writesPath2,
-        &stats.writesPath3, &stats.writesPath4,
-        &stats.writesPath5, &stats.writesPath6,
-        &stats.writesPath7, &stats.writesPath8
+        &(stats.writesPath1), &(stats.writesPath2),
+        &(stats.writesPath3), &(stats.writesPath4),
+        &(stats.writesPath5), &(stats.writesPath6),
+        &(stats.writesPath7), &(stats.writesPath8)
     };
 
     CPU *cp;

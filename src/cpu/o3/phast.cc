@@ -44,7 +44,7 @@ namespace gem5
 namespace o3
 {
 
-PHAST::PHAST(uint64_t num_rows, uint64_t associativity, uint64_t tag_bits, uint64_t max_counter_value, MemDepUnit *memDepUnit) {
+PHAST::PHAST(uint64_t num_rows, uint64_t associativity, uint64_t tag_bits, uint64_t max_counter_value, MemDepUnit *mem_dep_unit) {
 
     assert(isPowerOf2(num_rows) && "Invalid number of rows per table!\n");
 
@@ -56,7 +56,7 @@ PHAST::PHAST(uint64_t num_rows, uint64_t associativity, uint64_t tag_bits, uint6
     maxBranches = 0;
     selectedTargetBits = 5;
     selectedTargetMask = (1 << selectedTargetBits) - 1;
-    memDepUnit = memDepUnit;
+    memDepUnit = mem_dep_unit;
 
     unsigned num_tables = historySizes.size();
     paths = std::vector<SimplBlockCache>();
@@ -74,7 +74,7 @@ PHAST::~PHAST()
 {
 }
 
-void PHAST::init(uint64_t num_rows, uint64_t associativity, uint64_t tag_bits, uint64_t max_counter_value, MemDepUnit *memDepUnit) {
+void PHAST::init(uint64_t num_rows, uint64_t associativity, uint64_t tag_bits, uint64_t max_counter_value, MemDepUnit *mem_dep_unit) {
 
     assert(isPowerOf2(num_rows) && "Invalid number of rows per table!\n");
 
@@ -86,7 +86,7 @@ void PHAST::init(uint64_t num_rows, uint64_t associativity, uint64_t tag_bits, u
     maxBranches = 0;
     selectedTargetBits = 5;
     selectedTargetMask = (1 << selectedTargetBits) - 1;
-    memDepUnit = memDepUnit;
+    memDepUnit = mem_dep_unit;
 
     unsigned set_bits = (unsigned)log2((double)num_rows);
 
@@ -121,8 +121,7 @@ PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchH
         tmp_distance = paths[i].predict(load_pc, hash);
         if (tmp_distance) {
             // don't need to increment reads as all paths are read on prediction
-            ++(memDepUnit->stats).predictions;
-            //*(memDepUnit->pathWrites[i]) += 1;
+            ++(*(memDepUnit->pathWrites[i]));
             prediction.storeQueueDistance = tmp_distance;
             prediction.predBranchHistLength = i;
             prediction.predictorHash = hash;
@@ -162,8 +161,8 @@ void PHAST::violation(Addr load_pc, InstSeqNum store_seq_num, std::ptrdiff_t sto
     uint64_t path_hash = generateBranchHash(num_branches, path_index, branchHistory.begin(), branchHistory.end());
     paths[path_index].update(load_pc, path_hash, storeQueueDistance);
     maxBranches = std::max(maxBranches, path_index);
-    // *(memDepUnit->pathReads[path_index]) += 1;
-    // *(memDepUnit->pathWrites[path_index]) += 1;
+    ++(*(memDepUnit->pathReads[path_index]));
+    ++(*(memDepUnit->pathWrites[path_index]));
 
 }
 
@@ -192,8 +191,8 @@ void PHAST::commit(Addr load_pc, Addr load_addr, unsigned load_size, Addr store_
         misprediction = true;
 
     paths[path_index].updateCommit(load_pc, predictor_hash, misprediction);
-    // *(memDepUnit->pathReads[path_index]) += 1;
-    // *(memDepUnit->pathWrites[path_index]) += 1;
+    ++(*(memDepUnit->pathReads[path_index]));
+    ++(*(memDepUnit->pathWrites[path_index]));
 
 }
 
