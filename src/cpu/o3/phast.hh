@@ -125,7 +125,7 @@ class PHAST
     Addr violating_load = 0;
     int num_violating_branches;
     Addr first_violation_branch;
-    bool debug = true;
+    bool debug;
 
     //largest seen index into branchSizes
     unsigned maxBranches;
@@ -140,7 +140,7 @@ class PHAST
 
     MemDepUnit *memDepUnit;
 
-    uint64_t generateBranchHash(unsigned num_branches, BranchHistory::iterator branchHistoryBegin, BranchHistory::iterator branchHistoryEnd);
+    uint64_t generateBranchHash(unsigned path_index, unsigned num_branches, BranchHistory::iterator branchHistoryBegin, BranchHistory::iterator branchHistoryEnd);
 
     uint64_t foldHistory(std::bitset<BITSETSIZE> h, int bits, unsigned _set_bits, unsigned _tag_bits);
 

@@ -48,6 +48,7 @@
 #include "cpu/o3/dyn_inst_ptr.hh"
 #include "cpu/o3/limits.hh"
 #include "cpu/timebuf.hh"
+#include "dyn_inst_ptr.hh"
 
 namespace gem5
 {
@@ -203,6 +204,8 @@ class Decode
     unsigned squash(ThreadID tid);
 
     BranchHistory getBranchHistory() { return decodedBranchHistory; }
+
+    std::map<InstSeqNum, DynInstPtr> branchHistoryMap;
 
   private:
     // Interfaces to objects outside of decode.

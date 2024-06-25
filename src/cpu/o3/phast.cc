@@ -90,6 +90,8 @@ void PHAST::init(uint64_t num_rows, uint64_t associativity, uint64_t tag_bits, u
 
     unsigned set_bits = (unsigned)log2((double)num_rows);
 
+    debug = false;
+
     unsigned num_tables = historySizes.size();
     paths = std::vector<SimplBlockCache>();
     paths.resize(num_tables, SimplBlockCache());
@@ -196,8 +198,6 @@ void PHAST::violation(Addr load_pc, InstSeqNum store_seq_num, std::ptrdiff_t sto
     num_violating_branches = num_branches;
 
     //quantise num branches to first lowest path size
-    //TODO: should the num of branches we hash also be quantised?
-    //unsigned path_index;
     unsigned i;
     for (i = historySizes.size(); i-- > 0;) {
         unsigned size = historySizes[i];
@@ -207,11 +207,11 @@ void PHAST::violation(Addr load_pc, InstSeqNum store_seq_num, std::ptrdiff_t sto
         }
     }
 
-    uint64_t path_hash = generateBranchHash(i, path_index, num_branches, branchHistory.begin(), branchHistory.end());
+    uint64_t path_hash = generateBranchHash(i, num_branches, branchHistory.begin(), branchHistory.end());
     paths[num_branches].update(load_pc, path_hash, storeQueueDistance);
     maxBranches = std::max(maxBranches, i);
-    ++(*(memDepUnit->pathReads[num_branches]));
-    ++(*(memDepUnit->pathWrites[num_branches]));
+    ++(*(memDepUnit->pathReads[i]));
+    ++(*(memDepUnit->pathWrites[i]));
 
 }
 

@@ -49,6 +49,7 @@
 #include "cpu/o3/fu_pool.hh"
 #include "cpu/o3/limits.hh"
 #include "debug/IQ.hh"
+#include "dyn_inst_ptr.hh"
 #include "enums/OpClass.hh"
 #include "params/BaseO3CPU.hh"
 #include "sim/core.hh"
@@ -592,6 +593,11 @@ InstructionQueue::insert(const DynInstPtr &new_inst)
     addToProducers(new_inst);
 
     if (new_inst->isMemRef()) {
+        BranchHistory branchHistory = iewStage->getCPU()->getDecode()->getBranchHistory();
+        for (auto b: branchHistory) {
+            DynInstPtr inst = iewStage->getCPU()->getDecode()->branchHistoryMap[b.seqNum];
+            std::cout << "Squashed: " << inst->isSquashed() << "\n";
+        }
         memDepUnit[new_inst->threadNumber].insert(new_inst, iewStage->getCPU()->getDecode()->getBranchHistory());
     } else {
         addIfReady(new_inst);
@@ -1192,6 +1198,12 @@ InstructionQueue::doSquash(ThreadID tid)
     // Start at the tail.
     ListIt squash_it = instList[tid].end();
     --squash_it;
+
+    //revert branch history
+    BranchHistory decodedBranchHistory = cpu->getDecode()->getBranchHistory();
+    while (!decodedBranchHistory.empty() && decodedBranchHistory.front().seqNum >= squashedSeqNum[tid]) {
+        decodedBranchHistory.pop_front();
+    }
 
     DPRINTF(IQ, "[tid:%i] Squashing until sequence number %i!\n",
             tid, squashedSeqNum[tid]);
