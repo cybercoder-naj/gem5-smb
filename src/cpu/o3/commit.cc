@@ -996,12 +996,14 @@ Commit::commitInsts()
 
                 //record committed branch history
                 if (head_inst->isControl() && !head_inst->isUncondCtrl()) {
-                    uint64_t target = head_inst->isIndirectCtrl() ? head_inst->branchTarget()->instAddr() : 0;
+                    bool is_indirect = !head_inst->isDirectCtrl();
+                    uint64_t target = is_indirect ? head_inst->branchTarget()->instAddr() : 0;
                     branchInfo branch_info = {
-                        head_inst->isIndirectCtrl(),
+                        is_indirect,
                         head_inst->pcState().branching(),
                         target,
                         head_inst->seqNum,
+                        head_inst->pcState().instAddr(),
                     };
                     committedBranchHistory.push_front(branch_info);
                     if (committedBranchHistory.size() == MAX_BRANCH_HISTORY)

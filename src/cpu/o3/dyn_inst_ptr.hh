@@ -66,6 +66,7 @@ typedef struct branchInfo {
     bool taken;
     uint64_t target;
     InstSeqNum seqNum;
+    uint64_t pc;
 } branchInfo;
 
 /** Rolling branch history. Always pushed at the front, popped at the back.

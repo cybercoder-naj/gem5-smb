@@ -122,6 +122,11 @@ class PHAST
 
   private:
 
+    Addr violating_load = 0;
+    int num_violating_branches;
+    Addr first_violation_branch;
+    bool debug = true;
+
     //performance optimisation
     unsigned maxBranches;
 

@@ -107,9 +107,10 @@ PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchH
     struct PredictionResult prediction;
     prediction.storeQueueDistance = 0;
 
+    if (branchHistory.size() == 0) return prediction;
     auto begin = branchHistory.begin();
-    InstSeqNum branch_seq_num = load_seq_num;
-    while (begin != branchHistory.end() && load_seq_num < branch_seq_num) {
+    InstSeqNum branch_seq_num = branchHistory.front().seqNum;
+    while (begin != branchHistory.end() && branch_seq_num > load_seq_num) {
         branch_seq_num = begin->seqNum;
         begin++;
     }
@@ -120,7 +121,7 @@ PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchH
         hash = generateBranchHash(historySizes[i], begin, branchHistory.end());
         tmp_distance = paths[i].predict(load_pc, hash);
         if (tmp_distance) {
-            // don't need to increment reads as all paths are read on prediction
+            // all paths are read on prediction, so just use that stat to calc reads
             ++(*(memDepUnit->pathWrites[i]));
             prediction.storeQueueDistance = tmp_distance;
             prediction.predBranchHistLength = i;
@@ -128,11 +129,44 @@ PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchH
         }
     }
 
+    if (debug && violating_load == load_pc) {
+        for (auto b: branchHistory) {
+            if (b.pc == first_violation_branch){
+                std::cout << "Violating branch in decoded history\n";
+                bool older = load_seq_num > b.seqNum;
+                std::cout << "Load is older: " << older << "\n";
+                std::cout << "Taken: " << b.taken << "\n";
+                std::cout << "Lookup\n";
+                std::cout << "Load SeqNum: " << load_seq_num << "\n";
+                std::cout << "Prediction history:\n";
+                if (!older) break;
+                //int i = 0;
+                for (auto b: BranchHistory(begin, branchHistory.end())){
+                    //if (i == num_violating_branches) break;
+                    std::cout << "Indirect: " << b.indirect << "\n";
+                    std::cout << "Taken: " << b.taken << "\n";
+                    std::cout << "Target: " << b.target << "\n";
+                    std::cout << "SeqNum: " << b.seqNum << "\n";
+                    std::cout << "PC: " << b.pc << "\n";
+                    std::cout << "\n";
+                    //if (load_seq_num > b.seqNum) i++;
+                    if (b.pc == first_violation_branch) break;
+                }
+                break;
+            }
+        }
+    }
+
+    if (prediction.storeQueueDistance) std::cout << "Hit!\n";
+
     return prediction;
 }
 
 void PHAST::violation(Addr load_pc, InstSeqNum store_seq_num, std::ptrdiff_t storeQueueDistance,
                       BranchHistory branchHistory) {
+
+    violating_load = load_pc;
+    first_violation_branch = branchHistory.front().pc;
 
     //corner case of a violation before any branches or no +1 branch
     if (branchHistory.empty() || branchHistory.back().seqNum > store_seq_num) return;
@@ -143,9 +177,25 @@ void PHAST::violation(Addr load_pc, InstSeqNum store_seq_num, std::ptrdiff_t sto
     do {
         branch_seq_num = br_it->seqNum;
         br_it++;
-    } while (br_it != branchHistory.end() && store_seq_num < branch_seq_num);
+    } while (br_it != branchHistory.end() && branch_seq_num > store_seq_num);
+
+    //could the inbetween branches be in commit history in the wrong order?
+    if (debug) {
+        std::cout << "Violation!\n";
+        std::cout << "Load PC: " << load_pc << "\n";
+        std::cout << "Violation history:\n";
+        for (auto b: BranchHistory(branchHistory.begin(), br_it)){
+            std::cout << "Indirect: " << b.indirect << "\n";
+            std::cout << "Taken: " << b.taken << "\n";
+            std::cout << "Target: " << b.target << "\n";
+            std::cout << "PC: " << b.pc << "\n";
+            std::cout << "\n";
+        }
+        std::cout << "\n";
+    }
 
     unsigned num_branches = (unsigned)std::distance(branchHistory.begin(), br_it);
+    num_violating_branches = num_branches;
 
     //quantise num branches to first lowest path size
     //TODO: should the num of branches we hash also be quantised?

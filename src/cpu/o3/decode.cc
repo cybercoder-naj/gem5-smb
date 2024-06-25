@@ -334,7 +334,7 @@ Decode::squash(const DynInstPtr &inst, ThreadID tid)
     }
 
     //revert branch history
-    while (!decodedBranchHistory.empty() && squash_seq_num < decodedBranchHistory.front().seqNum) {
+    while (!decodedBranchHistory.empty() && decodedBranchHistory.front().seqNum >= squash_seq_num) {
         decodedBranchHistory.pop_front();
     }
 
@@ -740,12 +740,14 @@ Decode::decodeInsts(ThreadID tid)
 
         //Record decoded branches for memdep predictions
         if (inst->isControl() && !inst->isUncondCtrl()) {
-            uint64_t target = inst->isIndirectCtrl() ? inst->branchTarget()->instAddr() : 0;
+            bool is_indirect = !inst->isDirectCtrl();
+            uint64_t target = is_indirect ? inst->branchTarget()->instAddr() : 0;
             branchInfo branch_info = {
-                inst->isIndirectCtrl(),
+                is_indirect,
                 inst->readPredTaken(),
                 target,
                 inst->seqNum,
+                inst->pcState().instAddr(),
             };
             decodedBranchHistory.push_front(branch_info);
             if (decodedBranchHistory.size() == MAX_BRANCH_HISTORY)
