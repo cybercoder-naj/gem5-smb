@@ -109,16 +109,14 @@ PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchH
 
     if (branchHistory.size() == 0) return prediction;
     auto begin = branchHistory.begin();
-    InstSeqNum branch_seq_num = branchHistory.front().seqNum;
-    while (begin != branchHistory.end() && branch_seq_num > load_seq_num) {
-        branch_seq_num = begin->seqNum;
+    while (begin != branchHistory.end() && begin->seqNum > load_seq_num) {
         begin++;
     }
 
     uint64_t hash;
     std::ptrdiff_t tmp_distance;
     for (unsigned i = 0; i <= maxBranches && i < historySizes.size(); i++) {
-        hash = generateBranchHash(historySizes[i], begin, branchHistory.end());
+        hash = generateBranchHash(i, historySizes[i], begin, branchHistory.end());
         tmp_distance = paths[i].predict(load_pc, hash);
         if (tmp_distance) {
             // all paths are read on prediction, so just use that stat to calc reads
@@ -200,17 +198,18 @@ void PHAST::violation(Addr load_pc, InstSeqNum store_seq_num, std::ptrdiff_t sto
     //quantise num branches to first lowest path size
     //TODO: should the num of branches we hash also be quantised?
     //unsigned path_index;
-    for (unsigned i = historySizes.size(); i-- > 0;) {
+    unsigned i;
+    for (i = historySizes.size(); i-- > 0;) {
         unsigned size = historySizes[i];
         if (num_branches >= size) {
-            num_branches = i;
+            num_branches = size;
             break;
         }
     }
 
-    uint64_t path_hash = generateBranchHash(num_branches, branchHistory.begin(), branchHistory.end());
+    uint64_t path_hash = generateBranchHash(i, path_index, num_branches, branchHistory.begin(), branchHistory.end());
     paths[num_branches].update(load_pc, path_hash, storeQueueDistance);
-    maxBranches = std::max(maxBranches, num_branches);
+    maxBranches = std::max(maxBranches, i);
     ++(*(memDepUnit->pathReads[num_branches]));
     ++(*(memDepUnit->pathWrites[num_branches]));
 
@@ -246,7 +245,7 @@ void PHAST::commit(Addr load_pc, Addr load_addr, unsigned load_size, Addr store_
 
 }
 
-uint64_t PHAST::generateBranchHash(unsigned num_branches, BranchHistory::iterator branchHistoryBegin, BranchHistory::iterator branchHistoryEnd) {
+uint64_t PHAST::generateBranchHash(unsigned path_index, unsigned num_branches, BranchHistory::iterator branchHistoryBegin, BranchHistory::iterator branchHistoryEnd) {
     std::deque<uint64_t> tmp_path;
     tmp_path.clear();
     int bits = 60;
@@ -270,7 +269,7 @@ uint64_t PHAST::generateBranchHash(unsigned num_branches, BranchHistory::iterato
         }
     }
 
-    return foldHistory(h, bits, paths[num_branches].getSetBits(), paths[num_branches].getTagBits());
+    return foldHistory(h, bits, paths[path_index].getSetBits(), paths[path_index].getTagBits());
 }
 
 uint64_t PHAST::foldHistory(bitset<BITSETSIZE> h, int bits, unsigned _setBits, unsigned _tagBits) {

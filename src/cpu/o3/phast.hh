@@ -127,7 +127,7 @@ class PHAST
     Addr first_violation_branch;
     bool debug = true;
 
-    //performance optimisation
+    //largest seen index into branchSizes
     unsigned maxBranches;
 
     std::vector<unsigned> historySizes;
