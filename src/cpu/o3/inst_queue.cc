@@ -593,11 +593,17 @@ InstructionQueue::insert(const DynInstPtr &new_inst)
     addToProducers(new_inst);
 
     if (new_inst->isMemRef()) {
-        BranchHistory branchHistory = iewStage->getCPU()->getDecode()->getBranchHistory();
-        for (auto b: branchHistory) {
-            DynInstPtr inst = iewStage->getCPU()->getDecode()->branchHistoryMap[b.seqNum];
-            std::cout << "Squashed: " << inst->isSquashed() << "\n";
+        BranchHistory &branchHistory = iewStage->getCPU()->getDecode()->getBranchHistory();
+        DynInstPtr inst;
+        for (auto b = branchHistory.begin(); b != branchHistory.end();) {
+            inst = iewStage->getCPU()->getDecode()->branchHistoryMap[b->seqNum];
+            if (inst->isSquashed()) branchHistory.erase(b);
+            else ++b;
         }
+        // for (auto b: iewStage->getCPU()->getDecode()->getBranchHistory()){
+        // //for (auto b: branchHistory){
+        //     std::cout << "Squashed: " << iewStage->getCPU()->getDecode()->branchHistoryMap[b.seqNum]->isSquashed() << "\n";
+        // }
         memDepUnit[new_inst->threadNumber].insert(new_inst, iewStage->getCPU()->getDecode()->getBranchHistory());
     } else {
         addIfReady(new_inst);

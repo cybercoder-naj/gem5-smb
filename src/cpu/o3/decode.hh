@@ -203,7 +203,7 @@ class Decode
      */
     unsigned squash(ThreadID tid);
 
-    BranchHistory getBranchHistory() { return decodedBranchHistory; }
+    BranchHistory &getBranchHistory() { return decodedBranchHistory; }
 
     std::map<InstSeqNum, DynInstPtr> branchHistoryMap;
 

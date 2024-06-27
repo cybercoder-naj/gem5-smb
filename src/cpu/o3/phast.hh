@@ -176,7 +176,7 @@ class PHAST
         public:
             int init(unsigned counter_bits, unsigned set_bits, unsigned tag_bits, unsigned associativity);
 
-            std::ptrdiff_t predict(Addr pc, uint64_t history);
+            std::ptrdiff_t predict(Addr pc, uint64_t history, Addr violating_load);
 
             void update(Addr pc, uint64_t history, std::ptrdiff_t distance);
 

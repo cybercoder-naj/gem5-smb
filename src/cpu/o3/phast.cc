@@ -90,7 +90,7 @@ void PHAST::init(uint64_t num_rows, uint64_t associativity, uint64_t tag_bits, u
 
     unsigned set_bits = (unsigned)log2((double)num_rows);
 
-    debug = false;
+    debug = true;
 
     unsigned num_tables = historySizes.size();
     paths = std::vector<SimplBlockCache>();
@@ -117,9 +117,11 @@ PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchH
 
     uint64_t hash;
     std::ptrdiff_t tmp_distance;
+    std::ptrdiff_t print_hash;
     for (unsigned i = 0; i <= maxBranches && i < historySizes.size(); i++) {
         hash = generateBranchHash(i, historySizes[i], begin, branchHistory.end());
-        tmp_distance = paths[i].predict(load_pc, hash);
+        if (historySizes[i] == num_violating_branches) print_hash = hash;
+        tmp_distance = paths[i].predict(load_pc, hash, violating_load);
         if (tmp_distance) {
             // all paths are read on prediction, so just use that stat to calc reads
             ++(*(memDepUnit->pathWrites[i]));
@@ -132,25 +134,22 @@ PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchH
     if (debug && violating_load == load_pc) {
         for (auto b: branchHistory) {
             if (b.pc == first_violation_branch){
-                std::cout << "Violating branch in decoded history\n";
                 bool older = load_seq_num > b.seqNum;
-                std::cout << "Load is older: " << older << "\n";
-                std::cout << "Taken: " << b.taken << "\n";
                 std::cout << "Lookup\n";
                 std::cout << "Load SeqNum: " << load_seq_num << "\n";
                 std::cout << "Prediction history:\n";
+                std::cout << "Hash: " << print_hash << "\n";
                 if (!older) break;
-                //int i = 0;
+                int i = 0;
                 for (auto b: BranchHistory(begin, branchHistory.end())){
-                    //if (i == num_violating_branches) break;
+                    if (i > num_violating_branches) break;
                     std::cout << "Indirect: " << b.indirect << "\n";
                     std::cout << "Taken: " << b.taken << "\n";
                     std::cout << "Target: " << b.target << "\n";
                     std::cout << "SeqNum: " << b.seqNum << "\n";
                     std::cout << "PC: " << b.pc << "\n";
                     std::cout << "\n";
-                    //if (load_seq_num > b.seqNum) i++;
-                    if (b.pc == first_violation_branch) break;
+                    if (load_seq_num > b.seqNum) i++;
                 }
                 break;
             }
@@ -165,9 +164,6 @@ PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchH
 void PHAST::violation(Addr load_pc, InstSeqNum store_seq_num, std::ptrdiff_t storeQueueDistance,
                       BranchHistory branchHistory) {
 
-    violating_load = load_pc;
-    first_violation_branch = branchHistory.front().pc;
-
     //corner case of a violation before any branches or no +1 branch
     if (branchHistory.empty() || branchHistory.back().seqNum > store_seq_num) return;
 
@@ -179,23 +175,7 @@ void PHAST::violation(Addr load_pc, InstSeqNum store_seq_num, std::ptrdiff_t sto
         br_it++;
     } while (br_it != branchHistory.end() && branch_seq_num > store_seq_num);
 
-    //could the inbetween branches be in commit history in the wrong order?
-    if (debug) {
-        std::cout << "Violation!\n";
-        std::cout << "Load PC: " << load_pc << "\n";
-        std::cout << "Violation history:\n";
-        for (auto b: BranchHistory(branchHistory.begin(), br_it)){
-            std::cout << "Indirect: " << b.indirect << "\n";
-            std::cout << "Taken: " << b.taken << "\n";
-            std::cout << "Target: " << b.target << "\n";
-            std::cout << "PC: " << b.pc << "\n";
-            std::cout << "\n";
-        }
-        std::cout << "\n";
-    }
-
     unsigned num_branches = (unsigned)std::distance(branchHistory.begin(), br_it);
-    num_violating_branches = num_branches;
 
     //quantise num branches to first lowest path size
     unsigned i;
@@ -206,9 +186,29 @@ void PHAST::violation(Addr load_pc, InstSeqNum store_seq_num, std::ptrdiff_t sto
             break;
         }
     }
-
     uint64_t path_hash = generateBranchHash(i, num_branches, branchHistory.begin(), branchHistory.end());
-    paths[num_branches].update(load_pc, path_hash, storeQueueDistance);
+    paths[i].update(load_pc, path_hash, storeQueueDistance);
+    //could the inbetween branches be in commit history in the wrong order?
+    if (debug) {
+        violating_load = load_pc;
+        first_violation_branch = branchHistory.front().pc;
+
+        std::cout << "Violation!\n";
+        std::cout << "Load PC: " << load_pc << "\n";
+        std::cout << "Violation history:\n";
+        std::cout << "Hash: " << path_hash << "\n";
+        std::cout << "SQ distance: " << storeQueueDistance << "\n";
+        for (auto b: BranchHistory(branchHistory.begin(), br_it)){
+            std::cout << "Indirect: " << b.indirect << "\n";
+            std::cout << "Taken: " << b.taken << "\n";
+            std::cout << "Target: " << b.target << "\n";
+            std::cout << "PC: " << b.pc << "\n";
+            std::cout << "\n";
+        }
+        std::cout << "\n";
+        num_violating_branches = num_branches;
+    }
+
     maxBranches = std::max(maxBranches, i);
     ++(*(memDepUnit->pathReads[i]));
     ++(*(memDepUnit->pathWrites[i]));
@@ -371,8 +371,12 @@ void PHAST::SimplBlockCache::updateLRU(Entry* entry) {
     lruCounter++;
 }
 
-std::ptrdiff_t PHAST::SimplBlockCache::predict(Addr pc, uint64_t history) {
+std::ptrdiff_t PHAST::SimplBlockCache::predict(Addr pc, uint64_t history, Addr violating_load) {
     auto entry = findEntry(pc, history);
+    if (pc == violating_load && entry == nullptr) std::cout << "entry is null\n";
+    else if (pc == violating_load && entry->counter == 0) std::cout << "counter is zero\n";
+    else if (pc == violating_load && entry->distance == 0) std::cout << "distnace is zero\n";
+    else if (pc == violating_load && entry->distance) { std::cout << "Found distance!!\n"; exit(1); }
     if (entry == nullptr || entry->counter == 0 || entry->distance == 0) { // no prediction for this PC
         return 0;
     }
