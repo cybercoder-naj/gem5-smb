@@ -85,8 +85,6 @@ private:
         statistics::Scalar altlookupHit;
         statistics::Scalar mainpredHit;
         statistics::Scalar altpredHit;
-        std::map<uint32_t, uint32_t> usealtCounter;
-        std::map<uint32_t, TCnts>  THitCnt;
         ITTAGEStats(statistics::Group* parent);
     }ittagestats;
 

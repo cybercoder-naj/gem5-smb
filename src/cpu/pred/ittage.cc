@@ -49,32 +49,6 @@ ITTAGE::ITTAGE(const ITTAGEParams &params):
     }
     use_alt = 8;
     reset_counter = 128;
-    registerExitCallback([this]() {
-        {
-        auto out_handle = simout.create("altuseCnt.txt", false, true);
-        *out_handle->stream() << "use_alt" << " " << "cnt" << std::endl;
-        for (auto& it : ittagestats.usealtCounter) {
-            *out_handle->stream() << it.first << " " << it.second << std::endl;
-        }
-        simout.close(out_handle);
-        }
-
-        {
-        auto out_handle = simout.create("TableHitCnt.txt", false, true);
-        *out_handle->stream() << "table" << " " << "lookupcnt" << " " << "predhit" << " " << "predmiss" << std::endl;
-        for (auto& it : ittagestats.THitCnt) {
-            *out_handle->stream() << it.first << " " << it.second.lookuphit <<" "<< it.second.predhit <<" "<< it.second.predmiss << std::endl;
-        }
-        simout.close(out_handle);
-        }
-        {
-            auto out_handle = simout.create("missHistMap.txt", false, true);
-            for (const auto &it: missHistMap) {
-                *out_handle->stream() << it.first << ": " << it.second << std::endl;
-            }
-            simout.close(out_handle);
-        }
-    });
 }
 
 ITTAGE::ITTAGEStats::ITTAGEStats(statistics::Group* parent):
@@ -443,7 +417,6 @@ ITTAGE::recordTarget(
         lookup_helper(hist_entry.pcAddr, ghr, *target_1, *target_2, tid,
                       predictor, predictor_index, alt_predictor,
                       alt_predictor_index, pred_count, use_alt_pred);
-    ittagestats.usealtCounter[use_alt]++;
     if (predictor_found && use_alt_pred) {
         set(target_sel, target_2);
         predictor_sel = alt_predictor;
@@ -455,26 +428,6 @@ ITTAGE::recordTarget(
     } else {
         predictor_sel = predictor;
         predictor_index_sel = predictor_index;
-    }
-    if(predictor_found){
-        if(pred_count==1){
-            ittagestats.THitCnt[predictor].lookuphit++;
-            if(targetCache[tid][predictor][predictor_index].target->equals(target)){
-                ittagestats.THitCnt[predictor].predhit++;
-            }
-            else{
-                ittagestats.THitCnt[predictor].predmiss++;
-            }
-        }
-        if(pred_count==2){
-            ittagestats.THitCnt[alt_predictor].lookuphit++;
-            if(targetCache[tid][alt_predictor][alt_predictor_index].target->equals(target)){
-                ittagestats.THitCnt[alt_predictor].predhit++;
-            }
-            else{
-                ittagestats.THitCnt[alt_predictor].predmiss++;
-            }
-        }
     }
 
     // update previous target
