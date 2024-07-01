@@ -81,7 +81,7 @@ TAGE_EMILIO::squash(ThreadID tid, void * &bp_history)
 bool
 TAGE_EMILIO::predict(ThreadID tid, Addr pc, bool cond_branch, void* &b)
 {
-    int id = tage.get_new_branch_id();
+    int64_t id = tage.get_new_branch_id();
     TageEmilioBranchInfo *bi = new TageEmilioBranchInfo();
     b = (void*)(bi);
     DPRINTF(Tage, "TAGE id: %d predict: %lx bp_history:%p\n", id, pc, b);

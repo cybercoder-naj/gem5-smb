@@ -2671,7 +2671,7 @@ class TAGE_EMILIO: public BPredUnit
 
     struct TageEmilioBranchInfo
     {
-        int id;
+        int64_t id;
         Addr pc;
         tagescl::Branch_Type br_type;
         TageEmilioBranchInfo()
