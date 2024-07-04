@@ -1,28 +1,3 @@
-/* 
- * Copyright 2024 Eduardo José Gómez Hernández (University of Murcia)
- * Copyright 2024 Emilio Domínguez (University of Murcia)
- * Copyright 2024 CAPS-Group (University of Murcia)
- * Copyright 2020 HPS/SAFARI Research Groups
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- */
-
 #include "cpu/pred/tage_sc_l_emilio.hh"
 
 #include "base/intmath.hh"
@@ -69,7 +44,7 @@ void
 TAGE_EMILIO::squash(ThreadID tid, void * &bp_history)
 {
     TageEmilioBranchInfo *bi = static_cast<TageEmilioBranchInfo*>(bp_history);
-    DPRINTF(Tage, "TAGE id:%d squash: %lx bp_history:%p\n", bi ? bi->id : -1, 
+    DPRINTF(Tage, "TAGE id: %d squash: %lx bp_history:%p\n", bi ? bi->id : -1, 
         bi? bi->pc : 0x00, bp_history);
     if (bi) {
       tage.flush_branch(bi->id);
@@ -81,7 +56,7 @@ TAGE_EMILIO::squash(ThreadID tid, void * &bp_history)
 bool
 TAGE_EMILIO::predict(ThreadID tid, Addr pc, bool cond_branch, void* &b)
 {
-    int64_t id = tage.get_new_branch_id();
+    uint32_t id = tage.get_new_branch_id();
     TageEmilioBranchInfo *bi = new TageEmilioBranchInfo();
     b = (void*)(bi);
     DPRINTF(Tage, "TAGE id: %d predict: %lx bp_history:%p\n", id, pc, b);
