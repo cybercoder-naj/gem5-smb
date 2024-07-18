@@ -73,8 +73,8 @@ typedef struct branchInfo {
  *  So, branchHistory[n] = nth oldest branch, branchHistory[0] = newest branch. */
 typedef std::deque<branchInfo> BranchHistory;
 
-//unclear on what exactly this should be, setting it to double the max history length + 1 for now
-#define MAX_BRANCH_HISTORY 66
+//unclear on what exactly this should be, choosing a reasonably high number for now
+#define MAX_BRANCH_HISTORY 128
 
 
 } // namespace o3

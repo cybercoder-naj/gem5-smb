@@ -115,7 +115,7 @@ class MemDepUnit
     std::string name() const { return _name; }
 
     /** Initializes the unit with parameters and a thread id. */
-    void init(const BaseO3CPUParams &params, ThreadID tid, CPU *cpu);
+    void init(const BaseO3CPUParams &params, ThreadID tid, CPU *_cpu);
 
     /** Determine if we are drained. */
     bool isDrained() const;
@@ -223,7 +223,7 @@ class MemDepUnit
         &(stats.writesPath7), &(stats.writesPath8)
     };
 
-    CPU *cp;
+    CPU *cpu;
 
   private:
 

@@ -89,13 +89,13 @@ MemDepUnit::~MemDepUnit()
 }
 
 void
-MemDepUnit::init(const BaseO3CPUParams &params, ThreadID tid, CPU *cpu)
+MemDepUnit::init(const BaseO3CPUParams &params, ThreadID tid, CPU *_cpu)
 {
     DPRINTF(MemDepUnit, "Creating MemDepUnit %i object.\n",tid);
 
     _name = csprintf("%s.memDep%d", params.name, tid);
     id = tid;
-    cp = cpu;
+    cpu = _cpu;
 
     depPred.init(params.phast_num_rows, params.phast_associativity,
                  params.phast_tag_bits, params.phast_max_counter, this);
@@ -308,21 +308,21 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
                 store_entry->dependInsts.push_back(inst_entry);
 
             inst_entry->memDeps = store_entries.size();
-        } else { //PHAST predicted dependence
-            inst->memDepInfo.predBranchHistLength = prediction.predBranchHistLength;
-            inst->memDepInfo.predictorHash = prediction.predictorHash;
+        } else if (inst->sqIt.idx() >= (cpu->getIEW()->ldstQueue.getStoreHead(id) + prediction.storeQueueDistance)) {
+            //make a PHAST prediction, as long as the SQ offset is valid
             auto sq_it = inst->sqIt - prediction.storeQueueDistance;
             DynInstPtr store_inst = sq_it->instruction();
-
             MemDepHashIt hash_it = memDepHash.find(store_inst);
+            store_inst->dump();
             if (hash_it != memDepHash.end()) {
                 auto store_entry = (*hash_it).second;
                 store_entry->dependInsts.push_back(inst_entry);
                 inst->memDepInfo.predStoreAddr = store_inst->effAddr;
                 inst->memDepInfo.predStoreSize = sq_it->size();
+                inst->memDepInfo.predBranchHistLength = prediction.predBranchHistLength;
+                inst->memDepInfo.predictorHash = prediction.predictorHash;
                 inst_entry->memDeps = 1;
-            } else { DPRINTF(MemDepUnit, "Dependency predicted but store queue entry tracked in MDP\n"); }
-
+            } else { DPRINTF(MemDepUnit, "Dependency predicted but store queue entry not tracked in MDP\n"); }
         }
 
         if (inst->isLoad()) {

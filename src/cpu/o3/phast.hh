@@ -122,9 +122,6 @@ class PHAST
 
   private:
 
-    Addr violating_load = 0;
-    int num_violating_branches;
-    Addr first_violation_branch;
     bool debug;
 
     //largest seen index into branchSizes
@@ -174,9 +171,9 @@ class PHAST
         void updateLRU(Entry* entry);
 
         public:
-            int init(unsigned counter_bits, unsigned set_bits, unsigned tag_bits, unsigned associativity);
+            int init(uint32_t set_bits, uint32_t _associativity, uint32_t tag_bits, uint32_t max_counter_value);
 
-            std::ptrdiff_t predict(Addr pc, uint64_t history, Addr violating_load);
+            std::ptrdiff_t predict(Addr pc, uint64_t history);
 
             void update(Addr pc, uint64_t history, std::ptrdiff_t distance);
 

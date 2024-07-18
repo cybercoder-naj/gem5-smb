@@ -63,11 +63,9 @@ PHAST::PHAST(uint64_t num_rows, uint64_t associativity, uint64_t tag_bits, uint6
     paths.resize(num_tables, SimplBlockCache());
 
     for (unsigned i = 0; i < num_tables; ++i) {
-        paths[i].init(max_counter_value, set_bits, tag_bits, associativity);
+        paths[i].init((uint32_t)set_bits, (uint32_t)associativity, (uint32_t)tag_bits, (uint32_t)max_counter_value);
     }
 
-    std::string stats_group_name = csprintf("PHAST__%i", memDepUnit->id);
-    memDepUnit->cp->addStatGroup(stats_group_name.c_str(), &(memDepUnit->stats));
 }
 
 PHAST::~PHAST()
@@ -97,17 +95,16 @@ void PHAST::init(uint64_t num_rows, uint64_t associativity, uint64_t tag_bits, u
     paths.resize(num_tables, SimplBlockCache());
 
     for (unsigned i = 0; i < num_tables; ++i) {
-        paths[i].init(max_counter_value, set_bits, tag_bits, associativity);
+        paths[i].init((uint32_t)max_counter_value, (uint32_t)set_bits, (uint32_t)tag_bits, (uint32_t)associativity);
     }
 
-    std::string stats_group_name = csprintf("PHAST__%i", memDepUnit->id);
-    memDepUnit->cp->addStatGroup(stats_group_name.c_str(), &(memDepUnit->stats));
 }
 
 PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchHistory branchHistory) {
 
     struct PredictionResult prediction;
     prediction.storeQueueDistance = 0;
+
 
     if (branchHistory.size() == 0) return prediction;
     auto begin = branchHistory.begin();
@@ -117,11 +114,9 @@ PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchH
 
     uint64_t hash;
     std::ptrdiff_t tmp_distance;
-    std::ptrdiff_t print_hash;
     for (unsigned i = 0; i <= maxBranches && i < historySizes.size(); i++) {
         hash = generateBranchHash(i, historySizes[i], begin, branchHistory.end());
-        if (historySizes[i] == num_violating_branches) print_hash = hash;
-        tmp_distance = paths[i].predict(load_pc, hash, violating_load);
+        tmp_distance = paths[i].predict(load_pc, hash);
         if (tmp_distance) {
             // all paths are read on prediction, so just use that stat to calc reads
             ++(*(memDepUnit->pathWrites[i]));
@@ -130,33 +125,6 @@ PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchH
             prediction.predictorHash = hash;
         }
     }
-
-    if (debug && violating_load == load_pc) {
-        for (auto b: branchHistory) {
-            if (b.pc == first_violation_branch){
-                bool older = load_seq_num > b.seqNum;
-                std::cout << "Lookup\n";
-                std::cout << "Load SeqNum: " << load_seq_num << "\n";
-                std::cout << "Prediction history:\n";
-                std::cout << "Hash: " << print_hash << "\n";
-                if (!older) break;
-                int i = 0;
-                for (auto b: BranchHistory(begin, branchHistory.end())){
-                    if (i > num_violating_branches) break;
-                    std::cout << "Indirect: " << b.indirect << "\n";
-                    std::cout << "Taken: " << b.taken << "\n";
-                    std::cout << "Target: " << b.target << "\n";
-                    std::cout << "SeqNum: " << b.seqNum << "\n";
-                    std::cout << "PC: " << b.pc << "\n";
-                    std::cout << "\n";
-                    if (load_seq_num > b.seqNum) i++;
-                }
-                break;
-            }
-        }
-    }
-
-    if (prediction.storeQueueDistance) std::cout << "Hit!\n";
 
     return prediction;
 }
@@ -188,26 +156,6 @@ void PHAST::violation(Addr load_pc, InstSeqNum store_seq_num, std::ptrdiff_t sto
     }
     uint64_t path_hash = generateBranchHash(i, num_branches, branchHistory.begin(), branchHistory.end());
     paths[i].update(load_pc, path_hash, storeQueueDistance);
-    //could the inbetween branches be in commit history in the wrong order?
-    if (debug) {
-        violating_load = load_pc;
-        first_violation_branch = branchHistory.front().pc;
-
-        std::cout << "Violation!\n";
-        std::cout << "Load PC: " << load_pc << "\n";
-        std::cout << "Violation history:\n";
-        std::cout << "Hash: " << path_hash << "\n";
-        std::cout << "SQ distance: " << storeQueueDistance << "\n";
-        for (auto b: BranchHistory(branchHistory.begin(), br_it)){
-            std::cout << "Indirect: " << b.indirect << "\n";
-            std::cout << "Taken: " << b.taken << "\n";
-            std::cout << "Target: " << b.target << "\n";
-            std::cout << "PC: " << b.pc << "\n";
-            std::cout << "\n";
-        }
-        std::cout << "\n";
-        num_violating_branches = num_branches;
-    }
 
     maxBranches = std::max(maxBranches, i);
     ++(*(memDepUnit->pathReads[i]));
@@ -297,11 +245,11 @@ void PHAST::clear() {
 
 }
 
-int PHAST::SimplBlockCache::init(unsigned max_counter_value, unsigned set_bits, unsigned tag_bits, unsigned associativity) {
+int PHAST::SimplBlockCache::init(uint32_t set_bits, uint32_t _associativity, uint32_t tag_bits, uint32_t max_counter_value) {
 
     tagBits = tag_bits;
     setBits = set_bits;
-    associativity = associativity;
+    associativity = _associativity;
     maxCounterValue = max_counter_value;
     lruCounter = 0;
 
@@ -371,12 +319,8 @@ void PHAST::SimplBlockCache::updateLRU(Entry* entry) {
     lruCounter++;
 }
 
-std::ptrdiff_t PHAST::SimplBlockCache::predict(Addr pc, uint64_t history, Addr violating_load) {
+std::ptrdiff_t PHAST::SimplBlockCache::predict(Addr pc, uint64_t history) {
     auto entry = findEntry(pc, history);
-    if (pc == violating_load && entry == nullptr) std::cout << "entry is null\n";
-    else if (pc == violating_load && entry->counter == 0) std::cout << "counter is zero\n";
-    else if (pc == violating_load && entry->distance == 0) std::cout << "distnace is zero\n";
-    else if (pc == violating_load && entry->distance) { std::cout << "Found distance!!\n"; exit(1); }
     if (entry == nullptr || entry->counter == 0 || entry->distance == 0) { // no prediction for this PC
         return 0;
     }

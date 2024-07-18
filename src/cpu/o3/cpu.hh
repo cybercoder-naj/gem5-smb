@@ -399,6 +399,8 @@ class CPU : public BaseCPU
 
     Decode *getDecode() { return &decode; }
 
+    IEW *getIEW() { return &iew; }
+
   protected:
     /** The fetch stage. */
     Fetch fetch;
