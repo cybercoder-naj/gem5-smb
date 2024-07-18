@@ -598,7 +598,7 @@ InstructionQueue::insert(const DynInstPtr &new_inst)
         for (auto b = branchHistory.begin(); b != branchHistory.end();) {
             inst = iewStage->getCPU()->getDecode()->branchHistoryMap[b->seqNum];
             if (inst && inst->isSquashed()) b = branchHistory.erase(b);
-            ++b;
+            else ++b;
         }
         // for (auto b: iewStage->getCPU()->getDecode()->getBranchHistory()){
         // //for (auto b: branchHistory){

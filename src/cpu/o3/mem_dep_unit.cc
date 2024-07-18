@@ -299,20 +299,21 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
             inst_entry->regsReady = true;
         }
 
-        // Clear the bit saying this instruction can issue.
-        inst->clearCanIssue();
-
         // Add this instruction to the list of dependents.
         if (!prediction.storeQueueDistance) {
             for (auto store_entry : store_entries)
                 store_entry->dependInsts.push_back(inst_entry);
 
             inst_entry->memDeps = store_entries.size();
+			// Clear the bit saying this instruction can issue.
+			inst->clearCanIssue();
+
         } else if (inst->sqIt.idx() >= (cpu->getIEW()->ldstQueue.getStoreHead(id) + prediction.storeQueueDistance)) {
+			std::cout << "hello\n";
             //make a PHAST prediction, as long as the SQ offset is valid
             auto sq_it = inst->sqIt - prediction.storeQueueDistance;
             DynInstPtr store_inst = sq_it->instruction();
-            MemDepHashIt hash_it = memDepHash.find(store_inst);
+            MemDepHashIt hash_it = memDepHash.find(store_inst->seqNum);
             store_inst->dump();
             if (hash_it != memDepHash.end()) {
                 auto store_entry = (*hash_it).second;
@@ -322,8 +323,11 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
                 inst->memDepInfo.predBranchHistLength = prediction.predBranchHistLength;
                 inst->memDepInfo.predictorHash = prediction.predictorHash;
                 inst_entry->memDeps = 1;
-            } else { DPRINTF(MemDepUnit, "Dependency predicted but store queue entry not tracked in MDP\n"); }
+				inst->clearCanIssue();
+
+            } else { moveToReady(inst_entry); DPRINTF(MemDepUnit, "Dependency predicted but store queue entry not tracked in MDP\n"); }
         }
+		else { moveToReady(inst_entry); }
 
         if (inst->isLoad()) {
             ++stats.conflictingLoads;
