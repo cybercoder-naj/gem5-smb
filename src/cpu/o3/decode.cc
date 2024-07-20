@@ -748,7 +748,6 @@ Decode::decodeInsts(ThreadID tid)
                 inst->pcState().instAddr(),
             };
             decodedBranchHistory.push_front(branch_info);
-            branchHistoryMap[inst->seqNum] = inst;
             if (decodedBranchHistory.size() > MAX_BRANCH_HISTORY)
                 decodedBranchHistory.pop_back();
         }

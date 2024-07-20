@@ -309,7 +309,6 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
 			inst->clearCanIssue();
 
         } else if (inst->sqIt.idx() >= (cpu->getIEW()->ldstQueue.getStoreHead(id) + prediction.storeQueueDistance)) {
-			std::cout << "hello\n";
             //make a PHAST prediction, as long as the SQ offset is valid
             auto sq_it = inst->sqIt - prediction.storeQueueDistance;
             DynInstPtr store_inst = sq_it->instruction();
