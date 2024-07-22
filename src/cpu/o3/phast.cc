@@ -105,7 +105,6 @@ PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchH
     struct PredictionResult prediction;
     prediction.storeQueueDistance = 0;
 
-
     if (branchHistory.size() == 0) return prediction;
     auto begin = branchHistory.begin();
     while (begin != branchHistory.end() && begin->seqNum > load_seq_num) {

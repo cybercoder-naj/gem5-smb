@@ -309,12 +309,10 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
 			inst->clearCanIssue();
 
         } else if (inst->sqIt.idx() >= (cpu->getIEW()->ldstQueue.getStoreHead(id) + prediction.storeQueueDistance)) {
-			std::cout << "hello\n";
             //make a PHAST prediction, as long as the SQ offset is valid
             auto sq_it = inst->sqIt - prediction.storeQueueDistance;
             DynInstPtr store_inst = sq_it->instruction();
             MemDepHashIt hash_it = memDepHash.find(store_inst->seqNum);
-            store_inst->dump();
             if (hash_it != memDepHash.end()) {
                 auto store_entry = (*hash_it).second;
                 store_entry->dependInsts.push_back(inst_entry);
@@ -324,10 +322,9 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
                 inst->memDepInfo.predictorHash = prediction.predictorHash;
                 inst_entry->memDeps = 1;
 				inst->clearCanIssue();
-
-            } else { moveToReady(inst_entry); DPRINTF(MemDepUnit, "Dependency predicted but store queue entry not tracked in MDP\n"); }
+            } else if (inst_entry->regsReady) { moveToReady(inst_entry); }
         }
-		else { moveToReady(inst_entry); }
+		else if (inst_entry->regsReady) { moveToReady(inst_entry); }
 
         if (inst->isLoad()) {
             ++stats.conflictingLoads;
