@@ -564,8 +564,10 @@ LSQUnit::checkViolations(typename LoadQueue::iterator& loadIt,
                 if (memDepViolator && ld_inst->seqNum > memDepViolator->seqNum)
                     break;
                 // Check this load hasn't already forwarded from a younger store
-                if (inst->seqNum < ld_inst->memDepInfo.forwardedFrom)
-                    break;
+                if (inst->seqNum < ld_inst->memDepInfo.forwardedFrom){
+                    ++loadIt;
+                    continue;
+                }
 
                 DPRINTF(LSQUnit, "Detected fault with inst [sn:%lli] and "
                         "[sn:%lli] at address %#x\n",
