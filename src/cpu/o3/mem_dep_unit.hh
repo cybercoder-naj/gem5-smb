@@ -190,6 +190,7 @@ class MemDepUnit
         statistics::Scalar conflictingStores;
         /**  Number of predictions made by MDP */
         statistics::Scalar predictions;
+        statistics::Scalar hits;
         /**  Sorry for this. Need to track reads/writes for each
          *  specific branch len table for power usage estimation. */
         statistics::Scalar readsPath1;
@@ -224,6 +225,8 @@ class MemDepUnit
     };
 
     CPU *cpu;
+
+    std::map<Addr, Addr> violation_record;
 
   private:
 
