@@ -594,15 +594,11 @@ InstructionQueue::insert(const DynInstPtr &new_inst)
 
     if (new_inst->isMemRef()) {
         BranchHistory &branchHistory = iewStage->getCPU()->getDecode()->getBranchHistory();
-        DynInstPtr inst;
-        for (auto b = branchHistory.begin(); b != branchHistory.end();) {
-            inst = iewStage->getCPU()->getDecode()->branchHistoryMap[b->seqNum];
-            if (inst && inst->isSquashed()) b = branchHistory.erase(b);
-            else ++b;
-        }
-        // for (auto b: iewStage->getCPU()->getDecode()->getBranchHistory()){
-        // //for (auto b: branchHistory){
-        //     std::cout << "Squashed: " << iewStage->getCPU()->getDecode()->branchHistoryMap[b.seqNum]->isSquashed() << "\n";
+        // DynInstPtr inst;
+        // for (auto b = branchHistory.begin(); b != branchHistory.end();) {
+        //     inst = iewStage->getCPU()->getDecode()->branchHistoryMap[b->seqNum];
+        //     if (inst && inst->isSquashed()) b = branchHistory.erase(b);
+        //     else ++b;
         // }
         memDepUnit[new_inst->threadNumber].insert(new_inst, iewStage->getCPU()->getDecode()->getBranchHistory());
     } else {
@@ -1206,10 +1202,9 @@ InstructionQueue::doSquash(ThreadID tid)
     --squash_it;
 
     //revert branch history
-    BranchHistory decodedBranchHistory = cpu->getDecode()->getBranchHistory();
-    while (!decodedBranchHistory.empty() && decodedBranchHistory.front().seqNum >= squashedSeqNum[tid]) {
+    BranchHistory &decodedBranchHistory = cpu->getDecode()->getBranchHistory();
+    while (!decodedBranchHistory.empty() && decodedBranchHistory.front().seqNum >= squashedSeqNum[tid])
         decodedBranchHistory.pop_front();
-    }
 
     DPRINTF(IQ, "[tid:%i] Squashing until sequence number %i!\n",
             tid, squashedSeqNum[tid]);

@@ -917,7 +917,7 @@ Rename::doSquash(const InstSeqNum &squashed_seq_num, ThreadID tid)
     auto hb_it = historyBuffer[tid].begin();
 
     //revert branch history
-    BranchHistory decodedBranchHistory = cpu->getDecode()->getBranchHistory();
+    BranchHistory &decodedBranchHistory = cpu->getDecode()->getBranchHistory();
     while (!decodedBranchHistory.empty() && decodedBranchHistory.front().seqNum >= squashed_seq_num) {
         decodedBranchHistory.pop_front();
     }

@@ -411,7 +411,7 @@ IEW::squash(ThreadID tid)
     emptyRenameInsts(tid);
 
     //revert branch history
-    BranchHistory decodedBranchHistory = cpu->getDecode()->getBranchHistory();
+    BranchHistory &decodedBranchHistory = cpu->getDecode()->getBranchHistory();
     while (!decodedBranchHistory.empty() && decodedBranchHistory.front().seqNum >= fromCommit->commitInfo[tid].doneSeqNum) {
         decodedBranchHistory.pop_front();
     }
