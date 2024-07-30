@@ -594,12 +594,6 @@ InstructionQueue::insert(const DynInstPtr &new_inst)
 
     if (new_inst->isMemRef()) {
         BranchHistory &branchHistory = iewStage->getCPU()->getDecode()->getBranchHistory();
-        // DynInstPtr inst;
-        // for (auto b = branchHistory.begin(); b != branchHistory.end();) {
-        //     inst = iewStage->getCPU()->getDecode()->branchHistoryMap[b->seqNum];
-        //     if (inst && inst->isSquashed()) b = branchHistory.erase(b);
-        //     else ++b;
-        // }
         memDepUnit[new_inst->threadNumber].insert(new_inst, iewStage->getCPU()->getDecode()->getBranchHistory());
     } else {
         addIfReady(new_inst);
