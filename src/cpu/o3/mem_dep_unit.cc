@@ -322,7 +322,7 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
                     ++stats.hits;
                 auto store_entry = (*hash_it).second;
                 store_entry->dependInsts.push_back(inst_entry);
-                woken_inst->inst->memDepInfo.predStoreSize = inst->sqIt->size();
+                inst->inst->memDepInfo.predStoreSize = store_entry->inst->sqIt->size();
                 inst->memDepInfo.predBranchHistLength = prediction.predBranchHistLength;
                 inst->memDepInfo.predictorHash = prediction.predictorHash;
                 inst_entry->memDeps = 1;

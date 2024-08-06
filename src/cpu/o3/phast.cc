@@ -124,16 +124,16 @@ PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchH
     }
 
     uint64_t hash;
-    InstSeqNum tmp_seq_num;
     Addr store_pc;
     for (unsigned i = 0; i <= maxBranches && i < historySizes.size(); i++) {
         hash = generateBranchHash(i, historySizes[i], begin, branchHistory.end());
         store_pc = paths[i].predict(load_pc, hash);
         if (store_pc) {
-            tmp_seq_num = storeMap[store_pc];
+            auto tmp_seq_num_it = storeMap[store_pc];
+            if (tmp_seq_num_it == storeMap.end()) continue;
             // all paths are read on prediction, so just use that stat to calc reads
             ++(*(memDepUnit->pathWrites[i]));
-            prediction.seqNum = tmp_seq_num;
+            prediction.seqNum = tmp_seq_num_it->second;
             prediction.predBranchHistLength = i;
             prediction.predictorHash = hash;
         }
