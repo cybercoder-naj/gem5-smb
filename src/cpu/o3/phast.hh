@@ -66,7 +66,7 @@ struct MemDepInfo {
 };
 
 struct PredictionResult {
-    std::ptrdiff_t storeQueueDistance;
+    Addr storePC;
     unsigned predBranchHistLength;
     uint64_t predictorHash;
 };
@@ -113,7 +113,7 @@ class PHAST
     /** mem_dep_unit interface methods that don't do anything in PHAST */
     void squash(InstSeqNum squashed_num, ThreadID tid) { return; }
     void issued(Addr issued_PC, InstSeqNum issued_seq_num, bool is_store) { return; }
-    void insertStore(Addr store_PC, InstSeqNum store_seq_num, ThreadID tid) { return; }
+    void insertStore(Addr store_PC, InstSeqNum store_seq_num, ThreadID tid);
     void insertLoad(Addr load_PC, InstSeqNum load_seq_num) { return;}
 
     unsigned selectedTargetBits;
@@ -121,6 +121,8 @@ class PHAST
     uint64_t selectedTargetMask;
 
   private:
+
+    std::map<Addr, InstSeqNum> storeMap;
 
     bool debug;
 
@@ -146,7 +148,7 @@ class PHAST
     class SimplBlockCache {
         struct Entry {
             uint64_t tag;
-            std::ptrdiff_t distance;
+            Addr store_pc;
             uint32_t lru;
             uint32_t counter;
         };
@@ -175,7 +177,7 @@ class PHAST
 
             std::ptrdiff_t predict(Addr pc, uint64_t history);
 
-            void update(Addr pc, uint64_t history, std::ptrdiff_t distance);
+            void update(Addr pc, uint64_t history, Addr store_pc);
 
             void updateCommit(Addr pc, uint64_t history, bool predictionWrong);
 

@@ -1171,11 +1171,11 @@ InstructionQueue::getBlockedMemInstToExecute()
 }
 
 void
-InstructionQueue::violation(InstSeqNum store_seq_num, const DynInstPtr &faulting_load,
+InstructionQueue::violation(InstSeqNum store_seq_num, Addr store_pc, const DynInstPtr &faulting_load,
                             BranchHistory branchHistory)
 {
     iqIOStats.intInstQueueWrites++;
-    memDepUnit[faulting_load->threadNumber].violation(store_seq_num, faulting_load, branchHistory);
+    memDepUnit[faulting_load->threadNumber].violation(store_seq_num, store_pc, faulting_load, branchHistory);
 }
 
 void

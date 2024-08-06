@@ -243,7 +243,7 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
     // producing memrefs/stores.
     std::vector<InstSeqNum>  producing_stores;
     PredictionResult prediction;
-    prediction.storeQueueDistance = 0;
+    prediction.seqNum = 0;
     if ((inst->isLoad() || inst->isAtomic()) && hasLoadBarrier()) {
         DPRINTF(MemDepUnit, "%d load barriers in flight\n",
                 loadBarrierSNs.size());
@@ -277,7 +277,7 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
 
     // If no store entry, then instruction can issue as soon as the registers
     // are ready.
-    if (store_entries.empty() && !prediction.storeQueueDistance) {
+    if (store_entries.empty() && !prediction.seqNum) {
         DPRINTF(MemDepUnit, "No dependency for inst PC "
                 "%s [sn:%lli].\n", inst->pcState(), inst->seqNum);
 
@@ -300,7 +300,7 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
         }
 
         // Add this instruction to the list of dependents.
-        if (!prediction.storeQueueDistance) {
+        if (!prediction.seqNum) {
             for (auto store_entry : store_entries)
                 store_entry->dependInsts.push_back(inst_entry);
 
@@ -308,16 +308,14 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
 			// Clear the bit saying this instruction can issue.
 			inst->clearCanIssue();
 
-        } else if (inst->sqIt.idx() >= (cpu->getIEW()->ldstQueue.getStoreHead(id) + prediction.storeQueueDistance)) {
+        } else {
             //make a PHAST prediction, as long as the SQ offset is valid
-            auto sq_it = inst->sqIt - prediction.storeQueueDistance;
-            DynInstPtr store_inst = sq_it->instruction();
-            MemDepHashIt hash_it = memDepHash.find(store_inst->seqNum);
+            MemDepHashIt hash_it = memDepHash.find(prediction.seqNum);
             if (hash_it != memDepHash.end()) {
                 auto store_entry = (*hash_it).second;
                 store_entry->dependInsts.push_back(inst_entry);
-                inst->memDepInfo.predStoreAddr = store_inst->effAddr;
-                inst->memDepInfo.predStoreSize = sq_it->size();
+                inst->memDepInfo.predStoreAddr = store_entry->inst->effAddr;
+                inst->memDepInfo.predStoreSize = store_entry->inst->sqIt->size();
                 inst->memDepInfo.predBranchHistLength = prediction.predBranchHistLength;
                 inst->memDepInfo.predictorHash = prediction.predictorHash;
                 inst_entry->memDeps = 1;
@@ -622,14 +620,14 @@ MemDepUnit::squash(const InstSeqNum &squashed_num, ThreadID tid)
 }
 
 void
-MemDepUnit::violation(InstSeqNum store_seq_num,
+MemDepUnit::violation(InstSeqNum store_seq_num, Addr store_pc,
         const DynInstPtr &violating_load, BranchHistory branchHistory)
 {
     DPRINTF(MemDepUnit, "Passing violating PCs to store sets,"
             " load: %#x, store seq num: %#d\n", violating_load->pcState().instAddr(),
             store_seq_num);
     // Tell the memory dependence unit of the violation.
-    depPred.violation(violating_load->pcState().instAddr(), store_seq_num,
+    depPred.violation(violating_load->pcState().instAddr(), store_seq_num, store_pc,
                       violating_load->memDepInfo.storeQueueDistance, branchHistory);
 }
 

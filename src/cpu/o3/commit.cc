@@ -972,6 +972,7 @@ Commit::commitInsts()
             if (head_inst->squashedDueToMemOrder && !updatedMemDep
                 && head_inst->isLoad() && head_inst->memDepInfo.violatingStoreSeqNum) {
                 iewStage->instQueue.violation(head_inst->memDepInfo.violatingStoreSeqNum,
+                                              head_inst->memDepInfo.violatingStorePC,
                                               head_inst, committedBranchHistory);
                 updatedMemDep = true;
             }

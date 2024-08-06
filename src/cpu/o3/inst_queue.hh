@@ -268,7 +268,7 @@ class InstructionQueue
     void cacheUnblocked();
 
     /** Indicates an ordering violation between a store and a load. */
-    void violation(InstSeqNum store_seq_num, const DynInstPtr &faulting_load,
+    void violation(InstSeqNum store_seq_num, Addr store_pc, const DynInstPtr &faulting_load,
                    BranchHistory branchHistory);
 
     /**

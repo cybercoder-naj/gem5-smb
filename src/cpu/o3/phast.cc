@@ -100,10 +100,14 @@ void PHAST::init(uint64_t num_rows, uint64_t associativity, uint64_t tag_bits, u
 
 }
 
+void insertStore(Addr store_PC, InstSeqNum store_seq_num, ThreadID tid) {
+    storeMap[store_PC] = store_seq_num;
+}
+
 PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchHistory branchHistory) {
 
     struct PredictionResult prediction;
-    prediction.storeQueueDistance = 0;
+    prediction.seqNum = 0;
 
     if (branchHistory.size() == 0) return prediction;
     auto begin = branchHistory.begin();
@@ -112,14 +116,16 @@ PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchH
     }
 
     uint64_t hash;
-    std::ptrdiff_t tmp_distance;
+    InstSeqNum temp_seq_num;
+    Addr store_pc;
     for (unsigned i = 0; i <= maxBranches && i < historySizes.size(); i++) {
         hash = generateBranchHash(i, historySizes[i], begin, branchHistory.end());
-        tmp_distance = paths[i].predict(load_pc, hash);
-        if (tmp_distance) {
+        store_pc = paths[i].predict(load_pc, hash);
+        if (store_pc) {
+            tmp_seq_num = storeMap[store_pc];
             // all paths are read on prediction, so just use that stat to calc reads
             ++(*(memDepUnit->pathWrites[i]));
-            prediction.storeQueueDistance = tmp_distance;
+            prediction.seqNum = tmp_seq_num;
             prediction.predBranchHistLength = i;
             prediction.predictorHash = hash;
         }
@@ -128,7 +134,7 @@ PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchH
     return prediction;
 }
 
-void PHAST::violation(Addr load_pc, InstSeqNum store_seq_num, std::ptrdiff_t storeQueueDistance,
+void PHAST::violation(Addr load_pc, InstSeqNum store_seq_num, Addr store_pc, std::ptrdiff_t storeQueueDistance,
                       BranchHistory branchHistory) {
 
     //corner case of a violation before any branches or no +1 branch
@@ -145,16 +151,16 @@ void PHAST::violation(Addr load_pc, InstSeqNum store_seq_num, std::ptrdiff_t sto
     unsigned num_branches = (unsigned)std::distance(branchHistory.begin(), br_it);
 
     //quantise num branches to first lowest path size
-    unsigned i;
-    for (i = historySizes.size(); i-- > 0;) {
+    for (int i=1; i < historySizes.size(); i++) {
         unsigned size = historySizes[i];
-        if (num_branches >= size) {
-            num_branches = size;
+        if (num_branches < size) {
+            num_branches = historySizes[i-1];
             break;
         }
     }
+
     uint64_t path_hash = generateBranchHash(i, num_branches, branchHistory.begin(), branchHistory.end());
-    paths[i].update(load_pc, path_hash, storeQueueDistance);
+    paths[i].update(load_pc, path_hash, store_pc);
 
     maxBranches = std::max(maxBranches, i);
     ++(*(memDepUnit->pathReads[i]));
@@ -318,7 +324,7 @@ void PHAST::SimplBlockCache::updateLRU(Entry* entry) {
     lruCounter++;
 }
 
-std::ptrdiff_t PHAST::SimplBlockCache::predict(Addr pc, uint64_t history) {
+Addr PHAST::SimplBlockCache::predict(Addr pc, uint64_t history) {
     auto entry = findEntry(pc, history);
     if (entry == nullptr || entry->counter == 0 || entry->distance == 0) { // no prediction for this PC
         return 0;
@@ -326,20 +332,20 @@ std::ptrdiff_t PHAST::SimplBlockCache::predict(Addr pc, uint64_t history) {
 
     updateLRU(entry);
 
-    return entry->distance;
+    return entry->store_pc;
 }
 
-void PHAST::SimplBlockCache::update(Addr pc, uint64_t history, std::ptrdiff_t distance) {
+void PHAST::SimplBlockCache::update(Addr pc, uint64_t history, Addr store_pc) {
     auto entry = findEntry(pc, history);
     if (entry == nullptr) {
         // no prediction for this entry so far, so allocate one
         entry = getLRUEntry(getIndex(pc, history));
         entry->tag = getTag(pc, history);
-        entry->distance = distance;
+        entry->store_pc = store_pc;
         entry->counter = maxCounterValue;
         updateLRU(entry);
     } else {
-        entry->distance = distance;
+        entry->store_pc = store_pc;
         entry->counter = maxCounterValue;
         updateLRU(entry);
     }
