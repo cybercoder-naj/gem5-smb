@@ -52,7 +52,7 @@ namespace o3
 {
 
 struct PredictionResult {
-    Addr storePC;
+    InstSeqNum seqNum;
     unsigned predBranchHistLength;
     uint64_t predictorHash;
 };
@@ -82,7 +82,7 @@ class PHAST
 
     /** Records a memory ordering violation between the younger load
     * and the older store. */
-    void violation(Addr load_pc, InstSeqNum store_seq_num, std::ptrdiff_t storeQueueDistance, BranchHistory branchHistory);
+    void violation(Addr load_pc, InstSeqNum store_seq_num, Addr store_pc, std::ptrdiff_t storeQueueDistance, BranchHistory branchHistory);
 
     /** Checks if the instruction with the given PC is dependent upon
     * any store.  @return Returns the relative SQ distance of the store
@@ -161,7 +161,7 @@ class PHAST
         public:
             int init(uint32_t set_bits, uint32_t _associativity, uint32_t tag_bits, uint32_t max_counter_value);
 
-            std::ptrdiff_t predict(Addr pc, uint64_t history);
+            Addr predict(Addr pc, uint64_t history);
 
             void update(Addr pc, uint64_t history, Addr store_pc);
 

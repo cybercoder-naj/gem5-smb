@@ -363,6 +363,7 @@ class DynInst : public ExecContext, public RefCounted
         InstSeqNum forwardedFrom = 0;
         /** Youngest store this load violated with */
         InstSeqNum violatingStoreSeqNum = 0;
+        Addr violatingStorePC = 0;
         /** Relative offset into the SQ for dependent store*/
         std::ptrdiff_t storeQueueDistance;
         /** Memory location of store this load was predicted dependent on */
@@ -371,7 +372,6 @@ class DynInst : public ExecContext, public RefCounted
         /** Predicted information validated at commit */
         unsigned predBranchHistLength;
         uint64_t predictorHash;
-        Addr violatingStorePC;
     } memDepInfo;
 
     /////////////////////// TLB Miss //////////////////////

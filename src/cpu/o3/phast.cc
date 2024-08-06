@@ -35,6 +35,7 @@
 #include "cpu/o3/dyn_inst.hh"
 #include "cpu/o3/inst_queue.hh"
 #include "cpu/o3/limits.hh"
+#include "dyn_inst_ptr.hh"
 
 #include <cmath>
 
@@ -118,7 +119,7 @@ PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchH
 
     if (historySizes[maxBranches] > branchHistory.size()) {
         int i;
-        for (i=0; historySizes[i] <= branchHitory.size(); i++);
+        for (i=0; historySizes[i] <= branchHistory.size(); i++);
         maxBranches = i-1;
     }
 
@@ -336,7 +337,7 @@ void PHAST::SimplBlockCache::updateLRU(Entry* entry) {
 
 Addr PHAST::SimplBlockCache::predict(Addr pc, uint64_t history) {
     auto entry = findEntry(pc, history);
-    if (entry == nullptr || entry->counter == 0 || entry->distance == 0) { // no prediction for this PC
+    if (entry == nullptr || entry->counter == 0 || entry->store_pc == 0) { // no prediction for this PC
         return 0;
     }
 
@@ -383,7 +384,7 @@ void PHAST::SimplBlockCache::clear() {
     for (uint64_t i = 0; i < (1ULL << setBits); i++) {
         for (uint32_t j = 0; j < associativity; j++) {
             cache[i][j].tag = 0;
-            cache[i][j].distance = 0;
+            cache[i][j].store_pc = 0;
             cache[i][j].lru = 0;
             cache[i][j].counter = 0;
         }

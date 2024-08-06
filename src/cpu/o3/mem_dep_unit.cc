@@ -108,9 +108,9 @@ MemDepUnit::MemDepUnitStats::MemDepUnitStats(statistics::Group *parent)
     : statistics::Group(parent),
       ADD_STAT(hits, statistics::units::Count::get(),
                "Number of hits :)"),
-      ADD_STAT(PHASTMisprediction, statistics::units::Count::get(),
+      ADD_STAT(PHASTMispredictions, statistics::units::Count::get(),
                "mispreds"),
-      ADD_STAT(PHASTCorrectPrediction, statistics::units::Count::get(),
+      ADD_STAT(PHASTCorrectPredictions, statistics::units::Count::get(),
                "correct preds"),
       ADD_STAT(insertedLoads, statistics::units::Count::get(),
                "Number of loads inserted to the mem dependence unit."),
@@ -322,14 +322,12 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
                     ++stats.hits;
                 auto store_entry = (*hash_it).second;
                 store_entry->dependInsts.push_back(inst_entry);
-                inst->memDepInfo.predStoreSize = store_entry->inst->sqIt->size();
                 inst->memDepInfo.predBranchHistLength = prediction.predBranchHistLength;
                 inst->memDepInfo.predictorHash = prediction.predictorHash;
                 inst_entry->memDeps = 1;
 				inst->clearCanIssue();
             } else if (inst_entry->regsReady) { moveToReady(inst_entry); }
         }
-		else if (inst_entry->regsReady) { moveToReady(inst_entry); }
 
         if (inst->isLoad()) {
             ++stats.conflictingLoads;
@@ -544,6 +542,7 @@ MemDepUnit::wakeDependents(const DynInstPtr &inst)
             woken_inst->regsReady &&
             !woken_inst->squashed) {
             woken_inst->inst->memDepInfo.predStoreAddr = inst->effAddr;
+            woken_inst->inst->memDepInfo.predStoreSize = inst->sqIt->size();
             moveToReady(woken_inst);
         }
     }
