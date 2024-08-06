@@ -159,7 +159,8 @@ void PHAST::violation(Addr load_pc, InstSeqNum store_seq_num, Addr store_pc, std
     unsigned num_branches = (unsigned)std::distance(branchHistory.begin(), br_it);
 
     //quantise num branches to first lowest path size
-    for (int i=1; i < historySizes.size(); i++) {
+    unsigned i;
+    for (i=1; i < historySizes.size(); i++) {
         unsigned size = historySizes[i];
         if (num_branches < size) {
             num_branches = historySizes[i-1];

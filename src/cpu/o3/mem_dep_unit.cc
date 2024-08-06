@@ -322,6 +322,7 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
                     ++stats.hits;
                 auto store_entry = (*hash_it).second;
                 store_entry->dependInsts.push_back(inst_entry);
+                woken_inst->inst->memDepInfo.predStoreSize = inst->sqIt->size();
                 inst->memDepInfo.predBranchHistLength = prediction.predBranchHistLength;
                 inst->memDepInfo.predictorHash = prediction.predictorHash;
                 inst_entry->memDeps = 1;
@@ -542,7 +543,6 @@ MemDepUnit::wakeDependents(const DynInstPtr &inst)
             woken_inst->regsReady &&
             !woken_inst->squashed) {
             woken_inst->inst->memDepInfo.predStoreAddr = inst->effAddr;
-            woken_inst->inst->memDepInfo.predStoreSize = inst->sqIt->size();
             moveToReady(woken_inst);
         }
     }
