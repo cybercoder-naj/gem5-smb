@@ -100,8 +100,8 @@ void PHAST::init(uint64_t num_rows, uint64_t associativity, uint64_t tag_bits, u
 
 }
 
-void insertStore(Addr store_PC, InstSeqNum store_seq_num, ThreadID tid) {
-    storeMap[store_PC] = store_seq_num;
+void PHAST::issued(Addr store_PC, InstSeqNum store_seq_num, bool is_store) {
+    if (is_store) storeMap[store_PC] = store_seq_num;
 }
 
 PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchHistory branchHistory) {
@@ -123,7 +123,7 @@ PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchH
     }
 
     uint64_t hash;
-    InstSeqNum temp_seq_num;
+    InstSeqNum tmp_seq_num;
     Addr store_pc;
     for (unsigned i = 0; i <= maxBranches && i < historySizes.size(); i++) {
         hash = generateBranchHash(i, historySizes[i], begin, branchHistory.end());
@@ -198,6 +198,9 @@ void PHAST::commit(Addr load_pc, Addr load_addr, unsigned load_size, Addr store_
         misprediction = false;
     else
         misprediction = true;
+
+    if (misprediction) ++(memDepUnit->stats.PHASTMispredictions);
+    else ++(memDepUnit->stats.PHASTCorrectPredictions);
 
     paths[path_index].updateCommit(load_pc, predictor_hash, misprediction);
     ++(*(memDepUnit->pathReads[path_index]));

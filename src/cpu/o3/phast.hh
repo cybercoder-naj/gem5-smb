@@ -51,21 +51,6 @@ namespace gem5
 namespace o3
 {
 
-struct MemDepInfo {
-    /** Store this load received its data from, if any */
-    InstSeqNum forwardedFrom = 0;
-    /** Youngest store this load violated with */
-    InstSeqNum violatingStoreSeqNum;
-    /** Relative offset into the SQ for dependent store*/
-    std::ptrdiff_t storeQueueDistance;
-    /** Memory location of store this load was predicted dependent on */
-    Addr predStoreAddr = 0;
-    int predStoreSize;
-    /** Predicted information validated at commit */
-    unsigned predBranchHistLength;
-    uint64_t predictorHash;
-};
-
 struct PredictionResult {
     Addr storePC;
     unsigned predBranchHistLength;
@@ -112,9 +97,9 @@ class PHAST
     void clear();
 
     /** mem_dep_unit interface methods that don't do anything in PHAST */
-    void squash(InstSeqNum squashed_num, ThreadID tid);
-    void issued(Addr issued_PC, InstSeqNum issued_seq_num, bool is_store) { return; }
-    void insertStore(Addr store_PC, InstSeqNum store_seq_num, ThreadID tid);
+    void squash(InstSeqNum squashed_num, ThreadID tid) { return; }
+    void issued(Addr issued_PC, InstSeqNum issued_seq_num, bool is_store);
+    void insertStore(Addr store_PC, InstSeqNum store_seq_num, ThreadID tid) { return; }
     void insertLoad(Addr load_PC, InstSeqNum load_seq_num) { return;}
 
     unsigned selectedTargetBits;

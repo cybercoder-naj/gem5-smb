@@ -191,6 +191,8 @@ class MemDepUnit
         /**  Number of predictions made by MDP */
         statistics::Scalar predictions;
         statistics::Scalar hits;
+        statistics::Scalar PHASTMispredictions;
+        statistics::Scalar PHASTCorrectPredictions;
         /**  Sorry for this. Need to track reads/writes for each
          *  specific branch len table for power usage estimation. */
         statistics::Scalar readsPath1;

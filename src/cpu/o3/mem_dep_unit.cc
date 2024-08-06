@@ -108,6 +108,10 @@ MemDepUnit::MemDepUnitStats::MemDepUnitStats(statistics::Group *parent)
     : statistics::Group(parent),
       ADD_STAT(hits, statistics::units::Count::get(),
                "Number of hits :)"),
+      ADD_STAT(PHASTMisprediction, statistics::units::Count::get(),
+               "mispreds"),
+      ADD_STAT(PHASTCorrectPrediction, statistics::units::Count::get(),
+               "correct preds"),
       ADD_STAT(insertedLoads, statistics::units::Count::get(),
                "Number of loads inserted to the mem dependence unit."),
       ADD_STAT(insertedStores, statistics::units::Count::get(),
@@ -318,7 +322,6 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
                     ++stats.hits;
                 auto store_entry = (*hash_it).second;
                 store_entry->dependInsts.push_back(inst_entry);
-                inst->memDepInfo.predStoreAddr = store_entry->inst->effAddr;
                 inst->memDepInfo.predStoreSize = store_entry->inst->sqIt->size();
                 inst->memDepInfo.predBranchHistLength = prediction.predBranchHistLength;
                 inst->memDepInfo.predictorHash = prediction.predictorHash;
@@ -540,6 +543,7 @@ MemDepUnit::wakeDependents(const DynInstPtr &inst)
         if ((woken_inst->memDeps == 0) &&
             woken_inst->regsReady &&
             !woken_inst->squashed) {
+            woken_inst->inst->memDepInfo.predStoreAddr = inst->effAddr;
             moveToReady(woken_inst);
         }
     }
