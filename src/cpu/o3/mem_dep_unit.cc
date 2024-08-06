@@ -316,7 +316,7 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
             DynInstPtr store_inst = sq_it->instruction();
             MemDepHashIt hash_it = memDepHash.find(store_inst->seqNum);
             if (hash_it != memDepHash.end()) {
-                if (violating_record[inst->pcState().instAddr()] == store_inst->pcState().instAddr())
+                //if (violation_record[inst->pcState().instAddr()] == store_inst->pcState().instAddr())
                     ++stats.hits;
                 auto store_entry = (*hash_it).second;
                 store_entry->dependInsts.push_back(inst_entry);

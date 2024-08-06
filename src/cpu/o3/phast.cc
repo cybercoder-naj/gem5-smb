@@ -113,7 +113,8 @@ PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchH
     if (begin == branchHistory.end()) return prediction; //no +1 branch
 
     if (historySizes[maxBranches] > branchHistory.size()) {
-        for (int i=0; historySizes[i] <= branchHitory.size(); i++);
+        int i;
+        for (i=0; historySizes[i] <= branchHitory.size(); i++);
         maxBranches = i-1;
     }
 
