@@ -314,7 +314,7 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
             //make a PHAST prediction, as long as the SQ offset is valid
             MemDepHashIt hash_it = memDepHash.find(prediction.seqNum);
             if (hash_it != memDepHash.end()) {
-                if (violating_record[inst->pcState().instAddr()] == store_inst->pcState().instAddr())
+                //if (violation_record[inst->pcState().instAddr()] == store_inst->pcState().instAddr())
                     ++stats.hits;
                 auto store_entry = (*hash_it).second;
                 store_entry->dependInsts.push_back(inst_entry);
