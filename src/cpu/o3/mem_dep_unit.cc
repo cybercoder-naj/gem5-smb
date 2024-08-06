@@ -106,6 +106,8 @@ MemDepUnit::init(const BaseO3CPUParams &params, ThreadID tid, CPU *_cpu)
 
 MemDepUnit::MemDepUnitStats::MemDepUnitStats(statistics::Group *parent)
     : statistics::Group(parent),
+      ADD_STAT(hits, statistics::units::Count::get(),
+               "Number of hits :)"),
       ADD_STAT(insertedLoads, statistics::units::Count::get(),
                "Number of loads inserted to the mem dependence unit."),
       ADD_STAT(insertedStores, statistics::units::Count::get(),
@@ -312,6 +314,8 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
             //make a PHAST prediction, as long as the SQ offset is valid
             MemDepHashIt hash_it = memDepHash.find(prediction.seqNum);
             if (hash_it != memDepHash.end()) {
+                if (violating_record[inst->pcState().instAddr()] == store_inst->pcState().instAddr())
+                    ++stats.hits;
                 auto store_entry = (*hash_it).second;
                 store_entry->dependInsts.push_back(inst_entry);
                 inst->memDepInfo.predStoreAddr = store_entry->inst->effAddr;
@@ -629,6 +633,8 @@ MemDepUnit::violation(InstSeqNum store_seq_num, Addr store_pc,
     // Tell the memory dependence unit of the violation.
     depPred.violation(violating_load->pcState().instAddr(), store_seq_num, store_pc,
                       violating_load->memDepInfo.storeQueueDistance, branchHistory);
+
+    violation_record[violating_load->pcState().instAddr()] = violating_load->memDepInfo.violatingStorePC;
 }
 
 void

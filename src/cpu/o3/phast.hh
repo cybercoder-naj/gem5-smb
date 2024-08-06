@@ -35,6 +35,7 @@
 #include "cpu/o3/dyn_inst_ptr.hh"
 #include "cpu/o3/limits.hh"
 #include "debug/MemDepUnit.hh"
+#include "dyn_inst_ptr.hh"
 #include "mem/packet.hh"
 #include "mem/port.hh"
 #include <cstdint>
@@ -111,7 +112,7 @@ class PHAST
     void clear();
 
     /** mem_dep_unit interface methods that don't do anything in PHAST */
-    void squash(InstSeqNum squashed_num, ThreadID tid) { return; }
+    void squash(InstSeqNum squashed_num, ThreadID tid);
     void issued(Addr issued_PC, InstSeqNum issued_seq_num, bool is_store) { return; }
     void insertStore(Addr store_PC, InstSeqNum store_seq_num, ThreadID tid);
     void insertLoad(Addr load_PC, InstSeqNum load_seq_num) { return;}

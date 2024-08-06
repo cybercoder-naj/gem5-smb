@@ -114,6 +114,12 @@ PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchH
     while (begin != branchHistory.end() && begin->seqNum > load_seq_num) {
         begin++;
     }
+    if (begin == branchHistory.end()) return prediction; //no +1 branch
+
+    if (historySizes[maxBranches] > branchHistory.size()) {
+        for (int i=0; historySizes[i] <= branchHitory.size(); i++);
+        maxBranches = i-1;
+    }
 
     uint64_t hash;
     InstSeqNum temp_seq_num;
@@ -242,7 +248,7 @@ uint64_t PHAST::foldHistory(bitset<BITSETSIZE> h, int bits, unsigned _setBits, u
 }
 
 void PHAST::clear() {
-   	maxBranches = 0;
+   maxBranches = 0;
 
     for (unsigned i = 0; i < paths.size(); ++i) {
         paths[i].clear();

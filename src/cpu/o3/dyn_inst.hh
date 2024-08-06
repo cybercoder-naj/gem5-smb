@@ -371,6 +371,7 @@ class DynInst : public ExecContext, public RefCounted
         /** Predicted information validated at commit */
         unsigned predBranchHistLength;
         uint64_t predictorHash;
+        Addr violatingStorePC;
     } memDepInfo;
 
     /////////////////////// TLB Miss //////////////////////
