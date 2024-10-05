@@ -317,12 +317,13 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
         } else {
             //make a PHAST prediction, as long as the SQ offset is valid
             MemDepHashIt hash_it = memDepHash.find(prediction.seqNum);
+            //std::cout << prediction.seqNum << "\n";
             if (hash_it != memDepHash.end()) {
+                ++stats.hits;
                 //if (violation_record[inst->pcState().instAddr()] == store_inst->pcState().instAddr())
-                    ++stats.hits;
                 auto store_entry = (*hash_it).second;
                 store_entry->dependInsts.push_back(inst_entry);
-                inst->inst->memDepInfo.predStoreSize = store_entry->inst->sqIt->size();
+                inst->memDepInfo.predStoreSize = store_entry->inst->sqIt->size();
                 inst->memDepInfo.predBranchHistLength = prediction.predBranchHistLength;
                 inst->memDepInfo.predictorHash = prediction.predictorHash;
                 inst_entry->memDeps = 1;

@@ -1304,10 +1304,13 @@ IEW::executeInsts()
                 DynInstPtr violator;
                 violator = ldstQueue.getMemDepViolator(tid);
 
+                /*
                 DPRINTF(IEW, "LDSTQ detected a violation. Violator PC: %s "
                         "[sn:%lli], inst PC: %s [sn:%lli]. Addr is: %#x.\n",
                         violator->pcState(), violator->seqNum,
                         inst->pcState(), inst->seqNum, inst->physEffAddr);
+                */
+                DPRINTF(IEW, "Violation: %s\n", violator->pcState().instAddr());
 
                 fetchRedirect[tid] = true;
 
