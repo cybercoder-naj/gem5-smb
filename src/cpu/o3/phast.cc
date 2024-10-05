@@ -181,7 +181,7 @@ void PHAST::commit(Addr load_pc, Addr load_addr, unsigned load_size, Addr store_
 
     //TODO: in real hardware, would it still have to perform a lookup?
     //i.e., should we still increment a counter for power estimation purposes
-    if (!store_addr) return;
+    if (!predictor_hash) return;
 
     bool misprediction;
     Addr ld_s = load_addr;
