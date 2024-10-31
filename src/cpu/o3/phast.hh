@@ -98,7 +98,7 @@ class PHAST
 
     /** mem_dep_unit interface methods that don't do anything in PHAST */
     void squash(InstSeqNum squashed_num, ThreadID tid) { return; }
-    void issued(Addr issued_PC, InstSeqNum issued_seq_num, bool is_store) { return; }
+    void issued(Addr issued_PC, InstSeqNum issued_seq_num, bool is_store) { storeMap[issued_PC] = issued_seq_num; }
     void insertStore(Addr store_PC, InstSeqNum store_seq_num, ThreadID tid);
     void insertLoad(Addr load_PC, InstSeqNum load_seq_num) { return;}
 

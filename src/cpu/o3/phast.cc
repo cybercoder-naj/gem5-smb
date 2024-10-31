@@ -96,7 +96,7 @@ void PHAST::init(uint64_t num_rows, uint64_t associativity, uint64_t tag_bits, u
     paths.resize(num_tables, SimplBlockCache());
 
     for (unsigned i = 0; i < num_tables; ++i) {
-        paths[i].init((uint32_t)max_counter_value, (uint32_t)set_bits, (uint32_t)tag_bits, (uint32_t)associativity);
+        paths[i].init((uint32_t)set_bits, (uint32_t)associativity, (uint32_t)tag_bits, (uint32_t)max_counter_value);
     }
 
 }
@@ -171,6 +171,20 @@ void PHAST::violation(Addr load_pc, InstSeqNum store_seq_num, Addr store_pc, std
     uint64_t path_hash = generateBranchHash(i, num_branches, branchHistory.begin(), branchHistory.end());
     paths[i].update(load_pc, path_hash, store_pc);
 
+    if (store_pc == 4204896 && path_hash == 0) {
+        std::cout << "Store found\n";
+        std::cout << "hash: " << path_hash << "\n";
+        std::cout << "num branches (quant): " << i << "\n";
+        std::cout << "Branch history:\n";
+        for (int n=0; n < i; n++) {
+            std::cout << "address: " << branchHistory[n].pc << "\n";
+            std::cout << "taken: " << branchHistory[n].taken << "\n";
+            std::cout << "indirect: " << branchHistory[n].indirect << "\n";
+            std::cout << "target: " << branchHistory[n].target << "\n";
+        }   
+        std::cout << "\n";
+    }
+
     maxBranches = std::max(maxBranches, i);
     ++(*(memDepUnit->pathReads[i]));
     ++(*(memDepUnit->pathWrites[i]));
@@ -181,7 +195,7 @@ void PHAST::commit(Addr load_pc, Addr load_addr, unsigned load_size, Addr store_
 
     //TODO: in real hardware, would it still have to perform a lookup?
     //i.e., should we still increment a counter for power estimation purposes
-    if (!store_addr) return;
+    if (!predictor_hash) return;
 
     bool misprediction;
     Addr ld_s = load_addr;
