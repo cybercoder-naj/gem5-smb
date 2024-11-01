@@ -71,6 +71,8 @@ typedef struct branchInfo {
     uint64_t pc;
 } branchInfo;
 
+std::ostream& operator<<(std::ostream & os, const branchInfo& b);
+
 /** Rolling branch history. Always pushed at the front, popped at the back.
  *  So, branchHistory[n] = nth oldest branch, branchHistory[0] = newest branch. */
 typedef std::deque<branchInfo> BranchHistory;
