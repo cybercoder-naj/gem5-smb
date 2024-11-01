@@ -94,6 +94,16 @@ DynInst::DynInst(const Arrays &arrays, const StaticInstPtr &static_inst,
 
 }
 
+std::ostream& operator<<(std::ostream& os, const branchInfo& b) {
+    os  << "Branch info: \n"
+        << "Indirect: " << b.indirect << ", "
+        << "Taken: " << b.taken << ", "
+        << "Target: " << b.target << ", "
+        << "seqNum: " << b.seqNum << ", "
+        << "PC: " << b.pc;
+    return os;
+}
+
 DynInst::DynInst(const Arrays &arrays, const StaticInstPtr &static_inst,
         const StaticInstPtr &_macroop, const PCStateBase &_pc,
         const PCStateBase &pred_pc, InstSeqNum seq_num, CPU *_cpu)

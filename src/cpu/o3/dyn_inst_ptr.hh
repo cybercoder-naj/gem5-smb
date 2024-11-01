@@ -45,6 +45,8 @@
 #include "base/refcnt.hh"
 #include <deque>
 #include <cstdint>
+#include <iostream>
+#include <string>
 
 typedef uint64_t InstSeqNum;
 
@@ -68,15 +70,6 @@ typedef struct branchInfo {
     InstSeqNum seqNum;
     uint64_t pc;
 } branchInfo;
-
-std::ostream& operator<<(std::ostream& os, const branchInfo& b) {
-    os  << "Branch info: \n"
-        << "Indirect: " << b.indirect << ", "
-        << "Taken: " << b.taken << ", "
-        << "Target: " << b.target << ", "
-        << "seqNum: " << b.seqNum << ", "
-        << "PC: " << b.pc;
-}
 
 /** Rolling branch history. Always pushed at the front, popped at the back.
  *  So, branchHistory[n] = nth oldest branch, branchHistory[0] = newest branch. */
