@@ -323,6 +323,14 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
                 //if (violation_record[inst->pcState().instAddr()] == store_inst->pcState().instAddr())
                 auto store_entry = (*hash_it).second;
                 store_entry->dependInsts.push_back(inst_entry);
+                if (store_entry->inst->pcState().instAddr() == 4204896 && prediction.predictorHash == 8) {
+                std::cout << "Hit\n";
+                std::cout << "history length: " << prediction.predBranchHistLength << "\n";
+                //std::cout << "predictor hash: " << prediction.predictorHash << "\n";
+                //std::cout << "seq num: " << prediction.seqNum << "\n";
+                //std::cout << "store PC: " << store_entry->inst->pcState().instAddr() << "\n";
+                std::cout << "\n";
+                }
                 inst->memDepInfo.predStoreSize = store_entry->inst->sqIt->size();
                 inst->memDepInfo.predBranchHistLength = prediction.predBranchHistLength;
                 inst->memDepInfo.predictorHash = prediction.predictorHash;
