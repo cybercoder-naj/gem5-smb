@@ -38,6 +38,7 @@
 #include "dyn_inst_ptr.hh"
 #include "mem/packet.hh"
 #include "mem/port.hh"
+#include "mem_dep_unit.hh"
 #include <cstdint>
 #include <vector>
 #include <deque>
@@ -53,7 +54,8 @@ namespace o3
 
 struct PredictionResult {
     InstSeqNum seqNum;
-    unsigned predBranchHistLength;
+    unsigned#include "mem_dep_unit.hh"
+ predBranchHistLength;
     uint64_t predictorHash;
 };
 
@@ -72,13 +74,13 @@ class PHAST
     PHAST() { };
 
     /** Creates PHAST predictor with given table sizes. */
-    PHAST(uint64_t num_rows, uint64_t associativity, uint64_t tag_bits, uint64_t max_counter_value, MemDepUnit *mem_dep_unit);
+    PHAST(const BaseO3CPUParams &params, MemDepUnit *mem_dep_unit);
 
     /** Default destructor. */
     ~PHAST();
 
     /** Initializes the PHAST predictor with the given table sizes. */
-    void init(uint64_t num_rows, uint64_t associativity, uint64_t tag_bits, uint64_t max_counter_value, MemDepUnit *mem_dep_unit);
+    void init(const BaseO3CPUParams &params, MemDepUnit *mem_dep_unit);
 
     /** Records a memory ordering violation between the younger load
     * and the older store. */

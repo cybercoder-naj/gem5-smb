@@ -56,8 +56,7 @@ MemDepUnit::MemDepUnit() : stats(nullptr), iqPtr(NULL) {}
 
 MemDepUnit::MemDepUnit(const BaseO3CPUParams &params)
     : _name(params.name + ".memdepunit"),
-      depPred(params.phast_num_rows, params.phast_associativity,
-              params.phast_tag_bits, params.phast_max_counter, this),
+      depPred(params, this),
       stats(nullptr),
       iqPtr(NULL)
 {
@@ -97,8 +96,7 @@ MemDepUnit::init(const BaseO3CPUParams &params, ThreadID tid, CPU *_cpu)
     id = tid;
     cpu = _cpu;
 
-    depPred.init(params.phast_num_rows, params.phast_associativity,
-                 params.phast_tag_bits, params.phast_max_counter, this);
+    depPred.init(params, this);
 
     std::string stats_group_name = csprintf("MemDepUnit__%i", tid);
     cpu->addStatGroup(stats_group_name.c_str(), &stats);
