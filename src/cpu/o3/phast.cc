@@ -48,12 +48,12 @@ namespace o3
 
 PHAST::PHAST(const BaseO3CPUParams &params, MemDepUnit *mem_dep_unit) {
 
-    assert(isPowerOf2(params.num_rows) && "Invalid number of rows per table!\n");
+    assert(isPowerOf2(params.phast_num_rows) && "Invalid number of rows per table!\n");
 
     //TODO: paramertise this with a string and parse it into a list
     historySizes.assign({0, 2, 4, 6, 8, 12, 16, 32});
 
-    unsigned set_bits = (unsigned)log2((double)(params.num_rows));
+    unsigned set_bits = (unsigned)log2((double)(params.phast_num_rows));
 
     maxBranches = 0;
     selectedTargetBits = 5;
@@ -65,7 +65,7 @@ PHAST::PHAST(const BaseO3CPUParams &params, MemDepUnit *mem_dep_unit) {
     paths.resize(num_tables, SimplBlockCache());
 
     for (unsigned i = 0; i < num_tables; ++i) {
-        paths[i].init((uint32_t)(params.set_bits), (uint32_t)(params.associativity), (uint32_t)(params.tag_bits), (uint32_t)(params.max_counter_value));
+        paths[i].init((uint32_t)(set_bits), (uint32_t)(params.phast_associativity), (uint32_t)(params.phast_tag_bits), (uint32_t)(params.phast_max_counter));
     }
 
 }
@@ -76,7 +76,7 @@ PHAST::~PHAST()
 
 void PHAST::init(const BaseO3CPUParams &params, MemDepUnit *mem_dep_unit) {
 
-    assert(isPowerOf2(params.num_rows) && "Invalid number of rows per table!\n");
+    assert(isPowerOf2(params.phast_num_rows) && "Invalid number of rows per table!\n");
 
     //TODO: paramertise this with a string and parse it into a list
     //if you still want power estimation also need to have a non fucked version
@@ -88,7 +88,7 @@ void PHAST::init(const BaseO3CPUParams &params, MemDepUnit *mem_dep_unit) {
     selectedTargetMask = (1 << selectedTargetBits) - 1;
     memDepUnit = mem_dep_unit;
 
-    unsigned set_bits = (unsigned)log2((double)(params.num_rows));
+    unsigned set_bits = (unsigned)log2((double)(params.phast_num_rows));
 
     debug = true;
 
@@ -97,7 +97,7 @@ void PHAST::init(const BaseO3CPUParams &params, MemDepUnit *mem_dep_unit) {
     paths.resize(num_tables, SimplBlockCache());
 
     for (unsigned i = 0; i < num_tables; ++i) {
-        paths[i].init((uint32_t)(params.set_bits), (uint32_t)(params.associativity), (uint32_t)(params.tag_bits), (uint32_t)(params.max_counter_value));
+        paths[i].init((uint32_t)(set_bits), (uint32_t)(params.phast_associativity), (uint32_t)(params.phast_tag_bits), (uint32_t)(params.phast_max_counter));
     }
 
 }

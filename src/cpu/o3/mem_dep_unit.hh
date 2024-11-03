@@ -57,7 +57,8 @@
 #include "cpu/inst_seq.hh"
 #include "cpu/o3/dyn_inst_ptr.hh"
 #include "cpu/o3/limits.hh"
-#include "cpu/o3/phast.hh"
+//#include "cpu/o3/phast.hh"
+#include "cpu/o3/store_set.hh"
 #include "debug/MemDepUnit.hh"
 #include "mem/packet.hh"
 #include "mem/port.hh"
@@ -81,9 +82,16 @@ struct BaseO3CPUParams;
 namespace o3
 {
 
-class PHAST;
+// class PHAST;
+// class StoreSet;
 class CPU;
 class InstructionQueue;
+
+struct PredictionResult {
+    InstSeqNum seqNum;
+    unsigned predBranchHistLength;
+    uint64_t predictorHash;
+};
 
 /**
  * Memory dependency unit class.  This holds the memory dependence predictor.
@@ -191,6 +199,10 @@ class MemDepUnit
         /**  Number of predictions made by MDP */
         statistics::Scalar predictions;
         statistics::Scalar hits;
+        /** ==== Store Sets ==== */
+        statistics::Scalar LFSTReads;
+        statistics::Scalar LFSTWrites;
+        /** ==== PHAST ==== */
         statistics::Scalar PHASTMispredictions;
         statistics::Scalar PHASTCorrectPredictions;
         /**  Sorry for this. Need to track reads/writes for each
@@ -310,7 +322,7 @@ class MemDepUnit
      *  this unit what instruction the newly added instruction is dependent
      *  upon.
      */
-    PHAST depPred;
+    StoreSet depPred;
 
     /** Sequence numbers of outstanding load barriers. */
     std::unordered_set<InstSeqNum> loadBarrierSNs;

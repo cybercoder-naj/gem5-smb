@@ -55,7 +55,7 @@
 #include "cpu/o3/dyn_inst_ptr.hh"
 #include "cpu/o3/limits.hh"
 #include "cpu/o3/mem_dep_unit.hh"
-#include "cpu/o3/phast.hh"
+//#include "cpu/o3/phast.hh"
 #include "cpu/op_class.hh"
 #include "cpu/timebuf.hh"
 #include "enums/SMTQueuePolicy.hh"

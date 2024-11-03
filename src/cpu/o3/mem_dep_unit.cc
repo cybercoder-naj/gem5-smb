@@ -104,12 +104,6 @@ MemDepUnit::init(const BaseO3CPUParams &params, ThreadID tid, CPU *_cpu)
 
 MemDepUnit::MemDepUnitStats::MemDepUnitStats(statistics::Group *parent)
     : statistics::Group(parent),
-      ADD_STAT(hits, statistics::units::Count::get(),
-               "Number of hits :)"),
-      ADD_STAT(PHASTMispredictions, statistics::units::Count::get(),
-               "mispreds"),
-      ADD_STAT(PHASTCorrectPredictions, statistics::units::Count::get(),
-               "correct preds"),
       ADD_STAT(insertedLoads, statistics::units::Count::get(),
                "Number of loads inserted to the mem dependence unit."),
       ADD_STAT(insertedStores, statistics::units::Count::get(),
@@ -120,6 +114,18 @@ MemDepUnit::MemDepUnitStats::MemDepUnitStats(statistics::Group *parent)
                "Number of conflicting stores."),
       ADD_STAT(predictions, statistics::units::Count::get(),
                "Number of MDP predictions."),
+      /** ==== Store Set ==== */
+      ADD_STAT(LFSTReads, statistics::units::Count::get(),
+               "Number of LFST reads."),
+      ADD_STAT(LFSTWrites, statistics::units::Count::get(),
+               "Number of LFST writes."),
+      /** ==== PHAST ==== */
+      ADD_STAT(hits, statistics::units::Count::get(),
+               "Number of hits :)"),
+      ADD_STAT(PHASTMispredictions, statistics::units::Count::get(),
+               "mispreds"),
+      ADD_STAT(PHASTCorrectPredictions, statistics::units::Count::get(),
+               "correct preds"),
       ADD_STAT(readsPath1, statistics::units::Count::get(),
                "Number of reads to path table 1."),
       ADD_STAT(readsPath2, statistics::units::Count::get(),

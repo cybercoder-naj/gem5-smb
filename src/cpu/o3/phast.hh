@@ -37,6 +37,7 @@
 #include "debug/MemDepUnit.hh"
 #include "dyn_inst_ptr.hh"
 #include "mem/packet.hh"
+#include "params/BaseO3CPU.hh"
 #include "mem/port.hh"
 #include "mem_dep_unit.hh"
 #include <cstdint>
@@ -49,15 +50,12 @@ using namespace std;
 namespace gem5
 {
 
+struct BaseO3CPUParams;
+
 namespace o3
 {
 
-struct PredictionResult {
-    InstSeqNum seqNum;
-    unsigned#include "mem_dep_unit.hh"
- predBranchHistLength;
-    uint64_t predictorHash;
-};
+struct PredictionResult;
 
 #define BITSETSIZE 500
 
