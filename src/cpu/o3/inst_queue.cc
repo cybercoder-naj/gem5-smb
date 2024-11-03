@@ -593,7 +593,6 @@ InstructionQueue::insert(const DynInstPtr &new_inst)
     addToProducers(new_inst);
 
     if (new_inst->isMemRef()) {
-        BranchHistory &branchHistory = iewStage->getCPU()->getDecode()->getBranchHistory();
         memDepUnit[new_inst->threadNumber].insert(new_inst, iewStage->getCPU()->getDecode()->getBranchHistory());
     } else {
         addIfReady(new_inst);

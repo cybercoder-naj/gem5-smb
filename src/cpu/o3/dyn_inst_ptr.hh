@@ -77,6 +77,8 @@ std::ostream& operator<<(std::ostream & os, const branchInfo& b);
  *  So, branchHistory[n] = nth oldest branch, branchHistory[0] = newest branch. */
 typedef std::deque<branchInfo> BranchHistory;
 
+bool operator==(const BranchHistory a, const BranchHistory b);
+
 //unclear on what exactly this should be, choosing a reasonably high number for now
 #define MAX_BRANCH_HISTORY 128
 

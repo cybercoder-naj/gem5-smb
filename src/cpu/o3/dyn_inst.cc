@@ -104,6 +104,16 @@ std::ostream& operator<<(std::ostream& os, const branchInfo& b) {
     return os;
 }
 
+bool operator==(const BranchHistory a, const BranchHistory b) {
+    unsigned len = std::min((long unsigned)32, std::min(a.size(), b.size()));
+    for (int i=0; i < len; i++) {
+        if (a[i].pc != b[i].pc) return false;
+        if (a[i].taken != b[i].taken) return false;
+        if (a[i].target != b[i].target) return false;
+    }
+    return true;
+}
+
 DynInst::DynInst(const Arrays &arrays, const StaticInstPtr &static_inst,
         const StaticInstPtr &_macroop, const PCStateBase &_pc,
         const PCStateBase &pred_pc, InstSeqNum seq_num, CPU *_cpu)
