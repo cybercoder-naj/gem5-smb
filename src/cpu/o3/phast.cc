@@ -118,7 +118,7 @@ PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchH
 
     if (branchHistory.size() == 0) return prediction;
     unsigned begin = 0;
-    while (begin <= branchHistory.size() && branchHistory[begin]->seqNum > load_seq_num) {
+    while (begin <= branchHistory.size() && branchHistory[begin].seqNum > load_seq_num) {
         begin++;
         //tmp_history.pop_front();
     }
@@ -254,23 +254,23 @@ uint64_t PHAST::generateBranchHash(unsigned path_index, unsigned num_branches, B
     std::deque<uint64_t> tmp_path;
     tmp_path.clear();
     int bits = 60;
-    bitset<BITSETSIZE> h = branchHistoryBegin[num_branches].target & selectedTargetMask;  // This is the +1 branch.
-    tmp_path.push_back(branchHistoryBegin[num_branches].target);
+    bitset<BITSETSIZE> h = branch_history[end_indx].target & selectedTargetMask;  // This is the +1 branch.
+    tmp_path.push_back(branch_history[end_indx].target);
 
     unsigned hist_items = 0;
     for (unsigned indx = end_indx-1; indx >= start_indx && hist_items < num_branches; --indx) {
-        if (!branch_history[indx]->indirect) {
+        if (!branch_history[indx].indirect) {
             h <<= 1;
-            h[0] = branch_history[indx]->taken;
+            h[0] = branch_history[indx].taken;
             ++hist_items;
             ++bits;
-            tmp_path.push_back(branch_history[indx]->taken);
+            tmp_path.push_back(branch_history[indx].taken);
         } else if (selectedTargetMask != 0) {
             h <<= selectedTargetBits;
-            h ^= (branch_history[indx]->target & selectedTargetMask);
+            h ^= (branch_history[indx].target & selectedTargetMask);
             ++hist_items;
             bits += selectedTargetBits;
-            tmp_path.push_back(branch_history[indx]->target);
+            tmp_path.push_back(branch_history[indx].target);
         }
     }
 
