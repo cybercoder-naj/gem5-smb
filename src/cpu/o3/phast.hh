@@ -34,12 +34,10 @@
 #include "cpu/inst_seq.hh"
 #include "cpu/o3/dyn_inst_ptr.hh"
 #include "cpu/o3/limits.hh"
-#include "debug/MemDepUnit.hh"
 #include "dyn_inst_ptr.hh"
 #include "mem/packet.hh"
 #include "params/BaseO3CPU.hh"
 #include "mem/port.hh"
-#include "mem_dep_unit.hh"
 #include <cstdint>
 #include <vector>
 #include <deque>
@@ -98,7 +96,7 @@ class PHAST
 
     /** mem_dep_unit interface methods that don't do anything in PHAST */
     void squash(InstSeqNum squashed_num, ThreadID tid) { return; }
-    void issued(Addr issued_PC, InstSeqNum issued_seq_num, bool is_store) { storeMap[issued_PC] = issued_seq_num; }
+    void issued(Addr issued_PC, InstSeqNum issued_seq_num, bool is_store) { storeMap.erase(issued_PC); }
     void insertStore(Addr store_PC, InstSeqNum store_seq_num, ThreadID tid);
     void insertLoad(Addr load_PC, InstSeqNum load_seq_num) { return;}
 
@@ -107,6 +105,8 @@ class PHAST
     uint64_t selectedTargetMask;
 
   private:
+
+    std::map<Addr, std::vector<BranchHistory>> branchMap;
 
     std::map<Addr, InstSeqNum> storeMap;
 
