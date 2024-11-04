@@ -117,12 +117,12 @@ PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchH
     // }
 
     if (branchHistory.size() == 0) return prediction;
-    auto begin = branchHistory.begin();
-    while (begin != branchHistory.end() && begin->seqNum > load_seq_num) {
+    unsigned begin = 0;
+    while (begin <= branchHistory.size() && branchHistory[begin]->seqNum > load_seq_num) {
         begin++;
         //tmp_history.pop_front();
     }
-    if (begin == branchHistory.end()) return prediction; //no +1 branch
+    if (begin > branchHistory.size()) return prediction; //no +1 branch
 
     if (historySizes[maxBranches] > branchHistory.size()) {
         int i;
@@ -145,7 +145,7 @@ PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchH
     uint64_t hash;
     Addr store_pc;
     for (unsigned i = 0; i <= maxBranches && i < historySizes.size(); i++) {
-        hash = generateBranchHash(i, historySizes[i], begin, branchHistory.end());
+        hash = generateBranchHash(i, historySizes[i], branchHistory, begin);
         store_pc = paths[i].predict(load_pc, hash);
         if (store_pc) {
             auto tmp_seq_num_it = storeMap.find(store_pc);
@@ -209,7 +209,7 @@ void PHAST::violation(Addr load_pc, InstSeqNum store_seq_num, Addr store_pc, std
         }
     }
 
-    uint64_t path_hash = generateBranchHash(i, num_branches, branchHistory.begin(), branchHistory.end());
+    uint64_t path_hash = generateBranchHash(i, num_branches, branchHistory, 0);
     paths[i].update(load_pc, path_hash, store_pc);
 
     maxBranches = std::max(maxBranches, i);
@@ -248,7 +248,9 @@ void PHAST::commit(Addr load_pc, Addr load_addr, unsigned load_size, Addr store_
 
 }
 
-uint64_t PHAST::generateBranchHash(unsigned path_index, unsigned num_branches, BranchHistory::iterator branchHistoryBegin, BranchHistory::iterator branchHistoryEnd) {
+uint64_t PHAST::generateBranchHash(unsigned path_index, unsigned num_branches, BranchHistory branch_history, unsigned start_indx){
+    unsigned end_indx = start_indx + num_branches;
+    if (end_indx >= branch_history.size()) return 0; //TODO: shouldn't it be > not >=?
     std::deque<uint64_t> tmp_path;
     tmp_path.clear();
     int bits = 60;
@@ -256,19 +258,19 @@ uint64_t PHAST::generateBranchHash(unsigned path_index, unsigned num_branches, B
     tmp_path.push_back(branchHistoryBegin[num_branches].target);
 
     unsigned hist_items = 0;
-    for (auto br_it = branchHistoryBegin; br_it != branchHistoryEnd && hist_items < num_branches; br_it++) {
-        if (!br_it->indirect) {
+    for (unsigned indx = end_indx-1; indx >= start_indx && hist_items < num_branches; --indx) {
+        if (!branch_history[indx]->indirect) {
             h <<= 1;
-            h[0] = br_it->taken;
+            h[0] = branch_history[indx]->taken;
             ++hist_items;
             ++bits;
-            tmp_path.push_back(br_it->taken);
+            tmp_path.push_back(branch_history[indx]->taken);
         } else if (selectedTargetMask != 0) {
             h <<= selectedTargetBits;
-            h ^= (br_it->target & selectedTargetMask);
+            h ^= (branch_history[indx]->target & selectedTargetMask);
             ++hist_items;
             bits += selectedTargetBits;
-            tmp_path.push_back(br_it->target);
+            tmp_path.push_back(branch_history[indx]->target);
         }
     }
 

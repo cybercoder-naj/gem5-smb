@@ -125,7 +125,7 @@ class PHAST
 
     MemDepUnit *memDepUnit;
 
-    uint64_t generateBranchHash(unsigned path_index, unsigned num_branches, BranchHistory::iterator branchHistoryBegin, BranchHistory::iterator branchHistoryEnd);
+    uint64_t generateBranchHash(unsigned path_index, unsigned num_branches, BranchHistory branch_history, unsigned start_indx);
 
     uint64_t foldHistory(std::bitset<BITSETSIZE> h, int bits, unsigned _set_bits, unsigned _tag_bits);
 
