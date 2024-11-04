@@ -1010,8 +1010,8 @@ Commit::commitInsts()
                         committedBranchHistory.pop_back();
                 }
 
-                //update memdep predictor
-                if (head_inst->isLoad()) {
+                //update memdep predictor if this load was made to wait on a store
+                if (head_inst->isLoad() && head_inst->memDepInfo.predStoreAddr) {
                     iewStage->instQueue.memDepUnit[tid].commit(head_inst);
                 }
 

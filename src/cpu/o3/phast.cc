@@ -111,10 +111,16 @@ PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchH
     struct PredictionResult prediction;
     prediction.seqNum = 0;
 
+    // BranchHistory tmp_history;
+    // for (int i=0; i < branchHistory.size(); i++) {
+    //     tmp_history.push_back(branchHistory[i]);
+    // }
+
     if (branchHistory.size() == 0) return prediction;
     auto begin = branchHistory.begin();
     while (begin != branchHistory.end() && begin->seqNum > load_seq_num) {
         begin++;
+        //tmp_history.pop_front();
     }
     if (begin == branchHistory.end()) return prediction; //no +1 branch
 
@@ -123,6 +129,18 @@ PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchH
         for (i=0; historySizes[i] <= branchHistory.size(); i++);
         maxBranches = i-1;
     }
+
+    // bool match = false;
+    // if (branchMap.find(load_pc) != branchMap.end()) {
+    //     for (int i=0; i < branchMap[load_pc].size(); i++) {
+    //         if (branchMap[load_pc][i] == tmp_history) {
+    //             ++(memDepUnit->stats.matching_history);
+    //             match = true;
+    //             break;
+    //         }
+    //     }
+    // }
+    // if (!match) ++(memDepUnit->stats.mismatching_history);
 
     uint64_t hash;
     Addr store_pc;
@@ -140,6 +158,8 @@ PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchH
         }
     }
 
+    if (prediction.seqNum == 0) ++(memDepUnit->stats.no_hits);
+    // else if (match) ++(memDepUnit->stats.hit_with_history);
     return prediction;
 }
 
@@ -148,6 +168,26 @@ void PHAST::violation(Addr load_pc, InstSeqNum store_seq_num, Addr store_pc, std
 
     //corner case of a violation before any branches or no +1 branch
     if (branchHistory.empty() || branchHistory.back().seqNum > store_seq_num) return;
+
+    // bool exists = false;
+    // if (branchMap.find(load_pc) == branchMap.end()) {
+    //     branchMap[load_pc] = std::vector<std::deque<branchInfo>>();
+    // }
+    // else {
+    //     for (int i=0; i < branchMap[load_pc].size(); i++) {
+    //         if (branchMap[load_pc][i] == branchHistory) {
+    //             exists = true;
+    //             break;
+    //         }
+    //     }
+    // }
+    // if (!exists) {
+    //     unsigned idx = branchMap[load_pc].size();
+    //     branchMap[load_pc].push_back(std::deque<branchInfo>());
+    //     for (int i=0; i < branchHistory.size(); i++) {
+    //         branchMap[load_pc][idx].push_back(branchHistory[i]);
+    //     }
+    // }
 
     //taking branch history from commit so first branch is always older than the load
     auto br_it = branchHistory.begin();
@@ -172,31 +212,14 @@ void PHAST::violation(Addr load_pc, InstSeqNum store_seq_num, Addr store_pc, std
     uint64_t path_hash = generateBranchHash(i, num_branches, branchHistory.begin(), branchHistory.end());
     paths[i].update(load_pc, path_hash, store_pc);
 
-    if (store_pc == 4204896 && path_hash == 0) {
-        std::cout << "Store found\n";
-        std::cout << "hash: " << path_hash << "\n";
-        std::cout << "num branches (quant): " << i << "\n";
-        std::cout << "Branch history:\n";
-        for (int n=0; n < i; n++) {
-            std::cout << "address: " << branchHistory[n].pc << "\n";
-            std::cout << "taken: " << branchHistory[n].taken << "\n";
-            std::cout << "indirect: " << branchHistory[n].indirect << "\n";
-            std::cout << "target: " << branchHistory[n].target << "\n";
-        }   
-        std::cout << "\n";
-    }
-
     maxBranches = std::max(maxBranches, i);
+
     ++(*(memDepUnit->pathReads[i]));
     ++(*(memDepUnit->pathWrites[i]));
 
 }
 
 void PHAST::commit(Addr load_pc, Addr load_addr, unsigned load_size, Addr store_addr, unsigned store_size, unsigned path_index, uint64_t predictor_hash) {
-
-    //TODO: in real hardware, would it still have to perform a lookup?
-    //i.e., should we still increment a counter for power estimation purposes
-    if (!predictor_hash) return;
 
     bool misprediction;
     Addr ld_s = load_addr;

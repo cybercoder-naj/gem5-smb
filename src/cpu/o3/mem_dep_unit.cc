@@ -122,6 +122,14 @@ MemDepUnit::MemDepUnitStats::MemDepUnitStats(statistics::Group *parent)
       /** ==== PHAST ==== */
       ADD_STAT(hits, statistics::units::Count::get(),
                "Number of hits :)"),
+      ADD_STAT(no_hits, statistics::units::Count::get(),
+               "Number of no hits :("),
+      ADD_STAT(matching_history, statistics::units::Count::get(),
+               "Number of times committing and issuing branch histories match"),
+      ADD_STAT(mismatching_history, statistics::units::Count::get(),
+               "Number of times committing and issuing branch histories mismatch"),
+      ADD_STAT(hit_with_history, statistics::units::Count::get(),
+               "Number of times histories match and an entry is found."),
       ADD_STAT(PHASTMispredictions, statistics::units::Count::get(),
                "mispreds"),
       ADD_STAT(PHASTCorrectPredictions, statistics::units::Count::get(),
@@ -319,7 +327,7 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
 			inst->clearCanIssue();
 
         } else {
-            //make a PHAST prediction, as long as the SQ offset is valid
+            //make a depPred prediction
             MemDepHashIt hash_it = memDepHash.find(prediction.seqNum);
             //std::cout << prediction.seqNum << "\n";
             if (hash_it != memDepHash.end()) {
@@ -327,14 +335,6 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
                 //if (violation_record[inst->pcState().instAddr()] == store_inst->pcState().instAddr())
                 auto store_entry = (*hash_it).second;
                 store_entry->dependInsts.push_back(inst_entry);
-                if (store_entry->inst->pcState().instAddr() == 4204896 && prediction.predictorHash == 8) {
-                std::cout << "Hit\n";
-                std::cout << "history length: " << prediction.predBranchHistLength << "\n";
-                //std::cout << "predictor hash: " << prediction.predictorHash << "\n";
-                //std::cout << "seq num: " << prediction.seqNum << "\n";
-                //std::cout << "store PC: " << store_entry->inst->pcState().instAddr() << "\n";
-                std::cout << "\n";
-                }
                 inst->memDepInfo.predStoreSize = store_entry->inst->sqIt->size();
                 inst->memDepInfo.predBranchHistLength = prediction.predBranchHistLength;
                 inst->memDepInfo.predictorHash = prediction.predictorHash;
@@ -552,11 +552,11 @@ MemDepUnit::wakeDependents(const DynInstPtr &inst)
         assert(woken_inst->memDeps > 0);
         woken_inst->memDeps -= 1;
 
-        if ((woken_inst->memDeps == 0) &&
-            woken_inst->regsReady &&
-            !woken_inst->squashed) {
+        if (woken_inst->memDeps == 0) {
             woken_inst->inst->memDepInfo.predStoreAddr = inst->effAddr;
-            moveToReady(woken_inst);
+            if (woken_inst->regsReady && !woken_inst->squashed) {
+                moveToReady(woken_inst);
+            }
         }
     }
 
