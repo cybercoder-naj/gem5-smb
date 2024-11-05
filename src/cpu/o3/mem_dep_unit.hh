@@ -206,6 +206,9 @@ class MemDepUnit
         /** ==== PHAST ==== */
         statistics::Scalar matching_history;
         statistics::Scalar mismatching_history;
+        statistics::Scalar hash_match;
+        statistics::Scalar hash_mismatch;
+        statistics::Scalar missing_entry;
         statistics::Scalar hit_with_history;
         statistics::Scalar PHASTMispredictions;
         statistics::Scalar PHASTCorrectPredictions;
