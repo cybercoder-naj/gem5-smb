@@ -95,7 +95,7 @@ class PHAST
     void clear();
 
     /** mem_dep_unit interface methods that don't do anything in PHAST */
-    void squash(InstSeqNum squashed_num, ThreadID tid) { return; }
+    void squash(InstSeqNum squashed_num, ThreadID tid);
     void issued(Addr issued_PC, InstSeqNum issued_seq_num, bool is_store) { storeMap.erase(issued_PC); }
     void insertStore(Addr store_PC, InstSeqNum store_seq_num, ThreadID tid);
     void insertLoad(Addr load_PC, InstSeqNum load_seq_num) { return;}
