@@ -122,7 +122,7 @@ PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchH
         begin++;
         tmp_history.pop_front();
     }
-    if (begin > branchHistory.size()) return prediction; //no +1 branch
+    if (begin > branchHistory.size()) return prediction; //no +1 branch //TODO: should this be >=?
 
     if (historySizes[maxBranches] > branchHistory.size()) {
         int i;
@@ -209,12 +209,15 @@ void PHAST::violation(Addr load_pc, InstSeqNum store_seq_num, Addr store_pc, std
     unsigned num_branches = (unsigned)std::distance(branchHistory.begin(), br_it);
 
     //quantise num branches to first lowest path size
-    unsigned i;
-    for (i=1; i < historySizes.size(); i++) {
-        unsigned size = historySizes[i];
-        if (num_branches < size) {
-            num_branches = historySizes[i-1];
-            break;
+    if (num_branches >= historySizes.back()) num_branches = historySizes.back();
+    else {
+        unsigned i;
+        for (i=1; i < historySizes.size(); i++) {
+            unsigned size = historySizes[i];
+            if (num_branches < size) {
+                num_branches = historySizes[i-1];
+                break;
+            }
         }
     }
 
