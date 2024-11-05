@@ -142,17 +142,17 @@ PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchH
     }
     if (!branch_match) ++(memDepUnit->stats.mismatching_history);
 
-    bool hash_match = false;
+    bool hash_match;
     uint64_t hash;
     Addr store_pc;
     for (unsigned i = 0; i <= maxBranches && i < historySizes.size(); i++) {
+        hash_match = false;
         hash = generateBranchHash(i, historySizes[i], branchHistory, begin);
         if (branch_match && hashMap.find(load_pc) != hashMap.end()) {
             if (std::find(hashMap[load_pc].begin(), hashMap[load_pc].end(), hash) != hashMap[load_pc].end()) {
                 hash_match = true;
                 ++(memDepUnit->stats.hash_match);
             }
-            else ++(memDepUnit->stats.hash_mismatch);
         }
         store_pc = paths[i].predict(load_pc, hash);
         if (store_pc) {
@@ -209,9 +209,12 @@ void PHAST::violation(Addr load_pc, InstSeqNum store_seq_num, Addr store_pc, std
     unsigned num_branches = (unsigned)std::distance(branchHistory.begin(), br_it);
 
     //quantise num branches to first lowest path size
-    if (num_branches >= historySizes.back()) num_branches = historySizes.back();
+    unsigned i;
+    if (num_branches >= historySizes.back()) {
+        num_branches = historySizes.back();
+        i = historySizes.size() - 1;
+    }
     else {
-        unsigned i;
         for (i=1; i < historySizes.size(); i++) {
             unsigned size = historySizes[i];
             if (num_branches < size) {
