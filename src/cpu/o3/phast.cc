@@ -107,9 +107,12 @@ void PHAST::insertStore(Addr store_PC, InstSeqNum store_seq_num, ThreadID id) {
 }
 
 void PHAST::squash(InstSeqNum squashed_num, ThreadID tid) {
+    std::vector<Addr> squashed_pcs;
     for (auto s: storeMap)
         if (s.second >= squashed_num)
-            storeMap.erase(s.first);
+            squashed_pcs.push_back(s.first);
+    for (auto s: squashed_pcs)
+        storeMap.erase(s);
 }
 
 PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchHistory branchHistory) {
