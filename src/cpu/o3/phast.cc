@@ -164,7 +164,7 @@ PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchH
             prediction.predBranchHistLength = i;
             prediction.predictorHash = hash;
         }
-        else if (hash_match) ++(memDepUnit->stats.entry_missing);
+        else if (hash_match) ++(memDepUnit->stats.missing_entry);
     }
 
     if (prediction.seqNum == 0) ++(memDepUnit->stats.no_hits);
@@ -230,7 +230,7 @@ void PHAST::violation(Addr load_pc, InstSeqNum store_seq_num, Addr store_pc, std
     }
     else {
         for (int i=0; i < hashMap[load_pc].size(); i++) {
-            if (hashMap[load_pc] == path_hash) {
+            if (std::find(hashMap[load_pc].begin(), hashMap[load_pc].end(), path_hash) != hashMap[load_pc].end()) {
                 hash_exists = true;
                 break;
             }
