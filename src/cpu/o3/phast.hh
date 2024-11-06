@@ -106,9 +106,7 @@ class PHAST
 
   private:
 
-    std::map<Addr, std::vector<uint64_t>> hashMap;
-
-    std::map<Addr, std::vector<BranchHistory>> branchMap;
+    std::map<Addr, std::vector<std::pair<uint64_t,BranchHistory>>> branchMap;
 
     std::map<Addr, InstSeqNum> storeMap;
 

@@ -120,16 +120,16 @@ PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchH
     struct PredictionResult prediction;
     prediction.seqNum = 0;
 
-    // BranchHistory tmp_history;
-    // for (int i=0; i < branchHistory.size(); i++) {
-    //     tmp_history.push_back(branchHistory[i]);
-    // }
+    BranchHistory tmp_history;
+    for (int i=0; i < branchHistory.size(); i++) {
+        tmp_history.push_back(branchHistory[i]);
+    }
 
     if (branchHistory.size() == 0) return prediction;
     unsigned begin = 0;
     while (begin <= branchHistory.size() && branchHistory[begin].seqNum > load_seq_num) {
         begin++;
-        // tmp_history.pop_front();
+        tmp_history.pop_front();
     }
     if (begin > branchHistory.size()) return prediction; //no +1 branch //TODO: should this be >=?
 
@@ -139,31 +139,22 @@ PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchH
         maxBranches = i-1;
     }
 
-    // bool branch_match = false;
-    // if (branchMap.find(load_pc) != branchMap.end()) {
-    //     for (int i=0; i < branchMap[load_pc].size(); i++) {
-    //         if (branchMap[load_pc][i] == tmp_history) {
-    //             ++(memDepUnit->stats.matching_history);
-    //             branch_match = true;
-    //             break;
-    //         }
-    //     }
-    // }
-    // if (!branch_match) ++(memDepUnit->stats.mismatching_history);
 
-    bool hash_match;
+    bool branch_match;
     uint64_t hash;
     Addr store_pc;
-    //for (unsigned i = 0; i <= maxBranches && i < historySizes.size(); i++) {
-    for (unsigned i = 0; i < historySizes.size(); i++) {
-        hash_match = false;
+    for (unsigned i = 0; i <= maxBranches && i < historySizes.size(); i++) {
         hash = generateBranchHash(i, historySizes[i], branchHistory, begin);
-        // if (branch_match && hashMap.find(load_pc) != hashMap.end()) {
-        //     if (std::find(hashMap[load_pc].begin(), hashMap[load_pc].end(), hash) != hashMap[load_pc].end()) {
-        //         hash_match = true;
-        //         ++(memDepUnit->stats.hash_match);
-        //     }
-        // }
+        branch_match = false;
+        if (branchMap.find(load_pc) != branchMap.end()) {
+            for (int i=0; i < branchMap[load_pc].size(); i++) {
+                if (branchMap[load_pc][i].first == hash && branchMap[load_pc][i].second == tmp_history) {
+                    ++(memDepUnit->stats.matching_history);
+                    branch_match = true;
+                    break;
+                }
+            }
+        }
         store_pc = paths[i].predict(load_pc, hash);
         if (store_pc) {
             auto tmp_seq_num_it = storeMap.find(store_pc);
@@ -174,11 +165,11 @@ PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchH
             prediction.predBranchHistLength = i;
             prediction.predictorHash = hash;
         }
-        else if (hash_match) ++(memDepUnit->stats.missing_entry);
+        else if (branch_match) ++(memDepUnit->stats.missing_entry);
     }
 
     if (prediction.seqNum == 0) ++(memDepUnit->stats.no_hits);
-    //else if (branch_match) ++(memDepUnit->stats.hit_with_history);
+    else if (branch_match) ++(memDepUnit->stats.hit_with_history);
     return prediction;
 }
 
@@ -187,26 +178,6 @@ void PHAST::violation(Addr load_pc, InstSeqNum store_seq_num, Addr store_pc, std
 
     //corner case of a violation before any branches or no +1 branch
     if (branchHistory.empty() || branchHistory.back().seqNum > store_seq_num) return;
-
-    // bool exists = false;
-    // if (branchMap.find(load_pc) == branchMap.end()) {
-    //     branchMap[load_pc] = std::vector<std::deque<branchInfo>>();
-    // }
-    // else {
-    //     for (int i=0; i < branchMap[load_pc].size(); i++) {
-    //         if (branchMap[load_pc][i] == branchHistory) {
-    //             exists = true;
-    //             break;
-    //         }
-    //     }
-    // }
-    // if (!exists) {
-    //     unsigned idx = branchMap[load_pc].size();
-    //     branchMap[load_pc].push_back(std::deque<branchInfo>());
-    //     for (int i=0; i < branchHistory.size(); i++) {
-    //         branchMap[load_pc][idx].push_back(branchHistory[i]);
-    //     }
-    // }
 
     //taking branch history from commit so first branch is always older than the load
     auto br_it = branchHistory.begin();
@@ -237,19 +208,22 @@ void PHAST::violation(Addr load_pc, InstSeqNum store_seq_num, Addr store_pc, std
     uint64_t path_hash = generateBranchHash(i, num_branches, branchHistory, 0);
     paths[i].update(load_pc, path_hash, store_pc);
 
-    // bool hash_exists = false;
-    // if (hashMap.find(load_pc) == hashMap.end()) {
-    //     hashMap[load_pc] = std::vector<uint64_t>();
-    // }
-    // else {
-    //     for (int i=0; i < hashMap[load_pc].size(); i++) {
-    //         if (std::find(hashMap[load_pc].begin(), hashMap[load_pc].end(), path_hash) != hashMap[load_pc].end()) {
-    //             hash_exists = true;
-    //             break;
-    //         }
-    //     }
-    // }
-    // if (!hash_exists) hashMap[load_pc].push_back(path_hash);
+    bool exists = false;
+    if (branchMap.find(load_pc) == branchMap.end()) {
+        branchMap.emplace(load_pc, std::vector<std::pair<uint64_t, std::deque<branchInfo>>>{{path_hash, branchHistory}});
+    }
+    else {
+        for (int i=0; i < branchMap[load_pc].size(); i++) {
+            if (branchMap[load_pc][i].first == path_hash && branchMap[load_pc][i].second == branchHistory) {
+                exists = true;
+                break;
+            }
+        }
+    }
+    if (!exists) {
+        std::pair<uint64_t, std::deque<branchInfo>> new_entry = {path_hash, branchHistory};
+        branchMap[load_pc].push_back(new_entry);
+    }
 
     maxBranches = std::max(maxBranches, i);
 
