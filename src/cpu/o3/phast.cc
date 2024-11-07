@@ -127,7 +127,7 @@ PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchH
 
     if (branchHistory.size() == 0) return prediction;
     unsigned begin = 0;
-    while (begin <= branchHistory.size() && branchHistory[begin].seqNum > load_seq_num) {
+    while (begin < branchHistory.size() && branchHistory[begin].seqNum > load_seq_num) {
         begin++;
         // tmp_history.pop_front();
     }

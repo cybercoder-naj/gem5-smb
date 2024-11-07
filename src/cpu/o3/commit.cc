@@ -1011,7 +1011,7 @@ Commit::commitInsts()
                 }
 
                 //update memdep predictor if this load was made to wait on a store
-                if (head_inst->isLoad() && head_inst->memDepInfo.predStoreAddr) {
+                if (head_inst->isLoad() && head_inst->memDepInfo.predStoreSize) {
                     iewStage->instQueue.memDepUnit[tid].commit(head_inst);
                 }
 
