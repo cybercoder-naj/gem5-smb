@@ -146,6 +146,7 @@ class PHAST
         unsigned maxCounterValue;
         std::vector<std::vector<Entry>> cache;
 
+        public:
         uint64_t xorFold(uint64_t pc, uint64_t history, unsigned size) const;
 
         uint64_t getIndex(Addr pc, uint64_t history) const;
@@ -158,7 +159,6 @@ class PHAST
 
         void updateLRU(Entry* entry);
 
-        public:
             int init(uint32_t set_bits, uint32_t _associativity, uint32_t tag_bits, uint32_t max_counter_value);
 
             Addr predict(Addr pc, uint64_t history, bool branch_match, MemDepUnit *memDepUnit);
