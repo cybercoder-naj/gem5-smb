@@ -173,8 +173,7 @@ class PHAST
 
             unsigned getTagBits() { return tagBits; }
 
-            std::ostream& operator<<(std::ostream & os, const SimplBlockCache& b);
-    };
+            void printBlock();
 
 };
 

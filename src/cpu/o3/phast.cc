@@ -390,6 +390,8 @@ void PHAST::SimplBlockCache::updateLRU(Entry* entry) {
 
 Addr PHAST::SimplBlockCache::predict(Addr pc, uint64_t history, bool branch_match, MemDepUnit *memDepUnit) {
     auto entry = findEntry(pc, history);
+    std::cout << "Lookup:\n";
+    printBlock(getIndex(pc, history));
     if (branch_match) {
         if (entry == nullptr) ++(memDepUnit->stats.null_entry);
         else if (entry->counter == 0) ++(memDepUnit->stats.counter_is_zero);
@@ -414,15 +416,13 @@ void PHAST::SimplBlockCache::update(Addr pc, uint64_t history, Addr store_pc) {
         entry->store_pc = store_pc;
         entry->counter = maxCounterValue;
         updateLRU(entry);
-        if (!findEntry(pc, history)) {
-            std::cout << "Entry not found after allocating.\n";
-            exit(1);
-        }
     } else {
         entry->store_pc = store_pc;
         entry->counter = maxCounterValue;
         updateLRU(entry);
     }
+    std::cout << "Update:\n";
+    printBlock(getIndex(pc, history));
 }
 
 void PHAST::SimplBlockCache::updateCommit(Addr pc, uint64_t history, bool predictionWrong) {
@@ -452,11 +452,25 @@ void PHAST::SimplBlockCache::clear() {
             cache[i][j].counter = 0;
         }
     }
-
-std::ostream& PHAST::SimplBlockCache::operator<<(std::ostream & os, const SimplBlockCache& b) {
-    return os;
 }
 
+void PHAST::SimplBlockCache::printBlock(uint64_t set) {
+    std::string output = "\t";
+
+    for (int i=0; i < (1ULL << setBits); i++) {
+        if (i != set) continue;
+        std::cout << "|";
+        for (int j=0; j < associativity; j++) {
+            std::cout << "[ ";
+            std::cout << "Tag: " << cache[i][j].tag << " ";
+            std::cout << "PC" << cache[i][j].store_pc << " ";
+            std::cout << "LRU: " << cache[i][j].lru << " ";
+            std::cout << "Cntr: " << cache[i][j].counter << " ";
+            std::cout << "] ";
+        }
+        std::cout << "|\n";
+    }
+    std::cout << "\n";
 }
 
 } // namespace o3
