@@ -455,7 +455,6 @@ void PHAST::SimplBlockCache::clear() {
 }
 
 void PHAST::SimplBlockCache::printBlock(uint64_t set) {
-    std::string output = "\t";
 
     for (int i=0; i < (1ULL << setBits); i++) {
         if (i != set) continue;
@@ -470,6 +469,7 @@ void PHAST::SimplBlockCache::printBlock(uint64_t set) {
         }
         std::cout << "|\n";
     }
+
     std::cout << "\n";
 }
 

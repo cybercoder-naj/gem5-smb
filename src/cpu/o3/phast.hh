@@ -173,7 +173,8 @@ class PHAST
 
             unsigned getTagBits() { return tagBits; }
 
-            void printBlock();
+            void printBlock(uint64_t set);
+    };
 
 };
 
