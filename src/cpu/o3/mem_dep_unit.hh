@@ -208,7 +208,9 @@ class MemDepUnit
         statistics::Scalar mismatching_history;
         statistics::Scalar hash_match;
         statistics::Scalar hash_mismatch;
-        statistics::Scalar missing_entry;
+        statistics::Scalar null_entry;
+        statistics::Scalar counter_is_zero;
+        statistics::Scalar store_pc_is_zero;
         statistics::Scalar hit_with_history;
         statistics::Scalar PHASTMispredictions;
         statistics::Scalar PHASTCorrectPredictions;

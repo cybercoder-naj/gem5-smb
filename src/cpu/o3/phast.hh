@@ -161,7 +161,7 @@ class PHAST
         public:
             int init(uint32_t set_bits, uint32_t _associativity, uint32_t tag_bits, uint32_t max_counter_value);
 
-            Addr predict(Addr pc, uint64_t history);
+            Addr predict(Addr pc, uint64_t history, bool branch_match, MemDepUnit *memDepUnit);
 
             void update(Addr pc, uint64_t history, Addr store_pc);
 

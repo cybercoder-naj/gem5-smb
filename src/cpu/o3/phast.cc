@@ -155,7 +155,7 @@ PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchH
                 }
             }
         }
-        store_pc = paths[i].predict(load_pc, hash);
+        store_pc = paths[i].predict(load_pc, hash, branch_match, memDepUnit);
         if (store_pc) {
             auto tmp_seq_num_it = storeMap.find(store_pc);
             if (tmp_seq_num_it == storeMap.end()) continue;
@@ -165,7 +165,6 @@ PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchH
             prediction.predBranchHistLength = i;
             prediction.predictorHash = hash;
         }
-        else if (branch_match) ++(memDepUnit->stats.missing_entry);
     }
 
     if (prediction.seqNum == 0) ++(memDepUnit->stats.no_hits);
@@ -335,7 +334,7 @@ int PHAST::SimplBlockCache::init(uint32_t set_bits, uint32_t _associativity, uin
 
 }
 
-uint64_t PHAST::SimplBlockCache::xorFold(uint64_t pc, uint64_t history, unsigned size) const {
+uint64_t PHAST::SimplBlockCache::xorFold(uint64_t pc, uint64_t history, uint32_t size) const {
     uint64_t mask = (1 << size) - 1;
     uint64_t fold = (history & mask);
     fold = (fold ^ (pc & mask));
@@ -389,8 +388,14 @@ void PHAST::SimplBlockCache::updateLRU(Entry* entry) {
     lruCounter++;
 }
 
-Addr PHAST::SimplBlockCache::predict(Addr pc, uint64_t history) {
+Addr PHAST::SimplBlockCache::predict(Addr pc, uint64_t history, bool branch_match, MemDepUnit *memDepUnit) {
     auto entry = findEntry(pc, history);
+    if (branch_match) {
+        if (entry == nullptr) ++(memDepUnit->stats.null_entry);
+        else if (entry->counter == 0) ++(memDepUnit->stats.counter_is_zero);
+        else if (entry->store_pc == 0) ++(memDepUnit->stats.store_pc_is_zero);
+    }
+
     if (entry == nullptr || entry->counter == 0 || entry->store_pc == 0) { // no prediction for this PC
         return 0;
     }
