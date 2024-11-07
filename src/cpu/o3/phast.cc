@@ -145,7 +145,7 @@ PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchH
     Addr store_pc;
     for (unsigned i = 0; i <= maxBranches && i < historySizes.size(); i++) {
         hash = generateBranchHash(i, historySizes[i], branchHistory, begin);
-        if (i == 0) paths[i].print(paths[i].getIndex(load_pc, hash));
+        if (i == 0) paths[i].printBlock(paths[i].getIndex(load_pc, hash));
         branch_match = false;
         // if (branchMap.find(load_pc) != branchMap.end()) {
         //     for (int i=0; i < branchMap[load_pc].size(); i++) {
@@ -207,7 +207,7 @@ void PHAST::violation(Addr load_pc, InstSeqNum store_seq_num, Addr store_pc, std
 
     uint64_t path_hash = generateBranchHash(i, num_branches, branchHistory, 0);
     paths[i].update(load_pc, path_hash, store_pc);
-    if (i == 0) paths[i].print(paths[i].getIndex(load_pc, path_hash));
+    if (i == 0) paths[i].printBlock(paths[i].getIndex(load_pc, path_hash));
 
     // bool exists = false;
     // if (branchMap.find(load_pc) == branchMap.end()) {
