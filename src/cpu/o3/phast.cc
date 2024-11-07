@@ -456,13 +456,13 @@ void PHAST::SimplBlockCache::clear() {
 
 void PHAST::SimplBlockCache::printBlock(uint64_t set) {
 
-    for (int i=0; i < (1ULL << setBits); i++) {
-        if (i != set) continue;
-        std::cout << "|";
-        for (int j=0; j < associativity; j++) {
+    for (uint64_t i=0; i < (1ULL << setBits); i++) {
+        if (i == set) std::cout << "----> ";
+        std::cout << i << ": | ";
+        for (uint32_t j=0; j < associativity; j++) {
             std::cout << "[ ";
             std::cout << "Tag: " << cache[i][j].tag << " ";
-            std::cout << "PC" << cache[i][j].store_pc << " ";
+            std::cout << "PC: " << cache[i][j].store_pc << " ";
             std::cout << "LRU: " << cache[i][j].lru << " ";
             std::cout << "Cntr: " << cache[i][j].counter << " ";
             std::cout << "] ";
@@ -470,7 +470,7 @@ void PHAST::SimplBlockCache::printBlock(uint64_t set) {
         std::cout << "|\n";
     }
 
-    std::cout << "\n";
+    std::cout << "\n\n";
 }
 
 } // namespace o3
