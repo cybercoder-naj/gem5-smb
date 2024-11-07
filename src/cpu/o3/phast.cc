@@ -398,8 +398,6 @@ void PHAST::SimplBlockCache::updateLRU(Entry* entry) {
 
 Addr PHAST::SimplBlockCache::predict(Addr pc, uint64_t history, bool branch_match, MemDepUnit *memDepUnit) {
     auto entry = findEntry(pc, history);
-    std::cout << "Lookup:\n";
-    printBlock(getIndex(pc, history));
     if (branch_match) {
         if (entry == nullptr) ++(memDepUnit->stats.null_entry);
         else if (entry->counter == 0) ++(memDepUnit->stats.counter_is_zero);
@@ -429,8 +427,6 @@ void PHAST::SimplBlockCache::update(Addr pc, uint64_t history, Addr store_pc) {
         entry->counter = maxCounterValue;
         updateLRU(entry);
     }
-    std::cout << "Update:\n";
-    printBlock(getIndex(pc, history));
 }
 
 void PHAST::SimplBlockCache::updateCommit(Addr pc, uint64_t history, bool predictionWrong) {
