@@ -345,9 +345,9 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
                 //if (violation_record[inst->pcState().instAddr()] == store_inst->pcState().instAddr())
                 auto store_entry = (*hash_it).second;
                 store_entry->dependInsts.push_back(inst_entry);
-                inst->memDepInfo.predStoreSize = store_entry->inst->sqIt->size();
                 inst->memDepInfo.predBranchHistLength = prediction.predBranchHistLength;
                 inst->memDepInfo.predictorHash = prediction.predictorHash;
+                inst->memDepInfo.predicted = true;
                 inst_entry->memDeps = 1;
 				inst->clearCanIssue();
             } else if (inst_entry->regsReady) { moveToReady(inst_entry); }
@@ -564,6 +564,7 @@ MemDepUnit::wakeDependents(const DynInstPtr &inst)
 
         if (woken_inst->memDeps == 0) {
             woken_inst->inst->memDepInfo.predStoreAddr = inst->effAddr;
+            inst->memDepInfo.predStoreSize = store_entry->inst->sqIt->size();
             if (woken_inst->regsReady && !woken_inst->squashed) {
                 moveToReady(woken_inst);
             }

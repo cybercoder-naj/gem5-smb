@@ -367,11 +367,13 @@ class DynInst : public ExecContext, public RefCounted
         /** Relative offset into the SQ for dependent store*/
         std::ptrdiff_t storeQueueDistance;
         /** Memory location of store this load was predicted dependent on */
-        Addr predStoreAddr = 0;
-        int predStoreSize = 0;
+        Addr predStoreAddr;
+        int predStoreSize;
         /** Predicted information validated at commit */
         unsigned predBranchHistLength;
         uint64_t predictorHash = 0;
+        /** Was this load predicted to be dependent by the depPred? */
+        bool predicted = false;
     } memDepInfo;
 
     /////////////////////// TLB Miss //////////////////////
