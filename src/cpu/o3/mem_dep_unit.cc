@@ -564,7 +564,7 @@ MemDepUnit::wakeDependents(const DynInstPtr &inst)
 
         if (woken_inst->memDeps == 0) {
             woken_inst->inst->memDepInfo.predStoreAddr = inst->effAddr;
-            woken_inst->inst->memDepInfo.predStoreSize = inst->sqIt->size();
+            woken_inst->inst->memDepInfo.predStoreSize = inst->effSize;
             if (woken_inst->regsReady && !woken_inst->squashed) {
                 moveToReady(woken_inst);
             }
