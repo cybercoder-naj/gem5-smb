@@ -128,6 +128,8 @@ MemDepUnit::MemDepUnitStats::MemDepUnitStats(statistics::Group *parent)
                "Number of times committing and issuing branch histories match"),
       ADD_STAT(mismatching_history, statistics::units::Count::get(),
                "Number of times committing and issuing branch histories mismatch"),
+      ADD_STAT(missing_entry, statistics::units::Count::get(),
+               "Number of times hashes and branch history match but entry is not found anyway"),
       ADD_STAT(hash_match, statistics::units::Count::get(),
                "Number of times hashes match when branch history match"),
       ADD_STAT(hash_mismatch, statistics::units::Count::get(),

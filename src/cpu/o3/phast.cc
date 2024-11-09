@@ -149,16 +149,16 @@ PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchH
         //     std::cout << "Lookup:\n";
         //     paths[i].printBlock(paths[i].getIndex(load_pc, hash));
         // }
-        // branch_match = false;
-        // if (branchMap.find(load_pc) != branchMap.end()) {
-        //     for (int i=0; i < branchMap[load_pc].size(); i++) {
-        //         if (branchMap[load_pc][i].first == hash && branchMap[load_pc][i].second == tmp_history) {
-        //             ++(memDepUnit->stats.matching_history);
-        //             branch_match = true;
-        //             break;
-        //         }
-        //     }
-        // }
+        branch_match = false;
+        if (branchMap.find(load_pc) != branchMap.end()) {
+            for (int i=0; i < branchMap[load_pc].size(); i++) {
+                if (branchMap[load_pc][i].first == hash && branchMap[load_pc][i].second == tmp_history) {
+                    ++(memDepUnit->stats.matching_history);
+                    branch_match = true;
+                    break;
+                }
+            }
+        }
         store_pc = paths[i].predict(load_pc, hash, branch_match, memDepUnit);
         if (store_pc) {
             auto tmp_seq_num_it = storeMap.find(store_pc);
@@ -169,6 +169,7 @@ PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchH
             prediction.predBranchHistLength = i;
             prediction.predictorHash = hash;
         }
+        else if (branch_match) ++(memDepUnit->stats.missing_entry);
     }
 
     if (branch_match) ++(memDepUnit->stats.hit_with_history);
@@ -215,22 +216,22 @@ void PHAST::violation(Addr load_pc, InstSeqNum store_seq_num, Addr store_pc, std
     //     paths[i].printBlock(paths[i].getIndex(load_pc, path_hash));
     // }
 
-    // bool exists = false;
-    // if (branchMap.find(load_pc) == branchMap.end()) {
-    //     branchMap.emplace(load_pc, std::vector<std::pair<uint64_t, std::deque<branchInfo>>>{{path_hash, branchHistory}});
-    // }
-    // else {
-    //     for (int i=0; i < branchMap[load_pc].size(); i++) {
-    //         if (branchMap[load_pc][i].first == path_hash && branchMap[load_pc][i].second == branchHistory) {
-    //             exists = true;
-    //             break;
-    //         }
-    //     }
-    // }
-    // if (!exists) {
-    //     std::pair<uint64_t, std::deque<branchInfo>> new_entry = {path_hash, branchHistory};
-    //     branchMap[load_pc].push_back(new_entry);
-    // }
+    bool exists = false;
+    if (branchMap.find(load_pc) == branchMap.end()) {
+        branchMap.emplace(load_pc, std::vector<std::pair<uint64_t, std::deque<branchInfo>>>{{path_hash, branchHistory}});
+    }
+    else {
+        for (int i=0; i < branchMap[load_pc].size(); i++) {
+            if (branchMap[load_pc][i].first == path_hash && branchMap[load_pc][i].second == branchHistory) {
+                exists = true;
+                break;
+            }
+        }
+    }
+    if (!exists) {
+        std::pair<uint64_t, std::deque<branchInfo>> new_entry = {path_hash, branchHistory};
+        branchMap[load_pc].push_back(new_entry);
+    }
 
     maxBranches = std::max(maxBranches, i);
 
