@@ -739,11 +739,11 @@ Decode::decodeInsts(ThreadID tid)
         }
 
         //Record decoded branches for memdep predictions
-        if (inst->isControl() && !inst->isUncondCtrl()) {
+        if (inst->isControl() && !(inst->isDirectCtrl() && inst->isUncondCtrl())) {
             branchInfo branch_info = {
                 inst->isIndirectCtrl(),
                 inst->readPredTaken(),
-                inst->branchTarget()->instAddr(),
+                inst->predPC->instAddr(),
                 inst->seqNum,
                 inst->pcState().instAddr(),
             };

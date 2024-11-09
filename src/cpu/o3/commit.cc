@@ -997,11 +997,11 @@ Commit::commitInsts()
                 ppCommit->notify(head_inst);
 
                 //record committed branch history
-                if (head_inst->isControl() && !head_inst->isUncondCtrl()) {
+                if (head_inst->isControl() && !(head_inst->isDirectCtrl() && head_inst->isUncondCtrl())) {
                     branchInfo branch_info = {
                         head_inst->isIndirectCtrl(),
                         head_inst->readPredTaken(),
-                        head_inst->branchTarget()->instAddr(),
+                        head_inst->predPC->instAddr(),
                         head_inst->seqNum,
                         head_inst->pcState().instAddr(),
                     };
