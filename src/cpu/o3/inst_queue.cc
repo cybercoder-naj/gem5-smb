@@ -608,6 +608,11 @@ InstructionQueue::insert(const DynInstPtr &new_inst)
 void
 InstructionQueue::insertNonSpec(const DynInstPtr &new_inst)
 {
+
+    if (new_inst->pcState().instAddr() == 0x004007a8) {
+        std::cout << "Found barrier :)\n";
+        memDepUnit[new_inst->threadNumber].clear_dep_pred();
+    }
     // @todo: Clean up this code; can do it by setting inst as unable
     // to issue, then calling normal insert on the inst.
     if (new_inst->isFloating()) {

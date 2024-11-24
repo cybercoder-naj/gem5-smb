@@ -120,16 +120,16 @@ PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchH
     struct PredictionResult prediction;
     prediction.seqNum = 0;
 
-    // BranchHistory tmp_history;
-    // for (int i=0; i < branchHistory.size(); i++) {
-    //     tmp_history.push_back(branchHistory[i]);
-    // }
+    BranchHistory tmp_history;
+    for (int i=0; i < branchHistory.size(); i++) {
+        tmp_history.push_back(branchHistory[i]);
+    }
 
     if (branchHistory.size() == 0) return prediction;
     unsigned begin = 0;
     while (begin < branchHistory.size() && branchHistory[begin].seqNum > load_seq_num) {
         begin++;
-        // tmp_history.pop_front();
+        tmp_history.pop_front();
     }
     if (begin > branchHistory.size()) return prediction; //no +1 branch //TODO: should this be >=?
 
@@ -141,20 +141,22 @@ PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchH
 
 
     bool branch_match;
+    bool any_match = false;
     uint64_t hash;
     Addr store_pc;
     for (unsigned i = 0; i <= maxBranches && i < historySizes.size(); i++) {
         hash = generateBranchHash(i, historySizes[i], branchHistory, begin);
-        // if (i == 0) {
-        //     std::cout << "Lookup:\n";
-        //     paths[i].printBlock(paths[i].getIndex(load_pc, hash));
-        // }
+        //if (i == 0) {
+        //    std::cout << "Lookup: " << load_pc << "\n";
+        //    paths[i].printBlock(paths[i].getIndex(load_pc, hash));
+        //}
         branch_match = false;
         if (branchMap.find(load_pc) != branchMap.end()) {
             for (int i=0; i < branchMap[load_pc].size(); i++) {
                 if (branchMap[load_pc][i].first == hash && branchMap[load_pc][i].second == tmp_history) {
-                    ++(memDepUnit->stats.matching_history);
+                    if (!any_match) ++(memDepUnit->stats.matching_history);
                     branch_match = true;
+                    any_match = true;
                     break;
                 }
             }
@@ -172,7 +174,8 @@ PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchH
         else if (branch_match) ++(memDepUnit->stats.missing_entry);
     }
 
-    if (branch_match) ++(memDepUnit->stats.hit_with_history);
+    if (prediction.seqNum && any_match) ++(memDepUnit->stats.hit_with_history);
+    else if (prediction.seqNum) ++(memDepUnit->stats.alias_hit);
     return prediction;
 }
 
@@ -211,10 +214,10 @@ void PHAST::violation(Addr load_pc, InstSeqNum store_seq_num, Addr store_pc, std
 
     uint64_t path_hash = generateBranchHash(i, num_branches, branchHistory, 0);
     paths[i].update(load_pc, path_hash, store_pc);
-    // if (i == 0) {
-    //     std::cout << "Update:\n";
-    //     paths[i].printBlock(paths[i].getIndex(load_pc, path_hash));
-    // }
+    //if (i == 0) {
+    //    std::cout << "Update: " << load_pc << " on " << store_pc << "\n";
+    //    paths[i].printBlock(paths[i].getIndex(load_pc, path_hash));
+    //}
 
     bool exists = false;
     if (branchMap.find(load_pc) == branchMap.end()) {
@@ -243,11 +246,10 @@ void PHAST::violation(Addr load_pc, InstSeqNum store_seq_num, Addr store_pc, std
 void PHAST::commit(Addr load_pc, Addr load_addr, unsigned load_size, Addr store_addr, unsigned store_size, unsigned path_index, uint64_t predictor_hash) {
 
     bool misprediction;
-    Addr load_eff_addr1 = load_addr >> 4;
-    Addr load_eff_addr2 = (load_addr + load_size - 1) >> 4;
-    Addr store_eff_addr1 = store_addr >> 4;
-    Addr store_eff_addr2 = (store_addr + store_size - 1) >> 4;
-
+    Addr load_eff_addr1 = load_addr >> 0;
+    Addr load_eff_addr2 = (load_addr + load_size - 1) >> 0;
+    Addr store_eff_addr1 = store_addr >> 0;
+    Addr store_eff_addr2 = (store_addr + store_size - 1) >> 0;
     if (store_eff_addr2 >= load_eff_addr1 && store_eff_addr1 <= load_eff_addr2)
         misprediction = false;
     else

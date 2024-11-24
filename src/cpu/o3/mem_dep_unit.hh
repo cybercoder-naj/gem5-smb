@@ -134,6 +134,8 @@ class MemDepUnit
     /** Takes over from another CPU's thread. */
     void takeOverFrom();
 
+    void clear_dep_pred();
+
     /** Sets the pointer to the IQ. */
     void setIQ(InstructionQueue *iq_ptr);
 
@@ -199,6 +201,8 @@ class MemDepUnit
         /**  Number of predictions made by MDP */
         statistics::Scalar predictions;
         statistics::Scalar hits;
+        statistics::Scalar no_seq_num;
+        statistics::Scalar alias_hit;
         statistics::Scalar no_hits;
         /** ==== Store Sets ==== */
         statistics::Scalar LFSTReads;
