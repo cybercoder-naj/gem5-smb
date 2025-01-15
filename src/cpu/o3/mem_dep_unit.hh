@@ -88,7 +88,7 @@ class CPU;
 class InstructionQueue;
 
 struct PredictionResult {
-    InstSeqNum seqNum;
+    std::ptrdiff_t storeQueueDistance;
     unsigned predBranchHistLength;
     uint64_t predictorHash;
 };

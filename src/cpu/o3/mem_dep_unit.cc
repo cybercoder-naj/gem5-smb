@@ -279,7 +279,7 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
     // producing memrefs/stores.
     std::vector<InstSeqNum>  producing_stores;
     PredictionResult prediction;
-    prediction.seqNum = 0;
+    prediction.storeQueueDistance = 0;
     if ((inst->isLoad() || inst->isAtomic()) && hasLoadBarrier()) {
         DPRINTF(MemDepUnit, "%d load barriers in flight\n",
                 loadBarrierSNs.size());
