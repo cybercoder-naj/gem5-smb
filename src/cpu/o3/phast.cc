@@ -246,15 +246,15 @@ void PHAST::violation(Addr load_pc, InstSeqNum store_seq_num, Addr store_pc, std
 void PHAST::commit(Addr load_pc, Addr load_addr, unsigned load_size, Addr store_addr, unsigned store_size, unsigned path_index, uint64_t predictor_hash) {
 
     bool misprediction;
-    if ((store_has_lower_limit && store_has_upper_limit) ||
-        (store_has_lower_limit && lower_load_has_store_part) ||
-        (store_has_upper_limit && upper_load_has_store_part) ||
-        (lower_load_has_store_part && upper_load_has_store_part))
-    // Addr load_eff_addr1 = load_addr >> 0;
-    // Addr load_eff_addr2 = (load_addr + load_size - 1) >> 0;
-    // Addr store_eff_addr1 = store_addr >> 0;
-    // Addr store_eff_addr2 = (store_addr + store_size - 1) >> 0;
-    // if (store_eff_addr2 >= load_eff_addr1 && store_eff_addr1 <= load_eff_addr2)
+    // if ((store_has_lower_limit && store_has_upper_limit) ||
+    //     (store_has_lower_limit && lower_load_has_store_part) ||
+    //     (store_has_upper_limit && upper_load_has_store_part) ||
+    //     (lower_load_has_store_part && upper_load_has_store_part))
+    Addr load_eff_addr1 = load_addr >> 0;
+    Addr load_eff_addr2 = (load_addr + load_size - 1) >> 0;
+    Addr store_eff_addr1 = store_addr >> 0;
+    Addr store_eff_addr2 = (store_addr + store_size - 1) >> 0;
+    if (store_eff_addr2 >= load_eff_addr1 && store_eff_addr1 <= load_eff_addr2)
         misprediction = false;
     else
         misprediction = true;
