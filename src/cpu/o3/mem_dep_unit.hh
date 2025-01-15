@@ -88,6 +88,9 @@ class CPU;
 class InstructionQueue;
 
 struct PredictionResult {
+    /* For StoreSets */
+    InstSeqNum seqNum;
+    /* For PHAST */
     std::ptrdiff_t storeQueueDistance;
     unsigned predBranchHistLength;
     uint64_t predictorHash;

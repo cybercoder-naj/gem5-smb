@@ -257,7 +257,7 @@ StoreSet::insertStore(Addr store_PC, InstSeqNum store_seq_num, ThreadID tid)
 PredictionResult StoreSet::checkInst(Addr PC, InstSeqNum load_seq_num, BranchHistory branchHistory)
 {
 
-    struct PredictionResult prediction = {0,0,0};
+    struct PredictionResult prediction = {0,0,0,0};
 
     int index = calcIndex(PC);
 

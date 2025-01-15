@@ -119,8 +119,7 @@ void PHAST::squash(InstSeqNum squashed_num, ThreadID tid) {
 
 PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchHistory branchHistory) {
 
-    struct PredictionResult prediction;
-    prediction.storeQueueDistance = 0;
+    struct PredictionResult prediction = {0,0,0,0};
 
     BranchHistory tmp_history;
     for (int i=0; i < branchHistory.size(); i++) {
@@ -140,7 +139,6 @@ PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchH
         for (i=0; historySizes[i] <= branchHistory.size(); i++);
         maxBranches = i-1;
     }
-
 
     bool branch_match;
     bool any_match = false;

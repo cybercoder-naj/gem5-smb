@@ -280,6 +280,7 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
     std::vector<InstSeqNum>  producing_stores;
     PredictionResult prediction;
     prediction.storeQueueDistance = 0;
+    prediction.seqNum = 0;
     if ((inst->isLoad() || inst->isAtomic()) && hasLoadBarrier()) {
         DPRINTF(MemDepUnit, "%d load barriers in flight\n",
                 loadBarrierSNs.size());
@@ -313,7 +314,7 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
 
     // If no store entry, then instruction can issue as soon as the registers
     // are ready.
-    if (store_entries.empty() && !prediction.storeQueueDistance) {
+    if (store_entries.empty() && !prediction.storeQueueDistance && !prediction.seqNum) {
         DPRINTF(MemDepUnit, "No dependency for inst PC "
                 "%s [sn:%lli].\n", inst->pcState(), inst->seqNum);
 
@@ -335,8 +336,9 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
             inst_entry->regsReady = true;
         }
 
+        MemDepHashIt hash_it = memDepHash.end();
         // Add this instruction to the list of dependents.
-        if (!prediction.storeQueueDistance) {
+        if (!prediction.storeQueueDistance && !prediction.seqNum) {
             for (auto store_entry : store_entries)
                 store_entry->dependInsts.push_back(inst_entry);
 
@@ -344,24 +346,28 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
 			// Clear the bit saying this instruction can issue.
 			inst->clearCanIssue();
 
-        } else if (inst->sqIt.idx() >= (cpu->getIEW()->ldstQueue.getStoreHead(id) + prediction.storeQueueDistance)){
+        } else if (prediction.storeQueueDistance && inst->sqIt.idx() >= (cpu->getIEW()->ldstQueue.getStoreHead(id) + prediction.storeQueueDistance)){
             //make a PHAST prediction, as long as the SQ offset is valid
             auto sq_it = inst->sqIt - prediction.storeQueueDistance;
             DynInstPtr store_inst = sq_it->instruction();
-            MemDepHashIt hash_it = memDepHash.find(store_inst->seqNum);
-            if (hash_it != memDepHash.end()) {
-                ++stats.hits;
-                auto store_entry = (*hash_it).second;
-                store_entry->dependInsts.push_back(inst_entry);
-                inst->memDepInfo.predBranchHistLength = prediction.predBranchHistLength;
-                inst->memDepInfo.predictorHash = prediction.predictorHash;
-                inst->memDepInfo.predicted = true;
-                inst_entry->memDeps = 1;
-                inst->clearCanIssue();
-                DPRINTF(MemDepUnit, "\tinst PC %s is dependent on %s.\n",
-                        inst->pcState(), store_entry->inst->pcState());
-            } else if (inst_entry->regsReady) { moveToReady(inst_entry); }
+            hash_it = memDepHash.find(store_inst->seqNum);
         }
+        else if (prediction.seqNum) {
+            //make a StoreSet prediction
+            hash_it = memDepHash.find(prediction.seqNum);
+        }
+        if (hash_it != memDepHash.end()) {
+            ++stats.hits;
+            auto store_entry = (*hash_it).second;
+            store_entry->dependInsts.push_back(inst_entry);
+            inst->memDepInfo.predBranchHistLength = prediction.predBranchHistLength;
+            inst->memDepInfo.predictorHash = prediction.predictorHash;
+            inst->memDepInfo.predicted = true;
+            inst_entry->memDeps = 1;
+            inst->clearCanIssue();
+            DPRINTF(MemDepUnit, "\tinst PC %s is dependent on %s.\n",
+                    inst->pcState(), store_entry->inst->pcState());
+        } else if (inst_entry->memDeps == 0 && inst_entry->regsReady) { moveToReady(inst_entry); } //corner case where depPred returned a prediction but the seqnum wasn't in-flight
 
         if (inst->isLoad()) {
             ++stats.conflictingLoads;
