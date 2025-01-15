@@ -122,6 +122,10 @@ MemDepUnit::MemDepUnitStats::MemDepUnitStats(statistics::Group *parent)
       /** ==== PHAST ==== */
       ADD_STAT(hits, statistics::units::Count::get(),
                "Number of hits :)"),
+      ADD_STAT(no_seq_num, statistics::units::Count::get(),
+               "Number of hits :)"),
+      ADD_STAT(alias_hit, statistics::units::Count::get(),
+               "Number of hits :)"),
       ADD_STAT(no_hits, statistics::units::Count::get(),
                "Number of no hits :("),
       ADD_STAT(matching_history, statistics::units::Count::get(),
@@ -192,6 +196,8 @@ MemDepUnit::isDrained() const
 
     return drained;
 }
+
+void MemDepUnit::clear_dep_pred() { depPred.clear(); }
 
 void
 MemDepUnit::drainSanityCheck() const
@@ -344,7 +350,6 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
             //std::cout << prediction.seqNum << "\n";
             if (hash_it != memDepHash.end()) {
                 ++stats.hits;
-                //if (violation_record[inst->pcState().instAddr()] == store_inst->pcState().instAddr())
                 auto store_entry = (*hash_it).second;
                 store_entry->dependInsts.push_back(inst_entry);
                 inst->memDepInfo.predBranchHistLength = prediction.predBranchHistLength;
@@ -352,7 +357,10 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
                 inst->memDepInfo.predicted = true;
                 inst_entry->memDeps = 1;
 				inst->clearCanIssue();
-            } else if (inst_entry->regsReady) { moveToReady(inst_entry); }
+                DPRINTF(MemDepUnit, "\tinst PC %s is dependent on %s.\n",
+                    inst->pcState(), store_entry->inst->pcState());
+            } else if (inst_entry->regsReady) { ++stats.no_seq_num; moveToReady(inst_entry); }
+            else { ++stats.no_seq_num; }
         }
 
         if (inst->isLoad()) {
