@@ -313,7 +313,7 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
 
     // If no store entry, then instruction can issue as soon as the registers
     // are ready.
-    if (store_entries.empty() && !prediction.seqNum) {
+    if (store_entries.empty() && !prediction.storeQueueDistance) {
         DPRINTF(MemDepUnit, "No dependency for inst PC "
                 "%s [sn:%lli].\n", inst->pcState(), inst->seqNum);
 
@@ -336,7 +336,7 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
         }
 
         // Add this instruction to the list of dependents.
-        if (!prediction.seqNum) {
+        if (!prediction.storeQueueDistance) {
             for (auto store_entry : store_entries)
                 store_entry->dependInsts.push_back(inst_entry);
 
@@ -344,10 +344,11 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
 			// Clear the bit saying this instruction can issue.
 			inst->clearCanIssue();
 
-        } else {
-            //make a depPred prediction
-            MemDepHashIt hash_it = memDepHash.find(prediction.seqNum);
-            //std::cout << prediction.seqNum << "\n";
+        } else if (inst->sqIt.idx() >= (cpu->getIEW()->ldstQueue.getStoreHead(id) + prediction.storeQueueDistance)){
+            //make a PHAST prediction, as long as the SQ offset is valid
+            auto sq_it = inst->sqIt - prediction.storeQueueDistance;
+            DynInstPtr store_inst = sq_it->instruction();
+            MemDepHashIt hash_it = memDepHash.find(store_inst->seqNum);
             if (hash_it != memDepHash.end()) {
                 ++stats.hits;
                 auto store_entry = (*hash_it).second;
@@ -356,11 +357,10 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
                 inst->memDepInfo.predictorHash = prediction.predictorHash;
                 inst->memDepInfo.predicted = true;
                 inst_entry->memDeps = 1;
-				inst->clearCanIssue();
+                inst->clearCanIssue();
                 DPRINTF(MemDepUnit, "\tinst PC %s is dependent on %s.\n",
-                    inst->pcState(), store_entry->inst->pcState());
-            } else if (inst_entry->regsReady) { ++stats.no_seq_num; moveToReady(inst_entry); }
-            else { ++stats.no_seq_num; }
+                        inst->pcState(), store_entry->inst->pcState());
+            } else if (inst_entry->regsReady) { moveToReady(inst_entry); }
         }
 
         if (inst->isLoad()) {

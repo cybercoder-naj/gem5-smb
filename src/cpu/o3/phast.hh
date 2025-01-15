@@ -38,6 +38,7 @@
 #include "mem/packet.hh"
 #include "params/BaseO3CPU.hh"
 #include "mem/port.hh"
+#include <cstddef>
 #include <cstdint>
 #include <vector>
 #include <deque>
@@ -134,7 +135,7 @@ class PHAST
     class SimplBlockCache {
         struct Entry {
             uint64_t tag;
-            Addr store_pc;
+            std::ptrdiff_t distance;
             uint32_t lru;
             uint32_t counter;
         };
@@ -161,9 +162,9 @@ class PHAST
 
             int init(uint32_t set_bits, uint32_t _associativity, uint32_t tag_bits, uint32_t max_counter_value);
 
-            Addr predict(Addr pc, uint64_t history, bool branch_match, MemDepUnit *memDepUnit);
+            std::ptrdiff_t predict(Addr pc, uint64_t history, bool branch_match, MemDepUnit *memDepUnit);
 
-            void update(Addr pc, uint64_t history, Addr store_pc);
+            void update(Addr pc, uint64_t history, std::ptrdiff_t);
 
             void updateCommit(Addr pc, uint64_t history, bool predictionWrong);
 

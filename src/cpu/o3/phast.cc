@@ -37,6 +37,7 @@
 #include "cpu/o3/inst_queue.hh"
 #include "cpu/o3/limits.hh"
 #include "dyn_inst_ptr.hh"
+#include <cstddef>
 #include <iostream>
 
 #include <cmath>
@@ -119,7 +120,7 @@ void PHAST::squash(InstSeqNum squashed_num, ThreadID tid) {
 PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchHistory branchHistory) {
 
     struct PredictionResult prediction;
-    prediction.seqNum = 0;
+    prediction.storeQueueDistance = 0;
 
     BranchHistory tmp_history;
     for (int i=0; i < branchHistory.size(); i++) {
@@ -144,13 +145,13 @@ PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchH
     bool branch_match;
     bool any_match = false;
     uint64_t hash;
-    Addr store_pc;
+    std::ptrdiff_t tmp_distance;
     for (unsigned i = 0; i <= maxBranches && i < historySizes.size(); i++) {
         hash = generateBranchHash(i, historySizes[i], branchHistory, begin);
-        if (i == 0) {
-            std::cout << "Lookup: " << hex << load_pc << dec << "\n";
-            paths[i].printBlock(paths[i].getIndex(load_pc, hash));
-        }
+        // if (i == 0) {
+        //     std::cout << "Lookup: " << hex << load_pc << dec << "\n";
+        //     paths[i].printBlock(paths[i].getIndex(load_pc, hash));
+        // }
         branch_match = false;
         //if (branchMap.find(load_pc) != branchMap.end()) {
         //    for (int i=0; i < branchMap[load_pc].size(); i++) {
@@ -161,13 +162,11 @@ PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchH
         //        }
         //    }
         //}
-        store_pc = paths[i].predict(load_pc, hash, branch_match, memDepUnit);
-        if (store_pc) {
-            auto tmp_seq_num_it = storeMap.find(store_pc);
-            if (tmp_seq_num_it == storeMap.end()) continue;
+        tmp_distance = paths[i].predict(load_pc, hash, branch_match, memDepUnit);
+        if (tmp_distance) {
             // all paths are read on prediction, so just use that stat to calc reads
             ++(*(memDepUnit->pathWrites[i]));
-            prediction.seqNum = tmp_seq_num_it->second;
+            prediction.storeQueueDistance = tmp_distance;
             prediction.predBranchHistLength = i;
             prediction.predictorHash = hash;
         }
@@ -213,11 +212,11 @@ void PHAST::violation(Addr load_pc, InstSeqNum store_seq_num, Addr store_pc, std
     }
 
     uint64_t path_hash = generateBranchHash(i, num_branches, branchHistory, 0);
-    paths[i].update(load_pc, path_hash, store_pc);
-    if (i == 0) {
-        std::cout << "Update: " << hex << load_pc << " on " << hex << store_pc << dec << "\n";
-        paths[i].printBlock(paths[i].getIndex(load_pc, path_hash));
-    }
+    paths[i].update(load_pc, path_hash, storeQueueDistance);
+    // if (i == 0) {
+    //     std::cout << "Update: " << hex << load_pc << " on " << hex << store_pc << dec << "\n";
+    //     paths[i].printBlock(paths[i].getIndex(load_pc, path_hash));
+    // }
 
     //bool exists = false;
     //if (branchMap.find(load_pc) == branchMap.end()) {
@@ -396,34 +395,34 @@ void PHAST::SimplBlockCache::updateLRU(Entry* entry) {
     lruCounter++;
 }
 
-Addr PHAST::SimplBlockCache::predict(Addr pc, uint64_t history, bool branch_match, MemDepUnit *memDepUnit) {
+std::ptrdiff_t PHAST::SimplBlockCache::predict(Addr pc, uint64_t history, bool branch_match, MemDepUnit *memDepUnit) {
     auto entry = findEntry(pc, history);
     if (branch_match) {
         if (entry == nullptr) ++(memDepUnit->stats.null_entry);
         else if (entry->counter == 0) ++(memDepUnit->stats.counter_is_zero);
-        else if (entry->store_pc == 0) ++(memDepUnit->stats.store_pc_is_zero);
+        else if (entry->distance == 0) ++(memDepUnit->stats.store_pc_is_zero);
     }
 
-    if (entry == nullptr || entry->counter == 0 || entry->store_pc == 0) { // no prediction for this PC
+    if (entry == nullptr || entry->counter == 0 || entry->distance == 0) { // no prediction for this PC
         return 0;
     }
 
     updateLRU(entry);
 
-    return entry->store_pc;
+    return entry->distance;
 }
 
-void PHAST::SimplBlockCache::update(Addr pc, uint64_t history, Addr store_pc) {
+void PHAST::SimplBlockCache::update(Addr pc, uint64_t history, std::ptrdiff_t distance) {
     auto entry = findEntry(pc, history);
     if (entry == nullptr) {
         // no prediction for this entry so far, so allocate one
         entry = getLRUEntry(getIndex(pc, history));
         entry->tag = getTag(pc, history);
-        entry->store_pc = store_pc;
+        entry->distance = distance;
         entry->counter = maxCounterValue;
         updateLRU(entry);
     } else {
-        entry->store_pc = store_pc;
+        entry->distance = distance;
         entry->counter = maxCounterValue;
         updateLRU(entry);
     }
@@ -451,7 +450,7 @@ void PHAST::SimplBlockCache::clear() {
     for (uint64_t i = 0; i < (1ULL << setBits); i++) {
         for (uint32_t j = 0; j < associativity; j++) {
             cache[i][j].tag = 0;
-            cache[i][j].store_pc = 0;
+            cache[i][j].distance = 0;
             cache[i][j].lru = 0;
             cache[i][j].counter = 0;
         }
@@ -466,7 +465,7 @@ void PHAST::SimplBlockCache::printBlock(uint64_t set) {
         for (uint32_t j=0; j < associativity; j++) {
             std::cout << "[ ";
             std::cout << "Tag: " << cache[i][j].tag << " ";
-            std::cout << "PC: " << cache[i][j].store_pc << " ";
+            std::cout << "PC: " << cache[i][j].distance << " ";
             std::cout << "LRU: " << cache[i][j].lru << " ";
             std::cout << "Cntr: " << cache[i][j].counter << " ";
             std::cout << "] ";
