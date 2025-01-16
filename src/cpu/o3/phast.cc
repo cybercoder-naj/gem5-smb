@@ -146,10 +146,10 @@ PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchH
     std::ptrdiff_t tmp_distance;
     for (unsigned i = 0; i <= maxBranches && i < historySizes.size(); i++) {
         hash = generateBranchHash(i, historySizes[i], branchHistory, begin);
-        // if (i == 0) {
-        //     std::cout << "Lookup: " << hex << load_pc << dec << "\n";
-        //     paths[i].printBlock(paths[i].getIndex(load_pc, hash));
-        // }
+        if (i == 4) {
+            std::cout << "Lookup: " << hex << load_pc << dec << "\n";
+            paths[i].printBlock(paths[i].getIndex(load_pc, hash));
+        }
         branch_match = false;
         //if (branchMap.find(load_pc) != branchMap.end()) {
         //    for (int i=0; i < branchMap[load_pc].size(); i++) {
@@ -209,12 +209,13 @@ void PHAST::violation(Addr load_pc, InstSeqNum store_seq_num, Addr store_pc, std
         }
     }
 
+    //if (load_pc == 4230208) printf("Path: %d\n", i);
     uint64_t path_hash = generateBranchHash(i, num_branches, branchHistory, 0);
     paths[i].update(load_pc, path_hash, storeQueueDistance);
-    // if (i == 0) {
-    //     std::cout << "Update: " << hex << load_pc << " on " << hex << store_pc << dec << "\n";
-    //     paths[i].printBlock(paths[i].getIndex(load_pc, path_hash));
-    // }
+    if (i == 4) {
+        std::cout << "Update: " << hex << load_pc << " on " << hex << store_pc << dec << "\n";
+        paths[i].printBlock(paths[i].getIndex(load_pc, path_hash));
+    }
 
     //bool exists = false;
     //if (branchMap.find(load_pc) == branchMap.end()) {

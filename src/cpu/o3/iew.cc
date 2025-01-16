@@ -1310,8 +1310,8 @@ IEW::executeInsts()
                         violator->pcState(), violator->seqNum,
                         inst->pcState(), inst->seqNum, inst->physEffAddr);
                 */
-                DPRINTF(IEW, "Violation: %s,%s\n", violator->pcState().instAddr(), inst->pcState().instAddr());
-
+                DPRINTF(IEW, "Violation: %s [%lli], %s [%lli]\n", violator->pcState().instAddr(),  violator->seqNum, inst->pcState().instAddr(), inst->seqNum);
+                
                 fetchRedirect[tid] = true;
 
                 // Squash.
