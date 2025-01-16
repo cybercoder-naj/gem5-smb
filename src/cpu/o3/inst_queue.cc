@@ -609,7 +609,7 @@ void
 InstructionQueue::insertNonSpec(const DynInstPtr &new_inst)
 {
 
-    if (new_inst->pcState().instAddr() == 0x004007a8) {
+    if (new_inst->pcState().instAddr() == 0x00400970) {
         std::cout << "Found barrier :)\n";
         memDepUnit[new_inst->threadNumber].clear_dep_pred();
     }

@@ -83,7 +83,7 @@ namespace o3
 {
 
 // class PHAST;
-// class StoreSet;
+//class StoreSet;
 class CPU;
 class InstructionQueue;
 
