@@ -464,7 +464,7 @@ void PHAST::SimplBlockCache::printBlock(uint64_t set) {
         for (uint32_t j=0; j < associativity; j++) {
             std::cout << "[ ";
             std::cout << "Tag: " << cache[i][j].tag << " ";
-            std::cout << "PC: " << cache[i][j].distance << " ";
+            std::cout << "SQ D.: " << cache[i][j].distance << " ";
             std::cout << "LRU: " << cache[i][j].lru << " ";
             std::cout << "Cntr: " << cache[i][j].counter << " ";
             std::cout << "] ";
