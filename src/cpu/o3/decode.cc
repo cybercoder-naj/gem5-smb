@@ -334,7 +334,7 @@ Decode::squash(const DynInstPtr &inst, ThreadID tid)
     }
 
     //revert branch history
-    while (!decodedBranchHistory.empty() && decodedBranchHistory.front().seqNum >= squash_seq_num) {
+    while (!decodedBranchHistory.empty() && decodedBranchHistory.front().seqNum > squash_seq_num) {
         decodedBranchHistory.pop_front();
     }
 

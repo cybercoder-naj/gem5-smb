@@ -674,7 +674,7 @@ MemDepUnit::violation(InstSeqNum store_seq_num, Addr store_pc,
             " load: %#x, store seq num: %#d\n", violating_load->pcState().instAddr(),
             store_seq_num);
     // Tell the memory dependence unit of the violation.
-    depPred.violation(violating_load->pcState().instAddr(), store_seq_num, store_pc,
+    depPred.violation(violating_load->pcState().instAddr(), violating_load->seqNum, store_seq_num, store_pc,
                       violating_load->memDepInfo.storeQueueDistance, branchHistory);
 
     violation_record[violating_load->pcState().instAddr()] = violating_load->memDepInfo.violatingStorePC;

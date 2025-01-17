@@ -1201,7 +1201,7 @@ InstructionQueue::doSquash(ThreadID tid)
 
     //revert branch history
     BranchHistory &decodedBranchHistory = cpu->getDecode()->getBranchHistory();
-    while (!decodedBranchHistory.empty() && decodedBranchHistory.front().seqNum >= squashedSeqNum[tid])
+    while (!decodedBranchHistory.empty() && decodedBranchHistory.front().seqNum > squashedSeqNum[tid])
         decodedBranchHistory.pop_front();
 
     DPRINTF(IQ, "[tid:%i] Squashing until sequence number %i!\n",

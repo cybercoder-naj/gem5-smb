@@ -1006,7 +1006,7 @@ Commit::commitInsts()
                         head_inst->pcState().instAddr(),
                     };
                     committedBranchHistory.push_front(branch_info);
-                    if (committedBranchHistory.size() == MAX_BRANCH_HISTORY)
+                    if (committedBranchHistory.size() > MAX_BRANCH_HISTORY)
                         committedBranchHistory.pop_back();
                 }
 
