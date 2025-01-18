@@ -81,7 +81,7 @@ class PHAST
 
     /** Records a memory ordering violation between the younger load
     * and the older store. */
-    void violation(Addr load_pc, InstSeqNum load_seq_num, InstSeqNum store_seq_num, Addr store_pc, std::ptrdiff_t storeQueueDistance, BranchHistory branchHistory);
+    void violation(Addr load_pc, InstSeqNum load_seq_num, InstSeqNum store_seq_num, Addr store_pc, std::ptrdiff_t storeQueueDistance, bool predicted, unsigned predictedPathInex, uint64_t predictedHash, BranchHistory branchHistory);
 
     /** Checks if the instruction with the given PC is dependent upon
     * any store.  @return Returns the relative SQ distance of the store

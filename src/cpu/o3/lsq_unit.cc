@@ -1295,20 +1295,20 @@ LSQUnit::dumpInsts() const
 {
     cprintf("Load store queue: Dumping instructions.\n");
     cprintf("Load queue size: %i\n", loadQueue.size());
-    cprintf("Load queue: ");
+    cprintf("Load queue:\n");
 
     for (const auto& e: loadQueue) {
         const DynInstPtr &inst(e.instruction());
-        cprintf("%s.[sn:%llu] ", inst->pcState(), inst->seqNum);
+        cprintf("%s.[sn:%llu]\n", inst->pcState(), inst->seqNum);
     }
     cprintf("\n");
 
     cprintf("Store queue size: %i\n", storeQueue.size());
-    cprintf("Store queue: ");
+    cprintf("Store queue:\n");
 
     for (const auto& e: storeQueue) {
         const DynInstPtr &inst(e.instruction());
-        cprintf("%s.[sn:%llu] ", inst->pcState(), inst->seqNum);
+        cprintf("%s.[sn:%llu]\n", inst->pcState(), inst->seqNum);
     }
 
     cprintf("\n");

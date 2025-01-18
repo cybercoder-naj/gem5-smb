@@ -370,7 +370,7 @@ class DynInst : public ExecContext, public RefCounted
         Addr predStoreAddr;
         int predStoreSize;
         /** Predicted information validated at commit */
-        unsigned predBranchHistLength;
+        unsigned predBranchHistLength = 0;
         uint64_t predictorHash = 0;
         /** Was this load predicted to be dependent by the depPred? */
         bool predicted = false;

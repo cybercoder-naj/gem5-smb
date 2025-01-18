@@ -351,8 +351,7 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
             auto sq_it = inst->sqIt - prediction.storeQueueDistance;
             DynInstPtr store_inst = sq_it->instruction();
             hash_it = memDepHash.find(store_inst->seqNum);
-        }
-        else if (prediction.seqNum) {
+        } else if (prediction.seqNum) {
             //make a StoreSet prediction
             hash_it = memDepHash.find(prediction.seqNum);
         }
@@ -675,7 +674,9 @@ MemDepUnit::violation(InstSeqNum store_seq_num, Addr store_pc,
             store_seq_num);
     // Tell the memory dependence unit of the violation.
     depPred.violation(violating_load->pcState().instAddr(), violating_load->seqNum, store_seq_num, store_pc,
-                      violating_load->memDepInfo.storeQueueDistance, branchHistory);
+                      violating_load->memDepInfo.storeQueueDistance, violating_load->memDepInfo.predicted,
+                      violating_load->memDepInfo.predBranchHistLength,
+                      violating_load->memDepInfo.predictorHash, branchHistory);
 
     violation_record[violating_load->pcState().instAddr()] = violating_load->memDepInfo.violatingStorePC;
 }
