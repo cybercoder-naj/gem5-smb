@@ -176,7 +176,7 @@ PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchH
     return prediction;
 }
 
-void PHAST::violation(Addr load_pc, InstSeqNum load_seq_num, InstSeqNum store_seq_num, Addr store_pc, std::ptrdiff_t storeQueueDistance, bool predicted, unsigned predictedPathInex, uint64_t predictedHash, BranchHistory branchHistory) {
+void PHAST::violation(Addr load_pc, InstSeqNum load_seq_num, InstSeqNum store_seq_num, Addr store_pc, std::ptrdiff_t storeQueueDistance, bool predicted, unsigned predictedPathIndex, uint64_t predictedHash, BranchHistory branchHistory) {
 
     //corner case of a violation before any branches or no +1 branch
     if (branchHistory.empty() || branchHistory.back().seqNum > store_seq_num) return;
