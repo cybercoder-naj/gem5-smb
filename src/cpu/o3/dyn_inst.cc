@@ -95,8 +95,7 @@ DynInst::DynInst(const Arrays &arrays, const StaticInstPtr &static_inst,
 }
 
 std::ostream& operator<<(std::ostream& os, const branchInfo& b) {
-    os  << "Branch info: \n"
-        << "Indirect: " << b.indirect << ", "
+    os  << "Indirect: " << b.indirect << ", "
         << "Taken: " << b.taken << ", "
         << "Target: " << b.target << ", "
         << "seqNum: " << b.seqNum << ", "

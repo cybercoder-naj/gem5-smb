@@ -564,7 +564,8 @@ LSQUnit::checkViolations(typename LoadQueue::iterator& loadIt,
                 if (memDepViolator && ld_inst->seqNum > memDepViolator->seqNum)
                     break;
                 // Check this load hasn't already forwarded from a younger store
-                if (inst->seqNum < ld_inst->memDepInfo.forwardedFrom){
+                if (inst->seqNum < ld_inst->memDepInfo.forwardedFrom ||
+                    inst->seqNum < ld_inst->memDepInfo.violatingStoreSeqNum){
                     ++loadIt;
                     continue;
                 }
@@ -574,8 +575,7 @@ LSQUnit::checkViolations(typename LoadQueue::iterator& loadIt,
                         inst->seqNum, ld_inst->seqNum, ld_eff_addr1);
 
                 memDepViolator = ld_inst;
-                ld_inst->memDepInfo.violatingStoreSeqNum = std::max(inst->seqNum,
-                                                                    ld_inst->memDepInfo.violatingStoreSeqNum);
+                ld_inst->memDepInfo.violatingStoreSeqNum = inst->seqNum;
                 ld_inst->memDepInfo.violatingStorePC = inst->pcState().instAddr();
                 ld_inst->memDepInfo.storeQueueDistance = ld_inst->sqIt - inst->sqIt;
                 ld_inst->memDepInfo.violatingStorePC = inst->pcState().instAddr();
