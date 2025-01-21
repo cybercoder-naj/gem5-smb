@@ -298,51 +298,85 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
         ++stats.predictions;
     }
 
-    std::vector<MemDepEntryPtr> store_entries;
+    /* a Vector of MemDepUnit_entries for keeping producing_store
+       and the Barriers (i.e., all the dependencies of
+       the current Instruction). */
+    std::vector<MemDepEntryPtr> dependencies;
 
-    // If there is a producing store, try to find the entry.
-    for (auto producing_store : producing_stores) {
-        DPRINTF(MemDepUnit, "Searching for producer [sn:%lli]\n",
-                            producing_store);
-        MemDepHashIt hash_it = memDepHash.find(producing_store);
+    /* 2nd Step: Concurrently, check the in-flight Barriers; the Load
+       and Store Instructions are not allowed to overtake the
+       corresponding Barriers. (i.e., Comply with Consistency) */
+    if ((inst->isLoad() || inst->isAtomic()) && hasLoadBarrier()) {
+        DPRINTF(MemDepUnit, "%d load barriers in flight\n",
+                loadBarrierSNs.size());
+        for (InstSeqNum sn: loadBarrierSNs) {
+            MemDepHashIt hash_it = memDepHash.find(sn);
 
-        if (hash_it != memDepHash.end()) {
-            store_entries.push_back((*hash_it).second);
-            DPRINTF(MemDepUnit, "Producer found\n");
+            if (hash_it != memDepHash.end()) {
+                dependencies.push_back((*hash_it).second);
+                DPRINTF(MemDepUnit, "LoadBarrier found in HashMap.\n");
+            }
         }
     }
 
-    // If no store entry, then instruction can issue as soon as the registers
-    // are ready.
-    if (store_entries.empty() && !prediction.storeQueueDistance && !prediction.seqNum) {
+    /** For Atomic Instruction it should be dependent on
+    both LoadBarrier & StoreBarrier. */
+    if ((inst->isStore() || inst->isAtomic()) && hasStoreBarrier()) {
+        DPRINTF(MemDepUnit, "%d store barriers in flight\n",
+                storeBarrierSNs.size());
+        for (InstSeqNum sn: storeBarrierSNs) {
+            MemDepHashIt hash_it = memDepHash.find(sn);
+
+            if (hash_it != memDepHash.end()) {
+                dependencies.push_back((*hash_it).second);
+                DPRINTF(MemDepUnit, "StoreBarrier found in HashMap.\n");
+            }
+        }
+    }
+
+    /* If there are not any dependencies (i.e., the Instruction is not
+       dependent on any Inst), then Instruction can be issued as
+       soon as the registers are ready. */
+    if (dependencies.empty() && !prediction.storeQueueDistance && !prediction.seqNum) {
+
         DPRINTF(MemDepUnit, "No dependency for inst PC "
                 "%s [sn:%lli].\n", inst->pcState(), inst->seqNum);
 
-        assert(inst_entry->memDeps == 0);
+        /* The Counter "memDependencies" for the inst_entry is by default zero;
+           So there is no need to do sth here, like enabling any flags. */
 
         if (inst->readyToIssue()) {
             inst_entry->regsReady = true;
 
             moveToReady(inst_entry);
+
+            DPRINTF(MemDepUnit, "Also the Inst is ready to issue.\n");
         }
     } else {
-        // Otherwise make the instruction dependent on the store/barrier.
-        DPRINTF(MemDepUnit, "Adding to dependency list\n");
-        for ([[maybe_unused]] auto producing_store : producing_stores)
-            DPRINTF(MemDepUnit, "\tinst PC %s is dependent on [sn:%lli].\n",
-                inst->pcState(), producing_store);
-
-        if (inst->readyToIssue()) {
-            inst_entry->regsReady = true;
-        }
-
         MemDepHashIt hash_it = memDepHash.end();
         // Add this instruction to the list of dependents.
         if (!prediction.storeQueueDistance && !prediction.seqNum) {
-            for (auto store_entry : store_entries)
-                store_entry->dependInsts.push_back(inst_entry);
+			/* The current Instruction has some dependencies;
+			   either Store or Barriers or Both. */
+			inst_entry->memDeps = dependencies.size();
 
-            inst_entry->memDeps = store_entries.size();
+			/* Append the instruction in the dependent_VectorList of
+			   each dependency that has been found.*/
+			for (const auto &dependency: dependencies) {
+				DPRINTF(MemDepUnit, "Adding to dependency list; "
+						"inst PC %s [sn:%lli] is dependent on [sn:%lli].\n",
+						inst->pcState(), inst->seqNum,
+						dependency->inst->seqNum);
+
+				dependency->dependInsts.push_back(inst_entry);
+			}
+
+			/* If the Instruction is ready_to_Issue, we only set the
+			   flag; We are not allowed to issue the Instruction until
+			   all the dependencies have been resolved. */
+			if (inst->readyToIssue()) {
+				inst_entry->regsReady = true;
+			}
 			// Clear the bit saying this instruction can issue.
 			inst->clearCanIssue();
 
@@ -375,15 +409,12 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
         }
     }
 
-    // for load-acquire store-release that could also be a barrier
-    insertBarrierSN(inst);
-
     if (inst->isStore() || inst->isAtomic()) {
         DPRINTF(MemDepUnit, "Inserting store/atomic PC %s [sn:%lli].\n",
                 inst->pcState(), inst->seqNum);
 
         depPred.insertStore(inst->pcState().instAddr(), inst->seqNum,
-                inst->threadNumber);
+                            inst->threadNumber);
 
         ++stats.insertedStores;
     } else if (inst->isLoad()) {
@@ -454,8 +485,9 @@ MemDepUnit::regsReady(const DynInstPtr &inst)
 
         moveToReady(inst_entry);
     } else {
-        DPRINTF(MemDepUnit, "Instruction still waiting on "
-                "memory dependency.\n");
+        DPRINTF(MemDepUnit, "Instruction PC %#x [sn:%lli] still "
+                "waiting on memory dependency.\n",
+                inst_entry->inst->pcState().instAddr(), inst_entry->inst->seqNum);
     }
 }
 
@@ -562,26 +594,50 @@ MemDepUnit::wakeDependents(const DynInstPtr &inst)
 
     MemDepEntryPtr inst_entry = findInHash(inst);
 
-    for (int i = 0; i < inst_entry->dependInsts.size(); ++i ) {
-        MemDepEntryPtr woken_inst = inst_entry->dependInsts[i];
+    /* By entering to this function, we release one dependency for
+       the dependent_inst
+       (Inst which was stopped from issuing due to one or
+       multiple dependencies.)
 
-        if (!woken_inst->inst) {
+       --> !! The dependent_inst is going to be woken up whenever
+       all the dependencies have been resolved. !!
+    */
+
+    for (int i = 0; i < inst_entry->dependInsts.size(); ++i ) {
+        MemDepEntryPtr dependent_inst = inst_entry->dependInsts[i];
+
+        if (!dependent_inst->inst) {
             // Potentially removed mem dep entries could be on this list
             continue;
         }
 
-        DPRINTF(MemDepUnit, "Waking up a dependent inst, "
-                "[sn:%lli].\n",
-                woken_inst->inst->seqNum);
+        DPRINTF(MemDepUnit, "Inst PC: %#x [sn:%lli] is Releasing one "
+        "dependency for inst PC: %#x [sn:%lli].\n",
+        inst->pcState().instAddr(), inst->seqNum,
+        dependent_inst->inst->pcState().instAddr(),
+        dependent_inst->inst->seqNum);
 
-        assert(woken_inst->memDeps > 0);
-        woken_inst->memDeps -= 1;
+        // release one dependency.
+        dependent_inst->memDeps--;
 
+<<<<<<< HEAD
         if (woken_inst->memDeps == 0) {
             woken_inst->inst->memDepInfo.predStoreAddr = inst->effAddr;
             woken_inst->inst->memDepInfo.predStoreSize = inst->effSize;
             if (woken_inst->regsReady && !woken_inst->squashed) {
                 moveToReady(woken_inst);
+=======
+        if (dependent_inst->memDeps == 0) {
+            if (dependent_inst->regsReady && !dependent_inst->squashed) {
+                DPRINTF(MemDepUnit, "Inst PC: %#x [sn:%lli] is just "
+                        "woken up!!\n",
+                        dependent_inst->inst->pcState().instAddr(),
+                        dependent_inst->inst->seqNum);
+
+                /** All the dependencies have been resolved & the
+                    Registers are ready as well. */
+                moveToReady(dependent_inst);
+>>>>>>> upstream/master
             }
         }
     }

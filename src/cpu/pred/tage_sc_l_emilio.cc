@@ -44,7 +44,7 @@ void
 TAGE_EMILIO::squash(ThreadID tid, void * &bp_history)
 {
     TageEmilioBranchInfo *bi = static_cast<TageEmilioBranchInfo*>(bp_history);
-    DPRINTF(Tage, "TAGE id:%d squash: %lx bp_history:%p\n", bi ? bi->id : -1, 
+    DPRINTF(Tage, "TAGE id: %d squash: %lx bp_history:%p\n", bi ? bi->id : -1, 
         bi? bi->pc : 0x00, bp_history);
     if (bi) {
       tage.flush_branch(bi->id);
@@ -56,7 +56,7 @@ TAGE_EMILIO::squash(ThreadID tid, void * &bp_history)
 bool
 TAGE_EMILIO::predict(ThreadID tid, Addr pc, bool cond_branch, void* &b)
 {
-    int id = tage.get_new_branch_id();
+    uint32_t id = tage.get_new_branch_id();
     TageEmilioBranchInfo *bi = new TageEmilioBranchInfo();
     b = (void*)(bi);
     DPRINTF(Tage, "TAGE id: %d predict: %lx bp_history:%p\n", id, pc, b);

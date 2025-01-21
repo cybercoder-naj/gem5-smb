@@ -44,7 +44,7 @@ Import('*')
 SimObject('BranchPredictor.py',
     sim_objects=[
     'BranchPredictor',
-    'IndirectPredictor', 'SimpleIndirectPredictor',
+    'IndirectPredictor', 'SimpleIndirectPredictor', 'ITTAGE',
     'BranchTargetBuffer', 'SimpleBTB', 'AssociativeBTB',
     'ReturnAddrStack',
     'LocalBP', 'TournamentBP', 'BiModeBP', 'TAGEBase', 'TAGE', 'LoopPredictor',
@@ -66,6 +66,7 @@ Source('bpred_unit.cc')
 Source('2bit_local.cc')
 Source('simple_indirect.cc')
 Source('indirect.cc')
+Source('ittage.cc')
 Source('ras.cc')
 Source('tournament.cc')
 Source('bi_mode.cc')
@@ -93,5 +94,6 @@ DebugFlag('RAS')
 DebugFlag('FreeList')
 DebugFlag('Branch')
 DebugFlag('Tage')
+DebugFlag('ItTage')
 DebugFlag('LTage')
 DebugFlag('TageSCL')

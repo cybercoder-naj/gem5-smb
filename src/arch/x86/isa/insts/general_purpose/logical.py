@@ -36,7 +36,7 @@
 microcode = """
 def macroop OR_R_R
 {
-    or reg, reg, regm, flags=(OF,SF,ZF,PF,CF)
+    or reg, reg, regm, flags=(OF,SF,ZF,PF,CF,AF)
 };
 
 def macroop OR_M_I
@@ -45,7 +45,7 @@ def macroop OR_M_I
     
     limm t2, imm
     ldst t1, seg, sib, disp
-    or t1, t1, t2, flags=(OF,SF,ZF,PF,CF)
+    or t1, t1, t2, flags=(OF,SF,ZF,PF,CF,AF)
     st t1, seg, sib, disp
 };
 
@@ -56,7 +56,7 @@ def macroop OR_P_I
     limm t2, imm
     rdip t7
     ldst t1, seg, riprel, disp
-    or t1, t1, t2, flags=(OF,SF,ZF,PF,CF)
+    or t1, t1, t2, flags=(OF,SF,ZF,PF,CF,AF)
     st t1, seg, riprel, disp
 };
 
@@ -68,7 +68,7 @@ def macroop OR_LOCKED_M_I
     limm t2, imm
     mfence
     ldstl t1, seg, sib, disp
-    or t1, t1, t2, flags=(OF,SF,ZF,PF,CF)
+    or t1, t1, t2, flags=(OF,SF,ZF,PF,CF,AF)
     stul t1, seg, sib, disp
     mfence
 };
@@ -82,7 +82,7 @@ def macroop OR_LOCKED_P_I
     rdip t7
     mfence
     ldstl t1, seg, riprel, disp
-    or t1, t1, t2, flags=(OF,SF,ZF,PF,CF)
+    or t1, t1, t2, flags=(OF,SF,ZF,PF,CF,AF)
     stul t1, seg, riprel, disp
     mfence
 };
@@ -92,7 +92,7 @@ def macroop OR_M_R
     .rmw
     
     ldst t1, seg, sib, disp
-    or t1, t1, reg, flags=(OF,SF,ZF,PF,CF)
+    or t1, t1, reg, flags=(OF,SF,ZF,PF,CF,AF)
     st t1, seg, sib, disp
 };
 
@@ -102,7 +102,7 @@ def macroop OR_P_R
     
     rdip t7
     ldst t1, seg, riprel, disp
-    or t1, t1, reg, flags=(OF,SF,ZF,PF,CF)
+    or t1, t1, reg, flags=(OF,SF,ZF,PF,CF,AF)
     st t1, seg, riprel, disp
 };
 
@@ -113,7 +113,7 @@ def macroop OR_LOCKED_M_R
     
     mfence
     ldstl t1, seg, sib, disp
-    or t1, t1, reg, flags=(OF,SF,ZF,PF,CF)
+    or t1, t1, reg, flags=(OF,SF,ZF,PF,CF,AF)
     stul t1, seg, sib, disp
     mfence
 };
@@ -126,7 +126,7 @@ def macroop OR_LOCKED_P_R
     rdip t7
     mfence
     ldstl t1, seg, riprel, disp
-    or t1, t1, reg, flags=(OF,SF,ZF,PF,CF)
+    or t1, t1, reg, flags=(OF,SF,ZF,PF,CF,AF)
     stul t1, seg, riprel, disp
     mfence
 };
@@ -134,31 +134,31 @@ def macroop OR_LOCKED_P_R
 def macroop OR_R_M
 {
     ld t1, seg, sib, disp
-    or reg, reg, t1, flags=(OF,SF,ZF,PF,CF)
+    or reg, reg, t1, flags=(OF,SF,ZF,PF,CF,AF)
 };
 
 def macroop OR_R_P
 {
     rdip t7
     ld t1, seg, riprel, disp
-    or reg, reg, t1, flags=(OF,SF,ZF,PF,CF)
+    or reg, reg, t1, flags=(OF,SF,ZF,PF,CF,AF)
 };
 
 def macroop OR_R_I
 {
     limm t1, imm
-    or reg, reg, t1, flags=(OF,SF,ZF,PF,CF)
+    or reg, reg, t1, flags=(OF,SF,ZF,PF,CF,AF)
 };
 
 def macroop XOR_R_R
 {
-    xor reg, reg, regm, flags=(OF,SF,ZF,PF,CF)
+    xor reg, reg, regm, flags=(OF,SF,ZF,PF,CF,AF)
 };
 
 def macroop XOR_R_I
 {
     limm t1, imm
-    xor reg, reg, t1, flags=(OF,SF,ZF,PF,CF)
+    xor reg, reg, t1, flags=(OF,SF,ZF,PF,CF,AF)
 };
 
 def macroop XOR_M_I
@@ -167,7 +167,7 @@ def macroop XOR_M_I
     
     limm t2, imm
     ldst t1, seg, sib, disp
-    xor t1, t1, t2, flags=(OF,SF,ZF,PF,CF)
+    xor t1, t1, t2, flags=(OF,SF,ZF,PF,CF,AF)
     st t1, seg, sib, disp
 };
 
@@ -178,7 +178,7 @@ def macroop XOR_P_I
     limm t2, imm
     rdip t7
     ldst t1, seg, riprel, disp
-    xor t1, t1, t2, flags=(OF,SF,ZF,PF,CF)
+    xor t1, t1, t2, flags=(OF,SF,ZF,PF,CF,AF)
     st t1, seg, riprel, disp
 };
 
@@ -190,7 +190,7 @@ def macroop XOR_LOCKED_M_I
     limm t2, imm
     mfence
     ldstl t1, seg, sib, disp
-    xor t1, t1, t2, flags=(OF,SF,ZF,PF,CF)
+    xor t1, t1, t2, flags=(OF,SF,ZF,PF,CF,AF)
     stul t1, seg, sib, disp
     mfence
 };
@@ -204,7 +204,7 @@ def macroop XOR_LOCKED_P_I
     rdip t7
     mfence
     ldstl t1, seg, riprel, disp
-    xor t1, t1, t2, flags=(OF,SF,ZF,PF,CF)
+    xor t1, t1, t2, flags=(OF,SF,ZF,PF,CF,AF)
     stul t1, seg, riprel, disp
     mfence
 };
@@ -214,7 +214,7 @@ def macroop XOR_M_R
     .rmw
     
     ldst t1, seg, sib, disp
-    xor t1, t1, reg, flags=(OF,SF,ZF,PF,CF)
+    xor t1, t1, reg, flags=(OF,SF,ZF,PF,CF,AF)
     st t1, seg, sib, disp
 };
 
@@ -224,7 +224,7 @@ def macroop XOR_P_R
     
     rdip t7
     ldst t1, seg, riprel, disp
-    xor t1, t1, reg, flags=(OF,SF,ZF,PF,CF)
+    xor t1, t1, reg, flags=(OF,SF,ZF,PF,CF,AF)
     st t1, seg, riprel, disp
 };
 
@@ -235,7 +235,7 @@ def macroop XOR_LOCKED_M_R
     
     mfence
     ldstl t1, seg, sib, disp
-    xor t1, t1, reg, flags=(OF,SF,ZF,PF,CF)
+    xor t1, t1, reg, flags=(OF,SF,ZF,PF,CF,AF)
     stul t1, seg, sib, disp
     mfence
 };
@@ -248,7 +248,7 @@ def macroop XOR_LOCKED_P_R
     rdip t7
     mfence
     ldstl t1, seg, riprel, disp
-    xor t1, t1, reg, flags=(OF,SF,ZF,PF,CF)
+    xor t1, t1, reg, flags=(OF,SF,ZF,PF,CF,AF)
     stul t1, seg, riprel, disp
     mfence
 };
@@ -256,38 +256,38 @@ def macroop XOR_LOCKED_P_R
 def macroop XOR_R_M
 {
     ld t1, seg, sib, disp
-    xor reg, reg, t1, flags=(OF,SF,ZF,PF,CF)
+    xor reg, reg, t1, flags=(OF,SF,ZF,PF,CF,AF)
 };
 
 def macroop XOR_R_P
 {
     rdip t7
     ld t1, seg, riprel, disp
-    xor reg, reg, t1, flags=(OF,SF,ZF,PF,CF)
+    xor reg, reg, t1, flags=(OF,SF,ZF,PF,CF,AF)
 };
 
 def macroop AND_R_R
 {
-    and reg, reg, regm, flags=(OF,SF,ZF,PF,CF)
+    and reg, reg, regm, flags=(OF,SF,ZF,PF,CF,AF)
 };
 
 def macroop AND_R_M
 {
     ld t1, seg, sib, disp
-    and reg, reg, t1, flags=(OF,SF,ZF,PF,CF)
+    and reg, reg, t1, flags=(OF,SF,ZF,PF,CF,AF)
 };
 
 def macroop AND_R_P
 {
     rdip t7
     ld t1, seg, riprel, disp
-    and reg, reg, t1, flags=(OF,SF,ZF,PF,CF)
+    and reg, reg, t1, flags=(OF,SF,ZF,PF,CF,AF)
 };
 
 def macroop AND_R_I
 {
     limm t1, imm
-    and reg, reg, t1, flags=(OF,SF,ZF,PF,CF)
+    and reg, reg, t1, flags=(OF,SF,ZF,PF,CF,AF)
 };
 
 def macroop AND_M_I
@@ -296,7 +296,7 @@ def macroop AND_M_I
     
     ldst t2, seg, sib, disp
     limm t1, imm
-    and t2, t2, t1, flags=(OF,SF,ZF,PF,CF)
+    and t2, t2, t1, flags=(OF,SF,ZF,PF,CF,AF)
     st t2, seg, sib, disp
 };
 
@@ -307,7 +307,7 @@ def macroop AND_P_I
     rdip t7
     ldst t2, seg, riprel, disp
     limm t1, imm
-    and t2, t2, t1, flags=(OF,SF,ZF,PF,CF)
+    and t2, t2, t1, flags=(OF,SF,ZF,PF,CF,AF)
     st t2, seg, riprel, disp
 };
 
@@ -319,7 +319,7 @@ def macroop AND_LOCKED_M_I
     mfence
     ldstl t2, seg, sib, disp
     limm t1, imm
-    and t2, t2, t1, flags=(OF,SF,ZF,PF,CF)
+    and t2, t2, t1, flags=(OF,SF,ZF,PF,CF,AF)
     stul t2, seg, sib, disp
     mfence
 };
@@ -333,7 +333,7 @@ def macroop AND_LOCKED_P_I
     mfence
     ldstl t2, seg, riprel, disp
     limm t1, imm
-    and t2, t2, t1, flags=(OF,SF,ZF,PF,CF)
+    and t2, t2, t1, flags=(OF,SF,ZF,PF,CF,AF)
     stul t2, seg, riprel, disp
     mfence
 };
@@ -343,7 +343,7 @@ def macroop AND_M_R
     .rmw
     
     ldst t1, seg, sib, disp
-    and t1, t1, reg, flags=(OF,SF,ZF,PF,CF)
+    and t1, t1, reg, flags=(OF,SF,ZF,PF,CF,AF)
     st t1, seg, sib, disp
 };
 
@@ -353,7 +353,7 @@ def macroop AND_P_R
     
     rdip t7
     ldst t1, seg, riprel, disp
-    and t1, t1, reg, flags=(OF,SF,ZF,PF,CF)
+    and t1, t1, reg, flags=(OF,SF,ZF,PF,CF,AF)
     st t1, seg, riprel, disp
 };
 
@@ -364,7 +364,7 @@ def macroop AND_LOCKED_M_R
     
     mfence
     ldstl t1, seg, sib, disp
-    and t1, t1, reg, flags=(OF,SF,ZF,PF,CF)
+    and t1, t1, reg, flags=(OF,SF,ZF,PF,CF,AF)
     stul t1, seg, sib, disp
     mfence
 };
@@ -377,7 +377,7 @@ def macroop AND_LOCKED_P_R
     rdip t7
     mfence
     ldstl t1, seg, riprel, disp
-    and t1, t1, reg, flags=(OF,SF,ZF,PF,CF)
+    and t1, t1, reg, flags=(OF,SF,ZF,PF,CF,AF)
     stul t1, seg, riprel, disp
     mfence
 };
