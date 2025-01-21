@@ -93,7 +93,7 @@ class StoreSet
 
     /** Records a memory ordering violation between the younger load
      * and the older store. */
-    void violation(Addr load_PC, InstSeqNum store_seq_num, Addr store_PC, std::ptrdiff_t storeQueueDistance, BranchHistory branchHistory);
+    void violation(Addr load_pc, InstSeqNum load_seq_num, InstSeqNum store_seq_num, Addr store_pc, std::ptrdiff_t storeQueueDistance, bool predicted, unsigned predictedPathInex, uint64_t predictedHash, BranchHistory branchHistory);
 
     /** Clears the store set predictor every so often so that all the
      * entries aren't used and stores are constantly predicted as

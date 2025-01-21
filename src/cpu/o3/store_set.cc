@@ -120,7 +120,7 @@ StoreSet::init(const BaseO3CPUParams &params, MemDepUnit *_memDep)
 }
 
 
-void StoreSet::violation(Addr load_PC, InstSeqNum store_seq_num, Addr store_PC, std::ptrdiff_t storeQueueDistance, BranchHistory branchHistory)
+void StoreSet::violation(Addr load_PC, InstSeqNum load_seq_num, InstSeqNum store_seq_num, Addr store_PC, std::ptrdiff_t storeQueueDistance, bool predicted, unsigned predictedPathInex, uint64_t predictedHash, BranchHistory branchHistory) 
 {
     int load_index = calcIndex(load_PC);
     int store_index = calcIndex(store_PC);
