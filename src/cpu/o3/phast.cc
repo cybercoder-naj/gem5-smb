@@ -143,7 +143,7 @@ PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchH
     bool branch_match;
     bool any_match = false;
     uint64_t hash;
-    std::ptrdiff_t tmp_distance;
+    std::ptrdiff_t distance;
     for (unsigned i = 0; i <= maxBranches && i < historySizes.size(); i++) {
         hash = generateBranchHash(i, historySizes[i], branchHistory, begin);
         //if (i == 4) {
@@ -160,20 +160,22 @@ PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchH
         //        }
         //    }
         //}
-        tmp_distance = paths[i].predict(load_pc, hash, branch_match, memDepUnit);
-        if (tmp_distance) {
+        distance = paths[i].predict(load_pc, hash, branch_match, memDepUnit);
+        if (distance) {
             // all paths are read on prediction, so just use that stat to calc reads
             ++(*(memDepUnit->pathWrites[i]));
             prediction.storeQueueDistance = tmp_distance;
             prediction.predBranchHistLength = i;
             prediction.predictorHash = hash;
+            return prediction;
         }
         //else if (branch_match) ++(memDepUnit->stats.missing_entry);
     }
 
+    return prediction;
+
     // if (prediction.seqNum && any_match) ++(memDepUnit->stats.hit_with_history);
     // else if (prediction.seqNum) ++(memDepUnit->stats.alias_hit);
-    return prediction;
 }
 
 void PHAST::violation(Addr load_pc, InstSeqNum load_seq_num, InstSeqNum store_seq_num, Addr store_pc, std::ptrdiff_t storeQueueDistance, bool predicted, unsigned predictedPathIndex, uint64_t predictedHash, BranchHistory branchHistory) {
@@ -209,7 +211,7 @@ void PHAST::violation(Addr load_pc, InstSeqNum load_seq_num, InstSeqNum store_se
     }
 
     if (predicted) {
-        paths[predictedPathIndex].updateCommit(load_pc, predictedHash,  true);
+        paths[predictedPathIndex].updateCommit(load_pc, predictedHash, true);
         ++(memDepUnit->stats.PHASTMispredictions);
         ++(*(memDepUnit->pathReads[predictedPathIndex]));
         ++(*(memDepUnit->pathWrites[predictedPathIndex]));
@@ -254,10 +256,10 @@ void PHAST::commit(Addr load_pc, Addr load_addr, unsigned load_size, Addr store_
     //     (store_has_lower_limit && lower_load_has_store_part) ||
     //     (store_has_upper_limit && upper_load_has_store_part) ||
     //     (lower_load_has_store_part && upper_load_has_store_part))
-    Addr load_eff_addr1 = load_addr >> 0;
-    Addr load_eff_addr2 = (load_addr + load_size - 1) >> 0;
-    Addr store_eff_addr1 = store_addr >> 0;
-    Addr store_eff_addr2 = (store_addr + store_size - 1) >> 0;
+    Addr load_eff_addr1 = load_addr >> 4;
+    Addr load_eff_addr2 = (load_addr + load_size - 1) >> 4;
+    Addr store_eff_addr1 = store_addr >> 4;
+    Addr store_eff_addr2 = (store_addr + store_size - 1) >> 4;
     if (store_eff_addr2 >= load_eff_addr1 && store_eff_addr1 <= load_eff_addr2)
         misprediction = false;
     else
