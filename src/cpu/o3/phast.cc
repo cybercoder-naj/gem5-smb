@@ -164,7 +164,7 @@ PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchH
         if (distance) {
             // all paths are read on prediction, so just use that stat to calc reads
             ++(*(memDepUnit->pathWrites[i]));
-            prediction.storeQueueDistance = tmp_distance;
+            prediction.storeQueueDistance = distance;
             prediction.predBranchHistLength = i;
             prediction.predictorHash = hash;
             return prediction;
