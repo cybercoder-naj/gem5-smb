@@ -275,27 +275,33 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
 
     inst_entry->listIt = --(instList[tid].end());
 
-    // Check any barriers and the dependence predictor for any
-    // producing memrefs/stores.
-    std::vector<InstSeqNum>  producing_stores;
     PredictionResult prediction;
+    MemDepHashIt hash_it = memDepHash.end();
     prediction.storeQueueDistance = 0;
     prediction.seqNum = 0;
-    if ((inst->isLoad() || inst->isAtomic()) && hasLoadBarrier()) {
-        DPRINTF(MemDepUnit, "%d load barriers in flight\n",
-                loadBarrierSNs.size());
-        producing_stores.insert(std::end(producing_stores),
-                                std::begin(loadBarrierSNs),
-                                std::end(loadBarrierSNs));
-    } else if ((inst->isStore() || inst->isAtomic()) && hasStoreBarrier()) {
-        DPRINTF(MemDepUnit, "%d store barriers in flight\n",
-                storeBarrierSNs.size());
-        producing_stores.insert(std::end(producing_stores),
-                                std::begin(storeBarrierSNs),
-                                std::end(storeBarrierSNs));
-    } else {
-        prediction = depPred.checkInst(inst->pcState().instAddr(), inst->seqNum, branchHistory);
-        ++stats.predictions;
+    prediction = depPred.checkInst(inst->pcState().instAddr(), inst->seqNum, branchHistory);
+    ++stats.predictions;
+
+    if (prediction.storeQueueDistance && inst->sqIt.idx() >= (cpu->getIEW()->ldstQueue.getStoreHead(id) + prediction.storeQueueDistance)){
+        //make a PHAST prediction, as long as the SQ offset is valid
+        auto sq_it = inst->sqIt - prediction.storeQueueDistance;
+        DynInstPtr store_inst = sq_it->instruction();
+        hash_it = memDepHash.find(store_inst->seqNum);
+    } else if (prediction.seqNum) {
+        //make a StoreSet prediction
+        hash_it = memDepHash.find(prediction.seqNum);
+    }
+
+    if (hash_it != memDepHash.end()) {
+        auto store_entry = (*hash_it).second;
+        store_entry->dependInsts.push_back(inst_entry);
+        inst->memDepInfo.predBranchHistLength = prediction.predBranchHistLength;
+        inst->memDepInfo.predictorHash = prediction.predictorHash;
+        inst->memDepInfo.predicted = true;
+        inst_entry->memDeps = 1;
+        inst->clearCanIssue();
+        DPRINTF(MemDepUnit, "\tinst PC %s is dependent on %s.\n",
+                inst->pcState(), store_entry->inst->pcState());
     }
 
     /* a Vector of MemDepUnit_entries for keeping producing_store
@@ -337,7 +343,7 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
     /* If there are not any dependencies (i.e., the Instruction is not
        dependent on any Inst), then Instruction can be issued as
        soon as the registers are ready. */
-    if (dependencies.empty() && !prediction.storeQueueDistance && !prediction.seqNum) {
+    if (dependencies.empty() && inst_entry->memDeps == 0) {
 
         DPRINTF(MemDepUnit, "No dependency for inst PC "
                 "%s [sn:%lli].\n", inst->pcState(), inst->seqNum);
@@ -353,54 +359,30 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
             DPRINTF(MemDepUnit, "Also the Inst is ready to issue.\n");
         }
     } else {
-        MemDepHashIt hash_it = memDepHash.end();
         // Add this instruction to the list of dependents.
-        if (!prediction.storeQueueDistance && !prediction.seqNum) {
 			/* The current Instruction has some dependencies;
 			   either Store or Barriers or Both. */
-			inst_entry->memDeps = dependencies.size();
+		inst_entry->memDeps += dependencies.size();
 
-			/* Append the instruction in the dependent_VectorList of
-			   each dependency that has been found.*/
-			for (const auto &dependency: dependencies) {
-				DPRINTF(MemDepUnit, "Adding to dependency list; "
-						"inst PC %s [sn:%lli] is dependent on [sn:%lli].\n",
-						inst->pcState(), inst->seqNum,
-						dependency->inst->seqNum);
+        /* Append the instruction in the dependent_VectorList of
+            each dependency that has been found.*/
+        for (const auto &dependency: dependencies) {
+            DPRINTF(MemDepUnit, "Adding to dependency list; "
+                    "inst PC %s [sn:%lli] is dependent on [sn:%lli].\n",
+                    inst->pcState(), inst->seqNum,
+                    dependency->inst->seqNum);
 
-				dependency->dependInsts.push_back(inst_entry);
-			}
-
-			/* If the Instruction is ready_to_Issue, we only set the
-			   flag; We are not allowed to issue the Instruction until
-			   all the dependencies have been resolved. */
-			if (inst->readyToIssue()) {
-				inst_entry->regsReady = true;
-			}
-			// Clear the bit saying this instruction can issue.
-			inst->clearCanIssue();
-
-        } else if (prediction.storeQueueDistance && inst->sqIt.idx() >= (cpu->getIEW()->ldstQueue.getStoreHead(id) + prediction.storeQueueDistance)){
-            //make a PHAST prediction, as long as the SQ offset is valid
-            auto sq_it = inst->sqIt - prediction.storeQueueDistance;
-            DynInstPtr store_inst = sq_it->instruction();
-            hash_it = memDepHash.find(store_inst->seqNum);
-        } else if (prediction.seqNum) {
-            //make a StoreSet prediction
-            hash_it = memDepHash.find(prediction.seqNum);
+            dependency->dependInsts.push_back(inst_entry);
         }
-        if (hash_it != memDepHash.end()) {
-            ++stats.hits;
-            auto store_entry = (*hash_it).second;
-            store_entry->dependInsts.push_back(inst_entry);
-            inst->memDepInfo.predBranchHistLength = prediction.predBranchHistLength;
-            inst->memDepInfo.predictorHash = prediction.predictorHash;
-            inst->memDepInfo.predicted = true;
-            inst_entry->memDeps = 1;
-            inst->clearCanIssue();
-            DPRINTF(MemDepUnit, "\tinst PC %s is dependent on %s.\n",
-                    inst->pcState(), store_entry->inst->pcState());
-        } else if (inst_entry->memDeps == 0 && inst_entry->regsReady) { moveToReady(inst_entry); } //corner case where depPred returned a prediction but the seqnum wasn't in-flight
+
+        /* If the Instruction is ready_to_Issue, we only set the
+            flag; We are not allowed to issue the Instruction until
+            all the dependencies have been resolved. */
+        if (inst->readyToIssue()) {
+            inst_entry->regsReady = true;
+        }
+        // Clear the bit saying this instruction can issue.
+        inst->clearCanIssue();
 
         if (inst->isLoad()) {
             ++stats.conflictingLoads;
