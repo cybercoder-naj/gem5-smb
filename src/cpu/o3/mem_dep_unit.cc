@@ -302,6 +302,11 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
         inst->clearCanIssue();
         DPRINTF(MemDepUnit, "\tinst PC %s is dependent on %s.\n",
                 inst->pcState(), store_entry->inst->pcState());
+        if (inst->isLoad()) {
+            ++stats.conflictingLoads;
+        } else {
+            ++stats.conflictingStores;
+        }
     }
 
     /* a Vector of MemDepUnit_entries for keeping producing_store
@@ -348,9 +353,6 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
         DPRINTF(MemDepUnit, "No dependency for inst PC "
                 "%s [sn:%lli].\n", inst->pcState(), inst->seqNum);
 
-        /* The Counter "memDependencies" for the inst_entry is by default zero;
-           So there is no need to do sth here, like enabling any flags. */
-
         if (inst->readyToIssue()) {
             inst_entry->regsReady = true;
 
@@ -358,7 +360,7 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
 
             DPRINTF(MemDepUnit, "Also the Inst is ready to issue.\n");
         }
-    } else {
+    } else if (!dependencies.empty()){
         // Add this instruction to the list of dependents.
 			/* The current Instruction has some dependencies;
 			   either Store or Barriers or Both. */
@@ -602,14 +604,11 @@ MemDepUnit::wakeDependents(const DynInstPtr &inst)
         // release one dependency.
         dependent_inst->memDeps--;
 
-<<<<<<< HEAD
-        if (woken_inst->memDeps == 0) {
-            woken_inst->inst->memDepInfo.predStoreAddr = inst->effAddr;
-            woken_inst->inst->memDepInfo.predStoreSize = inst->effSize;
-            if (woken_inst->regsReady && !woken_inst->squashed) {
-                moveToReady(woken_inst);
-=======
         if (dependent_inst->memDeps == 0) {
+            if (dependent_inst->inst->memDepInfo.predicted && inst->isStore()) {
+                dependent_inst->inst->memDepInfo.predStoreAddr = inst->effAddr;
+                dependent_inst->inst->memDepInfo.predStoreSize = inst->effSize;
+            }
             if (dependent_inst->regsReady && !dependent_inst->squashed) {
                 DPRINTF(MemDepUnit, "Inst PC: %#x [sn:%lli] is just "
                         "woken up!!\n",
@@ -619,7 +618,6 @@ MemDepUnit::wakeDependents(const DynInstPtr &inst)
                 /** All the dependencies have been resolved & the
                     Registers are ready as well. */
                 moveToReady(dependent_inst);
->>>>>>> upstream/master
             }
         }
     }
