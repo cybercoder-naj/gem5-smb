@@ -276,7 +276,6 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
     inst_entry->listIt = --(instList[tid].end());
 
     PredictionResult prediction;
-    MemDepHashIt hash_it = memDepHash.end();
     prediction.storeQueueDistance = 0;
     prediction.seqNum = 0;
     prediction = depPred.checkInst(inst->pcState().instAddr(), inst->seqNum, branchHistory);
@@ -286,33 +285,23 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
         //make a PHAST prediction, as long as the SQ offset is valid
         auto sq_it = inst->sqIt - prediction.storeQueueDistance;
         DynInstPtr store_inst = sq_it->instruction();
-        hash_it = memDepHash.find(store_inst->seqNum);
+        MemDepHashIt hash_it = memDepHash.find(producing_store);
+
+        if (hash_it != memDepHash.end()) {
+            dependencies.push_back((*hash_it).second);
+            inst->memDepInfo.predBranchHistLength = prediction.predBranchHistLength;
+            inst->memDepInfo.predictorHash = prediction.predictorHash;
+            inst->memDepInfo.predicted = true;
+        }
     } else if (prediction.seqNum) {
         //make a StoreSet prediction
-        hash_it = memDepHash.find(prediction.seqNum);
-    }
+        MemDepHashIt hash_it = memDepHash.find(producing_store);
 
-    if (hash_it != memDepHash.end()) {
-        auto store_entry = (*hash_it).second;
-        store_entry->dependInsts.push_back(inst_entry);
-        inst->memDepInfo.predBranchHistLength = prediction.predBranchHistLength;
-        inst->memDepInfo.predictorHash = prediction.predictorHash;
-        inst->memDepInfo.predicted = true;
-        inst_entry->memDeps = 1;
-        inst->clearCanIssue();
-        DPRINTF(MemDepUnit, "\tinst PC %s is dependent on %s.\n",
-                inst->pcState(), store_entry->inst->pcState());
-        if (inst->isLoad()) {
-            ++stats.conflictingLoads;
-        } else {
-            ++stats.conflictingStores;
+        if (hash_it != memDepHash.end()) {
+            dependencies.push_back((*hash_it).second);
+            inst->memDepInfo.predicted = true;
         }
     }
-
-    /* a Vector of MemDepUnit_entries for keeping producing_store
-       and the Barriers (i.e., all the dependencies of
-       the current Instruction). */
-    std::vector<MemDepEntryPtr> dependencies;
 
     /* 2nd Step: Concurrently, check the in-flight Barriers; the Load
        and Store Instructions are not allowed to overtake the
@@ -348,10 +337,12 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
     /* If there are not any dependencies (i.e., the Instruction is not
        dependent on any Inst), then Instruction can be issued as
        soon as the registers are ready. */
-    if (dependencies.empty() && inst_entry->memDeps == 0) {
-
+    if (dependencies.empty()) {
         DPRINTF(MemDepUnit, "No dependency for inst PC "
                 "%s [sn:%lli].\n", inst->pcState(), inst->seqNum);
+
+        /* The Counter "memDependencies" for the inst_entry is by default zero;
+           So there is no need to do sth here, like enabling any flags. */
 
         if (inst->readyToIssue()) {
             inst_entry->regsReady = true;
@@ -360,14 +351,13 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
 
             DPRINTF(MemDepUnit, "Also the Inst is ready to issue.\n");
         }
-    } else if (!dependencies.empty()){
-        // Add this instruction to the list of dependents.
-			/* The current Instruction has some dependencies;
-			   either Store or Barriers or Both. */
-		inst_entry->memDeps += dependencies.size();
+    } else {
+        /* The current Instruction has some dependencies;
+           either Store or Barriers or Both. */
+        inst_entry->memDeps = dependencies.size();
 
         /* Append the instruction in the dependent_VectorList of
-            each dependency that has been found.*/
+           each dependency that has been found.*/
         for (const auto &dependency: dependencies) {
             DPRINTF(MemDepUnit, "Adding to dependency list; "
                     "inst PC %s [sn:%lli] is dependent on [sn:%lli].\n",
@@ -378,11 +368,12 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
         }
 
         /* If the Instruction is ready_to_Issue, we only set the
-            flag; We are not allowed to issue the Instruction until
-            all the dependencies have been resolved. */
+           flag; We are not allowed to issue the Instruction until
+           all the dependencies have been resolved. */
         if (inst->readyToIssue()) {
             inst_entry->regsReady = true;
         }
+
         // Clear the bit saying this instruction can issue.
         inst->clearCanIssue();
 
