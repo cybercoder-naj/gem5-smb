@@ -275,6 +275,7 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
 
     inst_entry->listIt = --(instList[tid].end());
 
+    std::vector<MemDepEntryPtr> dependencies;
     PredictionResult prediction;
     prediction.storeQueueDistance = 0;
     prediction.seqNum = 0;
@@ -285,7 +286,7 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
         //make a PHAST prediction, as long as the SQ offset is valid
         auto sq_it = inst->sqIt - prediction.storeQueueDistance;
         DynInstPtr store_inst = sq_it->instruction();
-        MemDepHashIt hash_it = memDepHash.find(producing_store);
+        MemDepHashIt hash_it = memDepHash.find(store_inst->seqNum);
 
         if (hash_it != memDepHash.end()) {
             dependencies.push_back((*hash_it).second);
@@ -295,7 +296,7 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
         }
     } else if (prediction.seqNum) {
         //make a StoreSet prediction
-        MemDepHashIt hash_it = memDepHash.find(producing_store);
+        MemDepHashIt hash_it = memDepHash.find(prediction.seqNum);
 
         if (hash_it != memDepHash.end()) {
             dependencies.push_back((*hash_it).second);
@@ -383,6 +384,8 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
             ++stats.conflictingStores;
         }
     }
+
+    insertBarrierSN(inst);
 
     if (inst->isStore() || inst->isAtomic()) {
         DPRINTF(MemDepUnit, "Inserting store/atomic PC %s [sn:%lli].\n",
