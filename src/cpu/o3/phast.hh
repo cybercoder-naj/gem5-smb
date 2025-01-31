@@ -113,6 +113,8 @@ class PHAST
 
     bool debug;
 
+    unsigned depCheckShift;
+
     //largest seen index into branchSizes
     unsigned maxBranches;
 

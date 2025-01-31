@@ -55,6 +55,7 @@ PHAST::PHAST(const BaseO3CPUParams &params, MemDepUnit *mem_dep_unit) {
     //TODO: paramertise this with a string and parse it into a list
     historySizes.assign({0, 2, 4, 6, 8, 12, 16, 32});
 
+    depCheckShift = params.LSQDepCheckShift;
     unsigned set_bits = (unsigned)log2((double)(params.phast_num_rows));
 
     maxBranches = 0;
@@ -90,6 +91,7 @@ void PHAST::init(const BaseO3CPUParams &params, MemDepUnit *mem_dep_unit) {
     selectedTargetMask = (1 << selectedTargetBits) - 1;
     memDepUnit = mem_dep_unit;
 
+    depCheckShift = params.LSQDepCheckShift;
     unsigned set_bits = (unsigned)log2((double)(params.phast_num_rows));
 
     debug = true;
@@ -256,10 +258,10 @@ void PHAST::commit(Addr load_pc, Addr load_addr, unsigned load_size, Addr store_
     //     (store_has_lower_limit && lower_load_has_store_part) ||
     //     (store_has_upper_limit && upper_load_has_store_part) ||
     //     (lower_load_has_store_part && upper_load_has_store_part))
-    Addr load_eff_addr1 = load_addr >> 4;
-    Addr load_eff_addr2 = (load_addr + load_size - 1) >> 4;
-    Addr store_eff_addr1 = store_addr >> 4;
-    Addr store_eff_addr2 = (store_addr + store_size - 1) >> 4;
+    Addr load_eff_addr1 = load_addr >> depCheckShift;
+    Addr load_eff_addr2 = (load_addr + load_size - 1) >> depCheckShift;
+    Addr store_eff_addr1 = store_addr >> depCheckShift;
+    Addr store_eff_addr2 = (store_addr + store_size - 1) >> depCheckShift;
     if (store_eff_addr2 >= load_eff_addr1 && store_eff_addr1 <= load_eff_addr2)
         misprediction = false;
     else
