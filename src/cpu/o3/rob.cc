@@ -568,21 +568,21 @@ ROB::ROBStats::ROBStats(statistics::Group *parent)
 {
 }
 
-void ROB::checkViolations(const DynInstPtr& store) {
+void ROB::checkViolations(ThreadID tid, const DynInstPtr& store) {
 
     Addr store_eff_addr1 = store->effAddr >> depCheckShift;
     Addr store_eff_addr2 = (store->effAddr + store->effSize - 1) >> depCheckShift;
 
     for (InstIt it = instList[tid].begin(); it != instList[tid].end(); it++) {
-        if ((*it)->isLoad() (*it)->memDepInfo.violatingStoreSeqNum)  {
+        if ((*it)->isLoad() && (*it)->memDepInfo.violatingStoreSeqNum)  {
             DynInstPtr load = *it;
             Addr load_eff_addr1 = load->effAddr >> depCheckShift;
             Addr load_eff_addr2 = (load->effAddr + load->effSize - 1) >> depCheckShift;
 
-            if (store_eff_addr2 >= ld_eff_addr1 && store_eff_addr1 <= ld_eff_addr2) {
+            if (store_eff_addr2 >= load_eff_addr1 && store_eff_addr1 <= load_eff_addr2) {
                 // Check this load hasn't already forwarded from a younger store
-                if (store->seqNum < ld->memDepInfo.forwardedFrom ||
-                    store->seqNum < ld->memDepInfo.violatingStoreSeqNum){
+                if (store->seqNum < load->memDepInfo.forwardedFrom ||
+                    store->seqNum < load->memDepInfo.violatingStoreSeqNum){
                     continue;
                 }
 

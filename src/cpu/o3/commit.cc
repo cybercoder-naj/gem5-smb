@@ -1016,7 +1016,7 @@ Commit::commitInsts()
                 }
 
                 if (head_inst->isStore()) {
-                    rob->checkViolations(head_inst);
+                    rob->checkViolations(tid, head_inst);
                 }
 
                 // hardware transactional memory
