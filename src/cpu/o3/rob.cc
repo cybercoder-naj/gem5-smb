@@ -97,6 +97,8 @@ ROB::ROB(CPU *_cpu, const BaseO3CPUParams &params)
         maxEntries[tid] = 0;
     }
 
+    depCheckShift = params.LSQDepCheckShift;
+
     resetState();
 }
 
@@ -564,6 +566,32 @@ ROB::ROBStats::ROBStats(statistics::Group *parent)
         "The number of atomic read-modify-write store instructions squashed")
     
 {
+}
+
+void ROB::checkViolations(const DynInstPtr& store) {
+
+    Addr store_eff_addr1 = store->effAddr >> depCheckShift;
+    Addr store_eff_addr2 = (store->effAddr + store->effSize - 1) >> depCheckShift;
+
+    for (InstIt it = instList[tid].begin(); it != instList[tid].end(); it++) {
+        if ((*it)->isLoad() (*it)->memDepInfo.violatingStoreSeqNum)  {
+            DynInstPtr load = *it;
+            Addr load_eff_addr1 = load->effAddr >> depCheckShift;
+            Addr load_eff_addr2 = (load->effAddr + load->effSize - 1) >> depCheckShift;
+
+            if (store_eff_addr2 >= ld_eff_addr1 && store_eff_addr1 <= ld_eff_addr2) {
+                // Check this load hasn't already forwarded from a younger store
+                if (store->seqNum < ld->memDepInfo.forwardedFrom ||
+                    store->seqNum < ld->memDepInfo.violatingStoreSeqNum){
+                    continue;
+                }
+
+                load->memDepInfo.violatingStoreSeqNum = store->seqNum;
+                load->memDepInfo.violatingStorePC = store->pcState().instAddr();
+                load->memDepInfo.storeQueueDistance = load->sqIt - store->sqIt;
+            }
+        }
+    }
 }
 
 DynInstPtr
