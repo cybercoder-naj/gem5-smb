@@ -40,6 +40,7 @@
 
 #include "cpu/o3/rob.hh"
 
+#include <cstddef>
 #include <list>
 
 #include "base/logging.hh"
@@ -578,14 +579,8 @@ void ROB::checkViolations(ThreadID tid, const DynInstPtr& store) {
             DynInstPtr load = *it;
             Addr load_eff_addr1 = load->effAddr >> depCheckShift;
             Addr load_eff_addr2 = (load->effAddr + load->effSize - 1) >> depCheckShift;
-
-            if (store_eff_addr2 >= load_eff_addr1 && store_eff_addr1 <= load_eff_addr2) {
-                // Check this load hasn't already forwarded from a younger store
-                if (store->seqNum < load->memDepInfo.forwardedFrom ||
-                    store->seqNum < load->memDepInfo.violatingStoreSeqNum){
-                    continue;
-                }
-
+            if (store_eff_addr2 >= load_eff_addr1 && store_eff_addr1 <= load_eff_addr2
+                && store->seqNum > load->memDepInfo.violatingStoreSeqNum) {
                 load->memDepInfo.violatingStoreSeqNum = store->seqNum;
                 load->memDepInfo.violatingStorePC = store->pcState().instAddr();
                 load->memDepInfo.storeQueueDistance = load->sqIt - store->sqIt;
