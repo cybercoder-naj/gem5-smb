@@ -6,6 +6,7 @@ PHAST is much more complex than Store Sets, which Gem5 implements by default, an
 - Changing the MDP and depPred interfaces to include additional methods and arguments needed by PHAST, while also keeping it generic to allow continued use of Store Sets if desired.
 - Adding a memDepInfo struct to DynInst objects to track necessary information as loads are executed. 
 - Adding an additional commit/ROB status to specify if squashing due to memory order violation.
+- Preventing stores from triggering a memory order violation with loads that have either already forwarded from a younger store, or already violated with a younger store.
 
 Furthermore, this Gem5 was originally based on a modified fork from the University of Murcia (https://github.com/CAPS-UMU/gem5). These changes include:
 - Fixed TAGE_SC_L_64K (based on https://github.com/useredsa/spec_tage_scl) now it is called TAGE_EMILIO
