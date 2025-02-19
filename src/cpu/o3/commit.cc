@@ -167,6 +167,8 @@ Commit::CommitStats::CommitStats(CPU *cpu, Commit *commit)
                "Number of function calls committed."),
       ADD_STAT(committedInstType, statistics::units::Count::get(),
                "Class of committed instruction"),
+      ADD_STAT(memOrderViolationEvents, statistics::units::Count::get(),
+               "Number of memory order violations"),
       ADD_STAT(commitEligibleSamples, statistics::units::Cycle::get(),
                "number cycles where commit BW limit reached")
 {
@@ -975,6 +977,7 @@ Commit::commitInsts()
                                               head_inst->memDepInfo.violatingStorePC,
                                               head_inst, committedBranchHistory);
                 updatedMemDep = true;
+                ++stats.memOrderViolationEvents;
             }
 
             ++stats.commitSquashedInsts;

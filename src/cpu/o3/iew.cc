@@ -165,8 +165,6 @@ IEW::IEWStats::IEWStats(CPU *cpu)
              "Number of times the IQ has become full, causing a stall"),
     ADD_STAT(lsqFullEvents, statistics::units::Count::get(),
              "Number of times the LSQ has become full, causing a stall"),
-    ADD_STAT(memOrderViolationEvents, statistics::units::Count::get(),
-             "Number of memory order violations"),
     ADD_STAT(predictedTakenIncorrect, statistics::units::Count::get(),
              "Number of branches that were predicted taken incorrectly"),
     ADD_STAT(predictedNotTakenIncorrect, statistics::units::Count::get(),
@@ -1304,20 +1302,15 @@ IEW::executeInsts()
                 DynInstPtr violator;
                 violator = ldstQueue.getMemDepViolator(tid);
 
-                /*
                 DPRINTF(IEW, "LDSTQ detected a violation. Violator PC: %s "
                         "[sn:%lli], inst PC: %s [sn:%lli]. Addr is: %#x.\n",
                         violator->pcState(), violator->seqNum,
                         inst->pcState(), inst->seqNum, inst->physEffAddr);
-                */
-                DPRINTF(IEW, "Violation: 0x%lx [%lli], 0x%lx [%lli]\n", violator->pcState().instAddr(),  violator->seqNum, inst->pcState().instAddr(), inst->seqNum);
                 
                 fetchRedirect[tid] = true;
 
                 // Squash.
                 squashDueToMemOrder(violator, tid);
-
-                ++iewStats.memOrderViolationEvents;
             }
         } else {
             // Reset any state associated with redirects that will not
