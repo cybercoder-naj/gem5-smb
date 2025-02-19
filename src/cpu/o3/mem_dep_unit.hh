@@ -201,25 +201,10 @@ class MemDepUnit
         /** Stat for number of conflicting stores that had to wait for a
          *  store. */
         statistics::Scalar conflictingStores;
-        /**  Number of predictions made by MDP */
-        statistics::Scalar predictions;
-        statistics::Scalar hits;
-        statistics::Scalar no_seq_num;
-        statistics::Scalar alias_hit;
-        statistics::Scalar no_hits;
         /** ==== Store Sets ==== */
         statistics::Scalar LFSTReads;
         statistics::Scalar LFSTWrites;
         /** ==== PHAST ==== */
-        statistics::Scalar matching_history;
-        statistics::Scalar mismatching_history;
-        statistics::Scalar missing_entry;
-        statistics::Scalar hash_match;
-        statistics::Scalar hash_mismatch;
-        statistics::Scalar null_entry;
-        statistics::Scalar counter_is_zero;
-        statistics::Scalar store_pc_is_zero;
-        statistics::Scalar hit_with_history;
         statistics::Scalar PHASTMispredictions;
         statistics::Scalar PHASTCorrectPredictions;
         /**  Sorry for this. Need to track reads/writes for each
@@ -256,8 +241,6 @@ class MemDepUnit
     };
 
     CPU *cpu;
-
-    std::map<Addr, Addr> violation_record;
 
   private:
 

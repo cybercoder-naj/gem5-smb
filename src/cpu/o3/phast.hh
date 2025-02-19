@@ -96,9 +96,9 @@ class PHAST
     void clear();
 
     /** mem_dep_unit interface methods that don't do anything in PHAST */
-    void squash(InstSeqNum squashed_num, ThreadID tid);
-    void issued(Addr issued_PC, InstSeqNum issued_seq_num, bool is_store) { storeMap.erase(issued_PC); }
-    void insertStore(Addr store_PC, InstSeqNum store_seq_num, ThreadID tid);
+    void squash(InstSeqNum squashed_num, ThreadID tid) { return; };
+    void issued(Addr issued_PC, InstSeqNum issued_seq_num, bool is_store) { return; }
+    void insertStore(Addr store_PC, InstSeqNum store_seq_num, ThreadID tid) { return; };
     void insertLoad(Addr load_PC, InstSeqNum load_seq_num) { return;}
 
     unsigned selectedTargetBits;
@@ -106,10 +106,6 @@ class PHAST
     uint64_t selectedTargetMask;
 
   private:
-
-    std::map<Addr, std::vector<std::pair<uint64_t,BranchHistory>>> branchMap;
-
-    std::map<Addr, InstSeqNum> storeMap;
 
     bool debug;
 
@@ -164,7 +160,7 @@ class PHAST
 
             int init(uint32_t set_bits, uint32_t _associativity, uint32_t tag_bits, uint32_t max_counter_value);
 
-            std::ptrdiff_t predict(Addr pc, uint64_t history, bool branch_match, MemDepUnit *memDepUnit);
+            std::ptrdiff_t predict(Addr pc, uint64_t history);
 
             void update(Addr pc, uint64_t history, std::ptrdiff_t);
 

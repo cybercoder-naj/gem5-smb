@@ -48,7 +48,7 @@ namespace gem5
 namespace o3
 {
 
-PHAST::PHAST(const BaseO3CPUParams &params, MemDepUnit *mem_dep_unit) {
+PHAST::PHAST(const BaseO3CPUParams &params, MemDepUnit *restrict mem_dep_unit) {
 
     assert(isPowerOf2(params.phast_num_rows) && "Invalid number of rows per table!\n");
 
@@ -77,7 +77,7 @@ PHAST::~PHAST()
 {
 }
 
-void PHAST::init(const BaseO3CPUParams &params, MemDepUnit *mem_dep_unit) {
+void PHAST::init(const BaseO3CPUParams &params, MemDepUnit *restrict mem_dep_unit) {
 
     assert(isPowerOf2(params.phast_num_rows) && "Invalid number of rows per table!\n");
 
@@ -106,35 +106,16 @@ void PHAST::init(const BaseO3CPUParams &params, MemDepUnit *mem_dep_unit) {
 
 }
 
-void PHAST::insertStore(Addr store_PC, InstSeqNum store_seq_num, ThreadID id) {
-    storeMap[store_PC] = store_seq_num;
-}
-
-void PHAST::squash(InstSeqNum squashed_num, ThreadID tid) {
-    std::vector<Addr> squashed_pcs;
-    for (auto s: storeMap)
-        if (s.second >= squashed_num)
-            squashed_pcs.push_back(s.first);
-    for (auto s: squashed_pcs)
-        storeMap.erase(s);
-}
-
 PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchHistory branchHistory) {
 
     struct PredictionResult prediction = {0,0,0,0};
-
-    BranchHistory tmp_history;
-    for (int i=0; i < branchHistory.size(); i++) {
-        tmp_history.push_back(branchHistory[i]);
-    }
 
     if (branchHistory.size() == 0) return prediction;
     unsigned begin = 0;
     while (begin < branchHistory.size() && branchHistory[begin].seqNum > load_seq_num) {
         begin++;
-        tmp_history.pop_front();
     }
-    if (begin > branchHistory.size()) return prediction; //no +1 branch //TODO: should this be >=?
+    if (begin > branchHistory.size()) return prediction; //no +1 branch
 
     if (historySizes[maxBranches] > branchHistory.size()) {
         int i;
@@ -142,27 +123,11 @@ PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchH
         maxBranches = i-1;
     }
 
-    bool branch_match;
-    bool any_match = false;
     uint64_t hash;
     std::ptrdiff_t distance;
     for (unsigned i = 0; i <= maxBranches && i < historySizes.size(); i++) {
         hash = generateBranchHash(i, historySizes[i], branchHistory, begin);
-        //if (i == 4) {
-        //    std::cout << "Lookup: " << hex << load_pc << dec << "[" << load_seq_num << "]" << "\n";
-        //    paths[i].printBlock(paths[i].getIndex(load_pc, hash));
-        //}
-        branch_match = false;
-        //if (branchMap.find(load_pc) != branchMap.end()) {
-        //    for (int i=0; i < branchMap[load_pc].size(); i++) {
-        //        if (branchMap[load_pc][i].first == hash && branchMap[load_pc][i].second == tmp_history) {
-        //            ++(memDepUnit->stats.matching_history);
-        //            branch_match = true;
-        //            break;
-        //        }
-        //    }
-        //}
-        distance = paths[i].predict(load_pc, hash, branch_match, memDepUnit);
+        distance = paths[i].predict(load_pc, hash);
         if (distance) {
             // all paths are read on prediction, so just use that stat to calc reads
             ++(*(memDepUnit->pathWrites[i]));
@@ -171,13 +136,9 @@ PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchH
             prediction.predictorHash = hash;
             return prediction;
         }
-        //else if (branch_match) ++(memDepUnit->stats.missing_entry);
     }
 
     return prediction;
-
-    // if (prediction.seqNum && any_match) ++(memDepUnit->stats.hit_with_history);
-    // else if (prediction.seqNum) ++(memDepUnit->stats.alias_hit);
 }
 
 void PHAST::violation(Addr load_pc, InstSeqNum load_seq_num, InstSeqNum store_seq_num, Addr store_pc, std::ptrdiff_t storeQueueDistance, bool predicted, unsigned predictedPathIndex, uint64_t predictedHash, BranchHistory branchHistory) {
@@ -212,6 +173,7 @@ void PHAST::violation(Addr load_pc, InstSeqNum load_seq_num, InstSeqNum store_se
         }
     }
 
+    /*This load was given a prediction but violated anyway, reduce the confidence counter*/
     if (predicted) {
         paths[predictedPathIndex].updateCommit(load_pc, predictedHash, true);
         ++(memDepUnit->stats.PHASTMispredictions);
@@ -221,28 +183,6 @@ void PHAST::violation(Addr load_pc, InstSeqNum load_seq_num, InstSeqNum store_se
 
     uint64_t path_hash = generateBranchHash(i, num_branches, branchHistory, 0);
     paths[i].update(load_pc, path_hash, storeQueueDistance);
-
-    //if (i == 4) {
-    //    std::cout << "Update: " << hex << load_pc << dec << " [" << load_seq_num << "]" << " on " << hex << store_pc << dec << " [" << store_seq_num << "]" <<"\n";
-    //    paths[i].printBlock(paths[i].getIndex(load_pc, path_hash));
-    //}
-
-    //bool exists = false;
-    //if (branchMap.find(load_pc) == branchMap.end()) {
-    //    branchMap.emplace(load_pc, std::vector<std::pair<uint64_t, std::deque<branchInfo>>>{{path_hash, branchHistory}});
-    //}
-    //else {
-    //    for (int i=0; i < branchMap[load_pc].size(); i++) {
-    //        if (branchMap[load_pc][i].first == path_hash && branchMap[load_pc][i].second == branchHistory) {
-    //            exists = true;
-    //            break;
-    //        }
-    //    }
-    //}
-    //if (!exists) {
-    //    std::pair<uint64_t, std::deque<branchInfo>> new_entry = {path_hash, branchHistory};
-    //    branchMap[load_pc].push_back(new_entry);
-    //}
 
     maxBranches = std::max(maxBranches, i);
 
@@ -254,10 +194,6 @@ void PHAST::violation(Addr load_pc, InstSeqNum load_seq_num, InstSeqNum store_se
 void PHAST::commit(Addr load_pc, Addr load_addr, unsigned load_size, Addr store_addr, unsigned store_size, unsigned path_index, uint64_t predictor_hash) {
 
     bool misprediction;
-    // if ((store_has_lower_limit && store_has_upper_limit) ||
-    //     (store_has_lower_limit && lower_load_has_store_part) ||
-    //     (store_has_upper_limit && upper_load_has_store_part) ||
-    //     (lower_load_has_store_part && upper_load_has_store_part))
     Addr load_eff_addr1 = load_addr >> depCheckShift;
     Addr load_eff_addr2 = (load_addr + load_size - 1) >> depCheckShift;
     Addr store_eff_addr1 = store_addr >> depCheckShift;
@@ -278,7 +214,7 @@ void PHAST::commit(Addr load_pc, Addr load_addr, unsigned load_size, Addr store_
 
 uint64_t PHAST::generateBranchHash(unsigned path_index, unsigned num_branches, BranchHistory branch_history, unsigned start_indx){
     unsigned end_indx = start_indx + num_branches;
-    if (end_indx >= branch_history.size()) return 0; //TODO: shouldn't it be > not >=?
+    if (end_indx >= branch_history.size()) return 0;
     std::deque<uint64_t> tmp_path;
     tmp_path.clear();
     int bits = 60;
@@ -404,13 +340,8 @@ void PHAST::SimplBlockCache::updateLRU(Entry* entry) {
     lruCounter++;
 }
 
-std::ptrdiff_t PHAST::SimplBlockCache::predict(Addr pc, uint64_t history, bool branch_match, MemDepUnit *memDepUnit) {
+std::ptrdiff_t PHAST::SimplBlockCache::predict(Addr pc, uint64_t history) {
     auto entry = findEntry(pc, history);
-    if (branch_match) {
-        if (entry == nullptr) ++(memDepUnit->stats.null_entry);
-        else if (entry->counter == 0) ++(memDepUnit->stats.counter_is_zero);
-        else if (entry->distance == 0) ++(memDepUnit->stats.store_pc_is_zero);
-    }
 
     if (entry == nullptr || entry->counter == 0 || entry->distance == 0) { // no prediction for this PC
         return 0;

@@ -112,44 +112,16 @@ MemDepUnit::MemDepUnitStats::MemDepUnitStats(statistics::Group *parent)
                "Number of conflicting loads."),
       ADD_STAT(conflictingStores, statistics::units::Count::get(),
                "Number of conflicting stores."),
-      ADD_STAT(predictions, statistics::units::Count::get(),
-               "Number of MDP predictions."),
       /** ==== Store Set ==== */
       ADD_STAT(LFSTReads, statistics::units::Count::get(),
                "Number of LFST reads."),
       ADD_STAT(LFSTWrites, statistics::units::Count::get(),
                "Number of LFST writes."),
       /** ==== PHAST ==== */
-      ADD_STAT(hits, statistics::units::Count::get(),
-               "Number of hits :)"),
-      ADD_STAT(no_seq_num, statistics::units::Count::get(),
-               "Number of hits :)"),
-      ADD_STAT(alias_hit, statistics::units::Count::get(),
-               "Number of hits :)"),
-      ADD_STAT(no_hits, statistics::units::Count::get(),
-               "Number of no hits :("),
-      ADD_STAT(matching_history, statistics::units::Count::get(),
-               "Number of times committing and issuing branch histories match"),
-      ADD_STAT(mismatching_history, statistics::units::Count::get(),
-               "Number of times committing and issuing branch histories mismatch"),
-      ADD_STAT(missing_entry, statistics::units::Count::get(),
-               "Number of times hashes and branch history match but entry is not found anyway"),
-      ADD_STAT(hash_match, statistics::units::Count::get(),
-               "Number of times hashes match when branch history match"),
-      ADD_STAT(hash_mismatch, statistics::units::Count::get(),
-               "Number of times hashes mismatch when branch history match"),
-      ADD_STAT(null_entry, statistics::units::Count::get(),
-               "Number of times the hash and branch history match but no entry is found anyway."),
-      ADD_STAT(counter_is_zero, statistics::units::Count::get(),
-               "Number of times the hash and branch history match but the found entry has a counter value of zero."),
-      ADD_STAT(store_pc_is_zero, statistics::units::Count::get(),
-               "Number of times the hash and branch history match but the stored store pc is zero."),
-      ADD_STAT(hit_with_history, statistics::units::Count::get(),
-               "Number of times histories match and an entry is found."),
       ADD_STAT(PHASTMispredictions, statistics::units::Count::get(),
-               "mispreds"),
+               "Number of times load's address didn't match predicted store's address"),
       ADD_STAT(PHASTCorrectPredictions, statistics::units::Count::get(),
-               "correct preds"),
+               "Number of times load's address did match predicted store's address"),
       ADD_STAT(readsPath1, statistics::units::Count::get(),
                "Number of reads to path table 1."),
       ADD_STAT(readsPath2, statistics::units::Count::get(),
@@ -280,7 +252,6 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
     prediction.storeQueueDistance = 0;
     prediction.seqNum = 0;
     prediction = depPred.checkInst(inst->pcState().instAddr(), inst->seqNum, branchHistory);
-    ++stats.predictions;
 
     if (prediction.storeQueueDistance && inst->sqIt.idx() >= (cpu->getIEW()->ldstQueue.getStoreHead(id) + prediction.storeQueueDistance)){
         //make a PHAST prediction, as long as the SQ offset is valid
@@ -707,8 +678,6 @@ MemDepUnit::violation(InstSeqNum store_seq_num, Addr store_pc,
                       violating_load->memDepInfo.storeQueueDistance, violating_load->memDepInfo.predicted,
                       violating_load->memDepInfo.predBranchHistLength,
                       violating_load->memDepInfo.predictorHash, branchHistory);
-
-    violation_record[violating_load->pcState().instAddr()] = violating_load->memDepInfo.violatingStorePC;
 }
 
 void
