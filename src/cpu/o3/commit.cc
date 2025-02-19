@@ -1253,6 +1253,21 @@ Commit::commitHead(const DynInstPtr &head_inst, unsigned inst_num)
 
         commitStatus[tid] = TrapPending;
 
+        //record branch history, making sure to catch committing branches that were interrupted.
+        //should only matter on FS emulation
+        if (head_inst->isControl() && !(head_inst->isDirectCtrl() && head_inst->isUncondCtrl())) {
+            branchInfo branch_info = {
+                head_inst->isIndirectCtrl(),
+                head_inst->readPredTaken(),
+                head_inst->predPC->instAddr(),
+                head_inst->seqNum,
+                head_inst->pcState().instAddr(),
+            };
+            committedBranchHistory.push_front(branch_info);
+            if (committedBranchHistory.size() > MAX_BRANCH_HISTORY)
+                committedBranchHistory.pop_back();
+        }
+
         DPRINTF(Commit,
             "[tid:%i] [sn:%llu] Committing instruction with fault\n",
             tid, head_inst->seqNum);
