@@ -114,7 +114,7 @@ class StoreSet
      * any store.  @return Returns the sequence number of the store
      * instruction this PC is dependent upon.  Returns 0 if none.
      */
-    PredictionResult checkInst(Addr PC, InstSeqNum load_seq_num, BranchHistory branchHistory);
+    PredictionResult checkInst(Addr PC, InstSeqNum load_seq_num, BranchHistory branchHistory, bool isLoad);
 
     void commit(Addr load_pc, Addr load_addr, unsigned load_size, Addr store_addr, unsigned store_size, unsigned path_index, uint64_t predictor_hash) { return; };
 

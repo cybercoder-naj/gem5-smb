@@ -251,7 +251,7 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
     PredictionResult prediction;
     prediction.storeQueueDistance = 0;
     prediction.seqNum = 0;
-    prediction = depPred.checkInst(inst->pcState().instAddr(), inst->seqNum, branchHistory);
+    prediction = depPred.checkInst(inst->pcState().instAddr(), inst->seqNum, branchHistory, inst->isLoad());
 
     if (prediction.storeQueueDistance && inst->sqIt.idx() >= (cpu->getIEW()->ldstQueue.getStoreHead(id) + prediction.storeQueueDistance)){
         //make a PHAST prediction, as long as the SQ offset is valid

@@ -48,7 +48,7 @@ namespace gem5
 namespace o3
 {
 
-PHAST::PHAST(const BaseO3CPUParams &params, MemDepUnit *restrict mem_dep_unit) {
+PHAST::PHAST(const BaseO3CPUParams &params, MemDepUnit *mem_dep_unit) {
 
     assert(isPowerOf2(params.phast_num_rows) && "Invalid number of rows per table!\n");
 
@@ -77,7 +77,7 @@ PHAST::~PHAST()
 {
 }
 
-void PHAST::init(const BaseO3CPUParams &params, MemDepUnit *restrict mem_dep_unit) {
+void PHAST::init(const BaseO3CPUParams &params, MemDepUnit *mem_dep_unit) {
 
     assert(isPowerOf2(params.phast_num_rows) && "Invalid number of rows per table!\n");
 
@@ -106,9 +106,11 @@ void PHAST::init(const BaseO3CPUParams &params, MemDepUnit *restrict mem_dep_uni
 
 }
 
-PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchHistory branchHistory) {
+PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchHistory branchHistory, bool isLoad) {
 
     struct PredictionResult prediction = {0,0,0,0};
+
+    if (!isLoad) return prediction;
 
     if (branchHistory.size() == 0) return prediction;
     unsigned begin = 0;

@@ -87,7 +87,7 @@ class PHAST
     * any store.  @return Returns the relative SQ distance of the store
     * instruction this PC is dependent upon.  Returns -1 if none.
     */
-    PredictionResult checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchHistory branchHistory);
+    PredictionResult checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchHistory branchHistory, bool isLoad);
 
     /** Updates predictor at load commit */
     void commit(Addr load_pc, Addr load_addr, unsigned load_size, Addr store_addr, unsigned store_size, unsigned path_index, uint64_t predictor_hash);
