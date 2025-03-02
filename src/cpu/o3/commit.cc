@@ -1018,10 +1018,6 @@ Commit::commitInsts()
                     iewStage->instQueue.memDepUnit[tid].commit(head_inst);
                 }
 
-                if (head_inst->isStore()) {
-                    rob->checkViolations(tid, head_inst);
-                }
-
                 // hardware transactional memory
 
                 // update nesting depth

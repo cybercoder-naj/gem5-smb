@@ -98,8 +98,6 @@ class ROB
 
     std::string name() const;
 
-    void checkViolations(ThreadID tid, const DynInstPtr& store);
-
     /** Sets pointer to the list of active threads.
      *  @param at_ptr Pointer to the list of active threads.
      */

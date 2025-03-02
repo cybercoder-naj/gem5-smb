@@ -569,26 +569,6 @@ ROB::ROBStats::ROBStats(statistics::Group *parent)
 {
 }
 
-void ROB::checkViolations(ThreadID tid, const DynInstPtr& store) {
-
-    Addr store_eff_addr1 = store->effAddr >> depCheckShift;
-    Addr store_eff_addr2 = (store->effAddr + store->effSize - 1) >> depCheckShift;
-
-    for (InstIt it = instList[tid].begin(); it != instList[tid].end(); it++) {
-        if ((*it)->isLoad() && (*it)->memDepInfo.violatingStoreSeqNum)  {
-            DynInstPtr load = *it;
-            Addr load_eff_addr1 = load->effAddr >> depCheckShift;
-            Addr load_eff_addr2 = (load->effAddr + load->effSize - 1) >> depCheckShift;
-            if (store_eff_addr2 >= load_eff_addr1 && store_eff_addr1 <= load_eff_addr2
-                && store->seqNum > load->memDepInfo.violatingStoreSeqNum) {
-                load->memDepInfo.violatingStoreSeqNum = store->seqNum;
-                load->memDepInfo.violatingStorePC = store->pcState().instAddr();
-                load->memDepInfo.storeQueueDistance = load->sqIt - store->sqIt;
-            }
-        }
-    }
-}
-
 DynInstPtr
 ROB::findInst(ThreadID tid, InstSeqNum squash_inst)
 {
