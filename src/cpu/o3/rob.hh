@@ -198,6 +198,8 @@ class ROB
     bool isEmpty(ThreadID tid) const
     { return threadEntries[tid] == 0; }
 
+    void updateViolationMarker(ThreadID tid, InstSeqNum squash_seq_num);
+
     /** Executes the squash, marking squashed instructions. */
     void doSquash(ThreadID tid, bool squashedDueToMemOrder);
 

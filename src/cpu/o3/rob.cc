@@ -308,6 +308,14 @@ ROB::numFreeEntries(ThreadID tid)
     return maxEntries[tid] - threadEntries[tid];
 }
 
+void ROB::updateViolationMarker(ThreadID tid, InstSeqNum squash_seq_num) {
+    for (auto inst: instList[tid]) {
+        if (inst->seqNum > squash_seq_num) {
+            inst->squashedDueToMemOrder = false;
+        }
+    }
+}
+
 void
 ROB::doSquash(ThreadID tid, bool squashedDueToMemOrder)
 {
@@ -338,6 +346,9 @@ ROB::doSquash(ThreadID tid, bool squashedDueToMemOrder)
     {
         numInstsToSquash = numEntries;
     }
+
+    if (!squashedDueToMemOrder)
+        updateViolationMarker(tid, squashedSeqNum[tid]);
 
     for (int numSquashed = 0;
          numSquashed < numInstsToSquash &&
