@@ -201,12 +201,13 @@ class MemDepUnit
         /** Stat for number of conflicting stores that had to wait for a
          *  store. */
         statistics::Scalar conflictingStores;
+        /* Number of false dependencies predicted by depPred */
+        statistics::Scalar falseDependencies;
+        /* Number of true dependencies predicted by depPred */
+        statistics::Scalar correctPredictions;
         /** ==== Store Sets ==== */
         statistics::Scalar LFSTReads;
         statistics::Scalar LFSTWrites;
-        /** ==== PHAST ==== */
-        statistics::Scalar PHASTMispredictions;
-        statistics::Scalar PHASTCorrectPredictions;
         /**  Sorry for this. Need to track reads/writes for each
          *  specific branch len table for power usage estimation. */
         statistics::Scalar readsPath1;
