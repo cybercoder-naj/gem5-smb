@@ -178,7 +178,7 @@ void PHAST::violation(Addr load_pc, InstSeqNum load_seq_num, InstSeqNum store_se
     /*This load was given a prediction but violated anyway, reduce the confidence counter*/
     if (predicted) {
         paths[predictedPathIndex].updateCommit(load_pc, predictedHash, true);
-        ++(memDepUnit->stats.PHASTMispredictions);
+        ++(memDepUnit->stats.falseDependencies);
         ++(*(memDepUnit->pathReads[predictedPathIndex]));
         ++(*(memDepUnit->pathWrites[predictedPathIndex]));
     }
@@ -205,8 +205,8 @@ void PHAST::commit(Addr load_pc, Addr load_addr, unsigned load_size, Addr store_
     else
         misprediction = true;
 
-    if (misprediction) ++(memDepUnit->stats.PHASTMispredictions);
-    else ++(memDepUnit->stats.PHASTCorrectPredictions);
+    if (misprediction) ++(memDepUnit->stats.falseDependencies);
+    else ++(memDepUnit->stats.correctPredictions);
 
     paths[path_index].updateCommit(load_pc, predictor_hash, misprediction);
     ++(*(memDepUnit->pathReads[path_index]));

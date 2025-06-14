@@ -118,9 +118,9 @@ MemDepUnit::MemDepUnitStats::MemDepUnitStats(statistics::Group *parent)
       ADD_STAT(LFSTWrites, statistics::units::Count::get(),
                "Number of LFST writes."),
       /** ==== PHAST ==== */
-      ADD_STAT(PHASTMispredictions, statistics::units::Count::get(),
+      ADD_STAT(falseDependencies, statistics::units::Count::get(),
                "Number of times load's address didn't match predicted store's address"),
-      ADD_STAT(PHASTCorrectPredictions, statistics::units::Count::get(),
+      ADD_STAT(correctPredictions, statistics::units::Count::get(),
                "Number of times load's address did match predicted store's address"),
       ADD_STAT(readsPath1, statistics::units::Count::get(),
                "Number of reads to path table 1."),
