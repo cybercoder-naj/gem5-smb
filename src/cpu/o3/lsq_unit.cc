@@ -1571,11 +1571,6 @@ LSQUnit::read(LSQRequest *request, ssize_t load_idx)
                         "Store idx %i to load addr %#x\n",
                         store_it._idx, request->mainReq()->getVaddr());
 
-                //though the load won't actually forward from this store, the store's data
-                //will still be what the load reads from cache instead of data from any
-                //older stores, so preventing violations from older matching stores is still valid
-                load_inst->memDepInfo.forwardedFrom = store_it->instruction()->seqNum;
-
                 // Must discard the request.
                 request->discard();
                 load_entry.setRequest(nullptr);
