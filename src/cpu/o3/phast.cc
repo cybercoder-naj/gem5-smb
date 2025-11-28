@@ -56,6 +56,7 @@ PHAST::PHAST(const BaseO3CPUParams &params, MemDepUnit *mem_dep_unit) {
     historySizes.assign({0, 2, 4, 6, 8, 12, 16, 32});
 
     depCheckShift = params.LSQDepCheckShift;
+    SQEntries = params.SQEntires;
     unsigned set_bits = (unsigned)log2((double)(params.phast_num_rows));
 
     maxBranches = 0;
@@ -92,6 +93,7 @@ void PHAST::init(const BaseO3CPUParams &params, MemDepUnit *mem_dep_unit) {
     memDepUnit = mem_dep_unit;
 
     depCheckShift = params.LSQDepCheckShift;
+    SQEntries = params.SQEntires;
     unsigned set_bits = (unsigned)log2((double)(params.phast_num_rows));
 
     debug = true;
@@ -108,7 +110,7 @@ void PHAST::init(const BaseO3CPUParams &params, MemDepUnit *mem_dep_unit) {
 
 PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchHistory branchHistory, bool isLoad) {
 
-    struct PredictionResult prediction = {0,0,0,0};
+    struct PredictionResult prediction = {0,0,0,0,0};
 
     if (!isLoad) return prediction;
 
@@ -127,13 +129,15 @@ PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchH
 
     uint64_t hash;
     std::ptrdiff_t distance;
+    std::ptrdiff_t distance2;
     for (unsigned i = 0; i <= maxBranches && i < historySizes.size(); i++) {
         hash = generateBranchHash(i, historySizes[i], branchHistory, begin);
-        distance = paths[i].predict(load_pc, hash);
+        [distance, distance2] = paths[i].predict(load_pc, hash);
         if (distance) {
             // all paths are read on prediction, so just use that stat to calc reads
             ++(*(memDepUnit->pathWrites[i]));
             prediction.storeQueueDistance = distance;
+            if (distance2) prediction.storeQueueDistance2 = distance2;
             prediction.predBranchHistLength = i;
             prediction.predictorHash = hash;
             return prediction;
@@ -193,14 +197,17 @@ void PHAST::violation(Addr load_pc, InstSeqNum load_seq_num, InstSeqNum store_se
 
 }
 
-void PHAST::commit(Addr load_pc, Addr load_addr, unsigned load_size, Addr store_addr, unsigned store_size, unsigned path_index, uint64_t predictor_hash) {
+void PHAST::commit(Addr load_pc, Addr load_addr, unsigned load_size, Addr store_addr, Addr store_addr, unsigned store_size2, unsigned store_size2, unsigned path_index, uint64_t predictor_hash) {
 
     bool misprediction;
     Addr load_eff_addr1 = load_addr >> depCheckShift;
     Addr load_eff_addr2 = (load_addr + load_size - 1) >> depCheckShift;
     Addr store_eff_addr1 = store_addr >> depCheckShift;
     Addr store_eff_addr2 = (store_addr + store_size - 1) >> depCheckShift;
-    if (store_eff_addr2 >= load_eff_addr1 && store_eff_addr1 <= load_eff_addr2)
+    Addr store2_eff_addr1 = store_addr2 >> depCheckShift;
+    Addr store2_eff_addr2 = (store_addr2 + store_size2 - 1) >> depCheckShift;
+    if ((store_eff_addr2 >= load_eff_addr1 && store_eff_addr1 <= load_eff_addr2) ||
+        (store2_eff_addr2 >= load_eff_addr1 && store2_eff_addr1 <= load_eff_addr2))
         misprediction = false;
     else
         misprediction = true;
@@ -342,7 +349,7 @@ void PHAST::SimplBlockCache::updateLRU(Entry* entry) {
     lruCounter++;
 }
 
-std::ptrdiff_t PHAST::SimplBlockCache::predict(Addr pc, uint64_t history) {
+std::tuple<std::ptrdiff_t, std::ptrdiff_t> PHAST::SimplBlockCache::predict(Addr pc, uint64_t history) {
     auto entry = findEntry(pc, history);
 
     if (entry == nullptr || entry->counter == 0 || entry->distance == 0) { // no prediction for this PC
@@ -351,7 +358,7 @@ std::ptrdiff_t PHAST::SimplBlockCache::predict(Addr pc, uint64_t history) {
 
     updateLRU(entry);
 
-    return entry->distance;
+    return {entry->distance, entry->distance2};
 }
 
 void PHAST::SimplBlockCache::update(Addr pc, uint64_t history, std::ptrdiff_t distance) {
@@ -362,12 +369,16 @@ void PHAST::SimplBlockCache::update(Addr pc, uint64_t history, std::ptrdiff_t di
         entry->tag = getTag(pc, history);
         entry->distance = distance;
         entry->counter = maxCounterValue;
-        updateLRU(entry);
-    } else {
+    } else if (entry && entry->distance2 == 0
+               && distance < SQEntries/2){
+        entry->distance2 = distance;
+        entry->counter = maxCounterValue;
+    }
+    else { //treat as an aliasing case
         entry->distance = distance;
         entry->counter = maxCounterValue;
-        updateLRU(entry);
     }
+    updateLRU(entry);
 }
 
 void PHAST::SimplBlockCache::updateCommit(Addr pc, uint64_t history, bool predictionWrong) {

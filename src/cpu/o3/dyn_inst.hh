@@ -367,8 +367,10 @@ class DynInst : public ExecContext, public RefCounted
         /** Relative offset into the SQ for dependent store*/
         std::ptrdiff_t storeQueueDistance;
         /** Memory location of store this load was predicted dependent on */
-        Addr predStoreAddr;
-        int predStoreSize;
+        Addr predStoreAddr = 0;
+        int predStoreSize = 0;
+        Addr predStoreAddr2 = 0;
+        int predStoreSize2 = 0;
         /** Predicted information validated at commit */
         unsigned predBranchHistLength = 0;
         uint64_t predictorHash = 0;

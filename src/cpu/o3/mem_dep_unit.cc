@@ -229,6 +229,26 @@ MemDepUnit::insertBarrierSN(const DynInstPtr &barr_inst)
     }
 }
 
+void MemDepUnit::addSQDistanceDep(const DynInstPtr &inst, std::ptrdiff_t distance,
+                                  std::vector<MemDepEntryPtr> dependencies) {
+
+    //check store queue distance is valid
+    if (distance == 0 || !(inst->sqIt.idx() >= (cpu->getIEW()->ldstQueue.getStoreHead(id) + distance)))
+        return
+
+    auto sq_it = inst->sqIt - distance;
+    DynInstPtr store_inst = sq_it->instruction();
+    MemDepHashIt hash_it = memDepHash.find(store_inst->seqNum);
+
+    if (hash_it != memDepHash.end()) {
+        dependencies.push_back((*hash_it).second);
+        inst->memDepInfo.predBranchHistLength = prediction.predBranchHistLength;
+        inst->memDepInfo.predictorHash = prediction.predictorHash;
+        inst->memDepInfo.predicted = true;
+    }
+
+}
+
 void
 MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
 {
@@ -253,18 +273,11 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
     prediction.seqNum = 0;
     prediction = depPred.checkInst(inst->pcState().instAddr(), inst->seqNum, branchHistory, inst->isLoad());
 
-    if (prediction.storeQueueDistance && inst->sqIt.idx() >= (cpu->getIEW()->ldstQueue.getStoreHead(id) + prediction.storeQueueDistance)){
+    if (prediction.storeQueueDistance) {
         //make a PHAST prediction, as long as the SQ offset is valid
-        auto sq_it = inst->sqIt - prediction.storeQueueDistance;
-        DynInstPtr store_inst = sq_it->instruction();
-        MemDepHashIt hash_it = memDepHash.find(store_inst->seqNum);
-
-        if (hash_it != memDepHash.end()) {
-            dependencies.push_back((*hash_it).second);
-            inst->memDepInfo.predBranchHistLength = prediction.predBranchHistLength;
-            inst->memDepInfo.predictorHash = prediction.predictorHash;
-            inst->memDepInfo.predicted = true;
-        }
+        addSQDistanceDep(prediction.storeQueueDistance);
+        addSQDistanceDep(prediction.storeQueueDistance2);
+    }
     } else if (prediction.seqNum) {
         //make a StoreSet prediction
         MemDepHashIt hash_it = memDepHash.find(prediction.seqNum);
@@ -571,8 +584,14 @@ MemDepUnit::wakeDependents(const DynInstPtr &inst)
 
         if (dependent_inst->memDeps == 0) {
             if (dependent_inst->inst->memDepInfo.predicted && inst->isStore()) {
-                dependent_inst->inst->memDepInfo.predStoreAddr = inst->effAddr;
-                dependent_inst->inst->memDepInfo.predStoreSize = inst->effSize;
+                if (dependent_inst->inst->memDepInfo.predStoreAddr == 0) {
+                    dependent_inst->inst->memDepInfo.predStoreAddr = inst->effAddr;
+                    dependent_inst->inst->memDepInfo.predStoreSize = inst->effSize;
+                }
+                else {
+                    dependent_inst->inst->memDepInfo.predStoreAddr2 = inst->effAddr;
+                    dependent_inst->inst->memDepInfo.predStoreSize2 = inst->effSize;
+                }
             }
             if (dependent_inst->regsReady && !dependent_inst->squashed) {
                 DPRINTF(MemDepUnit, "Inst PC: %#x [sn:%lli] is just "
@@ -699,6 +718,7 @@ MemDepUnit::commit(const DynInstPtr &inst)
 
     depPred.commit(inst->pcState().instAddr(), inst->effAddr,
                    inst->effSize, inst->memDepInfo.predStoreAddr, inst->memDepInfo.predStoreSize,
+                   inst->memDepInfo.predStoreAddr2, inst->memDepInfo.predStoreSize2,
                    inst->memDepInfo.predBranchHistLength, inst->memDepInfo.predictorHash);
 }
 

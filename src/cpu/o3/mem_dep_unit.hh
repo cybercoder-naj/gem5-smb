@@ -92,6 +92,7 @@ struct PredictionResult {
     InstSeqNum seqNum;
     /* For PHAST */
     std::ptrdiff_t storeQueueDistance;
+    std::ptrdiff_t storeQueueDistance2;
     unsigned predBranchHistLength;
     uint64_t predictorHash;
 };
