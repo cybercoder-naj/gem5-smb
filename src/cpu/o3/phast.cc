@@ -207,7 +207,7 @@ void PHAST::commit(Addr load_pc, Addr load_addr, unsigned load_size, Addr store_
     Addr store2_eff_addr1 = store_addr2 >> depCheckShift;
     Addr store2_eff_addr2 = (store_addr2 + store_size2 - 1) >> depCheckShift;
     if ((store_eff_addr2 >= load_eff_addr1 && store_eff_addr1 <= load_eff_addr2) ||
-        (store2_eff_addr2 >= load_eff_addr1 && store2_eff_addr1 <= load_eff_addr2))
+        (store_addr2 != 0 && store2_eff_addr2 >= load_eff_addr1 && store2_eff_addr1 <= load_eff_addr2))
         misprediction = false;
     else
         misprediction = true;
