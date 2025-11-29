@@ -113,6 +113,12 @@ class MemDepUnit
   protected:
     std::string _name;
 
+  private:
+    class MemDepEntry;
+
+    typedef std::shared_ptr<MemDepEntry> MemDepEntryPtr;
+
+
   public:
     /** Empty constructor. Must call init() prior to using in this case. */
     MemDepUnit();
@@ -142,6 +148,8 @@ class MemDepUnit
 
     /** Sets the pointer to the IQ. */
     void setIQ(InstructionQueue *iq_ptr);
+
+    void addSQDistanceDep(const DynInstPtr &inst, std::ptrdiff_t distance, std::vector<MemDepEntryPtr> dependencies, PredictionResult prediction);
 
     /** Inserts a memory instruction. */
     void insert(const DynInstPtr &inst, BranchHistory branchHistory);
@@ -253,10 +261,6 @@ class MemDepUnit
     void wakeDependents(const DynInstPtr &inst);
 
     typedef typename std::list<DynInstPtr>::iterator ListIt;
-
-    class MemDepEntry;
-
-    typedef std::shared_ptr<MemDepEntry> MemDepEntryPtr;
 
     /** Memory dependence entries that track memory operations, marking
      *  when the instruction is ready to execute and what instructions depend

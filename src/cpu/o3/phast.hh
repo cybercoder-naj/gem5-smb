@@ -166,7 +166,7 @@ class PHAST
 
             std::tuple<std::ptrdiff_t, std::ptrdiff_t> predict(Addr pc, uint64_t history);
 
-            void update(Addr pc, uint64_t history, std::ptrdiff_t distance);
+            void update(Addr pc, uint64_t history, std::ptrdiff_t distance, unsigned SQEntries);
 
             void updateCommit(Addr pc, uint64_t history, bool predictionWrong);
 

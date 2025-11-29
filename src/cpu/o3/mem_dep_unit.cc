@@ -230,11 +230,11 @@ MemDepUnit::insertBarrierSN(const DynInstPtr &barr_inst)
 }
 
 void MemDepUnit::addSQDistanceDep(const DynInstPtr &inst, std::ptrdiff_t distance,
-                                  std::vector<MemDepEntryPtr> dependencies) {
+                                  std::vector<MemDepEntryPtr> dependencies, PredictionResult prediction) {
 
     //check store queue distance is valid
     if (distance == 0 || !(inst->sqIt.idx() >= (cpu->getIEW()->ldstQueue.getStoreHead(id) + distance)))
-        return
+        return;
 
     auto sq_it = inst->sqIt - distance;
     DynInstPtr store_inst = sq_it->instruction();
@@ -275,9 +275,8 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
 
     if (prediction.storeQueueDistance) {
         //make a PHAST prediction, as long as the SQ offset is valid
-        addSQDistanceDep(prediction.storeQueueDistance);
-        addSQDistanceDep(prediction.storeQueueDistance2);
-    }
+        addSQDistanceDep(inst, prediction.storeQueueDistance, dependencies, prediction);
+        addSQDistanceDep(inst, prediction.storeQueueDistance2, dependencies, prediction);
     } else if (prediction.seqNum) {
         //make a StoreSet prediction
         MemDepHashIt hash_it = memDepHash.find(prediction.seqNum);
