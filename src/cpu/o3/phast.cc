@@ -369,8 +369,8 @@ void PHAST::SimplBlockCache::update(Addr pc, uint64_t history, std::ptrdiff_t di
         entry->tag = getTag(pc, history);
         entry->distance = distance;
         entry->counter = maxCounterValue;
-    } else if (entry && entry->distance2 == 0){
-               //&& distance < SQEntries/2 && entry->distance < SQEntries/2){
+    } else if (entry && entry->distance2 == 0
+               && distance < SQEntries/2 && entry->distance < SQEntries/2){
         entry->distance2 = distance;
         entry->counter = maxCounterValue;
     }
