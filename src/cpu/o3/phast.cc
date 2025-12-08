@@ -368,14 +368,16 @@ void PHAST::SimplBlockCache::update(Addr pc, uint64_t history, std::ptrdiff_t di
         entry = getLRUEntry(getIndex(pc, history));
         entry->tag = getTag(pc, history);
         entry->distance = distance;
+        entry->distance2 = 0;
         entry->counter = maxCounterValue;
-    } else if (entry && entry->distance2 == 0
+    } else if (entry && entry->distance2 == 0 && entry->distance != distance
                && distance < SQEntries/2 && entry->distance < SQEntries/2){
         entry->distance2 = distance;
         entry->counter = maxCounterValue;
     }
     else { //treat as an aliasing case
         entry->distance = distance;
+        entry->distance2 = 0;
         entry->counter = maxCounterValue;
     }
     updateLRU(entry);

@@ -230,7 +230,7 @@ MemDepUnit::insertBarrierSN(const DynInstPtr &barr_inst)
 }
 
 void MemDepUnit::addSQDistanceDep(const DynInstPtr &inst, std::ptrdiff_t distance,
-                                  std::vector<MemDepEntryPtr> dependencies, PredictionResult prediction) {
+                                  std::vector<MemDepEntryPtr> &dependencies, PredictionResult prediction) {
 
     //check store queue distance is valid
     if (distance == 0 || !(inst->sqIt.idx() >= (cpu->getIEW()->ldstQueue.getStoreHead(id) + distance)))

@@ -149,7 +149,7 @@ class MemDepUnit
     /** Sets the pointer to the IQ. */
     void setIQ(InstructionQueue *iq_ptr);
 
-    void addSQDistanceDep(const DynInstPtr &inst, std::ptrdiff_t distance, std::vector<MemDepEntryPtr> dependencies, PredictionResult prediction);
+    void addSQDistanceDep(const DynInstPtr &inst, std::ptrdiff_t distance, std::vector<MemDepEntryPtr> &dependencies, PredictionResult prediction);
 
     /** Inserts a memory instruction. */
     void insert(const DynInstPtr &inst, BranchHistory branchHistory);
