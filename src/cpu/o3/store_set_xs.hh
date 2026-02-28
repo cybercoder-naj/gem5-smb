@@ -72,15 +72,6 @@ struct PredictionResult;
 
 class MemDepUnit;
 
-struct ltseqnum
-{
-    bool
-    operator()(const InstSeqNum &lhs, const InstSeqNum &rhs) const
-    {
-        return lhs > rhs;
-    }
-};
-
 /**
  * Alternate implementation of the Store Set predictor found in the OpenXiangShan fork.
  * Each LFST entry holds multiple stores, and loads are made dependent on all at once.
@@ -97,32 +88,32 @@ class StoreSetXS
     StoreSetXS() { };
 
     /** Creates store set predictor with given table sizes. */
-    StoreSetXS(uint64_t clear_period, int SSIT_size, int LFST_size,int _store_set_clear_thres, int _LFSTEntrySize);
+    StoreSetXS(const BaseO3CPUParams &params, MemDepUnit *_memDep);
 
     /** Default destructor. */
     ~StoreSetXS();
 
     /** Initializes the store set predictor with the given table sizes. */
-    void init(uint64_t clear_period, int clear_period_thres, int _SSIT_size, int _LFST_size, int _LFST_entry_size);
+    void init(const BaseO3CPUParams &params, MemDepUnit *_memDep);
 
     /** Records a memory ordering violation between the younger load
      * and the older store. */
-    void violation(Addr store_PC, Addr load_PC);
+    void violation(Addr load_pc, InstSeqNum load_seq_num, InstSeqNum store_seq_num, Addr store_pc, std::ptrdiff_t storeQueueDistance, bool predicted, unsigned predictedPathInex, uint64_t predictedHash, BranchHistory branchHistory);
 
     /** Clears the store set predictor every so often so that all the
      * entries aren't used and stores are constantly predicted as
      * conflicting.
      */
-    void checkClear(Cycles curCycle);
+    void checkClear();
 
     /** Inserts a load into the store set predictor.  This does nothing but
      * is included in case other predictors require a similar function.
      */
-    void insertLoad(Addr load_PC, InstSeqNum load_seq_num,Cycles curCycle);
+    void insertLoad(Addr load_PC, InstSeqNum load_seq_num);
 
     /** Inserts a store into the store set predictor.  Updates the
      * LFST if the store has a valid SSID. */
-    void insertStore(Addr store_PC, InstSeqNum store_seq_num, ThreadID tid, Cycles curCycle);
+    void insertStore(Addr store_PC, InstSeqNum store_seq_num, ThreadID tid);
 
     /** Checks if the instruction with the given PC is dependent upon
      * any store.  @return Returns the sequence number of the store
@@ -175,13 +166,6 @@ class StoreSetXS
     /** Bit vector to tell if the LFST has a valid entry. */
     std::vector<std::vector<bool>> validLFSTLarge;
 
-    /** Map of stores that have been inserted into the store set, but
-     * not yet issued or squashed.
-     */
-    // std::map<InstSeqNum, int, ltseqnum> storeList;
-
-    typedef std::map<InstSeqNum, int, ltseqnum>::iterator SeqNumMapIt;
-
     /** Number of loads/stores to process before wiping predictor so all
      * entries don't get saturated
      */
@@ -204,6 +188,8 @@ class StoreSetXS
 
     /** Number of memory operations predicted since last clear of predictor */
     int memOpsPred;
+
+    MemDepUnit *memDep;
 };
 
 } // namespace o3

@@ -780,5 +780,7 @@ MemDepUnit::dumpLists()
 #endif
 }
 
+Cycles MemDepUnit::curCycle() { return cpu->curCycle(); }
+
 } // namespace o3
 } // namespace gem5

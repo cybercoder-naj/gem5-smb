@@ -65,8 +65,7 @@ struct ltseqnum
     }
 };
 
-/*#include "mem_dep_unit.hh"
-*
+/*
  * Implements a store set predictor for determining if memory
  * instructions are dependent upon each other.  See paper "Memory
  * Dependence Prediction using Store Sets" by Chrysos and Emer.  SSID
