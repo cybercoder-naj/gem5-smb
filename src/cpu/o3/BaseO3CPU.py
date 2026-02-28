@@ -152,9 +152,9 @@ class BaseO3CPU(BaseCPU):
         "Number of load/store insts before store sets should be invalided"
     )
     store_set_clear_thres = Param.Unsigned(512*1024, "Number of cycles before store sets should be invalided (XiangShan variant)")
-    LFSTSize = Param.Unsigned(512, "Last fetched store table size")
-    LFSTEntrySize = Param.Unsigned(4,"The number of store table inst in every entry of LFST can contain")
-    SSITSize = Param.Unsigned(512, "Store set ID table size")
+    LFSTSize = Param.Unsigned(32, "Last fetched store table size")
+    LFSTEntrySize = Param.Unsigned(4,"The number of store table inst in every entry of LFST can contain (XiangShan variant)")
+    SSITSize = Param.Unsigned(1024, "Store set ID table size")
 
     #phast_num_rows = Param.Unsigned(32, "Number of rows per table")
     #phast_associativity = Param.Unsigned(2, "Number of entries per row")
