@@ -229,12 +229,12 @@ MemDepUnit::insertBarrierSN(const DynInstPtr &barr_inst)
     }
 }
 
-void MemDepUnit::addSQDistanceDep(const DynInstPtr &inst, std::ptrdiff_t distance,
-                                  std::vector<MemDepEntryPtr> &dependencies, PredictionResult prediction) {
+bool MemDepUnit::addSQDistanceDep(const DynInstPtr &inst, std::ptrdiff_t distance,
+                                  std::vector<MemDepEntryPtr> &dependencies) {
 
     //check store queue distance is valid
-    if (distance == 0 || !(inst->sqIt.idx() >= (cpu->getIEW()->ldstQueue.getStoreHead(id) + distance)))
-        return;
+    if (distance == 0 || inst->sqIt.idx() <= (cpu->getIEW()->ldstQueue.getStoreHead(id) + distance))
+        return false;
 
     auto sq_it = inst->sqIt - distance;
     DynInstPtr store_inst = sq_it->instruction();
@@ -242,10 +242,9 @@ void MemDepUnit::addSQDistanceDep(const DynInstPtr &inst, std::ptrdiff_t distanc
 
     if (hash_it != memDepHash.end()) {
         dependencies.push_back((*hash_it).second);
-        inst->memDepInfo.predBranchHistLength = prediction.predBranchHistLength;
-        inst->memDepInfo.predictorHash = prediction.predictorHash;
-        inst->memDepInfo.predicted = true;
+        return true;
     }
+    return false;
 
 }
 
@@ -269,21 +268,30 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
 
     std::vector<MemDepEntryPtr> dependencies;
     PredictionResult prediction;
-    prediction.storeQueueDistance = 0;
-    prediction.seqNum = 0;
+    prediction.storeQueueDistances = {0,0};
+    prediction.seqNums = std::vector<InstSeqNum>();
     prediction = depPred.checkInst(inst->pcState().instAddr(), inst->seqNum, branchHistory, inst->isLoad());
 
-    if (prediction.storeQueueDistance) {
+    if (prediction.storeQueueDistances.first || prediction.storeQueueDistances.second) {
         //make a PHAST prediction, as long as the SQ offset is valid
-        addSQDistanceDep(inst, prediction.storeQueueDistance, dependencies, prediction);
-        addSQDistanceDep(inst, prediction.storeQueueDistance2, dependencies, prediction);
-    } else if (prediction.seqNum) {
-        //make a StoreSet prediction
-        MemDepHashIt hash_it = memDepHash.find(prediction.seqNum);
+        bool foundStore = false;
+        foundStore |= addSQDistanceDep(inst, prediction.storeQueueDistances.first, dependencies);
+        foundStore |= addSQDistanceDep(inst, prediction.storeQueueDistances.second, dependencies);
 
-        if (hash_it != memDepHash.end()) {
-            dependencies.push_back((*hash_it).second);
+        if (foundStore) {
+            inst->memDepInfo.predBranchHistLength = prediction.predBranchHistLength;
+            inst->memDepInfo.predictorHash = prediction.predictorHash;
             inst->memDepInfo.predicted = true;
+        }
+
+    } else if (prediction.seqNums.size()) {
+        //make a StoreSet prediction
+        for (auto seqNum : prediction.seqNums) {
+            MemDepHashIt hash_it = memDepHash.find(seqNum);
+            if (hash_it != memDepHash.end()) {
+                dependencies.push_back((*hash_it).second);
+                inst->memDepInfo.predicted = true;
+            }
         }
     }
 
@@ -583,13 +591,13 @@ MemDepUnit::wakeDependents(const DynInstPtr &inst)
 
         if (dependent_inst->memDeps == 0) {
             if (dependent_inst->inst->memDepInfo.predicted && inst->isStore()) {
-                if (dependent_inst->inst->memDepInfo.predStoreAddr == 0) {
-                    dependent_inst->inst->memDepInfo.predStoreAddr = inst->effAddr;
-                    dependent_inst->inst->memDepInfo.predStoreSize = inst->effSize;
+                if (dependent_inst->inst->memDepInfo.predStoreAddrs.first == 0) {
+                    dependent_inst->inst->memDepInfo.predStoreAddrs.first = inst->effAddr;
+                    dependent_inst->inst->memDepInfo.predStoreSizes.first = inst->effSize;
                 }
                 else {
-                    dependent_inst->inst->memDepInfo.predStoreAddr2 = inst->effAddr;
-                    dependent_inst->inst->memDepInfo.predStoreSize2 = inst->effSize;
+                    dependent_inst->inst->memDepInfo.predStoreAddrs.second = inst->effAddr;
+                    dependent_inst->inst->memDepInfo.predStoreSizes.second = inst->effSize;
                 }
             }
             if (dependent_inst->regsReady && !dependent_inst->squashed) {
@@ -716,8 +724,7 @@ MemDepUnit::commit(const DynInstPtr &inst)
     if (inst->isStore()) return;
 
     depPred.commit(inst->pcState().instAddr(), inst->effAddr,
-                   inst->effSize, inst->memDepInfo.predStoreAddr, inst->memDepInfo.predStoreSize,
-                   inst->memDepInfo.predStoreAddr2, inst->memDepInfo.predStoreSize2,
+                   inst->effSize, inst->memDepInfo.predStoreAddrs, inst->memDepInfo.predStoreSizes,
                    inst->memDepInfo.predBranchHistLength, inst->memDepInfo.predictorHash);
 }
 

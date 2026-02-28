@@ -257,7 +257,8 @@ StoreSet::insertStore(Addr store_PC, InstSeqNum store_seq_num, ThreadID tid)
 PredictionResult StoreSet::checkInst(Addr PC, InstSeqNum load_seq_num, BranchHistory branchHistory, bool isLoad)
 {
 
-    struct PredictionResult prediction = {0,0,0,0,0};
+    struct PredictionResult prediction{};
+    prediction.seqNums.reserve(1);
 
     int index = calcIndex(PC);
 
@@ -289,7 +290,7 @@ PredictionResult StoreSet::checkInst(Addr PC, InstSeqNum load_seq_num, BranchHis
             DPRINTF(StoreSet, "Inst %#x with index %i and SSID %i had LFST "
                     "inum of %i\n", PC, index, inst_SSID, LFST[inst_SSID]);
 
-            prediction.seqNum = LFST[inst_SSID];
+            prediction.seqNums.push_back(LFST[inst_SSID]);
             return prediction;
         }
     }

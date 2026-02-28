@@ -59,6 +59,7 @@
 #include "cpu/o3/limits.hh"
 #include "cpu/o3/phast.hh"
 //#include "cpu/o3/store_set.hh"
+//#include "cpu/o3/store_set_xs.hh"
 #include "debug/MemDepUnit.hh"
 #include "mem/packet.hh"
 #include "mem/port.hh"
@@ -82,17 +83,14 @@ struct BaseO3CPUParams;
 namespace o3
 {
 
-// class PHAST;
-//class StoreSet;
 class CPU;
 class InstructionQueue;
 
 struct PredictionResult {
     /* For StoreSets */
-    InstSeqNum seqNum;
+    std::vector<InstSeqNum> seqNums;
     /* For PHAST */
-    std::ptrdiff_t storeQueueDistance;
-    std::ptrdiff_t storeQueueDistance2;
+    std::pair<std::ptrdiff_t, std::ptrdiff_t> storeQueueDistances;
     unsigned predBranchHistLength;
     uint64_t predictorHash;
 };
@@ -149,7 +147,7 @@ class MemDepUnit
     /** Sets the pointer to the IQ. */
     void setIQ(InstructionQueue *iq_ptr);
 
-    void addSQDistanceDep(const DynInstPtr &inst, std::ptrdiff_t distance, std::vector<MemDepEntryPtr> &dependencies, PredictionResult prediction);
+    bool addSQDistanceDep(const DynInstPtr &inst, std::ptrdiff_t distance, std::vector<MemDepEntryPtr> &dependencies);
 
     /** Inserts a memory instruction. */
     void insert(const DynInstPtr &inst, BranchHistory branchHistory);

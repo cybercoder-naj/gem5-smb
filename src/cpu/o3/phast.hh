@@ -91,7 +91,7 @@ class PHAST
     PredictionResult checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchHistory branchHistory, bool isLoad);
 
     /** Updates predictor at load commit */
-    void commit(Addr load_pc, Addr load_addr, unsigned load_size, Addr store_addr, unsigned store_size, Addr store_addr2, unsigned store_size2, unsigned path_index, uint64_t predictor_hash);
+    void commit(Addr load_pc, Addr load_addr, unsigned load_size, std::pair<Addr, Addr> store_addrs, std::pair<unsigned, unsigned> store_sizes, unsigned path_index, uint64_t predictor_hash);
 
     /** Clears all tables */
     void clear();
@@ -136,8 +136,7 @@ class PHAST
     class SimplBlockCache {
         struct Entry {
             uint64_t tag;
-            std::ptrdiff_t distance;
-            std::ptrdiff_t distance2 = 0;
+            std::pair<std::ptrdiff_t, std::ptrdiff_t> distances;
             uint32_t lru;
             uint32_t counter;
         };
@@ -164,7 +163,7 @@ class PHAST
 
             int init(uint32_t set_bits, uint32_t _associativity, uint32_t tag_bits, uint32_t max_counter_value);
 
-            std::tuple<std::ptrdiff_t, std::ptrdiff_t> predict(Addr pc, uint64_t history);
+            std::pair<std::ptrdiff_t, std::ptrdiff_t> predict(Addr pc, uint64_t history);
 
             void update(Addr pc, uint64_t history, std::ptrdiff_t distance, unsigned SQEntries);
 

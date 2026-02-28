@@ -149,10 +149,11 @@ class BaseO3CPU(BaseCPU):
     )
     store_set_clear_period = Param.Unsigned(
         128*244,
-        "Number of load/store insts before the dep predictor "
-        "should be invalidated",
+        "Number of load/store insts before store sets should be invalided"
     )
+    store_set_clear_thres = Param.Unsigned(512*1024, "Number of cycles before store sets should be invalided (XiangShan variant)")
     LFSTSize = Param.Unsigned(512, "Last fetched store table size")
+    LFSTEntrySize = Param.Unsigned(4,"The number of store table inst in every entry of LFST can contain")
     SSITSize = Param.Unsigned(512, "Store set ID table size")
 
     #phast_num_rows = Param.Unsigned(32, "Number of rows per table")

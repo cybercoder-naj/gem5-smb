@@ -110,7 +110,7 @@ void PHAST::init(const BaseO3CPUParams &params, MemDepUnit *mem_dep_unit) {
 
 PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchHistory branchHistory, bool isLoad) {
 
-    struct PredictionResult prediction = {0,0,0,0,0};
+    struct PredictionResult prediction{};
 
     if (!isLoad) return prediction;
 
@@ -128,16 +128,14 @@ PredictionResult PHAST::checkInst(Addr load_pc, InstSeqNum load_seq_num, BranchH
     }
 
     uint64_t hash;
-    std::ptrdiff_t distance;
-    std::ptrdiff_t distance2;
+    std::pair<std::ptrdiff_t, std::ptrdiff_t> distances;
     for (unsigned i = 0; i <= maxBranches && i < historySizes.size(); i++) {
         hash = generateBranchHash(i, historySizes[i], branchHistory, begin);
-        tie(distance, distance2) = paths[i].predict(load_pc, hash);
-        if (distance) {
-            // all paths are read on prediction, so just use that stat to calc reads
+        distances = paths[i].predict(load_pc, hash);
+        if (distances.first || distances.second) {
+            // all paths are read on prediction, so just use that stat to calc reads for power est
             ++(*(memDepUnit->pathWrites[i]));
-            prediction.storeQueueDistance = distance;
-            if (distance2) prediction.storeQueueDistance2 = distance2;
+            prediction.storeQueueDistances = distances;
             prediction.predBranchHistLength = i;
             prediction.predictorHash = hash;
             return prediction;
@@ -197,20 +195,26 @@ void PHAST::violation(Addr load_pc, InstSeqNum load_seq_num, InstSeqNum store_se
 
 }
 
-void PHAST::commit(Addr load_pc, Addr load_addr, unsigned load_size, Addr store_addr, unsigned store_size, Addr store_addr2, unsigned store_size2, unsigned path_index, uint64_t predictor_hash) {
+void PHAST::commit(Addr load_pc, Addr load_addr, unsigned load_size, std::pair<Addr, Addr> store_addrs, std::pair<unsigned, unsigned> store_sizes, unsigned path_index, uint64_t predictor_hash) {
 
-    bool misprediction;
+    //not a mispred as long as at least one of the addrs matched
+    bool misprediction = true;
     Addr load_eff_addr1 = load_addr >> depCheckShift;
     Addr load_eff_addr2 = (load_addr + load_size - 1) >> depCheckShift;
-    Addr store_eff_addr1 = store_addr >> depCheckShift;
-    Addr store_eff_addr2 = (store_addr + store_size - 1) >> depCheckShift;
-    Addr store2_eff_addr1 = store_addr2 >> depCheckShift;
-    Addr store2_eff_addr2 = (store_addr2 + store_size2 - 1) >> depCheckShift;
-    if ((store_eff_addr2 >= load_eff_addr1 && store_eff_addr1 <= load_eff_addr2) ||
-        (store_addr2 != 0 && store2_eff_addr2 >= load_eff_addr1 && store2_eff_addr1 <= load_eff_addr2))
-        misprediction = false;
-    else
-        misprediction = true;
+    if (store_addrs.first) {
+        Addr store_addr = store_addrs.first;
+        Addr store_size = store_sizes.first;
+        Addr store_eff_addr1 = store_addr >> depCheckShift;
+        Addr store_eff_addr2 = (store_addr + store_size - 1) >> depCheckShift;
+        misprediction &= !(store_eff_addr2 >= load_eff_addr1 && store_eff_addr1 <= load_eff_addr2);
+    }
+    if (store_addrs.second && misprediction) {
+        Addr store_addr = store_addrs.second;
+        Addr store_size = store_sizes.second;
+        Addr store_eff_addr1 = store_addr >> depCheckShift;
+        Addr store_eff_addr2 = (store_addr + store_size - 1) >> depCheckShift;
+        misprediction &= !(store_eff_addr2 >= load_eff_addr1 && store_eff_addr1 <= load_eff_addr2);
+    }
 
     if (misprediction) ++(memDepUnit->stats.falseDependencies);
     else ++(memDepUnit->stats.correctPredictions);
@@ -287,7 +291,7 @@ int PHAST::SimplBlockCache::init(uint32_t set_bits, uint32_t _associativity, uin
     cache.resize((1 << setBits), std::vector<Entry>());
 
     for (uint64_t i = 0; i < (1ULL << setBits); i++) {
-        cache[i].resize(associativity, {0,0,0,0});
+        cache[i].resize(associativity);
     }
 
     //num entries for this path
@@ -349,16 +353,16 @@ void PHAST::SimplBlockCache::updateLRU(Entry* entry) {
     lruCounter++;
 }
 
-std::tuple<std::ptrdiff_t, std::ptrdiff_t> PHAST::SimplBlockCache::predict(Addr pc, uint64_t history) {
+std::pair<std::ptrdiff_t, std::ptrdiff_t> PHAST::SimplBlockCache::predict(Addr pc, uint64_t history) {
     auto entry = findEntry(pc, history);
 
-    if (entry == nullptr || entry->counter == 0 || entry->distance == 0) { // no prediction for this PC
+    if (entry == nullptr || entry->counter == 0 || (entry->distances.first == 0 && entry->distances.second == 0)) { // no prediction for this PC
         return {0, 0};
     }
 
     updateLRU(entry);
 
-    return {entry->distance, entry->distance2};
+    return entry->distances;
 }
 
 void PHAST::SimplBlockCache::update(Addr pc, uint64_t history, std::ptrdiff_t distance, unsigned SQEntries) {
@@ -367,17 +371,17 @@ void PHAST::SimplBlockCache::update(Addr pc, uint64_t history, std::ptrdiff_t di
         // no prediction for this entry so far, so allocate one
         entry = getLRUEntry(getIndex(pc, history));
         entry->tag = getTag(pc, history);
-        entry->distance = distance;
-        entry->distance2 = 0;
+        entry->distances.first = distance;
+        entry->distances.second = 0;
         entry->counter = maxCounterValue;
-    } else if (entry && entry->distance2 == 0 && entry->distance != distance
-               && distance < SQEntries/2 && entry->distance < SQEntries/2){
-        entry->distance2 = distance;
+    } else if (entry && entry->distances.second == 0 && entry->distances.first != distance
+               && distance < SQEntries/2 && entry->distances.first < SQEntries/2){
+        entry->distances.second = distance;
         entry->counter = maxCounterValue;
     }
     else { //treat as an aliasing case
-        entry->distance = distance;
-        entry->distance2 = 0;
+        entry->distances.first = distance;
+        entry->distances.second = 0;
         entry->counter = maxCounterValue;
     }
     updateLRU(entry);
@@ -405,7 +409,7 @@ void PHAST::SimplBlockCache::clear() {
     for (uint64_t i = 0; i < (1ULL << setBits); i++) {
         for (uint32_t j = 0; j < associativity; j++) {
             cache[i][j].tag = 0;
-            cache[i][j].distance = 0;
+            cache[i][j].distances = {0,0};
             cache[i][j].lru = 0;
             cache[i][j].counter = 0;
         }
@@ -420,7 +424,8 @@ void PHAST::SimplBlockCache::printBlock(uint64_t set) {
         for (uint32_t j=0; j < associativity; j++) {
             std::cout << "[ ";
             std::cout << "Tag: " << cache[i][j].tag << " ";
-            std::cout << "SQ D.: " << cache[i][j].distance << " ";
+            std::cout << "SQ D1: " << cache[i][j].distances.first << " ";
+            std::cout << "SQ D2: " << cache[i][j].distances.second << " ";
             std::cout << "LRU: " << cache[i][j].lru << " ";
             std::cout << "Cntr: " << cache[i][j].counter << " ";
             std::cout << "] ";
