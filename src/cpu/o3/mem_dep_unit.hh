@@ -57,9 +57,9 @@
 #include "cpu/inst_seq.hh"
 #include "cpu/o3/dyn_inst_ptr.hh"
 #include "cpu/o3/limits.hh"
-//#include "cpu/o3/phast.hh"
+#include "cpu/o3/phast.hh"
 //#include "cpu/o3/store_set.hh"
-#include "cpu/o3/store_set_xs.hh"
+//#include "cpu/o3/store_set_xs.hh"
 #include "debug/MemDepUnit.hh"
 #include "mem/packet.hh"
 #include "mem/port.hh"
@@ -328,7 +328,7 @@ class MemDepUnit
      *  this unit what instruction the newly added instruction is dependent
      *  upon.
      */
-    StoreSetXS depPred;
+    PHAST depPred;
 
     /** Sequence numbers of outstanding load barriers. */
     std::unordered_set<InstSeqNum> loadBarrierSNs;

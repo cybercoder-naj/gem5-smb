@@ -233,7 +233,7 @@ bool MemDepUnit::addSQDistanceDep(const DynInstPtr &inst, std::ptrdiff_t distanc
                                   std::vector<MemDepEntryPtr> &dependencies) {
 
     //check store queue distance is valid
-    if (distance == 0 || inst->sqIt.idx() <= (cpu->getIEW()->ldstQueue.getStoreHead(id) + distance))
+    if (distance == 0 || !(inst->sqIt.idx() >= (cpu->getIEW()->ldstQueue.getStoreHead(id) + distance)))
         return false;
 
     auto sq_it = inst->sqIt - distance;
