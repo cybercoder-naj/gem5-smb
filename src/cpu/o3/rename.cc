@@ -86,6 +86,9 @@ Rename::Rename(CPU *_cpu, const BaseO3CPUParams &params)
         serializeInst[tid] = nullptr;
         serializeOnNextInst[tid] = false;
     }
+
+    //? Should this ever result in memory leaks?
+    storeToPhysReg.clear();
 }
 
 std::string
@@ -718,6 +721,31 @@ Rename::renameInsts(ThreadID tid)
             storesInProgress[tid]++;
         } else if (inst->isLoad()) {
             loadsInProgress[tid]++;
+        }
+
+        if (inst->isStore()) {
+            storeToPhysReg[inst->seqNum] = inst->renamedSrcIdx(2); //' this index is confirmed with x86 debug logs.
+        }
+
+        if (inst->isLoad()) {
+            InstSeqNum inst_seq_num = 4; // todo comes from SMB
+            
+            if (true || inst_seq_num != -1) { //! remember to remove
+                DPRINTF(Rename, "Bypassing Load [sn:%llu] speculatively.\n",
+                        inst->seqNum);
+
+                // Perform RAT remapping
+                PhysRegIdPtr str_value_phys_reg = storeToPhysReg[inst_seq_num];
+                assert(str_value_phys_reg);
+
+                auto load_value_reg = inst->destRegIdx(0); //' with x86 debug logs.
+                renameMap[tid]->setEntry(load_value_reg, str_value_phys_reg);
+
+                // todo properly pin the value regs so it lives longer than the store.
+                // todo understand how the pinning affects the scoreboard and the free list.
+
+                inst->setBypassedLoad();
+            }
         }
 
         ++renamed_insts;

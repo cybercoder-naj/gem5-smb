@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+set -e
+
+: "${1:?Missing executable name}"
+: "${1:?Missing debug flags}"
+
+pwd=`dirname $0`
+filename=`basename $1`
+debugflags=$2
+
+echo -en "Compiling $filename.s..."
+gcc -nostdlib -no-pie $pwd/$filename.s -o $pwd/$filename
+echo "Done."
+
+echo -en "Object dump of $filename..."
+objdump -d $pwd/$filename > $pwd/$filename.dump
+echo "Done."
+
+./build/X86/gem5.opt \
+  --debug-flags=$debugflags \
+  configs/deprecated/example/se.py \
+  --cmd=$pwd/$filename \
+  -n 1 \
+  --mem-type SimpleMemory \
+  --caches \
+  --l2cache \
+  --cpu-type DerivO3CPU \
+  --maxinsts=1000000 | tee $pwd/$filename.out

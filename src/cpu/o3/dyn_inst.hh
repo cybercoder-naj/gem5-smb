@@ -190,6 +190,7 @@ class DynInst : public ExecContext, public RefCounted
         ReqMade,
         MemOpDone,
         HtmFromTransaction,
+        BypassedLoad,
         MaxFlags
     };
 
@@ -608,6 +609,12 @@ class DynInst : public ExecContext, public RefCounted
     bool isHtmStop() const { return staticInst->isHtmStop(); }
     bool isHtmCancel() const { return staticInst->isHtmCancel(); }
     bool isHtmCmd() const { return staticInst->isHtmCmd(); }
+
+    bool isBypassedLoad() const { 
+        return staticInst->isLoad() && instFlags.test(BypassedLoad); 
+    }
+
+    void setBypassedLoad() { instFlags.set(BypassedLoad); }
 
     uint64_t
     getHtmTransactionUid() const override

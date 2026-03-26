@@ -1,0 +1,669 @@
+Global frequency set at 1000000000000 ticks per second
+      0: system.cpu.iew.lsq.thread0: Creating LSQUnit0 object.
+      0: system.cpu.iew.lsq.thread0: LQ size: 132, #loads occupied: 0
+      0: system.cpu.iew.lsq.thread0: SQ size: 72, #stores occupied: 0
+      0: system.cpu.iew.lsq.thread0: LQ size: 132, #loads occupied: 0
+      0: system.cpu.iew.lsq.thread0: SQ size: 72, #stores occupied: 0
+gem5 Simulator System.  https://www.gem5.org
+gem5 is copyrighted software; use the --copyright option for details.
+
+gem5 version 24.0.0.1
+gem5 compiled Mar 26 2026 15:34:49
+gem5 started Mar 26 2026 15:35:57
+gem5 executing on spectral, pid 2221995
+command line: ./build/X86/gem5.opt --debug-flags=Rename,LSQUnit configs/deprecated/example/se.py --cmd=./my-progs/exit -n 1 --mem-type SimpleMemory --caches --l2cache --cpu-type DerivO3CPU --maxinsts=1000000
+
+**** REAL SIMULATION ****
+      0: system.cpu.rename: Processing [tid:0]
+      0: system.cpu.rename: [tid:0] Free IQ: 559, Free ROB: 918, Free LQ: 132, Free SQ: 72, FreeRM 127(879 870 917 1834 127 8 4585)
+      0: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
+      0: system.cpu.rename: calcFreeLQEntries: free lqEntries: 132, loadsInProgress: 0, loads dispatchedToLQ: 0
+      0: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
+      0: system.cpu.rename: [tid:0] Nothing to do, breaking out early.
+      0: system.cpu.iew.lsq.thread0: LQ size: 132, #loads occupied: 0
+      0: system.cpu.iew.lsq.thread0: SQ size: 72, #stores occupied: 0
+    500: system.cpu.rename: Processing [tid:0]
+    500: system.cpu.rename: [tid:0] Free IQ: 559, Free ROB: 918, Free LQ: 132, Free SQ: 72, FreeRM 127(879 870 917 1834 127 8 4585)
+    500: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
+    500: system.cpu.rename: [tid:0] Squashing instructions due to squash from commit.
+    500: system.cpu.rename: [tid:0] [squash sn:0] Squashing instructions.
+    500: system.cpu.iew.lsq.thread0: Squashing until [sn:0]!(Loads:0 Stores:0)
+    500: system.cpu.iew.lsq.thread0: LQ size: 132, #loads occupied: 0
+    500: system.cpu.iew.lsq.thread0: SQ size: 72, #stores occupied: 0
+   1000: system.cpu.rename: Processing [tid:0]
+   1000: system.cpu.rename: [tid:0] Free IQ: 559, Free ROB: 918, Free LQ: 132, Free SQ: 72, FreeRM 127(879 870 917 1834 127 8 4585)
+   1000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
+   1000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 132, loadsInProgress: 0, loads dispatchedToLQ: 0
+   1000: system.cpu.rename: [tid:0] Done squashing, switching to running.
+   1000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
+   1000: system.cpu.rename: [tid:0] Nothing to do, breaking out early.
+   1500: system.cpu.rename: Processing [tid:0]
+   1500: system.cpu.rename: [tid:0] Free IQ: 559, Free ROB: 918, Free LQ: 132, Free SQ: 72, FreeRM 127(879 870 917 1834 127 8 4585)
+   1500: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
+   1500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 132, loadsInProgress: 0, loads dispatchedToLQ: 0
+   1500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
+   1500: system.cpu.rename: [tid:0] Nothing to do, breaking out early.
+   2000: system.cpu.rename: Processing [tid:0]
+   2000: system.cpu.rename: [tid:0] Free IQ: 559, Free ROB: 918, Free LQ: 132, Free SQ: 72, FreeRM 127(879 870 917 1834 127 8 4585)
+   2000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
+   2000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 132, loadsInProgress: 0, loads dispatchedToLQ: 0
+   2000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
+   2000: system.cpu.rename: [tid:0] Nothing to do, breaking out early.
+   2500: system.cpu.rename: Processing [tid:0]
+   2500: system.cpu.rename: [tid:0] Free IQ: 559, Free ROB: 918, Free LQ: 132, Free SQ: 72, FreeRM 127(879 870 917 1834 127 8 4585)
+   2500: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
+   2500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 132, loadsInProgress: 0, loads dispatchedToLQ: 0
+   2500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
+   2500: system.cpu.rename: [tid:0] Nothing to do, breaking out early.
+   3000: system.cpu.rename: Processing [tid:0]
+   3000: system.cpu.rename: [tid:0] Free IQ: 559, Free ROB: 918, Free LQ: 132, Free SQ: 72, FreeRM 127(879 870 917 1834 127 8 4585)
+   3000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
+   3000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 132, loadsInProgress: 0, loads dispatchedToLQ: 0
+   3000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
+   3000: system.cpu.rename: [tid:0] Nothing to do, breaking out early.
+   3500: system.cpu.rename: Processing [tid:0]
+   3500: system.cpu.rename: [tid:0] Free IQ: 559, Free ROB: 918, Free LQ: 132, Free SQ: 72, FreeRM 127(879 870 917 1834 127 8 4585)
+   3500: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
+   3500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 132, loadsInProgress: 0, loads dispatchedToLQ: 0
+   3500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
+   3500: system.cpu.rename: [tid:0] Nothing to do, breaking out early.
+   4000: system.cpu.rename: Processing [tid:0]
+   4000: system.cpu.rename: [tid:0] Free IQ: 559, Free ROB: 918, Free LQ: 132, Free SQ: 72, FreeRM 127(879 870 917 1834 127 8 4585)
+   4000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
+   4000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 132, loadsInProgress: 0, loads dispatchedToLQ: 0
+   4000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
+   4000: system.cpu.rename: [tid:0] Nothing to do, breaking out early.
+   4500: system.cpu.rename: Processing [tid:0]
+   4500: system.cpu.rename: [tid:0] Free IQ: 559, Free ROB: 918, Free LQ: 132, Free SQ: 72, FreeRM 127(879 870 917 1834 127 8 4585)
+   4500: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
+   4500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 132, loadsInProgress: 0, loads dispatchedToLQ: 0
+   4500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
+   4500: system.cpu.rename: [tid:0] Nothing to do, breaking out early.
+   5000: system.cpu.rename: Processing [tid:0]
+   5000: system.cpu.rename: [tid:0] Free IQ: 559, Free ROB: 918, Free LQ: 132, Free SQ: 72, FreeRM 127(879 870 917 1834 127 8 4585)
+   5000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
+   5000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 132, loadsInProgress: 0, loads dispatchedToLQ: 0
+   5000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
+   5000: system.cpu.rename: [tid:0] Nothing to do, breaking out early.
+   5500: system.cpu.rename: Processing [tid:0]
+   5500: system.cpu.rename: [tid:0] Free IQ: 559, Free ROB: 918, Free LQ: 132, Free SQ: 72, FreeRM 127(879 870 917 1834 127 8 4585)
+   5500: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
+   5500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 132, loadsInProgress: 0, loads dispatchedToLQ: 0
+   5500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
+   5500: system.cpu.rename: [tid:0] Nothing to do, breaking out early.
+  64000: system.cpu.rename: Processing [tid:0]
+  64000: system.cpu.rename: [tid:0] Free IQ: 559, Free ROB: 918, Free LQ: 132, Free SQ: 72, FreeRM 127(879 870 917 1834 127 8 4585)
+  64000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
+  64000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 132, loadsInProgress: 0, loads dispatchedToLQ: 0
+  64000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
+  64000: system.cpu.rename: [tid:0] Nothing to do, breaking out early.
+  64500: system.cpu.rename: Processing [tid:0]
+  64500: system.cpu.rename: [tid:0] Free IQ: 559, Free ROB: 918, Free LQ: 132, Free SQ: 72, FreeRM 127(879 870 917 1834 127 8 4585)
+  64500: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
+  64500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 132, loadsInProgress: 0, loads dispatchedToLQ: 0
+  64500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
+  64500: system.cpu.rename: [tid:0] Nothing to do, breaking out early.
+  65000: system.cpu.rename: Processing [tid:0]
+  65000: system.cpu.rename: [tid:0] Free IQ: 559, Free ROB: 918, Free LQ: 132, Free SQ: 72, FreeRM 127(879 870 917 1834 127 8 4585)
+  65000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
+  65000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 132, loadsInProgress: 0, loads dispatchedToLQ: 0
+  65000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
+  65000: system.cpu.rename: [tid:0] 10 available instructions to send iew.
+  65000: system.cpu.rename: [tid:0] 0 insts pipelining from Rename | 0 insts dispatched to IQ last cycle.
+  65000: system.cpu.rename: [tid:0] Sending instructions to IEW.
+  65000: system.cpu.rename: [tid:0] Processing instruction [sn:1] with PC (0x401000=>0x401004).(0=>1).
+  65000: global: Renamed reg t1 to physical reg 39 (39) old mapping was 17 (17)
+  65000: system.cpu.rename: [tid:0] Renaming arch reg 17 (integer) to physical reg 39 (39).
+  65000: system.cpu.rename: [tid:0] [sn:1] Adding instruction to history buffer (size=1).
+  65000: system.cpu.rename: [tid:0] Sending instructions to IEW.
+  65000: system.cpu.rename: [tid:0] Processing instruction [sn:2] with PC (0x401000=>0x401004).(1=>2).
+  65000: system.cpu.rename: [tid:0] Looking up integer arch reg 4, got phys reg 4 (integer)
+  65000: system.cpu.rename: [tid:0] Register 4 (flat: 4) (integer) is ready.
+  65000: system.cpu.rename: [tid:0] Looking up integer arch reg 17, got phys reg 39 (integer)
+  65000: system.cpu.rename: [tid:0] Register 39 (flat: 39) (integer) is not ready.
+  65000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+  65000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+  65000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+  65000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+  65000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+  65000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+  65000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+  65000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+  65000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+  65000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+  65000: global: Renamed reg rsp to physical reg 40 (40) old mapping was 4 (4)
+  65000: system.cpu.rename: [tid:0] Renaming arch reg 4 (integer) to physical reg 40 (40).
+  65000: system.cpu.rename: [tid:0] [sn:2] Adding instruction to history buffer (size=2).
+  65000: global: Renamed reg condition_code[0] to physical reg 4731 (4731) old mapping was 4726 (4726)
+  65000: system.cpu.rename: [tid:0] Renaming arch reg 0 (condition_code) to physical reg 5 (4731).
+  65000: system.cpu.rename: [tid:0] [sn:2] Adding instruction to history buffer (size=3).
+  65000: global: Renamed reg condition_code[1] to physical reg 4732 (4732) old mapping was 4727 (4727)
+  65000: system.cpu.rename: [tid:0] Renaming arch reg 1 (condition_code) to physical reg 6 (4732).
+  65000: system.cpu.rename: [tid:0] [sn:2] Adding instruction to history buffer (size=4).
+  65000: system.cpu.rename: [tid:0] Renaming arch reg 0 (invalid) to physical reg 4294967295 (4294967295).
+  65000: system.cpu.rename: [tid:0] [sn:2] Adding instruction to history buffer (size=5).
+  65000: system.cpu.rename: [tid:0] Renaming arch reg 0 (invalid) to physical reg 4294967295 (4294967295).
+  65000: system.cpu.rename: [tid:0] [sn:2] Adding instruction to history buffer (size=6).
+  65000: system.cpu.rename: [tid:0] Renaming arch reg 0 (invalid) to physical reg 4294967295 (4294967295).
+  65000: system.cpu.rename: [tid:0] [sn:2] Adding instruction to history buffer (size=7).
+  65000: system.cpu.rename: [tid:0] Sending instructions to IEW.
+  65000: system.cpu.rename: [tid:0] Processing instruction [sn:3] with PC (0x401004=>0x40100b).(0=>1).
+  65000: global: Renamed reg t1 to physical reg 41 (41) old mapping was 39 (39)
+  65000: system.cpu.rename: [tid:0] Renaming arch reg 17 (integer) to physical reg 41 (41).
+  65000: system.cpu.rename: [tid:0] [sn:3] Adding instruction to history buffer (size=8).
+  65000: system.cpu.rename: [tid:0] Sending instructions to IEW.
+  65000: system.cpu.rename: calcFreeSQEntries: free sqEntries: 72, storesInProgress: 0, stores dispatchedToSQ: 0
+  65000: system.cpu.rename: [tid:0] Processing instruction [sn:4] with PC (0x401004=>0x40100b).(1=>2).
+  65000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+  65000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+  65000: system.cpu.rename: [tid:0] Looking up integer arch reg 4, got phys reg 40 (integer)
+  65000: system.cpu.rename: [tid:0] Register 40 (flat: 40) (integer) is not ready.
+  65000: system.cpu.rename: [tid:0] Looking up integer arch reg 17, got phys reg 41 (integer)
+  65000: system.cpu.rename: [tid:0] Register 41 (flat: 41) (integer) is not ready.
+  65000: system.cpu.rename: [tid:0] Looking up miscellaneous arch reg 154, got phys reg 154 (miscellaneous)
+  65000: system.cpu.rename: [tid:0] Register 154 (flat: 0) (miscellaneous) is ready.
+  65000: system.cpu.rename: [tid:0] Sending instructions to IEW.
+  65000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 132, loadsInProgress: 0, loads dispatchedToLQ: 0
+  65000: system.cpu.rename: [tid:0] Processing instruction [sn:5] with PC (0x40100b=>0x40100e).(0=>1).
+  65000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+  65000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+  65000: system.cpu.rename: [tid:0] Looking up integer arch reg 4, got phys reg 40 (integer)
+  65000: system.cpu.rename: [tid:0] Register 40 (flat: 40) (integer) is not ready.
+  65000: system.cpu.rename: [tid:0] Looking up miscellaneous arch reg 154, got phys reg 154 (miscellaneous)
+  65000: system.cpu.rename: [tid:0] Register 154 (flat: 0) (miscellaneous) is ready.
+  65000: global: Renamed reg rbx to physical reg 42 (42) old mapping was 3 (3)
+  65000: system.cpu.rename: [tid:0] Renaming arch reg 3 (integer) to physical reg 42 (42).
+  65000: system.cpu.rename: [tid:0] [sn:5] Adding instruction to history buffer (size=9).
+  65000: system.cpu.rename: Bypassing Load [sn:5] speculatively.
+  65000: system.cpu.rename: [tid:0] Sending instructions to IEW.
+  65000: system.cpu.rename: [tid:0] Processing instruction [sn:6] with PC (0x40100e=>0x401015).(0=>1).
+  65000: global: Renamed reg rax to physical reg 43 (43) old mapping was 0 (0)
+  65000: system.cpu.rename: [tid:0] Renaming arch reg 0 (integer) to physical reg 43 (43).
+  65000: system.cpu.rename: [tid:0] [sn:6] Adding instruction to history buffer (size=10).
+  65000: system.cpu.rename: [tid:0] Sending instructions to IEW.
+  65000: system.cpu.rename: [tid:0] Processing instruction [sn:7] with PC (0x401015=>0x401018).(0=>1).
+  65000: system.cpu.rename: [tid:0] Looking up integer arch reg 7, got phys reg 7 (integer)
+  65000: system.cpu.rename: [tid:0] Register 7 (flat: 7) (integer) is ready.
+  65000: system.cpu.rename: [tid:0] Looking up integer arch reg 7, got phys reg 7 (integer)
+  65000: system.cpu.rename: [tid:0] Register 7 (flat: 7) (integer) is ready.
+  65000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+  65000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+  65000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+  65000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+  65000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+  65000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+  65000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+  65000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+  65000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+  65000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+  65000: global: Renamed reg rdi to physical reg 44 (44) old mapping was 7 (7)
+  65000: system.cpu.rename: [tid:0] Renaming arch reg 7 (integer) to physical reg 44 (44).
+  65000: system.cpu.rename: [tid:0] [sn:7] Adding instruction to history buffer (size=11).
+  65000: global: Renamed reg condition_code[0] to physical reg 4733 (4733) old mapping was 4731 (4731)
+  65000: system.cpu.rename: [tid:0] Renaming arch reg 0 (condition_code) to physical reg 7 (4733).
+  65000: system.cpu.rename: [tid:0] [sn:7] Adding instruction to history buffer (size=12).
+  65000: global: Renamed reg condition_code[1] to physical reg 4734 (4734) old mapping was 4732 (4732)
+  65000: system.cpu.rename: [tid:0] Renaming arch reg 1 (condition_code) to physical reg 8 (4734).
+  65000: system.cpu.rename: [tid:0] [sn:7] Adding instruction to history buffer (size=13).
+  65000: system.cpu.rename: [tid:0] Renaming arch reg 0 (invalid) to physical reg 4294967295 (4294967295).
+  65000: system.cpu.rename: [tid:0] [sn:7] Adding instruction to history buffer (size=14).
+  65000: system.cpu.rename: [tid:0] Renaming arch reg 0 (invalid) to physical reg 4294967295 (4294967295).
+  65000: system.cpu.rename: [tid:0] [sn:7] Adding instruction to history buffer (size=15).
+  65000: system.cpu.rename: [tid:0] Renaming arch reg 0 (invalid) to physical reg 4294967295 (4294967295).
+  65000: system.cpu.rename: [tid:0] [sn:7] Adding instruction to history buffer (size=16).
+  65000: system.cpu.rename: [tid:0] Sending instructions to IEW.
+  65000: system.cpu.rename: [tid:0] Processing instruction [sn:8] with PC (0x401018=>0x40101c).(0=>1).
+  65000: global: Renamed reg t1 to physical reg 45 (45) old mapping was 41 (41)
+  65000: system.cpu.rename: [tid:0] Renaming arch reg 17 (integer) to physical reg 45 (45).
+  65000: system.cpu.rename: [tid:0] [sn:8] Adding instruction to history buffer (size=17).
+  65000: system.cpu.rename: [tid:0] Sending instructions to IEW.
+  65000: system.cpu.rename: [tid:0] Processing instruction [sn:9] with PC (0x401018=>0x40101c).(1=>2).
+  65000: system.cpu.rename: [tid:0] Looking up integer arch reg 4, got phys reg 40 (integer)
+  65000: system.cpu.rename: [tid:0] Register 40 (flat: 40) (integer) is not ready.
+  65000: system.cpu.rename: [tid:0] Looking up integer arch reg 17, got phys reg 45 (integer)
+  65000: system.cpu.rename: [tid:0] Register 45 (flat: 45) (integer) is not ready.
+  65000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+  65000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+  65000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+  65000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+  65000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+  65000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+  65000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+  65000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+  65000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+  65000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+  65000: global: Renamed reg rsp to physical reg 46 (46) old mapping was 40 (40)
+  65000: system.cpu.rename: [tid:0] Renaming arch reg 4 (integer) to physical reg 46 (46).
+  65000: system.cpu.rename: [tid:0] [sn:9] Adding instruction to history buffer (size=18).
+  65000: global: Renamed reg condition_code[0] to physical reg 4735 (4735) old mapping was 4733 (4733)
+  65000: system.cpu.rename: [tid:0] Renaming arch reg 0 (condition_code) to physical reg 9 (4735).
+  65000: system.cpu.rename: [tid:0] [sn:9] Adding instruction to history buffer (size=19).
+  65000: global: Renamed reg condition_code[1] to physical reg 4736 (4736) old mapping was 4734 (4734)
+  65000: system.cpu.rename: [tid:0] Renaming arch reg 1 (condition_code) to physical reg 10 (4736).
+  65000: system.cpu.rename: [tid:0] [sn:9] Adding instruction to history buffer (size=20).
+  65000: system.cpu.rename: [tid:0] Renaming arch reg 0 (invalid) to physical reg 4294967295 (4294967295).
+  65000: system.cpu.rename: [tid:0] [sn:9] Adding instruction to history buffer (size=21).
+  65000: system.cpu.rename: [tid:0] Renaming arch reg 0 (invalid) to physical reg 4294967295 (4294967295).
+  65000: system.cpu.rename: [tid:0] [sn:9] Adding instruction to history buffer (size=22).
+  65000: system.cpu.rename: [tid:0] Renaming arch reg 0 (invalid) to physical reg 4294967295 (4294967295).
+  65000: system.cpu.rename: [tid:0] [sn:9] Adding instruction to history buffer (size=23).
+  65000: system.cpu.rename: [tid:0] Sending instructions to IEW.
+  65000: system.cpu.rename: [tid:0] Processing instruction [sn:10] with PC (0x40101c=>0x40101e).(0=>1).
+  65500: system.cpu.rename: Processing [tid:0]
+  65500: system.cpu.rename: [tid:0] Free IQ: 559, Free ROB: 918, Free LQ: 132, Free SQ: 72, FreeRM 127(871 870 917 1834 127 8 4579)
+  65500: system.cpu.rename: [tid:0] 10 instructions not yet in ROB
+  65500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 132, loadsInProgress: 1, loads dispatchedToLQ: 0
+  65500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
+  65500: system.cpu.rename: [tid:0] 10 available instructions to send iew.
+  65500: system.cpu.rename: [tid:0] 10 insts pipelining from Rename | 0 insts dispatched to IQ last cycle.
+  65500: system.cpu.rename: [tid:0] Sending instructions to IEW.
+  65500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 132, loadsInProgress: 1, loads dispatchedToLQ: 0
+  65500: system.cpu.rename: [tid:0] Processing instruction [sn:11] with PC (0x40101e=>0x401020).(0=>1).
+  65500: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+  65500: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+  65500: system.cpu.rename: [tid:0] Looking up integer arch reg 0, got phys reg 43 (integer)
+  65500: system.cpu.rename: [tid:0] Register 43 (flat: 43) (integer) is not ready.
+  65500: system.cpu.rename: [tid:0] Looking up integer arch reg 17, got phys reg 45 (integer)
+  65500: system.cpu.rename: [tid:0] Register 45 (flat: 45) (integer) is not ready.
+  65500: system.cpu.rename: [tid:0] Looking up miscellaneous arch reg 155, got phys reg 155 (miscellaneous)
+  65500: system.cpu.rename: [tid:0] Register 155 (flat: 0) (miscellaneous) is ready.
+  65500: global: Renamed reg t1 to physical reg 47 (47) old mapping was 45 (45)
+  65500: system.cpu.rename: [tid:0] Renaming arch reg 17 (integer) to physical reg 47 (47).
+  65500: system.cpu.rename: [tid:0] [sn:11] Adding instruction to history buffer (size=24).
+  65500: system.cpu.rename: Bypassing Load [sn:11] speculatively.
+  65500: system.cpu.rename: [tid:0] Sending instructions to IEW.
+  65500: system.cpu.rename: [tid:0] Processing instruction [sn:12] with PC (0x40101e=>0x401020).(1=>2).
+  65500: system.cpu.rename: [tid:0] Looking up integer arch reg 17, got phys reg 41 (integer)
+  65500: system.cpu.rename: [tid:0] Register 41 (flat: 41) (integer) is not ready.
+  65500: system.cpu.rename: [tid:0] Looking up integer arch reg 0, got phys reg 43 (integer)
+  65500: system.cpu.rename: [tid:0] Register 43 (flat: 43) (integer) is not ready.
+  65500: system.cpu.rename: [tid:0] Looking up integer arch reg 17, got phys reg 41 (integer)
+  65500: system.cpu.rename: [tid:0] Register 41 (flat: 41) (integer) is not ready.
+  65500: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+  65500: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+  65500: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+  65500: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+  65500: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+  65500: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+  65500: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+  65500: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+  65500: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+  65500: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+  65500: global: Renamed reg t1 to physical reg 48 (48) old mapping was 41 (41)
+  65500: system.cpu.rename: [tid:0] Renaming arch reg 17 (integer) to physical reg 48 (48).
+  65500: system.cpu.rename: [tid:0] [sn:12] Adding instruction to history buffer (size=25).
+  65500: global: Renamed reg condition_code[0] to physical reg 4737 (4737) old mapping was 4735 (4735)
+  65500: system.cpu.rename: [tid:0] Renaming arch reg 0 (condition_code) to physical reg 11 (4737).
+  65500: system.cpu.rename: [tid:0] [sn:12] Adding instruction to history buffer (size=26).
+  65500: global: Renamed reg condition_code[1] to physical reg 4738 (4738) old mapping was 4736 (4736)
+  65500: system.cpu.rename: [tid:0] Renaming arch reg 1 (condition_code) to physical reg 12 (4738).
+  65500: system.cpu.rename: [tid:0] [sn:12] Adding instruction to history buffer (size=27).
+  65500: system.cpu.rename: [tid:0] Renaming arch reg 0 (invalid) to physical reg 4294967295 (4294967295).
+  65500: system.cpu.rename: [tid:0] [sn:12] Adding instruction to history buffer (size=28).
+  65500: system.cpu.rename: [tid:0] Renaming arch reg 0 (invalid) to physical reg 4294967295 (4294967295).
+  65500: system.cpu.rename: [tid:0] [sn:12] Adding instruction to history buffer (size=29).
+  65500: system.cpu.rename: [tid:0] Renaming arch reg 0 (invalid) to physical reg 4294967295 (4294967295).
+  65500: system.cpu.rename: [tid:0] [sn:12] Adding instruction to history buffer (size=30).
+  65500: system.cpu.rename: [tid:0] Sending instructions to IEW.
+  65500: system.cpu.rename: calcFreeSQEntries: free sqEntries: 72, storesInProgress: 1, stores dispatchedToSQ: 0
+  65500: system.cpu.rename: [tid:0] Processing instruction [sn:13] with PC (0x40101e=>0x401020).(2=>3).
+  65500: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+  65500: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+  65500: system.cpu.rename: [tid:0] Looking up integer arch reg 0, got phys reg 43 (integer)
+  65500: system.cpu.rename: [tid:0] Register 43 (flat: 43) (integer) is not ready.
+  65500: system.cpu.rename: [tid:0] Looking up integer arch reg 17, got phys reg 48 (integer)
+  65500: system.cpu.rename: [tid:0] Register 48 (flat: 48) (integer) is not ready.
+  65500: system.cpu.rename: [tid:0] Looking up miscellaneous arch reg 155, got phys reg 155 (miscellaneous)
+  65500: system.cpu.rename: [tid:0] Register 155 (flat: 0) (miscellaneous) is ready.
+  65500: system.cpu.rename: [tid:0] Sending instructions to IEW.
+  65500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 132, loadsInProgress: 2, loads dispatchedToLQ: 0
+  65500: system.cpu.rename: [tid:0] Processing instruction [sn:14] with PC (0x401020=>0x401022).(0=>1).
+  65500: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+  65500: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+  65500: system.cpu.rename: [tid:0] Looking up integer arch reg 0, got phys reg 43 (integer)
+  65500: system.cpu.rename: [tid:0] Register 43 (flat: 43) (integer) is not ready.
+  65500: system.cpu.rename: [tid:0] Looking up integer arch reg 17, got phys reg 48 (integer)
+  65500: system.cpu.rename: [tid:0] Register 48 (flat: 48) (integer) is not ready.
+  65500: system.cpu.rename: [tid:0] Looking up miscellaneous arch reg 155, got phys reg 155 (miscellaneous)
+  65500: system.cpu.rename: [tid:0] Register 155 (flat: 0) (miscellaneous) is ready.
+  65500: global: Renamed reg t1 to physical reg 49 (49) old mapping was 48 (48)
+  65500: system.cpu.rename: [tid:0] Renaming arch reg 17 (integer) to physical reg 49 (49).
+  65500: system.cpu.rename: [tid:0] [sn:14] Adding instruction to history buffer (size=31).
+  65500: system.cpu.rename: Bypassing Load [sn:14] speculatively.
+  65500: system.cpu.rename: [tid:0] Sending instructions to IEW.
+  65500: system.cpu.rename: [tid:0] Processing instruction [sn:15] with PC (0x401020=>0x401022).(1=>2).
+  65500: system.cpu.rename: [tid:0] Looking up integer arch reg 17, got phys reg 41 (integer)
+  65500: system.cpu.rename: [tid:0] Register 41 (flat: 41) (integer) is not ready.
+  65500: system.cpu.rename: [tid:0] Looking up integer arch reg 0, got phys reg 43 (integer)
+  65500: system.cpu.rename: [tid:0] Register 43 (flat: 43) (integer) is not ready.
+  65500: system.cpu.rename: [tid:0] Looking up integer arch reg 17, got phys reg 41 (integer)
+  65500: system.cpu.rename: [tid:0] Register 41 (flat: 41) (integer) is not ready.
+  65500: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+  65500: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+  65500: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+  65500: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+  65500: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+  65500: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+  65500: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+  65500: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+  65500: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+  65500: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+  65500: global: Renamed reg t1 to physical reg 50 (50) old mapping was 41 (41)
+  65500: system.cpu.rename: [tid:0] Renaming arch reg 17 (integer) to physical reg 50 (50).
+  65500: system.cpu.rename: [tid:0] [sn:15] Adding instruction to history buffer (size=32).
+  65500: global: Renamed reg condition_code[0] to physical reg 4739 (4739) old mapping was 4737 (4737)
+  65500: system.cpu.rename: [tid:0] Renaming arch reg 0 (condition_code) to physical reg 13 (4739).
+  65500: system.cpu.rename: [tid:0] [sn:15] Adding instruction to history buffer (size=33).
+  65500: global: Renamed reg condition_code[1] to physical reg 4740 (4740) old mapping was 4738 (4738)
+  65500: system.cpu.rename: [tid:0] Renaming arch reg 1 (condition_code) to physical reg 14 (4740).
+  65500: system.cpu.rename: [tid:0] [sn:15] Adding instruction to history buffer (size=34).
+  65500: system.cpu.rename: [tid:0] Renaming arch reg 0 (invalid) to physical reg 4294967295 (4294967295).
+  65500: system.cpu.rename: [tid:0] [sn:15] Adding instruction to history buffer (size=35).
+  65500: system.cpu.rename: [tid:0] Renaming arch reg 0 (invalid) to physical reg 4294967295 (4294967295).
+  65500: system.cpu.rename: [tid:0] [sn:15] Adding instruction to history buffer (size=36).
+  65500: system.cpu.rename: [tid:0] Renaming arch reg 0 (invalid) to physical reg 4294967295 (4294967295).
+  65500: system.cpu.rename: [tid:0] [sn:15] Adding instruction to history buffer (size=37).
+  65500: system.cpu.rename: [tid:0] Sending instructions to IEW.
+  65500: system.cpu.rename: calcFreeSQEntries: free sqEntries: 72, storesInProgress: 2, stores dispatchedToSQ: 0
+  65500: system.cpu.rename: [tid:0] Processing instruction [sn:16] with PC (0x401020=>0x401022).(2=>3).
+  65500: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+  65500: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+  65500: system.cpu.rename: [tid:0] Looking up integer arch reg 0, got phys reg 43 (integer)
+  65500: system.cpu.rename: [tid:0] Register 43 (flat: 43) (integer) is not ready.
+  65500: system.cpu.rename: [tid:0] Looking up integer arch reg 17, got phys reg 50 (integer)
+  65500: system.cpu.rename: [tid:0] Register 50 (flat: 50) (integer) is not ready.
+  65500: system.cpu.rename: [tid:0] Looking up miscellaneous arch reg 155, got phys reg 155 (miscellaneous)
+  65500: system.cpu.rename: [tid:0] Register 155 (flat: 0) (miscellaneous) is ready.
+  65500: system.cpu.rename: [tid:0] Sending instructions to IEW.
+  65500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 132, loadsInProgress: 3, loads dispatchedToLQ: 0
+  65500: system.cpu.rename: [tid:0] Processing instruction [sn:17] with PC (0x401022=>0x401024).(0=>1).
+  65500: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+  65500: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+  65500: system.cpu.rename: [tid:0] Looking up integer arch reg 0, got phys reg 43 (integer)
+  65500: system.cpu.rename: [tid:0] Register 43 (flat: 43) (integer) is not ready.
+  65500: system.cpu.rename: [tid:0] Looking up integer arch reg 17, got phys reg 50 (integer)
+  65500: system.cpu.rename: [tid:0] Register 50 (flat: 50) (integer) is not ready.
+  65500: system.cpu.rename: [tid:0] Looking up miscellaneous arch reg 155, got phys reg 155 (miscellaneous)
+  65500: system.cpu.rename: [tid:0] Register 155 (flat: 0) (miscellaneous) is ready.
+  65500: global: Renamed reg t1 to physical reg 51 (51) old mapping was 50 (50)
+  65500: system.cpu.rename: [tid:0] Renaming arch reg 17 (integer) to physical reg 51 (51).
+  65500: system.cpu.rename: [tid:0] [sn:17] Adding instruction to history buffer (size=38).
+  65500: system.cpu.rename: Bypassing Load [sn:17] speculatively.
+  65500: system.cpu.rename: [tid:0] Sending instructions to IEW.
+  65500: system.cpu.rename: [tid:0] Processing instruction [sn:18] with PC (0x401022=>0x401024).(1=>2).
+  65500: system.cpu.rename: [tid:0] Looking up integer arch reg 17, got phys reg 41 (integer)
+  65500: system.cpu.rename: [tid:0] Register 41 (flat: 41) (integer) is not ready.
+  65500: system.cpu.rename: [tid:0] Looking up integer arch reg 0, got phys reg 43 (integer)
+  65500: system.cpu.rename: [tid:0] Register 43 (flat: 43) (integer) is not ready.
+  65500: system.cpu.rename: [tid:0] Looking up integer arch reg 17, got phys reg 41 (integer)
+  65500: system.cpu.rename: [tid:0] Register 41 (flat: 41) (integer) is not ready.
+  65500: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+  65500: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+  65500: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+  65500: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+  65500: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+  65500: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+  65500: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+  65500: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+  65500: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+  65500: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+  65500: global: Renamed reg t1 to physical reg 52 (52) old mapping was 41 (41)
+  65500: system.cpu.rename: [tid:0] Renaming arch reg 17 (integer) to physical reg 52 (52).
+  65500: system.cpu.rename: [tid:0] [sn:18] Adding instruction to history buffer (size=39).
+  65500: global: Renamed reg condition_code[0] to physical reg 4741 (4741) old mapping was 4739 (4739)
+  65500: system.cpu.rename: [tid:0] Renaming arch reg 0 (condition_code) to physical reg 15 (4741).
+  65500: system.cpu.rename: [tid:0] [sn:18] Adding instruction to history buffer (size=40).
+  65500: global: Renamed reg condition_code[1] to physical reg 4742 (4742) old mapping was 4740 (4740)
+  65500: system.cpu.rename: [tid:0] Renaming arch reg 1 (condition_code) to physical reg 16 (4742).
+  65500: system.cpu.rename: [tid:0] [sn:18] Adding instruction to history buffer (size=41).
+  65500: system.cpu.rename: [tid:0] Renaming arch reg 0 (invalid) to physical reg 4294967295 (4294967295).
+  65500: system.cpu.rename: [tid:0] [sn:18] Adding instruction to history buffer (size=42).
+  65500: system.cpu.rename: [tid:0] Renaming arch reg 0 (invalid) to physical reg 4294967295 (4294967295).
+  65500: system.cpu.rename: [tid:0] [sn:18] Adding instruction to history buffer (size=43).
+  65500: system.cpu.rename: [tid:0] Renaming arch reg 0 (invalid) to physical reg 4294967295 (4294967295).
+  65500: system.cpu.rename: [tid:0] [sn:18] Adding instruction to history buffer (size=44).
+  65500: system.cpu.rename: [tid:0] Sending instructions to IEW.
+  65500: system.cpu.rename: calcFreeSQEntries: free sqEntries: 72, storesInProgress: 3, stores dispatchedToSQ: 0
+  65500: system.cpu.rename: [tid:0] Processing instruction [sn:19] with PC (0x401022=>0x401024).(2=>3).
+  65500: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+  65500: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+  65500: system.cpu.rename: [tid:0] Looking up integer arch reg 0, got phys reg 43 (integer)
+  65500: system.cpu.rename: [tid:0] Register 43 (flat: 43) (integer) is not ready.
+  65500: system.cpu.rename: [tid:0] Looking up integer arch reg 17, got phys reg 52 (integer)
+  65500: system.cpu.rename: [tid:0] Register 52 (flat: 52) (integer) is not ready.
+  65500: system.cpu.rename: [tid:0] Looking up miscellaneous arch reg 155, got phys reg 155 (miscellaneous)
+  65500: system.cpu.rename: [tid:0] Register 155 (flat: 0) (miscellaneous) is ready.
+  65500: system.cpu.rename: [tid:0] Sending instructions to IEW.
+  65500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 132, loadsInProgress: 4, loads dispatchedToLQ: 0
+  65500: system.cpu.rename: [tid:0] Processing instruction [sn:20] with PC (0x401024=>0x401026).(0=>1).
+  65500: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+  65500: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+  65500: system.cpu.rename: [tid:0] Looking up integer arch reg 0, got phys reg 43 (integer)
+  65500: system.cpu.rename: [tid:0] Register 43 (flat: 43) (integer) is not ready.
+  65500: system.cpu.rename: [tid:0] Looking up integer arch reg 17, got phys reg 52 (integer)
+  65500: system.cpu.rename: [tid:0] Register 52 (flat: 52) (integer) is not ready.
+  65500: system.cpu.rename: [tid:0] Looking up miscellaneous arch reg 155, got phys reg 155 (miscellaneous)
+  65500: system.cpu.rename: [tid:0] Register 155 (flat: 0) (miscellaneous) is ready.
+  65500: global: Renamed reg t1 to physical reg 53 (53) old mapping was 52 (52)
+  65500: system.cpu.rename: [tid:0] Renaming arch reg 17 (integer) to physical reg 53 (53).
+  65500: system.cpu.rename: [tid:0] [sn:20] Adding instruction to history buffer (size=45).
+  65500: system.cpu.rename: Bypassing Load [sn:20] speculatively.
+  66000: system.cpu.rename: Processing [tid:0]
+  66000: system.cpu.rename: [tid:0] Free IQ: 559, Free ROB: 908, Free LQ: 132, Free SQ: 72, FreeRM 127(864 870 917 1834 127 8 4573)
+  66000: system.cpu.rename: [tid:0] 20 instructions not yet in ROB
+  66000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 132, loadsInProgress: 5, loads dispatchedToLQ: 0
+  66000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
+  66000: system.cpu.rename: [tid:0] 10 available instructions to send iew.
+  66000: system.cpu.rename: [tid:0] 20 insts pipelining from Rename | 0 insts dispatched to IQ last cycle.
+  66000: system.cpu.rename: [tid:0] Sending instructions to IEW.
+  66000: system.cpu.rename: [tid:0] Processing instruction [sn:21] with PC (0x401024=>0x401026).(1=>2).
+  66000: system.cpu.rename: [tid:0] Looking up integer arch reg 17, got phys reg 41 (integer)
+  66000: system.cpu.rename: [tid:0] Register 41 (flat: 41) (integer) is not ready.
+  66000: system.cpu.rename: [tid:0] Looking up integer arch reg 0, got phys reg 43 (integer)
+  66000: system.cpu.rename: [tid:0] Register 43 (flat: 43) (integer) is not ready.
+  66000: system.cpu.rename: [tid:0] Looking up integer arch reg 17, got phys reg 41 (integer)
+  66000: system.cpu.rename: [tid:0] Register 41 (flat: 41) (integer) is not ready.
+  66000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+  66000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+  66000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+  66000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+  66000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+  66000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+  66000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+  66000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+  66000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+  66000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+  66000: global: Renamed reg t1 to physical reg 54 (54) old mapping was 41 (41)
+  66000: system.cpu.rename: [tid:0] Renaming arch reg 17 (integer) to physical reg 54 (54).
+  66000: system.cpu.rename: [tid:0] [sn:21] Adding instruction to history buffer (size=46).
+  66000: global: Renamed reg condition_code[0] to physical reg 4743 (4743) old mapping was 4741 (4741)
+  66000: system.cpu.rename: [tid:0] Renaming arch reg 0 (condition_code) to physical reg 17 (4743).
+  66000: system.cpu.rename: [tid:0] [sn:21] Adding instruction to history buffer (size=47).
+  66000: global: Renamed reg condition_code[1] to physical reg 4744 (4744) old mapping was 4742 (4742)
+  66000: system.cpu.rename: [tid:0] Renaming arch reg 1 (condition_code) to physical reg 18 (4744).
+  66000: system.cpu.rename: [tid:0] [sn:21] Adding instruction to history buffer (size=48).
+  66000: system.cpu.rename: [tid:0] Renaming arch reg 0 (invalid) to physical reg 4294967295 (4294967295).
+  66000: system.cpu.rename: [tid:0] [sn:21] Adding instruction to history buffer (size=49).
+  66000: system.cpu.rename: [tid:0] Renaming arch reg 0 (invalid) to physical reg 4294967295 (4294967295).
+  66000: system.cpu.rename: [tid:0] [sn:21] Adding instruction to history buffer (size=50).
+  66000: system.cpu.rename: [tid:0] Renaming arch reg 0 (invalid) to physical reg 4294967295 (4294967295).
+  66000: system.cpu.rename: [tid:0] [sn:21] Adding instruction to history buffer (size=51).
+  66000: system.cpu.rename: [tid:0] Sending instructions to IEW.
+  66000: system.cpu.rename: calcFreeSQEntries: free sqEntries: 72, storesInProgress: 4, stores dispatchedToSQ: 0
+  66000: system.cpu.rename: [tid:0] Processing instruction [sn:22] with PC (0x401024=>0x401026).(2=>3).
+  66000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+  66000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+  66000: system.cpu.rename: [tid:0] Looking up integer arch reg 0, got phys reg 43 (integer)
+  66000: system.cpu.rename: [tid:0] Register 43 (flat: 43) (integer) is not ready.
+  66000: system.cpu.rename: [tid:0] Looking up integer arch reg 17, got phys reg 54 (integer)
+  66000: system.cpu.rename: [tid:0] Register 54 (flat: 54) (integer) is not ready.
+  66000: system.cpu.rename: [tid:0] Looking up miscellaneous arch reg 155, got phys reg 155 (miscellaneous)
+  66000: system.cpu.rename: [tid:0] Register 155 (flat: 0) (miscellaneous) is ready.
+  66000: system.cpu.rename: [tid:0] Sending instructions to IEW.
+  66000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 132, loadsInProgress: 5, loads dispatchedToLQ: 0
+  66000: system.cpu.rename: [tid:0] Processing instruction [sn:23] with PC (0x401026=>0x401028).(0=>1).
+  66000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+  66000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+  66000: system.cpu.rename: [tid:0] Looking up integer arch reg 0, got phys reg 43 (integer)
+  66000: system.cpu.rename: [tid:0] Register 43 (flat: 43) (integer) is not ready.
+  66000: system.cpu.rename: [tid:0] Looking up integer arch reg 17, got phys reg 54 (integer)
+  66000: system.cpu.rename: [tid:0] Register 54 (flat: 54) (integer) is not ready.
+  66000: system.cpu.rename: [tid:0] Looking up miscellaneous arch reg 155, got phys reg 155 (miscellaneous)
+  66000: system.cpu.rename: [tid:0] Register 155 (flat: 0) (miscellaneous) is ready.
+  66000: global: Renamed reg t1 to physical reg 55 (55) old mapping was 54 (54)
+  66000: system.cpu.rename: [tid:0] Renaming arch reg 17 (integer) to physical reg 55 (55).
+  66000: system.cpu.rename: [tid:0] [sn:23] Adding instruction to history buffer (size=52).
+  66000: system.cpu.rename: Bypassing Load [sn:23] speculatively.
+  66000: system.cpu.rename: [tid:0] Sending instructions to IEW.
+  66000: system.cpu.rename: [tid:0] Processing instruction [sn:24] with PC (0x401026=>0x401028).(1=>2).
+  66000: system.cpu.rename: [tid:0] Looking up integer arch reg 17, got phys reg 41 (integer)
+  66000: system.cpu.rename: [tid:0] Register 41 (flat: 41) (integer) is not ready.
+  66000: system.cpu.rename: [tid:0] Looking up integer arch reg 0, got phys reg 43 (integer)
+  66000: system.cpu.rename: [tid:0] Register 43 (flat: 43) (integer) is not ready.
+  66000: system.cpu.rename: [tid:0] Looking up integer arch reg 17, got phys reg 41 (integer)
+  66000: system.cpu.rename: [tid:0] Register 41 (flat: 41) (integer) is not ready.
+  66000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+  66000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+  66000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+  66000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+  66000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+  66000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+  66000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+  66000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+  66000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+  66000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+  66000: global: Renamed reg t1 to physical reg 56 (56) old mapping was 41 (41)
+  66000: system.cpu.rename: [tid:0] Renaming arch reg 17 (integer) to physical reg 56 (56).
+  66000: system.cpu.rename: [tid:0] [sn:24] Adding instruction to history buffer (size=53).
+  66000: global: Renamed reg condition_code[0] to physical reg 4745 (4745) old mapping was 4743 (4743)
+  66000: system.cpu.rename: [tid:0] Renaming arch reg 0 (condition_code) to physical reg 19 (4745).
+  66000: system.cpu.rename: [tid:0] [sn:24] Adding instruction to history buffer (size=54).
+  66000: global: Renamed reg condition_code[1] to physical reg 4746 (4746) old mapping was 4744 (4744)
+  66000: system.cpu.rename: [tid:0] Renaming arch reg 1 (condition_code) to physical reg 20 (4746).
+  66000: system.cpu.rename: [tid:0] [sn:24] Adding instruction to history buffer (size=55).
+  66000: system.cpu.rename: [tid:0] Renaming arch reg 0 (invalid) to physical reg 4294967295 (4294967295).
+  66000: system.cpu.rename: [tid:0] [sn:24] Adding instruction to history buffer (size=56).
+  66000: system.cpu.rename: [tid:0] Renaming arch reg 0 (invalid) to physical reg 4294967295 (4294967295).
+  66000: system.cpu.rename: [tid:0] [sn:24] Adding instruction to history buffer (size=57).
+  66000: system.cpu.rename: [tid:0] Renaming arch reg 0 (invalid) to physical reg 4294967295 (4294967295).
+  66000: system.cpu.rename: [tid:0] [sn:24] Adding instruction to history buffer (size=58).
+  66000: system.cpu.rename: [tid:0] Sending instructions to IEW.
+  66000: system.cpu.rename: calcFreeSQEntries: free sqEntries: 72, storesInProgress: 5, stores dispatchedToSQ: 0
+  66000: system.cpu.rename: [tid:0] Processing instruction [sn:25] with PC (0x401026=>0x401028).(2=>3).
+  66000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+  66000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+  66000: system.cpu.rename: [tid:0] Looking up integer arch reg 0, got phys reg 43 (integer)
+  66000: system.cpu.rename: [tid:0] Register 43 (flat: 43) (integer) is not ready.
+  66000: system.cpu.rename: [tid:0] Looking up integer arch reg 17, got phys reg 56 (integer)
+  66000: system.cpu.rename: [tid:0] Register 56 (flat: 56) (integer) is not ready.
+  66000: system.cpu.rename: [tid:0] Looking up miscellaneous arch reg 155, got phys reg 155 (miscellaneous)
+  66000: system.cpu.rename: [tid:0] Register 155 (flat: 0) (miscellaneous) is ready.
+  66000: system.cpu.rename: [tid:0] Sending instructions to IEW.
+  66000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 132, loadsInProgress: 6, loads dispatchedToLQ: 0
+  66000: system.cpu.rename: [tid:0] Processing instruction [sn:26] with PC (0x401028=>0x40102a).(0=>1).
+  66000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+  66000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+  66000: system.cpu.rename: [tid:0] Looking up integer arch reg 0, got phys reg 43 (integer)
+  66000: system.cpu.rename: [tid:0] Register 43 (flat: 43) (integer) is not ready.
+  66000: system.cpu.rename: [tid:0] Looking up integer arch reg 17, got phys reg 56 (integer)
+  66000: system.cpu.rename: [tid:0] Register 56 (flat: 56) (integer) is not ready.
+  66000: system.cpu.rename: [tid:0] Looking up miscellaneous arch reg 155, got phys reg 155 (miscellaneous)
+  66000: system.cpu.rename: [tid:0] Register 155 (flat: 0) (miscellaneous) is ready.
+  66000: global: Renamed reg t1 to physical reg 57 (57) old mapping was 56 (56)
+  66000: system.cpu.rename: [tid:0] Renaming arch reg 17 (integer) to physical reg 57 (57).
+  66000: system.cpu.rename: [tid:0] [sn:26] Adding instruction to history buffer (size=59).
+  66000: system.cpu.rename: Bypassing Load [sn:26] speculatively.
+  66000: system.cpu.rename: [tid:0] Sending instructions to IEW.
+  66000: system.cpu.rename: [tid:0] Processing instruction [sn:27] with PC (0x401028=>0x40102a).(1=>2).
+  66000: system.cpu.rename: [tid:0] Looking up integer arch reg 17, got phys reg 41 (integer)
+  66000: system.cpu.rename: [tid:0] Register 41 (flat: 41) (integer) is not ready.
+  66000: system.cpu.rename: [tid:0] Looking up integer arch reg 0, got phys reg 43 (integer)
+  66000: system.cpu.rename: [tid:0] Register 43 (flat: 43) (integer) is not ready.
+  66000: system.cpu.rename: [tid:0] Looking up integer arch reg 17, got phys reg 41 (integer)
+  66000: system.cpu.rename: [tid:0] Register 41 (flat: 41) (integer) is not ready.
+  66000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+  66000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+  66000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+  66000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+  66000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+  66000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+  66000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+  66000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+  66000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+  66000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+  66000: global: Renamed reg t1 to physical reg 58 (58) old mapping was 41 (41)
+  66000: system.cpu.rename: [tid:0] Renaming arch reg 17 (integer) to physical reg 58 (58).
+  66000: system.cpu.rename: [tid:0] [sn:27] Adding instruction to history buffer (size=60).
+  66000: global: Renamed reg condition_code[0] to physical reg 4747 (4747) old mapping was 4745 (4745)
+  66000: system.cpu.rename: [tid:0] Renaming arch reg 0 (condition_code) to physical reg 21 (4747).
+  66000: system.cpu.rename: [tid:0] [sn:27] Adding instruction to history buffer (size=61).
+  66000: global: Renamed reg condition_code[1] to physical reg 4748 (4748) old mapping was 4746 (4746)
+  66000: system.cpu.rename: [tid:0] Renaming arch reg 1 (condition_code) to physical reg 22 (4748).
+  66000: system.cpu.rename: [tid:0] [sn:27] Adding instruction to history buffer (size=62).
+  66000: system.cpu.rename: [tid:0] Renaming arch reg 0 (invalid) to physical reg 4294967295 (4294967295).
+  66000: system.cpu.rename: [tid:0] [sn:27] Adding instruction to history buffer (size=63).
+  66000: system.cpu.rename: [tid:0] Renaming arch reg 0 (invalid) to physical reg 4294967295 (4294967295).
+  66000: system.cpu.rename: [tid:0] [sn:27] Adding instruction to history buffer (size=64).
+  66000: system.cpu.rename: [tid:0] Renaming arch reg 0 (invalid) to physical reg 4294967295 (4294967295).
+  66000: system.cpu.rename: [tid:0] [sn:27] Adding instruction to history buffer (size=65).
+  66000: system.cpu.rename: [tid:0] Sending instructions to IEW.
+  66000: system.cpu.rename: calcFreeSQEntries: free sqEntries: 72, storesInProgress: 6, stores dispatchedToSQ: 0
+  66000: system.cpu.rename: [tid:0] Processing instruction [sn:28] with PC (0x401028=>0x40102a).(2=>3).
+  66000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+  66000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+  66000: system.cpu.rename: [tid:0] Looking up integer arch reg 0, got phys reg 43 (integer)
+  66000: system.cpu.rename: [tid:0] Register 43 (flat: 43) (integer) is not ready.
+  66000: system.cpu.rename: [tid:0] Looking up integer arch reg 17, got phys reg 58 (integer)
+  66000: system.cpu.rename: [tid:0] Register 58 (flat: 58) (integer) is not ready.
+  66000: system.cpu.rename: [tid:0] Looking up miscellaneous arch reg 155, got phys reg 155 (miscellaneous)
+  66000: system.cpu.rename: [tid:0] Register 155 (flat: 0) (miscellaneous) is ready.
+  66000: system.cpu.rename: [tid:0] Sending instructions to IEW.
+  66000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 132, loadsInProgress: 7, loads dispatchedToLQ: 0
+  66000: system.cpu.rename: [tid:0] Processing instruction [sn:29] with PC (0x40102a=>0x40102c).(0=>1).
+  66000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+  66000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+  66000: system.cpu.rename: [tid:0] Looking up integer arch reg 0, got phys reg 43 (integer)
+  66000: system.cpu.rename: [tid:0] Register 43 (flat: 43) (integer) is not ready.
+  66000: system.cpu.rename: [tid:0] Looking up integer arch reg 17, got phys reg 58 (integer)
+  66000: system.cpu.rename: [tid:0] Register 58 (flat: 58) (integer) is not ready.
+  66000: system.cpu.rename: [tid:0] Looking up miscellaneous arch reg 155, got phys reg 155 (miscellaneous)
+  66000: system.cpu.rename: [tid:0] Register 155 (flat: 0) (miscellaneous) is ready.
+  66000: global: Renamed reg t1 to physical reg 59 (59) old mapping was 58 (58)
+  66000: system.cpu.rename: [tid:0] Renaming arch reg 17 (integer) to physical reg 59 (59).
+  66000: system.cpu.rename: [tid:0] [sn:29] Adding instruction to history buffer (size=66).
+  66000: system.cpu.rename: Bypassing Load [sn:29] speculatively.
+  66000: system.cpu.rename: [tid:0] Sending instructions to IEW.
+  66000: system.cpu.rename: [tid:0] Processing instruction [sn:30] with PC (0x40102a=>0x40102c).(1=>2).
+  66000: system.cpu.rename: [tid:0] Looking up integer arch reg 17, got phys reg 41 (integer)
+  66000: system.cpu.rename: [tid:0] Register 41 (flat: 41) (integer) is not ready.
+  66000: system.cpu.rename: [tid:0] Looking up integer arch reg 0, got phys reg 43 (integer)
+  66000: system.cpu.rename: [tid:0] Register 43 (flat: 43) (integer) is not ready.
+  66000: system.cpu.rename: [tid:0] Looking up integer arch reg 17, got phys reg 41 (integer)
+  66000: system.cpu.rename: [tid:0] Register 41 (flat: 41) (integer) is not ready.
+  66000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+  66000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+  66000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+  66000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+  66000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+  66000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+  66000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+  66000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+  66000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+  66000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+  66000: global: Renamed reg t1 to physical reg 60 (60) old mapping was 41 (41)
+  66000: system.cpu.rename: [tid:0] Renaming arch reg 17 (integer) to physical reg 60 (60).
+  66000: system.cpu.rename: [tid:0] [sn:30] Adding instruction to history buffer (size=67).
+  66000: global: Renamed reg condition_code[0] to physical reg 4749 (4749) old mapping was 4747 (4747)
+  66000: system.cpu.rename: [tid:0] Renaming arch reg 0 (condition_code) to physical reg 23 (4749).
+  66000: system.cpu.rename: [tid:0] [sn:30] Adding instruction to history buffer (size=68).
+  66000: global: Renamed reg condition_code[1] to physical reg 4750 (4750) old mapping was 4748 (4748)
+  66000: system.cpu.rename: [tid:0] Renaming arch reg 1 (condition_code) to physical reg 24 (4750).
+  66000: system.cpu.rename: [tid:0] [sn:30] Adding instruction to history buffer (size=69).
+  66000: system.cpu.rename: [tid:0] Renaming arch reg 0 (invalid) to physical reg 4294967295 (4294967295).
+  66000: system.cpu.rename: [tid:0] [sn:30] Adding instruction to history buffer (size=70).
+  66000: system.cpu.rename: [tid:0] Renaming arch reg 0 (invalid) to physical reg 4294967295 (4294967295).
+  66000: system.cpu.rename: [tid:0] [sn:30] Adding instruction to history buffer (size=71).
+  66000: system.cpu.rename: [tid:0] Renaming arch reg 0 (invalid) to physical reg 4294967295 (4294967295).
+  66000: system.cpu.rename: [tid:0] [sn:30] Adding instruction to history buffer (size=72).
+  66000: system.cpu.iew.lsq.thread0: Inserting store PC (0x401004=>0x40100b).(1=>2), idx:0 [sn:4]
+  66000: system.cpu.iew.lsq.thread0: Load PC (0x40100b=>0x40100e).(0=>1) is bypassed. [sn:5]

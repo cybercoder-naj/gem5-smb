@@ -321,16 +321,19 @@ LSQUnit::insertLoad(const DynInstPtr &load_inst)
     assert(!loadQueue.full());
     assert(loadQueue.size() < loadQueue.capacity());
 
-    DPRINTF(LSQUnit, "Inserting load PC %s, idx:%i [sn:%lli]\n",
-            load_inst->pcState(), loadQueue.tail(), load_inst->seqNum);
-
-    /* Grow the queue. */
-    loadQueue.advance_tail();
+    if (load_inst->isBypassedLoad()) {
+        DPRINTF(LSQUnit, "Bypassing load PC %s [sn:%lli]\n", load_inst->pcState(), load_inst->seqNum);
+    } else {
+        DPRINTF(LSQUnit, "Inserting load PC %s, idx:%i [sn:%lli]\n",
+                load_inst->pcState(), loadQueue.tail(), load_inst->seqNum);
+    
+        /* Grow the queue and add the load. */
+        loadQueue.advance_tail();
+        assert(!loadQueue.back().valid());
+        loadQueue.back().set(load_inst);
+    }
 
     load_inst->sqIt = storeQueue.end();
-
-    assert(!loadQueue.back().valid());
-    loadQueue.back().set(load_inst);
     load_inst->lqIdx = loadQueue.tail();
     assert(load_inst->lqIdx > 0);
     load_inst->lqIt = loadQueue.getIterator(load_inst->lqIdx);
