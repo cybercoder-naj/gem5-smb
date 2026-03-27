@@ -5,10 +5,6 @@
 Disassembly of section .text:
 
 0000000000401000 <_start>:
-  401000:	48 83 ec 04          	sub    $0x4,%rsp
-  401004:	c7 04 24 05 00 00 00 	movl   $0x5,(%rsp)
-  40100b:	8b 1c 24             	mov    (%rsp),%ebx
-  40100e:	48 c7 c0 3c 00 00 00 	mov    $0x3c,%rax
-  401015:	48 31 ff             	xor    %rdi,%rdi
-  401018:	48 83 c4 04          	add    $0x4,%rsp
-  40101c:	0f 05                	syscall
+  401000:	48 c7 c0 3c 00 00 00 	mov    $0x3c,%rax
+  401007:	48 31 ff             	xor    %rdi,%rdi
+  40100a:	0f 05                	syscall

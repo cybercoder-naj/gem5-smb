@@ -728,9 +728,9 @@ Rename::renameInsts(ThreadID tid)
         }
 
         if (inst->isLoad()) {
-            InstSeqNum inst_seq_num = 4; // todo comes from SMB
+            InstSeqNum inst_seq_num = -1; // todo comes from SMB
             
-            if (true || inst_seq_num != -1) { //! remember to remove
+            if (inst_seq_num != -1) {
                 DPRINTF(Rename, "Bypassing Load [sn:%llu] speculatively.\n",
                         inst->seqNum);
 

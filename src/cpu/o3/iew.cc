@@ -981,18 +981,21 @@ IEW::dispatchInsts(ThreadID tid)
 
             toRename->iewInfo[tid].dispatchedToSQ++;
         } else if (inst->isLoad()) {
-            DPRINTF(IEW, "[tid:%i] Issue: Memory instruction "
-                    "encountered, adding to LSQ.\n", tid);
+            if (inst->isBypassedLoad()) {
+                /* code */
+            } else {
+                DPRINTF(IEW, "[tid:%i] Issue: Load instruction "
+                        "encountered, adding to LSQ.\n", tid);
 
-            // Reserve a spot in the load store queue for this
-            // memory access.
-            ldstQueue.insertLoad(inst);
+                // Reserve a spot in the load store queue for this
+                // memory access.
+                ldstQueue.insertLoad(inst);
+                toRename->iewInfo[tid].dispatchedToLQ++;
+            }
 
             ++iewStats.dispLoadInsts;
 
             add_to_iq = true;
-
-            toRename->iewInfo[tid].dispatchedToLQ++;
         } else if (inst->isStore()) {
             DPRINTF(IEW, "[tid:%i] Issue: Memory instruction "
                     "encountered, adding to LSQ.\n", tid);
