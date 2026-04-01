@@ -930,7 +930,7 @@ IEW::dispatchInsts(ThreadID tid)
 
         // Check LSQ if inst is LD/ST
         if ((inst->isAtomic() && ldstQueue.sqFull(tid)) ||
-            (inst->isLoad() && ldstQueue.lqFull(tid)) ||
+            (inst->isLoad() && !inst->isBypassedLoad() && ldstQueue.lqFull(tid)) ||
             (inst->isStore() && ldstQueue.sqFull(tid))) {
             DPRINTF(IEW, "[tid:%i] Issue: %s has become full.\n",tid,
                     inst->isLoad() ? "LQ" : "SQ");
@@ -982,7 +982,7 @@ IEW::dispatchInsts(ThreadID tid)
             toRename->iewInfo[tid].dispatchedToSQ++;
         } else if (inst->isLoad()) {
             if (inst->isBypassedLoad()) {
-                /* code */
+                // todo code
             } else {
                 DPRINTF(IEW, "[tid:%i] Issue: Load instruction "
                         "encountered, adding to LSQ.\n", tid);
