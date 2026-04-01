@@ -65,7 +65,8 @@ Rename::Rename(CPU *_cpu, const BaseO3CPUParams &params)
       commitToRenameDelay(params.commitToRenameDelay),
       renameWidth(params.renameWidth),
       numThreads(params.numThreads),
-      stats(_cpu)
+      stats(_cpu),
+      smb(_cpu->name() + ".smb")
 {
     if (renameWidth > MaxWidth)
         fatal("renameWidth (%d) is larger than compiled limit (%d),\n"
@@ -1110,31 +1111,35 @@ Rename::renameDestRegs(const DynInstPtr &inst, ThreadID tid)
         RegId flat_dest_regid = dest_reg.flatten(*isa);
         flat_dest_regid.setNumPinnedWrites(dest_reg.getNumPinnedWrites());
 
+        InstSeqNum smb_store_seqnum = -1; // todo comes from SMB
+
         if (inst->isLoad() && dest_idx == 0) { // todo works in x86 at least.
-            InstSeqNum inst_seq_num = -1; // todo comes from SMB
-            
-            if (inst_seq_num != -1) {
-                DPRINTF(Rename, "Bypassing Load [sn:%llu] speculatively.\n",
-                        inst->seqNum);
+            smb_store_seqnum = smb.predictSourceStore(inst->seqNum);
+        } 
+        
+        if (smb_store_seqnum != -1) {
+            DPRINTF(Rename, "Bypassing Load [sn:%llu] speculatively.\n",
+                    inst->seqNum);
 
-                // Perform RAT remapping
-                PhysRegIdPtr str_value_phys_reg = storeToPhysReg[inst_seq_num];
-                assert(str_value_phys_reg);
+            assert(storeToPhysReg.find(smb_store_seqnum) != storeToPhysReg.end());
+            // Perform RAT remapping
+            PhysRegIdPtr str_value_phys_reg = storeToPhysReg[smb_store_seqnum];
+            assert(str_value_phys_reg);
 
-                PhysRegIdPtr old_mapping = map->lookup(flat_dest_regid);
-                map->setEntry(flat_dest_regid, str_value_phys_reg);
+            PhysRegIdPtr old_mapping = map->lookup(flat_dest_regid);
+            map->setEntry(flat_dest_regid, str_value_phys_reg);
 
-                RenameHistory hb_entry(inst->seqNum, flat_dest_regid,
-                                       str_value_phys_reg,
-                                        old_mapping);
-                historyBuffer[tid].push_front(hb_entry);
+            RenameHistory hb_entry(inst->seqNum, flat_dest_regid,
+                                    str_value_phys_reg,
+                                    old_mapping);
+            historyBuffer[tid].push_front(hb_entry);
 
-                // todo maybe check if this pins the registers correctly.
-                inst->renameDestReg(dest_idx, str_value_phys_reg, old_mapping);
-
-                inst->setBypassedLoad();
-            }
-        } else {
+            // todo maybe check if this pins the registers correctly.
+            inst->renameDestReg(dest_idx, str_value_phys_reg, old_mapping);
+            inst->setBypassedLoad();
+            // todo add stats of bypassed loads.
+        }
+        else {
             rename_result = map->rename(flat_dest_regid);
 
             inst->flattenedDestIdx(dest_idx, flat_dest_regid);
