@@ -982,7 +982,8 @@ IEW::dispatchInsts(ThreadID tid)
             toRename->iewInfo[tid].dispatchedToSQ++;
         } else if (inst->isLoad()) {
             if (inst->isBypassedLoad()) {
-                // todo code
+                DPRINTF(IEW, "[tid:%i] Issue: Load instruction Bypassed, not adding to LSQ.\n", tid);
+                // Bypassed loads don't go in the LSQ.
             } else {
                 DPRINTF(IEW, "[tid:%i] Issue: Load instruction "
                         "encountered, adding to LSQ.\n", tid);

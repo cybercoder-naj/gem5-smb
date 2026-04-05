@@ -9,6 +9,8 @@ pwd=`dirname $0`
 filename=`basename $1`
 debugflags=$2
 
+./my-progs/build
+
 echo -en "Compiling $filename.s..."
 gcc -nostdlib -no-pie $pwd/$filename.s -o $pwd/$filename
 echo "Done."
@@ -26,4 +28,4 @@ echo "Done."
   --caches \
   --l2cache \
   --cpu-type DerivO3CPU \
-  --maxinsts=1000000 | tee $pwd/$filename.out
+  --maxinsts=1000000 2>&1 | tee $pwd/$filename.out

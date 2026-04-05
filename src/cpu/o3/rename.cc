@@ -1087,7 +1087,7 @@ Rename::renameSrcRegs(const DynInstPtr &inst, ThreadID tid)
                     renamed_reg->className());
         }
 
-        if (inst->isStore() && src_idx == 2) { // todo works in x86 at least.
+        if (inst->isStore() && src_idx == 2) {
             storeToPhysReg[inst->seqNum] = renamed_reg; //' this index is confirmed with x86 debug logs.
         }
 
@@ -1111,72 +1111,72 @@ Rename::renameDestRegs(const DynInstPtr &inst, ThreadID tid)
         RegId flat_dest_regid = dest_reg.flatten(*isa);
         flat_dest_regid.setNumPinnedWrites(dest_reg.getNumPinnedWrites());
 
-        InstSeqNum smb_store_seqnum = -1; // todo comes from SMB
-
-        if (inst->isLoad() && dest_idx == 0) { // todo works in x86 at least.
+        InstSeqNum smb_store_seqnum = -1;
+        if (inst->isLoad() && dest_idx == 0) { // works in x86 at least.
             smb_store_seqnum = smb.predictSourceStore(inst->seqNum);
         } 
         
+        rename_result = map->rename(flat_dest_regid);
+
+        inst->flattenedDestIdx(dest_idx, flat_dest_regid);
+
+        scoreboard->unsetReg(rename_result.first);
+
+        DPRINTF(Rename,
+                "[tid:%i] "
+                "Renaming arch reg %i (%s) to physical reg %i (%i).\n",
+                tid, dest_reg.index(), dest_reg.className(),
+                rename_result.first->index(),
+                rename_result.first->flatIndex());
+
+        // Record the rename information so that a history can be kept.
+        RenameHistory hb_entry(inst->seqNum, flat_dest_regid,
+                            rename_result.first,
+                            rename_result.second);
+
+        historyBuffer[tid].push_front(hb_entry);
+
+        DPRINTF(Rename, "[tid:%i] [sn:%llu] "
+                "Adding instruction to history buffer (size=%i).\n",
+                tid,(*historyBuffer[tid].begin()).instSeqNum,
+                historyBuffer[tid].size());
+
+        // Tell the instruction to rename the appropriate destination
+        // register (dest_idx) to the new physical register
+        // (rename_result.first), and record the previous physical
+        // register that the same logical register was renamed to
+        // (rename_result.second).
+        inst->renameDestReg(dest_idx,
+                            rename_result.first,
+                            rename_result.second);
+
         if (smb_store_seqnum != -1) {
             DPRINTF(Rename, "Bypassing Load [sn:%llu] speculatively.\n",
                     inst->seqNum);
 
-            assert(storeToPhysReg.find(smb_store_seqnum) != storeToPhysReg.end());
-            // Perform RAT remapping
-            PhysRegIdPtr str_value_phys_reg = storeToPhysReg[smb_store_seqnum];
-            assert(str_value_phys_reg);
+            auto smb_phys_reg = storeToPhysReg[smb_store_seqnum];
+            assert(smb_phys_reg);
 
-            PhysRegIdPtr old_mapping = map->lookup(flat_dest_regid);
-            map->setEntry(flat_dest_regid, str_value_phys_reg);
-
-            RenameHistory hb_entry(inst->seqNum, flat_dest_regid,
-                                    str_value_phys_reg,
-                                    old_mapping);
-            historyBuffer[tid].push_front(hb_entry);
-
-            // todo maybe check if this pins the registers correctly.
-            inst->renameDestReg(dest_idx, str_value_phys_reg, old_mapping);
-            inst->setBypassedLoad();
-            // todo add stats of bypassed loads.
-        }
-        else {
-            rename_result = map->rename(flat_dest_regid);
-
-            inst->flattenedDestIdx(dest_idx, flat_dest_regid);
-
-            scoreboard->unsetReg(rename_result.first);
+            map->setEntry(flat_dest_regid, smb_phys_reg);
 
             DPRINTF(Rename,
-                    "[tid:%i] "
-                    "Renaming arch reg %i (%s) to physical reg %i (%i).\n",
-                    tid, dest_reg.index(), dest_reg.className(),
-                    rename_result.first->index(),
-                    rename_result.first->flatIndex());
+                "[tid:%i] "
+                "Renaming arch reg %i (%s) to physical reg %i (%i) due to SMB bypass.\n",
+                tid, dest_reg.index(), dest_reg.className(),
+                smb_phys_reg->index(),
+                smb_phys_reg->flatIndex());
 
-            // Record the rename information so that a history can be kept.
-            RenameHistory hb_entry(inst->seqNum, flat_dest_regid,
-                                rename_result.first,
-                                rename_result.second);
+            RenameHistory smb_hb_entry(inst->seqNum, flat_dest_regid,
+                            smb_phys_reg,
+                            rename_result.first);
+            historyBuffer[tid].push_front(smb_hb_entry);
 
-            historyBuffer[tid].push_front(hb_entry);
-
-            DPRINTF(Rename, "[tid:%i] [sn:%llu] "
-                    "Adding instruction to history buffer (size=%i).\n",
-                    tid,(*historyBuffer[tid].begin()).instSeqNum,
-                    historyBuffer[tid].size());
-
-            // Tell the instruction to rename the appropriate destination
-            // register (dest_idx) to the new physical register
-            // (rename_result.first), and record the previous physical
-            // register that the same logical register was renamed to
-            // (rename_result.second).
-            inst->renameDestReg(dest_idx,
-                                rename_result.first,
-                                rename_result.second);
+            inst->setBypassedLoad();
         }
-
-        ++stats.renamedOperands;
     }
+
+    ++stats.renamedOperands;
+    // }
 }
 
 int
