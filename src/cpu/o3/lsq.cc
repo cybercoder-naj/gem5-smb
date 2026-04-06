@@ -1091,7 +1091,8 @@ void
 LSQ::LSQRequest::install()
 {
     if (isLoad()) {
-        _port.loadQueue[_inst->lqIdx].setRequest(this);
+        if (!_inst->isBypassedLoad())
+            _port.loadQueue[_inst->lqIdx].setRequest(this);
     } else {
         // Store, StoreConditional, and Atomic requests are pushed
         // to this storeQueue
@@ -1528,7 +1529,10 @@ LSQ::read(LSQRequest* request, ssize_t load_idx)
     assert(request->req()->contextId() == request->contextId());
     ThreadID tid = cpu->contextToThread(request->req()->contextId());
 
-    return thread.at(tid).read(request, load_idx);
+    if (request->instruction()->isBypassedLoad())
+        return thread.at(tid).readBypassed(request);
+    else
+        return thread.at(tid).read(request, load_idx);
 }
 
 Fault

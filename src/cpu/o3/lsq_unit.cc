@@ -655,7 +655,7 @@ LSQUnit::executeLoad(const DynInstPtr &inst)
             auto it = inst->lqIt;
             ++it;
 
-            if (checkLoads)
+            if (checkLoads && !inst->isBypassedLoad())
                 return checkViolations(it, inst);
         }
     }
@@ -1602,6 +1602,31 @@ LSQUnit::read(LSQRequest *request, ssize_t load_idx)
     // stores do).
     // @todo We should account for cache port contention
     // and arbitrate between loads and stores.
+
+    // if we the cache is not blocked, do cache access
+    request->buildPackets();
+    request->sendPacketToCache();
+    if (!request->isSent())
+        iewStage->blockMemInst(load_inst);
+
+    return NoFault;
+}
+
+Fault
+LSQUnit::readBypassed(LSQRequest *request)
+{
+    DPRINTF(LSQUnit, "Read bypassed called. addr: %#x%s\n",
+            request->mainReq()->getPaddr(), request->isSplit() ? " split" :
+            "");
+
+    const DynInstPtr& load_inst = request->instruction();
+    assert(load_inst);
+    assert(!load_inst->isExecuted());
+
+    // Allocate memory if this is the first time a load is issued.
+    if (!load_inst->memData) {
+        load_inst->memData = new uint8_t[request->mainReq()->getSize()];
+    }
 
     // if we the cache is not blocked, do cache access
     request->buildPackets();

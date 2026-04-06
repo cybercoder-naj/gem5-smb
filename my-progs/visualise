@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+set -e
+
+: "${1:?Missing executable name}"
+
+pwd=`dirname $0`
+filename=`basename $1`
+
+./my-progs/build
+
+echo -en "Compiling $filename.s..."
+gcc -nostdlib -no-pie $pwd/$filename.s -o $pwd/$filename
+echo "Done."
+
+echo -en "Object dump of $filename..."
+objdump -d $pwd/$filename > $pwd/$filename.dump
+echo "Done."
+
+./build/X86/gem5.opt \
+  --debug-flags=O3PipeView \
+  --debug-file=trace.out \
+  configs/deprecated/example/se.py \
+  --cpu-type DerivO3CPU \
+  --caches \
+  --cmd=$pwd/$filename

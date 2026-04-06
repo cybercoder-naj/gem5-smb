@@ -544,6 +544,9 @@ class LSQUnit
     /** Executes the load at the given index. */
     Fault read(LSQRequest *request, ssize_t load_idx);
 
+    /** Executes the bypassed load. */
+    Fault readBypassed(LSQRequest *request);
+
     /** Executes the store at the given index. */
     Fault write(LSQRequest *requst, uint8_t *data, ssize_t store_idx);
 
