@@ -21,6 +21,7 @@ echo "Done."
 
 ./build/X86/gem5.opt \
   --debug-flags=$debugflags \
+  --debug-file=../$pwd/$filename.debug \
   configs/deprecated/example/se.py \
   --cmd=$pwd/$filename \
   -n 1 \
@@ -28,4 +29,4 @@ echo "Done."
   --caches \
   --l2cache \
   --cpu-type DerivO3CPU \
-  --maxinsts=1000000 2>&1 | tee $pwd/$filename.out
+  --maxinsts=1000000

@@ -19,7 +19,7 @@ echo "Done."
 
 ./build/X86/gem5.opt \
   --debug-flags=O3PipeView \
-  --debug-file=trace.out \
+  --debug-file=../$pwd/$filename.trace \
   configs/deprecated/example/se.py \
   --cpu-type DerivO3CPU \
   --caches \
