@@ -683,8 +683,11 @@ class LSQ
     /** Ticks the LSQ. */
     void tick();
 
-    /** Inserts a load into the LSQ. */
-    void insertLoad(const DynInstPtr &load_inst);
+    /** 
+     * Inserts a load into the LSQ if it is not bypassed.
+     * @return whether or not the load was inserted into the LSQ (i.e. not bypassed).
+     */
+    bool maybeInsertLoad(const DynInstPtr &load_inst);
     /** Inserts a store into the LSQ. */
     void insertStore(const DynInstPtr &store_inst);
 

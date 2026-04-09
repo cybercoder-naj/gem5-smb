@@ -217,12 +217,18 @@ LSQ::cachePortBusy(bool is_load)
     }
 }
 
-void
-LSQ::insertLoad(const DynInstPtr &load_inst)
+bool
+LSQ::maybeInsertLoad(const DynInstPtr &load_inst)
 {
     ThreadID tid = load_inst->threadNumber;
 
+    if (load_inst->isBypassedLoad()) {
+        thread[tid].setIteratorsForBypassedLoad(load_inst);
+        return false;
+    } 
+
     thread[tid].insertLoad(load_inst);
+    return true;
 }
 
 void
@@ -1529,10 +1535,7 @@ LSQ::read(LSQRequest* request, ssize_t load_idx)
     assert(request->req()->contextId() == request->contextId());
     ThreadID tid = cpu->contextToThread(request->req()->contextId());
 
-    if (request->instruction()->isBypassedLoad())
-        return thread.at(tid).readBypassed(request);
-    else
-        return thread.at(tid).read(request, load_idx);
+    return thread.at(tid).read(request, load_idx);
 }
 
 Fault

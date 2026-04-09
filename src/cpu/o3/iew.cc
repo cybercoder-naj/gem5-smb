@@ -544,6 +544,8 @@ IEW::cacheUnblocked()
 void
 IEW::instToCommit(const DynInstPtr& inst)
 {
+    DPRINTF(IEW, "[tid:%i] Adding inst [sn:%llu] to commit queue.\n",
+            inst->thread->threadId(), inst->seqNum);
     // This function should not be called after writebackInsts in a
     // single cycle.  That will cause problems with an instruction
     // being added to the queue to commit without being processed by
@@ -981,19 +983,20 @@ IEW::dispatchInsts(ThreadID tid)
 
             toRename->iewInfo[tid].dispatchedToSQ++;
         } else if (inst->isLoad()) {
-            if (inst->isBypassedLoad()) {
-                DPRINTF(IEW, "[tid:%i] Issue: Load instruction Bypassed, not adding to LSQ.\n", tid);
+            DPRINTF(IEW, "[tid:%i] Issue: Load instruction "
+                    "encountered, attempting to add to LSQ.\n", tid);
 
-                // todo set SqIt and lqIt for bypassed loads
+            // Reserve a spot in the load store queue for this
+            // memory access.
+            if (ldstQueue.maybeInsertLoad(inst)) {
+                DPRINTF(IEW, "[tid:%i] Issue: Successfully added to LSQ.\n",
+                        tid);
             } else {
-                DPRINTF(IEW, "[tid:%i] Issue: Load instruction "
-                        "encountered, adding to LSQ.\n", tid);
-
-                // Reserve a spot in the load store queue for this
-                // memory access.
-                ldstQueue.insertLoad(inst);
-                toRename->iewInfo[tid].dispatchedToLQ++;
+                assert(inst->isBypassedLoad());
+                DPRINTF(IEW, "[tid:%i] Issue: Load was not added to LSQ.\n", tid);
             }
+
+            toRename->iewInfo[tid].dispatchedToLQ++;
 
             ++iewStats.dispLoadInsts;
 

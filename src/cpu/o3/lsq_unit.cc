@@ -316,6 +316,16 @@ LSQUnit::insert(const DynInstPtr &inst)
 }
 
 void
+LSQUnit::setIteratorsForBypassedLoad(const DynInstPtr &inst)
+{
+    assert(inst->isMemRef() && inst->isLoad() && inst->isBypassedLoad());
+
+    inst->sqIt = storeQueue.end();
+    inst->lqIdx = loadQueue.tail();
+    inst->lqIt = loadQueue.getIterator(inst->lqIdx);
+}
+
+void
 LSQUnit::insertLoad(const DynInstPtr &load_inst)
 {
     assert(!loadQueue.full());
@@ -608,8 +618,12 @@ LSQUnit::executeLoad(const DynInstPtr &inst)
     assert(!inst->isSquashed());
 
     load_fault = inst->initiateAcc();
+    DPRINTF(LSQUnit, "FARTS Load [sn:%lli] initiateAcc returned %s\n",
+            inst->seqNum, load_fault);
 
     if (load_fault == NoFault && !inst->readMemAccPredicate()) {
+        DPRINTF(LSQUnit, "FARTS Load [sn:%lli] not executed from mem acc predication\n",
+                inst->seqNum);
         assert(inst->readPredicate());
         inst->setExecuted();
         inst->completeAcc(nullptr);
@@ -635,6 +649,8 @@ LSQUnit::executeLoad(const DynInstPtr &inst)
     // If the instruction faulted or predicated false, then we need to send it
     // along to commit without the instruction completing.
     if (load_fault != NoFault || !inst->readPredicate()) {
+        DPRINTF(LSQUnit, "FARTS Fault on Load PC %s, [sn:%lli], fault: %s\n",
+                inst->pcState(), inst->seqNum, load_fault);
         // Send this instruction to commit, also make sure iew stage
         // realizes there is activity.  Mark it as executed unless it
         // is a strictly ordered load that needs to hit the head of
@@ -1326,13 +1342,20 @@ LSQUnit::cacheLineSize()
 Fault
 LSQUnit::read(LSQRequest *request, ssize_t load_idx)
 {
-    LQEntry& load_entry = loadQueue[load_idx];
-    const DynInstPtr& load_inst = load_entry.instruction();
-
-    load_entry.setRequest(request);
+    const DynInstPtr& load_inst = request->instruction();
     assert(load_inst);
-
     assert(!load_inst->isExecuted());
+
+    bool hasLQEntry = load_inst->isLoad() && !load_inst->isBypassedLoad();
+
+    LQEntry* load_entry = nullptr;
+    if (hasLQEntry) {
+        load_entry = &loadQueue[load_idx];
+        assert(load_entry);
+    }
+
+    if (hasLQEntry)
+        load_entry->setRequest(request);
 
     // Make sure this isn't a strictly ordered load
     // A bit of a hackish way to get strictly ordered accesses to work
@@ -1353,7 +1376,8 @@ LSQUnit::read(LSQRequest *request, ssize_t load_idx)
         // Must delete request now that it wasn't handed off to
         // memory.  This is quite ugly.  @todo: Figure out the proper
         // place to really handle request deletes.
-        load_entry.setRequest(nullptr);
+        if(hasLQEntry)
+            load_entry->setRequest(nullptr);
         request->discard();
         return std::make_shared<GenericISA::M5PanicFault>(
             "Strictly ordered load [sn:%llx] PC %s\n",
@@ -1523,7 +1547,8 @@ LSQUnit::read(LSQRequest *request, ssize_t load_idx)
                     // that response packets should be discarded.
                     request->discard();
                     // Avoid checking snoops on this discarded request.
-                    load_entry.setRequest(nullptr);
+                    if (hasLQEntry)
+                        load_entry->setRequest(nullptr);
                 }
 
                 WritebackEvent *wb = new WritebackEvent(load_inst, data_pkt,
@@ -1573,7 +1598,8 @@ LSQUnit::read(LSQRequest *request, ssize_t load_idx)
 
                 // Must discard the request.
                 request->discard();
-                load_entry.setRequest(nullptr);
+                if (hasLQEntry)
+                    load_entry->setRequest(nullptr);
                 return NoFault;
             }
         }
@@ -1602,34 +1628,6 @@ LSQUnit::read(LSQRequest *request, ssize_t load_idx)
     // stores do).
     // @todo We should account for cache port contention
     // and arbitrate between loads and stores.
-
-    // if we the cache is not blocked, do cache access
-    request->buildPackets();
-    request->sendPacketToCache();
-    if (!request->isSent())
-        iewStage->blockMemInst(load_inst);
-
-    return NoFault;
-}
-
-Fault
-LSQUnit::readBypassed(LSQRequest *request)
-{
-    DPRINTF(LSQUnit, "Read bypassed called. addr: %#x%s\n",
-            request->mainReq()->getPaddr(), request->isSplit() ? " split" :
-            "");
-
-    const DynInstPtr& load_inst = request->instruction();
-    assert(load_inst);
-    assert(!load_inst->isExecuted());
-
-    // Allocate memory if this is the first time a load is issued.
-    if (!load_inst->memData) {
-        load_inst->memData = new uint8_t[request->mainReq()->getSize()];
-    }
-
-    DPRINTF(LSQUnit, "Doing memory access for inst [sn:%lli] PC %s\n",
-            load_inst->seqNum, load_inst->pcState());
 
     // if we the cache is not blocked, do cache access
     request->buildPackets();

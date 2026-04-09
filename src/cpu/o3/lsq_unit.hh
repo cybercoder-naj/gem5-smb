@@ -243,6 +243,8 @@ class LSQUnit
     void insertLoad(const DynInstPtr &load_inst);
     /** Inserts a store instruction. */
     void insertStore(const DynInstPtr &store_inst);
+    /** Bypassed Loads still require iterators of the LQ and SQ */
+    void setIteratorsForBypassedLoad(const DynInstPtr &inst);
 
     /** Check for ordering violations in the LSQ. For a store squash if we
      * ever find a conflicting load. For a load, only squash if we
@@ -543,9 +545,6 @@ class LSQUnit
   public:
     /** Executes the load at the given index. */
     Fault read(LSQRequest *request, ssize_t load_idx);
-
-    /** Executes the bypassed load. */
-    Fault readBypassed(LSQRequest *request);
 
     /** Executes the store at the given index. */
     Fault write(LSQRequest *requst, uint8_t *data, ssize_t store_idx);
