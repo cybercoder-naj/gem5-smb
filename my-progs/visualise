@@ -18,9 +18,9 @@ objdump -d $pwd/$filename > $pwd/$filename.dump
 echo "Done."
 
 ./build/X86/gem5.opt \
-  --debug-flags=O3PipeView \
-  --debug-file=../$pwd/$filename.trace \
+  --debug-flags=O3PipeView,O3CPUAll \
+  --debug-file=../$pwd/$filename-trace.out \
   configs/deprecated/example/se.py \
-  --cpu-type DerivO3CPU \
+  --cpu-type=O3CPU \
   --caches \
   --cmd=$pwd/$filename

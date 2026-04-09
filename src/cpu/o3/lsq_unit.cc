@@ -1628,6 +1628,9 @@ LSQUnit::readBypassed(LSQRequest *request)
         load_inst->memData = new uint8_t[request->mainReq()->getSize()];
     }
 
+    DPRINTF(LSQUnit, "Doing memory access for inst [sn:%lli] PC %s\n",
+            load_inst->seqNum, load_inst->pcState());
+
     // if we the cache is not blocked, do cache access
     request->buildPackets();
     request->sendPacketToCache();

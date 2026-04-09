@@ -28,5 +28,6 @@ echo "Done."
   --mem-type SimpleMemory \
   --caches \
   --l2cache \
-  --cpu-type DerivO3CPU \
-  --maxinsts=1000000
+  --cpu-type X86O3CPU \
+  --cpu-clock 1GHz \
+  -I 1000000

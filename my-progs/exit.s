@@ -8,7 +8,7 @@ _start:
     movl (%rsp), %ebx
 
     mov  $60, %rax      # sys_exit
-    movq %rbx, %rdi     # status = 5
+    movq $0, %rdi     # status = 5
 
     add  $4, %rsp
     syscall

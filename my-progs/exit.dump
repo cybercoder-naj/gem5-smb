@@ -10,6 +10,6 @@ Disassembly of section .text:
   40100b:	c7 04 24 0a 00 00 00 	movl   $0xa,(%rsp)
   401012:	8b 1c 24             	mov    (%rsp),%ebx
   401015:	48 c7 c0 3c 00 00 00 	mov    $0x3c,%rax
-  40101c:	48 89 df             	mov    %rbx,%rdi
-  40101f:	48 83 c4 04          	add    $0x4,%rsp
-  401023:	0f 05                	syscall
+  40101c:	48 c7 c7 00 00 00 00 	mov    $0x0,%rdi
+  401023:	48 83 c4 04          	add    $0x4,%rsp
+  401027:	0f 05                	syscall

@@ -12,5 +12,5 @@ debugflags=$2
 scons build/X86/gem5.debug --ignore-style -j20
 
 gdb \
-  -ex "set args --debug-flags=$debugflags configs/deprecated/example/se.py --cmd=$pwd/$filename -n 1 --mem-type SimpleMemory --caches --l2cache --cpu-type DerivO3CPU --maxinsts=1000000" \
+  -ex "set args --debug-flags=$debugflags configs/deprecated/example/se.py --cmd=$pwd/$filename -n 1 --mem-type SimpleMemory --caches --l2cache --cpu-type O3CPU --maxinsts=1000000" \
   build/X86/gem5.debug
