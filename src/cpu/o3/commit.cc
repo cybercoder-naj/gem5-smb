@@ -1290,6 +1290,18 @@ Commit::commitHead(const DynInstPtr &head_inst, unsigned inst_num)
         return false;
     }
 
+    if (head_inst->isBypassedLoad()) {
+        auto realValueReg = head_inst->renamedDestIdx(0);
+        auto specValueReg = head_inst->specReg; // todo
+        assert(specValueReg);
+
+        auto realValue = cpu->getReg(realValueReg, tid);
+        auto specValue = cpu->getReg(specValueReg, tid);
+        
+        DPRINTF(Commit, "[tid:%i] [sn:%llu] Bypassed load, real value reg: %i, spec value reg: %i\n",
+                tid, head_inst->seqNum, realValue, specValue);
+    }
+
     updateComInstStats(head_inst);
 
     DPRINTF(Commit,

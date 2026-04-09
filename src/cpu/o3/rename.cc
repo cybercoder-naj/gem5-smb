@@ -1175,7 +1175,7 @@ Rename::renameDestRegs(const DynInstPtr &inst, ThreadID tid)
                             rename_result.first);
             historyBuffer[tid].push_front(smb_hb_entry);
 
-            inst->setBypassedLoad();
+            inst->setBypassedLoad(smb_phys_reg);
         }
     }
 

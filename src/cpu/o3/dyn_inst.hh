@@ -378,6 +378,8 @@ class DynInst : public ExecContext, public RefCounted
         bool predicted = false;
     } memDepInfo;
 
+    PhysRegIdPtr specReg = nullptr;
+
     /////////////////////// TLB Miss //////////////////////
     /**
      * Saved memory request (needed when the DTB address translation is
@@ -614,7 +616,10 @@ class DynInst : public ExecContext, public RefCounted
         return staticInst->isLoad() && instFlags.test(BypassedLoad); 
     }
 
-    void setBypassedLoad() { instFlags.set(BypassedLoad); }
+    void setBypassedLoad(PhysRegIdPtr spec_reg) { 
+        instFlags.set(BypassedLoad); 
+        specReg = spec_reg;
+    }
 
     uint64_t
     getHtmTransactionUid() const override
