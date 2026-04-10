@@ -1,98 +1,1061 @@
-      0: system.cpu.rename: Processing [tid:0]
-      0: system.cpu.rename: [tid:0] Free IQ: 559, Free ROB: 918, Free LQ: 132, Free SQ: 72, FreeRM 127(879 870 917 1834 127 8 4585)
-      0: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
-      0: system.cpu.rename: calcFreeLQEntries: free lqEntries: 132, loadsInProgress: 0, loads dispatchedToLQ: 0
-      0: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
-      0: system.cpu.rename: [tid:0] Nothing to do, breaking out early.
-   1000: system.cpu.rename: Processing [tid:0]
-   1000: system.cpu.rename: [tid:0] Free IQ: 559, Free ROB: 918, Free LQ: 132, Free SQ: 72, FreeRM 127(879 870 917 1834 127 8 4585)
-   1000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
-   1000: system.cpu.rename: [tid:0] Squashing instructions due to squash from commit.
-   1000: system.cpu.rename: [tid:0] [squash sn:0] Squashing instructions.
-   2000: system.cpu.rename: Processing [tid:0]
-   2000: system.cpu.rename: [tid:0] Free IQ: 559, Free ROB: 918, Free LQ: 132, Free SQ: 72, FreeRM 127(879 870 917 1834 127 8 4585)
-   2000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
-   2000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 132, loadsInProgress: 0, loads dispatchedToLQ: 0
-   2000: system.cpu.rename: [tid:0] Done squashing, switching to running.
-   2000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
-   2000: system.cpu.rename: [tid:0] Nothing to do, breaking out early.
-   3000: system.cpu.rename: Processing [tid:0]
-   3000: system.cpu.rename: [tid:0] Free IQ: 559, Free ROB: 918, Free LQ: 132, Free SQ: 72, FreeRM 127(879 870 917 1834 127 8 4585)
-   3000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
-   3000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 132, loadsInProgress: 0, loads dispatchedToLQ: 0
-   3000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
-   3000: system.cpu.rename: [tid:0] Nothing to do, breaking out early.
-   4000: system.cpu.rename: Processing [tid:0]
-   4000: system.cpu.rename: [tid:0] Free IQ: 559, Free ROB: 918, Free LQ: 132, Free SQ: 72, FreeRM 127(879 870 917 1834 127 8 4585)
-   4000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
-   4000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 132, loadsInProgress: 0, loads dispatchedToLQ: 0
-   4000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
-   4000: system.cpu.rename: [tid:0] Nothing to do, breaking out early.
-   5000: system.cpu.rename: Processing [tid:0]
-   5000: system.cpu.rename: [tid:0] Free IQ: 559, Free ROB: 918, Free LQ: 132, Free SQ: 72, FreeRM 127(879 870 917 1834 127 8 4585)
-   5000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
-   5000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 132, loadsInProgress: 0, loads dispatchedToLQ: 0
-   5000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
-   5000: system.cpu.rename: [tid:0] Nothing to do, breaking out early.
-   6000: system.cpu.rename: Processing [tid:0]
-   6000: system.cpu.rename: [tid:0] Free IQ: 559, Free ROB: 918, Free LQ: 132, Free SQ: 72, FreeRM 127(879 870 917 1834 127 8 4585)
-   6000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
-   6000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 132, loadsInProgress: 0, loads dispatchedToLQ: 0
-   6000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
-   6000: system.cpu.rename: [tid:0] Nothing to do, breaking out early.
-   7000: system.cpu.rename: Processing [tid:0]
-   7000: system.cpu.rename: [tid:0] Free IQ: 559, Free ROB: 918, Free LQ: 132, Free SQ: 72, FreeRM 127(879 870 917 1834 127 8 4585)
-   7000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
-   7000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 132, loadsInProgress: 0, loads dispatchedToLQ: 0
-   7000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
-   7000: system.cpu.rename: [tid:0] Nothing to do, breaking out early.
-   8000: system.cpu.rename: Processing [tid:0]
-   8000: system.cpu.rename: [tid:0] Free IQ: 559, Free ROB: 918, Free LQ: 132, Free SQ: 72, FreeRM 127(879 870 917 1834 127 8 4585)
-   8000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
-   8000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 132, loadsInProgress: 0, loads dispatchedToLQ: 0
-   8000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
-   8000: system.cpu.rename: [tid:0] Nothing to do, breaking out early.
-   9000: system.cpu.rename: Processing [tid:0]
-   9000: system.cpu.rename: [tid:0] Free IQ: 559, Free ROB: 918, Free LQ: 132, Free SQ: 72, FreeRM 127(879 870 917 1834 127 8 4585)
-   9000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
-   9000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 132, loadsInProgress: 0, loads dispatchedToLQ: 0
-   9000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
-   9000: system.cpu.rename: [tid:0] Nothing to do, breaking out early.
-  10000: system.cpu.rename: Processing [tid:0]
-  10000: system.cpu.rename: [tid:0] Free IQ: 559, Free ROB: 918, Free LQ: 132, Free SQ: 72, FreeRM 127(879 870 917 1834 127 8 4585)
-  10000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
-  10000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 132, loadsInProgress: 0, loads dispatchedToLQ: 0
-  10000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
-  10000: system.cpu.rename: [tid:0] Nothing to do, breaking out early.
-  11000: system.cpu.rename: Processing [tid:0]
-  11000: system.cpu.rename: [tid:0] Free IQ: 559, Free ROB: 918, Free LQ: 132, Free SQ: 72, FreeRM 127(879 870 917 1834 127 8 4585)
-  11000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
-  11000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 132, loadsInProgress: 0, loads dispatchedToLQ: 0
-  11000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
-  11000: system.cpu.rename: [tid:0] Nothing to do, breaking out early.
-  87000: system.cpu.rename: Processing [tid:0]
-  87000: system.cpu.rename: [tid:0] Free IQ: 559, Free ROB: 918, Free LQ: 132, Free SQ: 72, FreeRM 127(879 870 917 1834 127 8 4585)
-  87000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
-  87000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 132, loadsInProgress: 0, loads dispatchedToLQ: 0
-  87000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
-  87000: system.cpu.rename: [tid:0] Nothing to do, breaking out early.
-  88000: system.cpu.rename: Processing [tid:0]
-  88000: system.cpu.rename: [tid:0] Free IQ: 559, Free ROB: 918, Free LQ: 132, Free SQ: 72, FreeRM 127(879 870 917 1834 127 8 4585)
-  88000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
-  88000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 132, loadsInProgress: 0, loads dispatchedToLQ: 0
-  88000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
-  88000: system.cpu.rename: [tid:0] Nothing to do, breaking out early.
-  89000: system.cpu.rename: Processing [tid:0]
-  89000: system.cpu.rename: [tid:0] Free IQ: 559, Free ROB: 918, Free LQ: 132, Free SQ: 72, FreeRM 127(879 870 917 1834 127 8 4585)
-  89000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
-  89000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 132, loadsInProgress: 0, loads dispatchedToLQ: 0
-  89000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
-  89000: system.cpu.rename: [tid:0] 10 available instructions to send iew.
-  89000: system.cpu.rename: [tid:0] 0 insts pipelining from Rename | 0 insts dispatched to IQ last cycle.
-  89000: system.cpu.rename: [tid:0] Sending instructions to IEW.
-  89000: system.cpu.rename: [tid:0] Processing instruction [sn:1] with PC (0x401000=>0x401004).(0=>1).
-  89000: global: Renamed reg t1 to physical reg 39 (39) old mapping was 17 (17)
-  89000: system.cpu.rename: [tid:0] Renaming arch reg 17 (integer) to physical reg 39 (39).
-  89000: system.cpu.rename: [tid:0] [sn:0] Adding instruction to history buffer (size=0).
-  89000: system.cpu.rename: [tid:0] Sending instructions to IEW.
-  89000: system.cpu.rename: [tid:0] Processing instruction [sn:2] with PC (0x401000=>0x401004).(1=>2).
+      0: system.cpu.iew.lsq.thread0: Creating LSQUnit0 object.
+      0: system.cpu.commit: Generating TC squash event for [tid:0]
+      0: system.cpu.iew.lsq.thread0: LQ size: 132, #loads occupied: 0
+      0: system.cpu.iew.lsq.thread0: SQ size: 72, #stores occupied: 0
+      0: system.cpu.iew.lsq.thread0: LQ size: 132, #loads occupied: 0
+      0: system.cpu.iew.lsq.thread0: SQ size: 72, #stores occupied: 0
+      0: system.cpu.iew.lsq.thread0: LQ size: 132, #loads occupied: 0
+      0: system.cpu.iew.lsq.thread0: SQ size: 72, #stores occupied: 0
+      0: system.cpu.commit: Squashing from TC, restarting at PC (0x401000=>0x401008).(0=>1)
+      0: system.cpu.commit: [tid:0] ROB has 0 insts & 918 free entries.
+   1000: system.cpu.iew.lsq.thread0: Squashing until [sn:0]!(Loads:0 Stores:0)
+   1000: system.cpu.iew.lsq.thread0: LQ size: 132, #loads occupied: 0
+   1000: system.cpu.iew.lsq.thread0: SQ size: 72, #stores occupied: 0
+   1000: system.cpu.commit: Getting instructions from Rename stage.
+   1000: system.cpu.commit: Trying to commit instructions in the ROB.
+   1000: system.cpu.commit: [tid:0] ROB has 0 insts & 918 free entries.
+   2000: system.cpu.commit: Getting instructions from Rename stage.
+   2000: system.cpu.commit: Trying to commit instructions in the ROB.
+   2000: system.cpu.commit: [tid:0] ROB has 0 insts & 918 free entries.
+   3000: system.cpu.commit: Getting instructions from Rename stage.
+   3000: system.cpu.commit: Trying to commit instructions in the ROB.
+   3000: system.cpu.commit: [tid:0] ROB has 0 insts & 918 free entries.
+   4000: system.cpu.commit: Getting instructions from Rename stage.
+   4000: system.cpu.commit: Trying to commit instructions in the ROB.
+   4000: system.cpu.commit: [tid:0] ROB has 0 insts & 918 free entries.
+   5000: system.cpu.commit: Getting instructions from Rename stage.
+   5000: system.cpu.commit: Trying to commit instructions in the ROB.
+   5000: system.cpu.commit: [tid:0] ROB has 0 insts & 918 free entries.
+   6000: system.cpu.commit: Getting instructions from Rename stage.
+   6000: system.cpu.commit: Trying to commit instructions in the ROB.
+   6000: system.cpu.commit: [tid:0] ROB has 0 insts & 918 free entries.
+   7000: system.cpu.commit: Getting instructions from Rename stage.
+   7000: system.cpu.commit: Trying to commit instructions in the ROB.
+   7000: system.cpu.commit: [tid:0] ROB has 0 insts & 918 free entries.
+   8000: system.cpu.commit: Getting instructions from Rename stage.
+   8000: system.cpu.commit: Trying to commit instructions in the ROB.
+   8000: system.cpu.commit: [tid:0] ROB has 0 insts & 918 free entries.
+   9000: system.cpu.commit: Getting instructions from Rename stage.
+   9000: system.cpu.commit: Trying to commit instructions in the ROB.
+   9000: system.cpu.commit: [tid:0] ROB has 0 insts & 918 free entries.
+  10000: system.cpu.commit: Getting instructions from Rename stage.
+  10000: system.cpu.commit: Trying to commit instructions in the ROB.
+  10000: system.cpu.commit: [tid:0] ROB has 0 insts & 918 free entries.
+  11000: system.cpu.commit: Getting instructions from Rename stage.
+  11000: system.cpu.commit: Trying to commit instructions in the ROB.
+  11000: system.cpu.commit: [tid:0] ROB has 0 insts & 918 free entries.
+  87000: system.cpu.commit: Getting instructions from Rename stage.
+  87000: system.cpu.commit: Trying to commit instructions in the ROB.
+  87000: system.cpu.commit: [tid:0] ROB has 0 insts & 918 free entries.
+  88000: system.cpu.commit: Getting instructions from Rename stage.
+  88000: system.cpu.commit: Trying to commit instructions in the ROB.
+  88000: system.cpu.commit: [tid:0] ROB has 0 insts & 918 free entries.
+  89000: system.cpu.commit: Getting instructions from Rename stage.
+  89000: system.cpu.commit: Trying to commit instructions in the ROB.
+  89000: system.cpu.commit: [tid:0] ROB has 0 insts & 918 free entries.
+  90000: system.cpu.commit: Getting instructions from Rename stage.
+  90000: system.cpu.commit: [tid:0] [sn:1] Inserting PC (0x401000=>0x401004).(0=>1) into ROB.
+  90000: system.cpu.commit: [tid:0] [sn:2] Inserting PC (0x401000=>0x401004).(1=>2) into ROB.
+  90000: system.cpu.commit: [tid:0] [sn:3] Inserting PC (0x401004=>0x40100a).(0=>1) into ROB.
+  90000: system.cpu.commit: [tid:0] [sn:4] Inserting PC (0x40100a=>0x40100e).(0=>1) into ROB.
+  90000: system.cpu.commit: [tid:0] [sn:5] Inserting PC (0x40100e=>0x401015).(0=>1) into ROB.
+  90000: system.cpu.commit: [tid:0] [sn:6] Inserting PC (0x40100e=>0x401015).(1=>2) into ROB.
+  90000: system.cpu.commit: [tid:0] [sn:7] Inserting PC (0x401015=>0x401018).(0=>1) into ROB.
+  90000: system.cpu.commit: [tid:0] [sn:8] Inserting PC (0x401018=>0x40101f).(0=>1) into ROB.
+  90000: system.cpu.commit: [tid:0] [sn:9] Inserting PC (0x40101f=>0x401022).(0=>1) into ROB.
+  90000: system.cpu.commit: [tid:0] [sn:10] Inserting PC (0x401022=>0x401026).(0=>1) into ROB.
+  90000: system.cpu.commit: Trying to commit instructions in the ROB.
+  90000: system.cpu.commit: [tid:0] Can't commit, Instruction [sn:1] PC (0x401000=>0x401004).(0=>1) is head of ROB and not ready
+  90000: system.cpu.commit: [tid:0] ROB has 10 insts & 908 free entries.
+  91000: system.cpu.iew.lsq.thread0: Inserting store PC (0x40100a=>0x40100e).(0=>1), idx:0 [sn:4]
+  91000: system.cpu.iew.lsq.thread0: Inserting store PC (0x40100e=>0x401015).(1=>2), idx:1 [sn:6]
+  91000: system.cpu.iew.lsq.thread0: Inserting load PC (0x401015=>0x401018).(0=>1), idx:0 [sn:7]
+  91000: system.cpu.commit: Getting instructions from Rename stage.
+  91000: system.cpu.commit: [tid:0] [sn:11] Inserting PC (0x401022=>0x401026).(1=>2) into ROB.
+  91000: system.cpu.commit: [tid:0] [sn:12] Inserting PC (0x401026=>0x401028).(0=>1) into ROB.
+  91000: system.cpu.commit: [tid:0] [sn:13] Inserting PC (0x401028=>0x40102a).(0=>1) into ROB.
+  91000: system.cpu.commit: [tid:0] [sn:14] Inserting PC (0x401028=>0x40102a).(1=>2) into ROB.
+  91000: system.cpu.commit: [tid:0] [sn:15] Inserting PC (0x401028=>0x40102a).(2=>3) into ROB.
+  91000: system.cpu.commit: [tid:0] [sn:16] Inserting PC (0x40102a=>0x40102c).(0=>1) into ROB.
+  91000: system.cpu.commit: [tid:0] [sn:17] Inserting PC (0x40102a=>0x40102c).(1=>2) into ROB.
+  91000: system.cpu.commit: [tid:0] [sn:18] Inserting PC (0x40102a=>0x40102c).(2=>3) into ROB.
+  91000: system.cpu.commit: [tid:0] [sn:19] Inserting PC (0x40102c=>0x40102e).(0=>1) into ROB.
+  91000: system.cpu.commit: [tid:0] [sn:20] Inserting PC (0x40102c=>0x40102e).(1=>2) into ROB.
+  91000: system.cpu.commit: Trying to commit instructions in the ROB.
+  91000: system.cpu.commit: [tid:0] Can't commit, Instruction [sn:1] PC (0x401000=>0x401004).(0=>1) is head of ROB and not ready
+  91000: system.cpu.commit: [tid:0] ROB has 20 insts & 898 free entries.
+  92000: system.cpu.iew.lsq.thread0: Inserting load PC (0x401028=>0x40102a).(0=>1), idx:1 [sn:13]
+  92000: system.cpu.iew.lsq.thread0: Inserting store PC (0x401028=>0x40102a).(2=>3), idx:2 [sn:15]
+  92000: system.cpu.iew.lsq.thread0: Inserting load PC (0x40102a=>0x40102c).(0=>1), idx:2 [sn:16]
+  92000: system.cpu.iew.lsq.thread0: Inserting store PC (0x40102a=>0x40102c).(2=>3), idx:3 [sn:18]
+  92000: system.cpu.iew.lsq.thread0: Inserting load PC (0x40102c=>0x40102e).(0=>1), idx:3 [sn:19]
+  92000: system.cpu.iew.lsq.thread0: LQ size: 132, #loads occupied: 4
+  92000: system.cpu.iew.lsq.thread0: SQ size: 72, #stores occupied: 4
+  92000: system.cpu.commit: Getting instructions from Rename stage.
+  92000: system.cpu.commit: [tid:0] [sn:21] Inserting PC (0x40102c=>0x40102e).(2=>3) into ROB.
+  92000: system.cpu.commit: [tid:0] [sn:22] Inserting PC (0x40102e=>0x401030).(0=>1) into ROB.
+  92000: system.cpu.commit: [tid:0] [sn:23] Inserting PC (0x40102e=>0x401030).(1=>2) into ROB.
+  92000: system.cpu.commit: [tid:0] [sn:24] Inserting PC (0x40102e=>0x401030).(2=>3) into ROB.
+  92000: system.cpu.commit: [tid:0] [sn:25] Inserting PC (0x401030=>0x401032).(0=>1) into ROB.
+  92000: system.cpu.commit: [tid:0] [sn:26] Inserting PC (0x401030=>0x401032).(1=>2) into ROB.
+  92000: system.cpu.commit: [tid:0] [sn:27] Inserting PC (0x401030=>0x401032).(2=>3) into ROB.
+  92000: system.cpu.commit: [tid:0] [sn:28] Inserting PC (0x401032=>0x401034).(0=>1) into ROB.
+  92000: system.cpu.commit: [tid:0] [sn:29] Inserting PC (0x401032=>0x401034).(1=>2) into ROB.
+  92000: system.cpu.commit: [tid:0] [sn:30] Inserting PC (0x401032=>0x401034).(2=>3) into ROB.
+  92000: system.cpu.commit: Trying to commit instructions in the ROB.
+  92000: system.cpu.commit: [tid:0] Can't commit, Instruction [sn:1] PC (0x401000=>0x401004).(0=>1) is head of ROB and not ready
+  92000: system.cpu.commit: [tid:0] ROB has 30 insts & 888 free entries.
+  93000: system.cpu.iew.lsq.thread0: Inserting store PC (0x40102c=>0x40102e).(2=>3), idx:4 [sn:21]
+  93000: system.cpu.iew.lsq.thread0: Inserting load PC (0x40102e=>0x401030).(0=>1), idx:4 [sn:22]
+  93000: system.cpu.iew.lsq.thread0: Inserting store PC (0x40102e=>0x401030).(2=>3), idx:5 [sn:24]
+  93000: system.cpu.iew.lsq.thread0: Inserting load PC (0x401030=>0x401032).(0=>1), idx:5 [sn:25]
+  93000: system.cpu.iew.lsq.thread0: Inserting store PC (0x401030=>0x401032).(2=>3), idx:6 [sn:27]
+  93000: system.cpu.iew.lsq.thread0: Inserting load PC (0x401032=>0x401034).(0=>1), idx:6 [sn:28]
+  93000: system.cpu.iew.lsq.thread0: Inserting store PC (0x401032=>0x401034).(2=>3), idx:7 [sn:30]
+  93000: system.cpu.iew.lsq.thread0: Executing load PC (0x401028=>0x40102a).(0=>1), [sn:13]
+  93000: system.cpu.iew.lsq.thread0: FARTS Load [sn:13] initiateAcc returned 0x62fd83450bd0
+  93000: system.cpu.iew.lsq.thread0: FARTS Fault on Load PC (0x401028=>0x40102a).(0=>1), [sn:13], fault: 0x62fd83450bd0
+  93000: system.cpu.iew.lsq.thread0: Load [sn:13] not executed from fault
+  93000: system.cpu.iew.lsq.thread0: LQ size: 132, #loads occupied: 7
+  93000: system.cpu.iew.lsq.thread0: SQ size: 72, #stores occupied: 8
+  93000: system.cpu.commit: Getting instructions from Rename stage.
+  93000: system.cpu.commit: [tid:0] [sn:31] Inserting PC (0x401034=>0x401036).(0=>1) into ROB.
+  93000: system.cpu.commit: [tid:0] [sn:32] Inserting PC (0x401034=>0x401036).(1=>2) into ROB.
+  93000: system.cpu.commit: [tid:0] [sn:33] Inserting PC (0x401034=>0x401036).(2=>3) into ROB.
+  93000: system.cpu.commit: [tid:0] [sn:34] Inserting PC (0x401036=>0x401038).(0=>1) into ROB.
+  93000: system.cpu.commit: [tid:0] [sn:35] Inserting PC (0x401036=>0x401038).(1=>2) into ROB.
+  93000: system.cpu.commit: [tid:0] [sn:36] Inserting PC (0x401036=>0x401038).(2=>3) into ROB.
+  93000: system.cpu.commit: [tid:0] [sn:37] Inserting PC (0x401038=>0x40103a).(0=>1) into ROB.
+  93000: system.cpu.commit: [tid:0] [sn:38] Inserting PC (0x401038=>0x40103a).(1=>2) into ROB.
+  93000: system.cpu.commit: [tid:0] [sn:39] Inserting PC (0x401038=>0x40103a).(2=>3) into ROB.
+  93000: system.cpu.commit: [tid:0] [sn:40] Inserting PC (0x40103a=>0x40103c).(0=>1) into ROB.
+  93000: system.cpu.commit: Trying to commit instructions in the ROB.
+  93000: system.cpu.commit: [tid:0] Marking PC (0x401000=>0x401004).(0=>1), [sn:1] ready within ROB.
+  93000: system.cpu.commit: [tid:0] Marking PC (0x401004=>0x40100a).(0=>1), [sn:3] ready within ROB.
+  93000: system.cpu.commit: [tid:0] Marking PC (0x40100e=>0x401015).(0=>1), [sn:5] ready within ROB.
+  93000: system.cpu.commit: [tid:0] Marking PC (0x401018=>0x40101f).(0=>1), [sn:8] ready within ROB.
+  93000: system.cpu.commit: [tid:0] Marking PC (0x401022=>0x401026).(0=>1), [sn:10] ready within ROB.
+  93000: system.cpu.commit: [tid:0] Instruction [sn:1] PC (0x401000=>0x401004).(0=>1) is head of ROB and ready to commit
+  93000: system.cpu.commit: [tid:0] ROB has 40 insts & 878 free entries.
+  94000: system.cpu.iew.lsq.thread0: Inserting load PC (0x401034=>0x401036).(0=>1), idx:7 [sn:31]
+  94000: system.cpu.iew.lsq.thread0: Inserting store PC (0x401034=>0x401036).(2=>3), idx:8 [sn:33]
+  94000: system.cpu.iew.lsq.thread0: Inserting load PC (0x401036=>0x401038).(0=>1), idx:8 [sn:34]
+  94000: system.cpu.iew.lsq.thread0: Inserting store PC (0x401036=>0x401038).(2=>3), idx:9 [sn:36]
+  94000: system.cpu.iew.lsq.thread0: Inserting load PC (0x401038=>0x40103a).(0=>1), idx:9 [sn:37]
+  94000: system.cpu.iew.lsq.thread0: Inserting store PC (0x401038=>0x40103a).(2=>3), idx:10 [sn:39]
+  94000: system.cpu.iew.lsq.thread0: Inserting load PC (0x40103a=>0x40103c).(0=>1), idx:10 [sn:40]
+  94000: system.cpu.iew.lsq.thread0: Executing store PC (0x40100a=>0x40100e).(0=>1) [sn:4]
+  94000: system.cpu.iew.lsq.thread0: Doing write to store idx 0, addr 0x2e5c | storeHead:0 [sn:4]
+  94000: system.cpu.iew.lsq.thread0: Executing store PC (0x40100e=>0x401015).(1=>2) [sn:6]
+  94000: system.cpu.iew.lsq.thread0: Doing write to store idx 1, addr 0x2e5c | storeHead:0 [sn:6]
+  94000: system.cpu.iew.lsq.thread0: Executing load PC (0x401015=>0x401018).(0=>1), [sn:7]
+  94000: system.cpu.iew.lsq.thread0: Read called, load idx: 0, store idx: 3, storeHead: 0 addr: 0x2e5c
+  94000: system.cpu.iew.lsq.thread0: Forwarding from store idx 2 to load to addr 0x7fffffffee5c
+  94000: system.cpu.iew.lsq.thread0: FARTS Load [sn:7] initiateAcc returned 0
+  94000: system.cpu.iew.lsq.thread0: LQ size: 132, #loads occupied: 11
+  94000: system.cpu.iew.lsq.thread0: SQ size: 72, #stores occupied: 11
+  94000: system.cpu.commit: Getting instructions from Rename stage.
+  94000: system.cpu.commit: [tid:0] [sn:41] Inserting PC (0x40103a=>0x40103c).(1=>2) into ROB.
+  94000: system.cpu.commit: [tid:0] [sn:42] Inserting PC (0x40103a=>0x40103c).(2=>3) into ROB.
+  94000: system.cpu.commit: [tid:0] [sn:43] Inserting PC (0x40103c=>0x40103e).(0=>1) into ROB.
+  94000: system.cpu.commit: [tid:0] [sn:44] Inserting PC (0x40103c=>0x40103e).(1=>2) into ROB.
+  94000: system.cpu.commit: [tid:0] [sn:45] Inserting PC (0x40103c=>0x40103e).(2=>3) into ROB.
+  94000: system.cpu.commit: [tid:0] [sn:46] Inserting PC (0x40103e=>0x401040).(0=>1) into ROB.
+  94000: system.cpu.commit: [tid:0] [sn:47] Inserting PC (0x40103e=>0x401040).(1=>2) into ROB.
+  94000: system.cpu.commit: [tid:0] [sn:48] Inserting PC (0x40103e=>0x401040).(2=>3) into ROB.
+  94000: system.cpu.commit: Trying to commit instructions in the ROB.
+  94000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:1]
+  94000: system.cpu.commit: [tid:0] [sn:1] Committing instruction with PC (0x401000=>0x401004).(0=>1)
+  94000: system.cpu.commit: [tid:0] Marking PC (0x401000=>0x401004).(1=>2), [sn:2] ready within ROB.
+  94000: system.cpu.commit: [tid:0] Marking PC (0x401026=>0x401028).(0=>1), [sn:12] ready within ROB.
+  94000: system.cpu.commit: [tid:0] Marking PC (0x401028=>0x40102a).(0=>1), [sn:13] ready within ROB.
+  94000: system.cpu.commit: [tid:0] Instruction [sn:2] PC (0x401000=>0x401004).(1=>2) is head of ROB and ready to commit
+  94000: system.cpu.commit: [tid:0] ROB has 47 insts & 871 free entries.
+  95000: system.cpu.iew.lsq.thread0: Inserting store PC (0x40103a=>0x40103c).(2=>3), idx:11 [sn:42]
+  95000: system.cpu.iew.lsq.thread0: Inserting load PC (0x40103c=>0x40103e).(0=>1), idx:11 [sn:43]
+  95000: system.cpu.iew.lsq.thread0: Inserting store PC (0x40103c=>0x40103e).(2=>3), idx:12 [sn:45]
+  95000: system.cpu.iew.lsq.thread0: Inserting load PC (0x40103e=>0x401040).(0=>1), idx:12 [sn:46]
+  95000: system.cpu.iew.lsq.thread0: Inserting store PC (0x40103e=>0x401040).(2=>3), idx:13 [sn:48]
+  95000: system.cpu.commit: Getting instructions from Rename stage.
+  95000: system.cpu.commit: Trying to commit instructions in the ROB.
+  95000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:2]
+  95000: system.cpu.commit: [tid:0] [sn:2] Committing instruction with PC (0x401000=>0x401004).(1=>2)
+  95000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:3]
+  95000: system.cpu.commit: [tid:0] [sn:3] Committing instruction with PC (0x401004=>0x40100a).(0=>1)
+  95000: system.cpu.commit: [tid:0] Marking PC (0x40100a=>0x40100e).(0=>1), [sn:4] ready within ROB.
+  95000: system.cpu.commit: [tid:0] Marking PC (0x40100e=>0x401015).(1=>2), [sn:6] ready within ROB.
+  95000: system.cpu.commit: [tid:0] Marking PC (0x401022=>0x401026).(1=>2), [sn:11] ready within ROB.
+  95000: system.cpu.commit: [tid:0] Instruction [sn:4] PC (0x40100a=>0x40100e).(0=>1) is head of ROB and ready to commit
+  95000: system.cpu.commit: [tid:0] ROB has 45 insts & 873 free entries.
+  96000: system.cpu.iew.lsq.thread0: LQ size: 132, #loads occupied: 13
+  96000: system.cpu.iew.lsq.thread0: SQ size: 72, #stores occupied: 14
+  96000: system.cpu.commit: Getting instructions from Rename stage.
+  96000: system.cpu.commit: Trying to commit instructions in the ROB.
+  96000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:4]
+  96000: system.cpu.commit: [tid:0] [sn:4] Committing instruction with PC (0x40100a=>0x40100e).(0=>1)
+  96000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:5]
+  96000: system.cpu.commit: [tid:0] [sn:5] Committing instruction with PC (0x40100e=>0x401015).(0=>1)
+  96000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:6]
+  96000: system.cpu.commit: [tid:0] [sn:6] Committing instruction with PC (0x40100e=>0x401015).(1=>2)
+  96000: system.cpu.commit: [tid:0] Marking PC (0x401015=>0x401018).(0=>1), [sn:7] ready within ROB.
+  96000: system.cpu.commit: [tid:0] Instruction [sn:7] PC (0x401015=>0x401018).(0=>1) is head of ROB and ready to commit
+  96000: system.cpu.commit: [tid:0] ROB has 42 insts & 876 free entries.
+  97000: system.cpu.iew.lsq.thread0: Marking store as able to write back, PC (0x40100a=>0x40100e).(0=>1) [sn:4]
+  97000: system.cpu.iew.lsq.thread0: Marking store as able to write back, PC (0x40100e=>0x401015).(1=>2) [sn:6]
+  97000: system.cpu.iew.lsq.thread0: LQ size: 132, #loads occupied: 13
+  97000: system.cpu.iew.lsq.thread0: SQ size: 72, #stores occupied: 14
+  97000: system.cpu.commit: Getting instructions from Rename stage.
+  97000: system.cpu.commit: Trying to commit instructions in the ROB.
+  97000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:7]
+  97000: system.cpu.commit: [tid:0] [sn:7] Committing instruction with PC (0x401015=>0x401018).(0=>1)
+  97000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:8]
+  97000: system.cpu.commit: [tid:0] [sn:8] Committing instruction with PC (0x401018=>0x40101f).(0=>1)
+  97000: system.cpu.commit: [tid:0] Marking PC (0x40101f=>0x401022).(0=>1), [sn:9] ready within ROB.
+  97000: system.cpu.commit: [tid:0] Instruction [sn:9] PC (0x40101f=>0x401022).(0=>1) is head of ROB and ready to commit
+  97000: system.cpu.commit: [tid:0] ROB has 40 insts & 878 free entries.
+  98000: system.cpu.iew.lsq.thread0: D-Cache: Writing back store idx:1 PC:(0x40100a=>0x40100e).(0=>1) to Addr:0x2e5c, data:0x8 [sn:4]
+  98000: system.cpu.iew.lsq.thread0: Memory request (pkt: WriteReq [2e5c:2e5f]) from inst [sn:4] was sent (cache is blocked: 0, cache_got_blocked: 0)
+  98000: system.cpu.iew.lsq.thread0: Committing head load instruction, PC (0x401015=>0x401018).(0=>1)
+  98000: system.cpu.iew.lsq.thread0: LQ size: 132, #loads occupied: 12
+  98000: system.cpu.iew.lsq.thread0: SQ size: 72, #stores occupied: 14
+  98000: system.cpu.commit: Getting instructions from Rename stage.
+  98000: system.cpu.commit: Trying to commit instructions in the ROB.
+  98000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:9]
+  98000: system.cpu.commit: [tid:0] [sn:9] Committing instruction with PC (0x40101f=>0x401022).(0=>1)
+  98000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:10]
+  98000: system.cpu.commit: [tid:0] [sn:10] Committing instruction with PC (0x401022=>0x401026).(0=>1)
+  98000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:11]
+  98000: system.cpu.commit: [tid:0] [sn:11] Committing instruction with PC (0x401022=>0x401026).(1=>2)
+  98000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+  98000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+  98000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+  98000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+  98000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+  98000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+  99000: system.cpu.iew.lsq.thread0: LQ size: 132, #loads occupied: 12
+  99000: system.cpu.iew.lsq.thread0: SQ size: 72, #stores occupied: 14
+  99000: system.cpu.commit: Getting instructions from Rename stage.
+  99000: system.cpu.commit: Trying to commit instructions in the ROB.
+  99000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+  99000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+  99000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+  99000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+  99000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+  99000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 100000: system.cpu.iew.lsq.thread0: LQ size: 132, #loads occupied: 12
+ 100000: system.cpu.iew.lsq.thread0: SQ size: 72, #stores occupied: 14
+ 100000: system.cpu.commit: Getting instructions from Rename stage.
+ 100000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 100000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 100000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 100000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 100000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 100000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 100000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 101000: system.cpu.commit: Getting instructions from Rename stage.
+ 101000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 101000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 101000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 101000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 101000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 101000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 101000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 102000: system.cpu.commit: Getting instructions from Rename stage.
+ 102000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 102000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 102000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 102000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 102000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 102000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 102000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 103000: system.cpu.commit: Getting instructions from Rename stage.
+ 103000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 103000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 103000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 103000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 103000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 103000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 103000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 104000: system.cpu.commit: Getting instructions from Rename stage.
+ 104000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 104000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 104000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 104000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 104000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 104000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 104000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 105000: system.cpu.commit: Getting instructions from Rename stage.
+ 105000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 105000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 105000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 105000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 105000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 105000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 105000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 106000: system.cpu.commit: Getting instructions from Rename stage.
+ 106000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 106000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 106000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 106000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 106000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 106000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 106000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 107000: system.cpu.commit: Getting instructions from Rename stage.
+ 107000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 107000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 107000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 107000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 107000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 107000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 107000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 108000: system.cpu.commit: Getting instructions from Rename stage.
+ 108000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 108000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 108000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 108000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 108000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 108000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 108000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 109000: system.cpu.commit: Getting instructions from Rename stage.
+ 109000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 109000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 109000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 109000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 109000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 109000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 109000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 110000: system.cpu.commit: Getting instructions from Rename stage.
+ 110000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 110000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 110000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 110000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 110000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 110000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 110000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 111000: system.cpu.commit: Getting instructions from Rename stage.
+ 111000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 111000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 111000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 111000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 111000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 111000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 111000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 112000: system.cpu.commit: Getting instructions from Rename stage.
+ 112000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 112000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 112000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 112000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 112000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 112000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 112000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 113000: system.cpu.commit: Getting instructions from Rename stage.
+ 113000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 113000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 113000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 113000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 113000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 113000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 113000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 114000: system.cpu.commit: Getting instructions from Rename stage.
+ 114000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 114000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 114000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 114000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 114000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 114000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 114000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 115000: system.cpu.commit: Getting instructions from Rename stage.
+ 115000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 115000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 115000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 115000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 115000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 115000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 115000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 116000: system.cpu.commit: Getting instructions from Rename stage.
+ 116000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 116000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 116000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 116000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 116000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 116000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 116000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 117000: system.cpu.commit: Getting instructions from Rename stage.
+ 117000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 117000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 117000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 117000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 117000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 117000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 117000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 118000: system.cpu.commit: Getting instructions from Rename stage.
+ 118000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 118000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 118000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 118000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 118000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 118000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 118000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 119000: system.cpu.commit: Getting instructions from Rename stage.
+ 119000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 119000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 119000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 119000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 119000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 119000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 119000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 120000: system.cpu.commit: Getting instructions from Rename stage.
+ 120000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 120000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 120000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 120000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 120000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 120000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 120000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 121000: system.cpu.commit: Getting instructions from Rename stage.
+ 121000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 121000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 121000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 121000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 121000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 121000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 121000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 122000: system.cpu.commit: Getting instructions from Rename stage.
+ 122000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 122000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 122000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 122000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 122000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 122000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 122000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 123000: system.cpu.commit: Getting instructions from Rename stage.
+ 123000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 123000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 123000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 123000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 123000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 123000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 123000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 124000: system.cpu.commit: Getting instructions from Rename stage.
+ 124000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 124000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 124000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 124000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 124000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 124000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 124000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 125000: system.cpu.commit: Getting instructions from Rename stage.
+ 125000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 125000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 125000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 125000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 125000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 125000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 125000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 126000: system.cpu.commit: Getting instructions from Rename stage.
+ 126000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 126000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 126000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 126000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 126000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 126000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 126000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 127000: system.cpu.commit: Getting instructions from Rename stage.
+ 127000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 127000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 127000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 127000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 127000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 127000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 127000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 128000: system.cpu.commit: Getting instructions from Rename stage.
+ 128000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 128000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 128000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 128000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 128000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 128000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 128000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 129000: system.cpu.commit: Getting instructions from Rename stage.
+ 129000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 129000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 129000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 129000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 129000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 129000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 129000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 130000: system.cpu.commit: Getting instructions from Rename stage.
+ 130000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 130000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 130000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 130000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 130000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 130000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 130000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 131000: system.cpu.commit: Getting instructions from Rename stage.
+ 131000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 131000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 131000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 131000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 131000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 131000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 131000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 132000: system.cpu.commit: Getting instructions from Rename stage.
+ 132000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 132000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 132000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 132000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 132000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 132000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 132000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 133000: system.cpu.commit: Getting instructions from Rename stage.
+ 133000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 133000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 133000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 133000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 133000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 133000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 133000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 134000: system.cpu.commit: Getting instructions from Rename stage.
+ 134000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 134000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 134000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 134000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 134000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 134000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 134000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 135000: system.cpu.commit: Getting instructions from Rename stage.
+ 135000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 135000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 135000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 135000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 135000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 135000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 135000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 136000: system.cpu.commit: Getting instructions from Rename stage.
+ 136000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 136000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 136000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 136000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 136000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 136000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 136000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 137000: system.cpu.commit: Getting instructions from Rename stage.
+ 137000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 137000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 137000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 137000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 137000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 137000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 137000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 138000: system.cpu.commit: Getting instructions from Rename stage.
+ 138000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 138000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 138000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 138000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 138000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 138000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 138000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 139000: system.cpu.commit: Getting instructions from Rename stage.
+ 139000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 139000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 139000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 139000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 139000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 139000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 139000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 140000: system.cpu.commit: Getting instructions from Rename stage.
+ 140000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 140000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 140000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 140000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 140000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 140000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 140000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 141000: system.cpu.commit: Getting instructions from Rename stage.
+ 141000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 141000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 141000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 141000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 141000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 141000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 141000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 142000: system.cpu.commit: Getting instructions from Rename stage.
+ 142000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 142000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 142000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 142000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 142000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 142000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 142000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 143000: system.cpu.commit: Getting instructions from Rename stage.
+ 143000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 143000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 143000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 143000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 143000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 143000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 143000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 144000: system.cpu.commit: Getting instructions from Rename stage.
+ 144000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 144000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 144000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 144000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 144000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 144000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 144000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 145000: system.cpu.commit: Getting instructions from Rename stage.
+ 145000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 145000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 145000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 145000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 145000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 145000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 145000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 146000: system.cpu.commit: Getting instructions from Rename stage.
+ 146000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 146000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 146000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 146000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 146000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 146000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 146000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 147000: system.cpu.commit: Getting instructions from Rename stage.
+ 147000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 147000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 147000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 147000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 147000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 147000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 147000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 148000: system.cpu.commit: Getting instructions from Rename stage.
+ 148000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 148000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 148000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 148000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 148000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 148000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 148000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 149000: system.cpu.commit: Getting instructions from Rename stage.
+ 149000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 149000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 149000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 149000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 149000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 149000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 149000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 150000: system.cpu.commit: Getting instructions from Rename stage.
+ 150000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 150000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 150000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 150000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 150000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 150000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 150000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 151000: system.cpu.commit: Getting instructions from Rename stage.
+ 151000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 151000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 151000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 151000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 151000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 151000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 151000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 152000: system.cpu.commit: Getting instructions from Rename stage.
+ 152000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 152000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 152000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 152000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 152000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 152000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 152000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 153000: system.cpu.commit: Getting instructions from Rename stage.
+ 153000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 153000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 153000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 153000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 153000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 153000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 153000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 154000: system.cpu.commit: Getting instructions from Rename stage.
+ 154000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 154000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 154000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 154000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 154000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 154000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 154000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 155000: system.cpu.commit: Getting instructions from Rename stage.
+ 155000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 155000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 155000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 155000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 155000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 155000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 155000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 156000: system.cpu.commit: Getting instructions from Rename stage.
+ 156000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 156000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 156000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 156000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 156000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 156000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 156000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 157000: system.cpu.commit: Getting instructions from Rename stage.
+ 157000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 157000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 157000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 157000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 157000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 157000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 157000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 158000: system.cpu.commit: Getting instructions from Rename stage.
+ 158000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 158000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 158000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 158000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 158000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 158000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 158000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 159000: system.cpu.commit: Getting instructions from Rename stage.
+ 159000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 159000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 159000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 159000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 159000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 159000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 159000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 160000: system.cpu.commit: Getting instructions from Rename stage.
+ 160000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 160000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 160000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 160000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 160000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 160000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 160000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 161000: system.cpu.commit: Getting instructions from Rename stage.
+ 161000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 161000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 161000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 161000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 161000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 161000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 161000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 162000: system.cpu.commit: Getting instructions from Rename stage.
+ 162000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 162000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 162000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 162000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 162000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 162000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 162000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 163000: system.cpu.commit: Getting instructions from Rename stage.
+ 163000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 163000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 163000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 163000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 163000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 163000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 163000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 164000: system.cpu.commit: Getting instructions from Rename stage.
+ 164000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 164000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 164000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 164000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 164000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 164000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 164000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 165000: system.cpu.commit: Getting instructions from Rename stage.
+ 165000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 165000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 165000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 165000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 165000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 165000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 165000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 166000: system.cpu.commit: Getting instructions from Rename stage.
+ 166000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 166000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 166000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 166000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 166000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 166000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 166000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 167000: system.cpu.commit: Getting instructions from Rename stage.
+ 167000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 167000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 167000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 167000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 167000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 167000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 167000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 168000: system.cpu.commit: Getting instructions from Rename stage.
+ 168000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 168000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 168000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 168000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 168000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 168000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 168000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 169000: system.cpu.commit: Getting instructions from Rename stage.
+ 169000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 169000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 169000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 169000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 169000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 169000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 169000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 170000: system.cpu.commit: Getting instructions from Rename stage.
+ 170000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 170000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 170000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 170000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 170000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 170000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 170000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 171000: system.cpu.commit: Getting instructions from Rename stage.
+ 171000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 171000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 171000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 171000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 171000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 171000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 171000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 172000: system.cpu.commit: Getting instructions from Rename stage.
+ 172000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 172000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 172000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 172000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 172000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 172000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 172000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 173000: system.cpu.commit: Getting instructions from Rename stage.
+ 173000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 173000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 173000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 173000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 173000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 173000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 173000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 174000: system.cpu.commit: Getting instructions from Rename stage.
+ 174000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 174000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 174000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 174000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 174000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 174000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 174000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 175000: system.cpu.commit: Getting instructions from Rename stage.
+ 175000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 175000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 175000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 175000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 175000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 175000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 175000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 176000: system.cpu.commit: Getting instructions from Rename stage.
+ 176000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 176000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 176000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 176000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 176000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 176000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 176000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 177000: system.cpu.commit: Getting instructions from Rename stage.
+ 177000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 177000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 177000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 177000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 177000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 177000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 177000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 178000: system.cpu.commit: Getting instructions from Rename stage.
+ 178000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 178000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 178000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 178000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 178000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 178000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 178000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 179000: system.cpu.commit: Getting instructions from Rename stage.
+ 179000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 179000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 179000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 179000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 179000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 179000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 179000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+ 180000: system.cpu.commit: Getting instructions from Rename stage.
+ 180000: system.cpu.commit: [tid:0] [sn:49] Inserting PC (0x401040=>0x401042).(0=>1) into ROB.
+ 180000: system.cpu.commit: [tid:0] [sn:50] Inserting PC (0x401040=>0x401042).(1=>2) into ROB.
+ 180000: system.cpu.commit: [tid:0] [sn:51] Inserting PC (0x401040=>0x401042).(2=>3) into ROB.
+ 180000: system.cpu.commit: [tid:0] [sn:52] Inserting PC (0x401042=>0x401044).(0=>1) into ROB.
+ 180000: system.cpu.commit: [tid:0] [sn:53] Inserting PC (0x401042=>0x401044).(1=>2) into ROB.
+ 180000: system.cpu.commit: [tid:0] [sn:54] Inserting PC (0x401042=>0x401044).(2=>3) into ROB.
+ 180000: system.cpu.commit: [tid:0] [sn:55] Inserting PC (0x401044=>0x401046).(0=>1) into ROB.
+ 180000: system.cpu.commit: [tid:0] [sn:56] Inserting PC (0x401044=>0x401046).(1=>2) into ROB.
+ 180000: system.cpu.commit: [tid:0] [sn:57] Inserting PC (0x401044=>0x401046).(2=>3) into ROB.
+ 180000: system.cpu.commit: [tid:0] [sn:58] Inserting PC (0x401046=>0x401048).(0=>1) into ROB.
+ 180000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 180000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 180000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 180000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 180000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 180000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 180000: system.cpu.commit: [tid:0] ROB has 47 insts & 871 free entries.
+ 181000: system.cpu.iew.lsq.thread0: Inserting load PC (0x401040=>0x401042).(0=>1), idx:13 [sn:49]
+ 181000: system.cpu.iew.lsq.thread0: Inserting store PC (0x401040=>0x401042).(2=>3), idx:14 [sn:51]
+ 181000: system.cpu.iew.lsq.thread0: Inserting load PC (0x401042=>0x401044).(0=>1), idx:14 [sn:52]
+ 181000: system.cpu.iew.lsq.thread0: Inserting store PC (0x401042=>0x401044).(2=>3), idx:15 [sn:54]
+ 181000: system.cpu.iew.lsq.thread0: Inserting load PC (0x401044=>0x401046).(0=>1), idx:15 [sn:55]
+ 181000: system.cpu.iew.lsq.thread0: Inserting store PC (0x401044=>0x401046).(2=>3), idx:16 [sn:57]
+ 181000: system.cpu.iew.lsq.thread0: Inserting load PC (0x401046=>0x401048).(0=>1), idx:16 [sn:58]
+ 181000: system.cpu.commit: Getting instructions from Rename stage.
+ 181000: system.cpu.commit: [tid:0] [sn:59] Inserting PC (0x401046=>0x401048).(1=>2) into ROB.
+ 181000: system.cpu.commit: [tid:0] [sn:60] Inserting PC (0x401046=>0x401048).(2=>3) into ROB.
+ 181000: system.cpu.commit: [tid:0] [sn:61] Inserting PC (0x401048=>0x40104a).(0=>1) into ROB.
+ 181000: system.cpu.commit: [tid:0] [sn:62] Inserting PC (0x401048=>0x40104a).(1=>2) into ROB.
+ 181000: system.cpu.commit: [tid:0] [sn:63] Inserting PC (0x401048=>0x40104a).(2=>3) into ROB.
+ 181000: system.cpu.commit: [tid:0] [sn:64] Inserting PC (0x40104a=>0x40104c).(0=>1) into ROB.
+ 181000: system.cpu.commit: [tid:0] [sn:65] Inserting PC (0x40104a=>0x40104c).(1=>2) into ROB.
+ 181000: system.cpu.commit: [tid:0] [sn:66] Inserting PC (0x40104a=>0x40104c).(2=>3) into ROB.
+ 181000: system.cpu.commit: [tid:0] [sn:67] Inserting PC (0x40104c=>0x40104e).(0=>1) into ROB.
+ 181000: system.cpu.commit: [tid:0] [sn:68] Inserting PC (0x40104c=>0x40104e).(1=>2) into ROB.
+ 181000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 181000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 181000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 181000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 181000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 181000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 181000: system.cpu.commit: [tid:0] ROB has 57 insts & 861 free entries.
+ 182000: system.cpu.iew.lsq.thread0: Inserting store PC (0x401046=>0x401048).(2=>3), idx:17 [sn:60]
+ 182000: system.cpu.iew.lsq.thread0: Inserting load PC (0x401048=>0x40104a).(0=>1), idx:17 [sn:61]
+ 182000: system.cpu.iew.lsq.thread0: Inserting store PC (0x401048=>0x40104a).(2=>3), idx:18 [sn:63]
+ 182000: system.cpu.iew.lsq.thread0: Inserting load PC (0x40104a=>0x40104c).(0=>1), idx:18 [sn:64]
+ 182000: system.cpu.iew.lsq.thread0: Inserting store PC (0x40104a=>0x40104c).(2=>3), idx:19 [sn:66]
+ 182000: system.cpu.iew.lsq.thread0: Inserting load PC (0x40104c=>0x40104e).(0=>1), idx:19 [sn:67]
+ 182000: system.cpu.commit: Getting instructions from Rename stage.
+ 182000: system.cpu.commit: [tid:0] [sn:69] Inserting PC (0x40104c=>0x40104e).(2=>3) into ROB.
+ 182000: system.cpu.commit: [tid:0] [sn:70] Inserting PC (0x40104e=>0x401050).(0=>1) into ROB.
+ 182000: system.cpu.commit: [tid:0] [sn:71] Inserting PC (0x40104e=>0x401050).(1=>2) into ROB.
+ 182000: system.cpu.commit: [tid:0] [sn:72] Inserting PC (0x40104e=>0x401050).(2=>3) into ROB.
+ 182000: system.cpu.commit: [tid:0] [sn:73] Inserting PC (0x401050=>0x401052).(0=>1) into ROB.
+ 182000: system.cpu.commit: [tid:0] [sn:74] Inserting PC (0x401050=>0x401052).(1=>2) into ROB.
+ 182000: system.cpu.commit: [tid:0] [sn:75] Inserting PC (0x401050=>0x401052).(2=>3) into ROB.
+ 182000: system.cpu.commit: [tid:0] [sn:76] Inserting PC (0x401052=>0x401054).(0=>1) into ROB.
+ 182000: system.cpu.commit: [tid:0] [sn:77] Inserting PC (0x401052=>0x401054).(1=>2) into ROB.
+ 182000: system.cpu.commit: [tid:0] [sn:78] Inserting PC (0x401052=>0x401054).(2=>3) into ROB.
+ 182000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 182000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 182000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 182000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 182000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 182000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 182000: system.cpu.commit: [tid:0] ROB has 67 insts & 851 free entries.
+ 183000: system.cpu.iew.lsq.thread0: Inserting store PC (0x40104c=>0x40104e).(2=>3), idx:20 [sn:69]
+ 183000: system.cpu.iew.lsq.thread0: Inserting load PC (0x40104e=>0x401050).(0=>1), idx:20 [sn:70]
+ 183000: system.cpu.iew.lsq.thread0: Inserting store PC (0x40104e=>0x401050).(2=>3), idx:21 [sn:72]
+ 183000: system.cpu.iew.lsq.thread0: Inserting load PC (0x401050=>0x401052).(0=>1), idx:21 [sn:73]
+ 183000: system.cpu.iew.lsq.thread0: Inserting store PC (0x401050=>0x401052).(2=>3), idx:22 [sn:75]
+ 183000: system.cpu.iew.lsq.thread0: Inserting load PC (0x401052=>0x401054).(0=>1), idx:22 [sn:76]
+ 183000: system.cpu.iew.lsq.thread0: Inserting store PC (0x401052=>0x401054).(2=>3), idx:23 [sn:78]
+ 183000: system.cpu.commit: Getting instructions from Rename stage.
+ 183000: system.cpu.commit: [tid:0] [sn:79] Inserting PC (0x401054=>0x401056).(0=>1) into ROB.
+ 183000: system.cpu.commit: [tid:0] [sn:80] Inserting PC (0x401054=>0x401056).(1=>2) into ROB.
+ 183000: system.cpu.commit: [tid:0] [sn:81] Inserting PC (0x401054=>0x401056).(2=>3) into ROB.
+ 183000: system.cpu.commit: [tid:0] [sn:82] Inserting PC (0x401056=>0x401058).(0=>1) into ROB.
+ 183000: system.cpu.commit: [tid:0] [sn:83] Inserting PC (0x401056=>0x401058).(1=>2) into ROB.
+ 183000: system.cpu.commit: [tid:0] [sn:84] Inserting PC (0x401056=>0x401058).(2=>3) into ROB.
+ 183000: system.cpu.commit: [tid:0] [sn:85] Inserting PC (0x401058=>0x40105a).(0=>1) into ROB.
+ 183000: system.cpu.commit: [tid:0] [sn:86] Inserting PC (0x401058=>0x40105a).(1=>2) into ROB.
+ 183000: system.cpu.commit: [tid:0] [sn:87] Inserting PC (0x401058=>0x40105a).(2=>3) into ROB.
+ 183000: system.cpu.commit: [tid:0] [sn:88] Inserting PC (0x40105a=>0x40105c).(0=>1) into ROB.
+ 183000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 183000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 183000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 183000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 183000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 183000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 183000: system.cpu.commit: [tid:0] ROB has 77 insts & 841 free entries.
+ 184000: system.cpu.iew.lsq.thread0: Completing store [sn:4], idx:0, store head idx:1
+ 184000: system.cpu.iew.lsq.thread0: Inserting load PC (0x401054=>0x401056).(0=>1), idx:23 [sn:79]
+ 184000: system.cpu.iew.lsq.thread0: Inserting store PC (0x401054=>0x401056).(2=>3), idx:24 [sn:81]
+ 184000: system.cpu.iew.lsq.thread0: Inserting load PC (0x401056=>0x401058).(0=>1), idx:24 [sn:82]
+ 184000: system.cpu.iew.lsq.thread0: Inserting store PC (0x401056=>0x401058).(2=>3), idx:25 [sn:84]
+ 184000: system.cpu.iew.lsq.thread0: Inserting load PC (0x401058=>0x40105a).(0=>1), idx:25 [sn:85]
+ 184000: system.cpu.iew.lsq.thread0: Inserting store PC (0x401058=>0x40105a).(2=>3), idx:26 [sn:87]
+ 184000: system.cpu.iew.lsq.thread0: Inserting load PC (0x40105a=>0x40105c).(0=>1), idx:26 [sn:88]
+ 184000: system.cpu.iew.lsq.thread0: D-Cache: Writing back store idx:2 PC:(0x40100e=>0x401015).(1=>2) to Addr:0x2e5c, data:0xa [sn:6]
+ 184000: system.cpu.iew.lsq.thread0: Memory request (pkt: WriteResp [2e5c:2e5f]) from inst [sn:6] was sent (cache is blocked: 0, cache_got_blocked: 0)
+ 184000: system.cpu.iew.lsq.thread0: LQ size: 132, #loads occupied: 26
+ 184000: system.cpu.iew.lsq.thread0: SQ size: 72, #stores occupied: 26
+ 184000: system.cpu.commit: Getting instructions from Rename stage.
+ 184000: system.cpu.commit: [tid:0] [sn:89] Inserting PC (0x40105a=>0x40105c).(1=>2) into ROB.
+ 184000: system.cpu.commit: [tid:0] [sn:90] Inserting PC (0x40105a=>0x40105c).(2=>3) into ROB.
+ 184000: system.cpu.commit: [tid:0] [sn:91] Inserting PC (0x40105c=>0x40105e).(0=>1) into ROB.
+ 184000: system.cpu.commit: [tid:0] [sn:92] Inserting PC (0x40105c=>0x40105e).(1=>2) into ROB.
+ 184000: system.cpu.commit: [tid:0] [sn:93] Inserting PC (0x40105c=>0x40105e).(2=>3) into ROB.
+ 184000: system.cpu.commit: [tid:0] [sn:94] Inserting PC (0x40105e=>0x401060).(0=>1) into ROB.
+ 184000: system.cpu.commit: [tid:0] [sn:95] Inserting PC (0x40105e=>0x401060).(1=>2) into ROB.
+ 184000: system.cpu.commit: [tid:0] [sn:96] Inserting PC (0x40105e=>0x401060).(2=>3) into ROB.
+ 184000: system.cpu.commit: [tid:0] [sn:97] Inserting PC (0x401060=>0x401062).(0=>1) into ROB.
+ 184000: system.cpu.commit: [tid:0] [sn:98] Inserting PC (0x401060=>0x401062).(1=>2) into ROB.
+ 184000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 184000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 184000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 184000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 184000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 184000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 184000: system.cpu.commit: [tid:0] ROB has 87 insts & 831 free entries.
+ 185000: system.cpu.iew.lsq.thread0: Inserting store PC (0x40105a=>0x40105c).(2=>3), idx:27 [sn:90]
+ 185000: system.cpu.iew.lsq.thread0: Inserting load PC (0x40105c=>0x40105e).(0=>1), idx:27 [sn:91]
+ 185000: system.cpu.iew.lsq.thread0: Inserting store PC (0x40105c=>0x40105e).(2=>3), idx:28 [sn:93]
+ 185000: system.cpu.iew.lsq.thread0: Inserting load PC (0x40105e=>0x401060).(0=>1), idx:28 [sn:94]
+ 185000: system.cpu.iew.lsq.thread0: Inserting store PC (0x40105e=>0x401060).(2=>3), idx:29 [sn:96]
+ 185000: system.cpu.iew.lsq.thread0: Inserting load PC (0x401060=>0x401062).(0=>1), idx:29 [sn:97]
+ 185000: system.cpu.commit: Getting instructions from Rename stage.
+ 185000: system.cpu.commit: [tid:0] [sn:99] Inserting PC (0x401060=>0x401062).(2=>3) into ROB.
+ 185000: system.cpu.commit: [tid:0] [sn:100] Inserting PC (0x401062=>0x401064).(0=>1) into ROB.
+ 185000: system.cpu.commit: [tid:0] [sn:101] Inserting PC (0x401062=>0x401064).(1=>2) into ROB.
+ 185000: system.cpu.commit: [tid:0] [sn:102] Inserting PC (0x401062=>0x401064).(2=>3) into ROB.
+ 185000: system.cpu.commit: [tid:0] [sn:103] Inserting PC (0x401064=>0x401066).(0=>1) into ROB.
+ 185000: system.cpu.commit: [tid:0] [sn:104] Inserting PC (0x401064=>0x401066).(1=>2) into ROB.
+ 185000: system.cpu.commit: [tid:0] [sn:105] Inserting PC (0x401064=>0x401066).(2=>3) into ROB.
+ 185000: system.cpu.commit: [tid:0] [sn:106] Inserting PC (0x401066=>0x401068).(0=>1) into ROB.
+ 185000: system.cpu.commit: [tid:0] [sn:107] Inserting PC (0x401066=>0x401068).(1=>2) into ROB.
+ 185000: system.cpu.commit: [tid:0] [sn:108] Inserting PC (0x401066=>0x401068).(2=>3) into ROB.
+ 185000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 185000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 185000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 185000: system.cpu.commit: [tid:0] [sn:12] Stores outstanding, fault must wait.
+ 185000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 185000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 185000: system.cpu.commit: [tid:0] ROB has 97 insts & 821 free entries.
+ 186000: system.cpu.iew.lsq.thread0: Completing store [sn:6], idx:1, store head idx:2
+ 186000: system.cpu.iew.lsq.thread0: Inserting store PC (0x401060=>0x401062).(2=>3), idx:30 [sn:99]
+ 186000: system.cpu.iew.lsq.thread0: Inserting load PC (0x401062=>0x401064).(0=>1), idx:30 [sn:100]
+ 186000: system.cpu.iew.lsq.thread0: Inserting store PC (0x401062=>0x401064).(2=>3), idx:31 [sn:102]
+ 186000: system.cpu.iew.lsq.thread0: Inserting load PC (0x401064=>0x401066).(0=>1), idx:31 [sn:103]
+ 186000: system.cpu.iew.lsq.thread0: Inserting store PC (0x401064=>0x401066).(2=>3), idx:32 [sn:105]
+ 186000: system.cpu.iew.lsq.thread0: Inserting load PC (0x401066=>0x401068).(0=>1), idx:32 [sn:106]
+ 186000: system.cpu.iew.lsq.thread0: Inserting store PC (0x401066=>0x401068).(2=>3), idx:33 [sn:108]
+ 186000: system.cpu.iew.lsq.thread0: LQ size: 132, #loads occupied: 32
+ 186000: system.cpu.iew.lsq.thread0: SQ size: 72, #stores occupied: 32
+ 186000: system.cpu.commit: Getting instructions from Rename stage.
+ 186000: system.cpu.commit: [tid:0] [sn:109] Inserting PC (0x401068=>0x40106a).(0=>1) into ROB.
+ 186000: system.cpu.commit: [tid:0] [sn:110] Inserting PC (0x401068=>0x40106a).(1=>2) into ROB.
+ 186000: system.cpu.commit: [tid:0] [sn:111] Inserting PC (0x401068=>0x40106a).(2=>3) into ROB.
+ 186000: system.cpu.commit: [tid:0] [sn:112] Inserting PC (0x40106a=>0x40106c).(0=>1) into ROB.
+ 186000: system.cpu.commit: [tid:0] [sn:113] Inserting PC (0x40106a=>0x40106c).(1=>2) into ROB.
+ 186000: system.cpu.commit: [tid:0] [sn:114] Inserting PC (0x40106a=>0x40106c).(2=>3) into ROB.
+ 186000: system.cpu.commit: [tid:0] [sn:115] Inserting PC (0x40106c=>0x40106e).(0=>1) into ROB.
+ 186000: system.cpu.commit: [tid:0] [sn:116] Inserting PC (0x40106c=>0x40106e).(1=>2) into ROB.
+ 186000: system.cpu.commit: [tid:0] [sn:117] Inserting PC (0x40106c=>0x40106e).(2=>3) into ROB.
+ 186000: system.cpu.commit: [tid:0] [sn:118] Inserting PC (0x40106e=>0x401070).(0=>1) into ROB.
+ 186000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 186000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+ 186000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
+ 186000: system.cpu.commit: [tid:0] [sn:12] Committing instruction with fault
+ 186000: system.cpu.commit: Generating trap event for [tid:0]
+ 186000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
+ 186000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
+ 186000: system.cpu.commit: [tid:0] ROB has 107 insts & 811 free entries.

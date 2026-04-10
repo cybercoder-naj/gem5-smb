@@ -723,6 +723,14 @@ class LSQ
     /** Returns whether or not there was a memory ordering violation. */
     bool violation();
 
+    /** 
+     * Checks if a load-predicted store causes a memory ordering violation. 
+     * @param addr The actual address of the load.
+     * @param tid The thread of the load+store.
+     * @param store_it The iterator of the predicted store in the store queue. 
+    */
+    bool checkSmbViolation(ThreadID tid, DynInstPtr load_inst);
+
     /**
      * Returns whether or not there was a memory ordering violation for a
      * specific thread.

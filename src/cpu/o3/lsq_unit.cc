@@ -316,13 +316,54 @@ LSQUnit::insert(const DynInstPtr &inst)
 }
 
 void
-LSQUnit::setIteratorsForBypassedLoad(const DynInstPtr &inst)
+LSQUnit::handleBypassedLoad(const DynInstPtr &inst)
 {
     assert(inst->isMemRef() && inst->isLoad() && inst->isBypassedLoad());
+    assert(inst->smbStoreSeqNum != 0);
 
-    inst->sqIt = storeQueue.end();
+    auto sqIt = storeQueue.end();
+    --sqIt;
+
+    while (sqIt != storeQueue.begin() && sqIt->instruction()->seqNum > inst->smbStoreSeqNum) {
+        --sqIt;
+    }
+    if ((sqIt == storeQueue.begin() && sqIt->instruction()->seqNum != inst->smbStoreSeqNum)
+        || sqIt->instruction()->seqNum != inst->smbStoreSeqNum) {
+        panic("Couldn't find the store for this bypassed load!");
+    }
+
+    inst->sqIt = sqIt;
     inst->lqIdx = loadQueue.tail();
     inst->lqIt = loadQueue.getIterator(inst->lqIdx);
+}
+
+bool 
+LSQUnit::checkSmbViolation(DynInstPtr load_inst) {
+    auto store_it = load_inst->sqIt;
+
+    //? Is it possible that Stores may not have resolved their address yet?
+    //? then should we wait?
+
+    // check for a full address match at the position of the store that the load is bypassing
+    if (store_it->valid() && store_it->instruction()->effAddrValid()
+        && (store_it->instruction()->effAddr != load_inst->effAddr)) {
+            return true;
+    }
+
+    ++store_it;
+    for (; store_it != storeQueue.end(); ++store_it) {
+        Addr load_addr_start = load_inst->effAddr >> depCheckShift;
+        Addr load_addr_end = (load_inst->effAddr + load_inst->effSize - 1) >> depCheckShift;
+
+        auto store_inst = store_it->instruction();
+        Addr store_addr_start = store_inst->effAddr >> depCheckShift;
+        Addr store_addr_end = (store_inst->effAddr + store_inst->effSize - 1) >> depCheckShift;
+
+        if (load_addr_end >= store_addr_start && load_addr_start <= store_addr_end)
+            return true;
+    } 
+
+    return false;
 }
 
 void
@@ -603,9 +644,6 @@ LSQUnit::checkViolations(typename LoadQueue::iterator& loadIt,
     return NoFault;
 }
 
-
-
-
 Fault
 LSQUnit::executeLoad(const DynInstPtr &inst)
 {
@@ -671,7 +709,7 @@ LSQUnit::executeLoad(const DynInstPtr &inst)
             auto it = inst->lqIt;
             ++it;
 
-            if (checkLoads && !inst->isBypassedLoad())
+            if (checkLoads) //? Should I block this check if inst is a bypassed load?
                 return checkViolations(it, inst);
         }
     }
@@ -728,6 +766,8 @@ LSQUnit::executeStore(const DynInstPtr &store_inst)
     }
 
     assert(store_fault == NoFault);
+
+    // todo populate the bypassedLoads with the effAddr
 
     if (store_inst->isStoreConditional() || store_inst->isAtomic()) {
         // Store conditionals and Atomics need to set themselves as able to

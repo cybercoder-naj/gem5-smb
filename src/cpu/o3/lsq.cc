@@ -223,7 +223,7 @@ LSQ::maybeInsertLoad(const DynInstPtr &load_inst)
     ThreadID tid = load_inst->threadNumber;
 
     if (load_inst->isBypassedLoad()) {
-        thread[tid].setIteratorsForBypassedLoad(load_inst);
+        thread[tid].handleBypassedLoad(load_inst);
         return false;
     } 
 
@@ -309,6 +309,10 @@ LSQ::violation()
 }
 
 bool LSQ::violation(ThreadID tid) { return thread.at(tid).violation(); }
+
+bool LSQ::checkSmbViolation(ThreadID tid, DynInstPtr load_inst) {
+    return thread.at(tid).checkSmbViolation(load_inst);
+}
 
 DynInstPtr
 LSQ::getMemDepViolator(ThreadID tid)

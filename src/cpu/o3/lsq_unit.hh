@@ -244,7 +244,7 @@ class LSQUnit
     /** Inserts a store instruction. */
     void insertStore(const DynInstPtr &store_inst);
     /** Bypassed Loads still require iterators of the LQ and SQ */
-    void setIteratorsForBypassedLoad(const DynInstPtr &inst);
+    void handleBypassedLoad(const DynInstPtr &inst);
 
     /** Check for ordering violations in the LSQ. For a store squash if we
      * ever find a conflicting load. For a load, only squash if we
@@ -254,6 +254,18 @@ class LSQUnit
      */
     Fault checkViolations(typename LoadQueue::iterator& loadIt,
             const DynInstPtr& inst);
+
+    /**
+     * Checks if the given load address and SQ iterator from SMB cause a memory ordering violation.
+     * This does two things:
+     *  1) at the position of store_it, a full address match is checked. This is a simple necessary check to see
+     *     if the store that the load is bypassing is actually the store that the load is dependent on. 
+     *  2) At every store after the store_it, a partial address match is checked. This is a check to see if there were
+     *     any intervening stores that partially overlap with the load's address that would cause a memory ordering violation.
+     * 
+     * @return true if there is a violation
+     */
+    bool checkSmbViolation(DynInstPtr load_inst);
 
     /** Check if an incoming invalidate hits in the lsq on a load
      * that might have issued out of order wrt another load beacuse

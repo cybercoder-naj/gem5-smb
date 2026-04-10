@@ -1171,38 +1171,39 @@ Rename::renameDestRegs(const DynInstPtr &inst, ThreadID tid)
                             rename_result.first,
                             rename_result.second);
 
-        InstSeqNum smb_store_seqnum = -1;
         if (inst->isLoad() && dest_idx == 0) { // works in x86 at least.
             DPRINTF(Rename, "Checking for SMB bypass for Load [sn:%llu] %s.\n",
                     inst->seqNum, inst->staticInst->disassemble(inst->pcState().instAddr()));
-            smb_store_seqnum = smb.predictSourceStore(inst->seqNum);
+
+            InstSeqNum smb_store_seqnum = smb.predictSourceStore(inst->seqNum);
+            if (smb_store_seqnum != -1) {
+                // SMB predicted a store that can forward to this load
+                // so we need to rename the load's destination register to the same physical register that the store was renamed to.
+                DPRINTF(Rename, "Bypassing Load [sn:%llu] speculatively.\n",
+                        inst->seqNum);
+
+                inst->smbStoreSeqNum = smb_store_seqnum;
+
+                auto smb_phys_reg = storeToPhysReg[smb_store_seqnum];
+                assert(smb_phys_reg);
+
+                map->setEntry(flat_dest_regid, smb_phys_reg);
+
+                // Since the load is being renamed to the same physical register as the store,
+                // we need to increment the logical dependents of the physical register, since the load is now also depending on it.
+                smb_phys_reg->incrLogicalDependents();
+
+                DPRINTF(Rename,
+                    "[tid:%i] "
+                    "Renaming arch reg %i (%s) to physical reg %i (%i) due to SMB bypass.\n",
+                    tid, dest_reg.index(), dest_reg.className(),
+                    smb_phys_reg->index(),
+                    smb_phys_reg->flatIndex());
+
+                hb_entry.newPhysReg = smb_phys_reg;
+                inst->setBypassedLoad(smb_phys_reg);
+            }
         } 
-        
-        if (smb_store_seqnum != -1) {
-            // SMB predicted a store that can forward to this load
-            // so we need to rename the load's destination register to the same physical register that the store was renamed to.
-            DPRINTF(Rename, "Bypassing Load [sn:%llu] speculatively.\n",
-                    inst->seqNum);
-
-            auto smb_phys_reg = storeToPhysReg[smb_store_seqnum];
-            assert(smb_phys_reg);
-
-            map->setEntry(flat_dest_regid, smb_phys_reg);
-
-            // Since the load is being renamed to the same physical register as the store,
-            // we need to increment the logical dependents of the physical register, since the load is now also depending on it.
-            smb_phys_reg->incrLogicalDependents();
-
-            DPRINTF(Rename,
-                "[tid:%i] "
-                "Renaming arch reg %i (%s) to physical reg %i (%i) due to SMB bypass.\n",
-                tid, dest_reg.index(), dest_reg.className(),
-                smb_phys_reg->index(),
-                smb_phys_reg->flatIndex());
-
-            hb_entry.newPhysReg = smb_phys_reg;
-            inst->setBypassedLoad(smb_phys_reg);
-        }
 
         DPRINTF(Rename, "[tid:%i] [sn:%llu] "
                 "Adding instruction to history buffer (size=%i).\n",

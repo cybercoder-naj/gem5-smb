@@ -341,6 +341,9 @@ class DynInst : public ExecContext, public RefCounted
     /** The effective physical address. */
     Addr physEffAddr = 0;
 
+    /** The effective virtual address of the source store predicted by SMB. */
+    InstSeqNum smbStoreSeqNum = 0;
+
     /** The memory request flags (from translation). */
     unsigned memReqFlags = 0;
 
@@ -356,6 +359,11 @@ class DynInst : public ExecContext, public RefCounted
 
     /** Store queue index. */
     ssize_t sqIdx = -1;
+    /** 
+     * Iterator pointing to the store when the load was inserted into the LQ.
+     * 
+     * Note!! Bypassed loads don't enter the LQ. For bypassed loads, sqIt points to the predicted store in the SQ.
+     */
     typename LSQUnit::SQIterator sqIt;
 
     /** Info needed for each load for PHAST */
