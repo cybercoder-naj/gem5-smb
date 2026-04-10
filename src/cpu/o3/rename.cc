@@ -1009,7 +1009,18 @@ Rename::removeFromHistory(InstSeqNum inst_seq_num, ThreadID tid)
         // can be recognized because the new mapping is the same as
         // the old one.
         if (hb_it->newPhysReg != hb_it->prevPhysReg) {
-            freeList->addReg(hb_it->prevPhysReg);
+            // Instructions that are committed, theres one less logical dependent.
+            hb_it->prevPhysReg->decrLogicalDependents();
+
+            if (hb_it->prevPhysReg->getLogicalDependents() <= 0) {
+                DPRINTF(Rename, "[tid:%i] Adding phys reg %i (%s) to free list, "
+                        "since it has no more logical dependents [sn:%llu].\n",
+                        tid, hb_it->prevPhysReg->index(),
+                        hb_it->prevPhysReg->className(),
+                        hb_it->instSeqNum);
+
+                freeList->addReg(hb_it->prevPhysReg);
+            }
         }
 
         ++stats.committedMaps;
@@ -1034,6 +1045,9 @@ Rename::renameSrcRegs(const DynInstPtr &inst, ThreadID tid)
         PhysRegIdPtr renamed_reg;
 
         renamed_reg = map->lookup(flat_reg);
+        //! This assertion is false
+        // assert(!flat_reg.isRenameable() || renamed_reg->getLogicalDependents() > 0);
+
         switch (flat_reg.classValue()) {
           case InvalidRegClass:
             break;
@@ -1174,6 +1188,10 @@ Rename::renameDestRegs(const DynInstPtr &inst, ThreadID tid)
             assert(smb_phys_reg);
 
             map->setEntry(flat_dest_regid, smb_phys_reg);
+
+            // Since the load is being renamed to the same physical register as the store,
+            // we need to increment the logical dependents of the physical register, since the load is now also depending on it.
+            smb_phys_reg->incrLogicalDependents();
 
             DPRINTF(Rename,
                 "[tid:%i] "
