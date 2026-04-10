@@ -1291,15 +1291,32 @@ Commit::commitHead(const DynInstPtr &head_inst, unsigned inst_num)
     }
 
     if (head_inst->isBypassedLoad()) {
-        auto realValueReg = head_inst->renamedDestIdx(0);
-        auto specValueReg = head_inst->specReg; // todo
+        // auto actualAddr = head_inst->effAddr;
+        // auto specAddr = head_inst->smbStoreAddr;
+        
+        // if (actualAddr != specAddr) {
+        //     DPRINTF(Commit, "[tid:%i] [sn:%llu] Bypassed load address mismatch! real address: %#x, speculated address: %#x\n",
+        //             tid, head_inst->seqNum, actualAddr, specAddr);
+
+        //     // todo update Mascot predictor to fix the mis-speculation. For now, just print a warning.
+        //     //? Do we need to squash? What if the value is correct but the address is wrong? 
+        // }
+
+        auto actualValueReg = head_inst->renamedDestIdx(0);
+        auto specValueReg = head_inst->specReg;
         assert(specValueReg);
 
-        auto realValue = cpu->getReg(realValueReg, tid);
+        auto actualValue = cpu->getReg(actualValueReg, tid);
         auto specValue = cpu->getReg(specValueReg, tid);
-        
-        DPRINTF(Commit, "[tid:%i] [sn:%llu] Bypassed load, real value reg: %i, spec value reg: %i\n",
-                tid, head_inst->seqNum, realValue, specValue);
+
+        if (actualValue != specValue) {
+            DPRINTF(Commit, "[tid:%i] [sn:%llu] Bypassed load value mismatch! real value: %#x, speculated value: %#x\n",
+                    tid, head_inst->seqNum, actualValue, specValue);
+
+            // todo squash after this instruction to fix the mis-speculation. For now, just print a warning.
+        }
+
+        head_inst->setCompleted();
     }
 
     updateComInstStats(head_inst);

@@ -1113,13 +1113,6 @@ Rename::renameDestRegs(const DynInstPtr &inst, ThreadID tid)
         RegId flat_dest_regid = dest_reg.flatten(*isa);
         flat_dest_regid.setNumPinnedWrites(dest_reg.getNumPinnedWrites());
 
-        InstSeqNum smb_store_seqnum = -1;
-        if (inst->isLoad() && dest_idx == 0) { // works in x86 at least.
-            DPRINTF(Rename, "Checking for SMB bypass for Load [sn:%llu] %s.\n",
-                    inst->seqNum, inst->staticInst->disassemble(inst->pcState().instAddr()));
-            smb_store_seqnum = smb.predictSourceStore(inst->seqNum);
-        } 
-        
         rename_result = map->rename(flat_dest_regid);
 
         inst->flattenedDestIdx(dest_idx, flat_dest_regid);
@@ -1133,18 +1126,6 @@ Rename::renameDestRegs(const DynInstPtr &inst, ThreadID tid)
                 rename_result.first->index(),
                 rename_result.first->flatIndex());
 
-        // Record the rename information so that a history can be kept.
-        RenameHistory hb_entry(inst->seqNum, flat_dest_regid,
-                            rename_result.first,
-                            rename_result.second);
-
-        historyBuffer[tid].push_front(hb_entry);
-
-        DPRINTF(Rename, "[tid:%i] [sn:%llu] "
-                "Adding instruction to history buffer (size=%i).\n",
-                tid,(*historyBuffer[tid].begin()).instSeqNum,
-                historyBuffer[tid].size());
-
         // Tell the instruction to rename the appropriate destination
         // register (dest_idx) to the new physical register
         // (rename_result.first), and record the previous physical
@@ -1154,7 +1135,38 @@ Rename::renameDestRegs(const DynInstPtr &inst, ThreadID tid)
                             rename_result.first,
                             rename_result.second);
 
+        // renameMap[ebx] = P5
+        // rename(ebx) = P6, P5
+        // inst->renameDestReg(ebx, P6, P5)
+        // historyBuffer entry = (inst, ebx, P6, P5)
+
+        // BUT in bypassed load case:
+        // renameMap[ebx] = P10 (coming from store)
+        // we still must free P5
+        // and future renameMap[ebx] = PXX, P10
+        // But it is possible that P10 is still used by the other logical registers.
+        // SMB makes it such that 2 or more logical registers can be renamed to the same physical register.
+        // So we need to make sure to only free the physical register when all the logical registers that are renamed to it are squashed or committed.
+
+        // Should this value be in the history buffer, or should it be stored in the register information?
+
+        // Record the rename information so that a history can be kept.
+        // seqNum of inst, logical instruction, new physical mapping, old physical mapping.
+        // At commit/squash time, the history is traversed to free the old mappings.
+        RenameHistory hb_entry(inst->seqNum, flat_dest_regid,
+                            rename_result.first,
+                            rename_result.second);
+
+        InstSeqNum smb_store_seqnum = -1;
+        if (inst->isLoad() && dest_idx == 0) { // works in x86 at least.
+            DPRINTF(Rename, "Checking for SMB bypass for Load [sn:%llu] %s.\n",
+                    inst->seqNum, inst->staticInst->disassemble(inst->pcState().instAddr()));
+            smb_store_seqnum = smb.predictSourceStore(inst->seqNum);
+        } 
+        
         if (smb_store_seqnum != -1) {
+            // SMB predicted a store that can forward to this load
+            // so we need to rename the load's destination register to the same physical register that the store was renamed to.
             DPRINTF(Rename, "Bypassing Load [sn:%llu] speculatively.\n",
                     inst->seqNum);
 
@@ -1170,17 +1182,19 @@ Rename::renameDestRegs(const DynInstPtr &inst, ThreadID tid)
                 smb_phys_reg->index(),
                 smb_phys_reg->flatIndex());
 
-            RenameHistory smb_hb_entry(inst->seqNum, flat_dest_regid,
-                            smb_phys_reg,
-                            rename_result.first);
-            historyBuffer[tid].push_front(smb_hb_entry);
-
+            hb_entry.newPhysReg = smb_phys_reg;
             inst->setBypassedLoad(smb_phys_reg);
         }
+
+        DPRINTF(Rename, "[tid:%i] [sn:%llu] "
+                "Adding instruction to history buffer (size=%i).\n",
+                tid,(*historyBuffer[tid].begin()).instSeqNum,
+                historyBuffer[tid].size());
+
+        historyBuffer[tid].push_front(hb_entry);
     }
 
     ++stats.renamedOperands;
-    // }
 }
 
 int
