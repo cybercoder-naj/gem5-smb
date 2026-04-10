@@ -359,12 +359,11 @@ class DynInst : public ExecContext, public RefCounted
 
     /** Store queue index. */
     ssize_t sqIdx = -1;
-    /** 
-     * Iterator pointing to the store when the load was inserted into the LQ.
-     * 
-     * Note!! Bypassed loads don't enter the LQ. For bypassed loads, sqIt points to the predicted store in the SQ.
-     */
     typename LSQUnit::SQIterator sqIt;
+    /** 
+     * Bypassed loads don't enter the LQ. smbPredStoreIt points to the predicted store in the SQ.
+     */
+    typename LSQUnit::SQIterator smbPredStoreIt;
 
     /** Info needed for each load for PHAST */
     struct MemDepInfo {
@@ -386,7 +385,7 @@ class DynInst : public ExecContext, public RefCounted
         bool predicted = false;
     } memDepInfo;
 
-    PhysRegIdPtr specReg = nullptr;
+    PhysRegIdPtr smbSpeculatedReg = nullptr;
 
     /////////////////////// TLB Miss //////////////////////
     /**
@@ -626,7 +625,7 @@ class DynInst : public ExecContext, public RefCounted
 
     void setBypassedLoad(PhysRegIdPtr spec_reg) { 
         instFlags.set(BypassedLoad); 
-        specReg = spec_reg;
+        smbSpeculatedReg = spec_reg;
     }
 
     uint64_t

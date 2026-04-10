@@ -321,25 +321,29 @@ LSQUnit::handleBypassedLoad(const DynInstPtr &inst)
     assert(inst->isMemRef() && inst->isLoad() && inst->isBypassedLoad());
     assert(inst->smbStoreSeqNum != 0);
 
-    auto sqIt = storeQueue.end();
-    --sqIt;
+    auto spec_store_it = storeQueue.end();
+    --spec_store_it;
 
-    while (sqIt != storeQueue.begin() && sqIt->instruction()->seqNum > inst->smbStoreSeqNum) {
-        --sqIt;
+    // Walking backwards through the store queue to find the store that this load is bypassing. 
+    // The sequence number of the stores are in increasing order.
+    //! CONFIRM
+    while (spec_store_it != storeQueue.begin() && spec_store_it->instruction()->seqNum > inst->smbStoreSeqNum) {
+        --spec_store_it;
     }
-    if ((sqIt == storeQueue.begin() && sqIt->instruction()->seqNum != inst->smbStoreSeqNum)
-        || sqIt->instruction()->seqNum != inst->smbStoreSeqNum) {
+    if ((spec_store_it == storeQueue.begin() && spec_store_it->instruction()->seqNum != inst->smbStoreSeqNum)
+        || spec_store_it->instruction()->seqNum != inst->smbStoreSeqNum) {
         panic("Couldn't find the store for this bypassed load!");
     }
 
-    inst->sqIt = sqIt;
+    inst->smbPredStoreIt = spec_store_it;
+    inst->sqIt = storeQueue.end();
     inst->lqIdx = loadQueue.tail();
     inst->lqIt = loadQueue.getIterator(inst->lqIdx);
 }
 
 bool 
 LSQUnit::checkSmbViolation(DynInstPtr load_inst) {
-    auto store_it = load_inst->sqIt;
+    auto store_it = load_inst->smbPredStoreIt;
 
     //? Is it possible that Stores may not have resolved their address yet?
     //? then should we wait?
@@ -351,7 +355,7 @@ LSQUnit::checkSmbViolation(DynInstPtr load_inst) {
     }
 
     ++store_it;
-    for (; store_it != storeQueue.end(); ++store_it) {
+    for (; store_it != load_inst->sqIt; ++store_it) {
         Addr load_addr_start = load_inst->effAddr >> depCheckShift;
         Addr load_addr_end = (load_inst->effAddr + load_inst->effSize - 1) >> depCheckShift;
 
@@ -656,12 +660,8 @@ LSQUnit::executeLoad(const DynInstPtr &inst)
     assert(!inst->isSquashed());
 
     load_fault = inst->initiateAcc();
-    DPRINTF(LSQUnit, "FARTS Load [sn:%lli] initiateAcc returned %s\n",
-            inst->seqNum, load_fault);
 
     if (load_fault == NoFault && !inst->readMemAccPredicate()) {
-        DPRINTF(LSQUnit, "FARTS Load [sn:%lli] not executed from mem acc predication\n",
-                inst->seqNum);
         assert(inst->readPredicate());
         inst->setExecuted();
         inst->completeAcc(nullptr);
@@ -687,8 +687,6 @@ LSQUnit::executeLoad(const DynInstPtr &inst)
     // If the instruction faulted or predicated false, then we need to send it
     // along to commit without the instruction completing.
     if (load_fault != NoFault || !inst->readPredicate()) {
-        DPRINTF(LSQUnit, "FARTS Fault on Load PC %s, [sn:%lli], fault: %s\n",
-                inst->pcState(), inst->seqNum, load_fault);
         // Send this instruction to commit, also make sure iew stage
         // realizes there is activity.  Mark it as executed unless it
         // is a strictly ordered load that needs to hit the head of
@@ -766,8 +764,6 @@ LSQUnit::executeStore(const DynInstPtr &store_inst)
     }
 
     assert(store_fault == NoFault);
-
-    // todo populate the bypassedLoads with the effAddr
 
     if (store_inst->isStoreConditional() || store_inst->isAtomic()) {
         // Store conditionals and Atomics need to set themselves as able to

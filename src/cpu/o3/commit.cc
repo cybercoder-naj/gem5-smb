@@ -1300,7 +1300,7 @@ Commit::commitHead(const DynInstPtr &head_inst, unsigned inst_num)
         }
 
         auto actualValueReg = head_inst->renamedDestIdx(0);
-        auto specValueReg = head_inst->specReg;
+        auto specValueReg = head_inst->smbSpeculatedReg;
         assert(specValueReg);
 
         auto actualValue = cpu->getReg(actualValueReg, tid);
