@@ -1299,7 +1299,7 @@ Commit::commitHead(const DynInstPtr &head_inst, unsigned inst_num)
             //? Do we need to squash? What if the value is correct but the address is wrong? 
         }
 
-        auto actualValueReg = head_inst->renamedDestIdx(0);
+        auto actualValueReg = head_inst->renamedDestIdx(0); //' fixed because x86 logs
         auto specValueReg = head_inst->smbSpeculatedReg;
         assert(specValueReg);
 
@@ -1310,8 +1310,13 @@ Commit::commitHead(const DynInstPtr &head_inst, unsigned inst_num)
             DPRINTF(Commit, "[tid:%i] [sn:%llu] Bypassed load value mismatch! actual value: %#x, speculated value: %#x\n",
                     tid, head_inst->seqNum, actualValue, specValue);
 
-            // todo squash after this instruction to fix the mis-speculation. For now, just print a warning.
-            // todo return false;
+            //? Is this the correct way to correct the speculation?
+            renameMap[tid]->setEntry(head_inst->flattenedDestIdx(0), actualValueReg);
+
+            commitStatus[tid] = ROBSquashing;
+            //? Do we squash everything or just dependent instructions? 
+            squashAll(tid);
+            return false;
         }
 
         head_inst->setCompleted();

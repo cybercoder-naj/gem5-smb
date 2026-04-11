@@ -987,7 +987,7 @@ O3CPU: Ticking main, O3CPU.
   79500: system.cpu.rename: [tid:0] Renaming arch reg 3 (integer) to physical reg 43 (43).
   79500: system.cpu.rename: Checking for SMB bypass for Load [sn:7]   MOV_R_M : ld   ebx, SS:[t0 + rsp].
   79500: system.cpu.rename: Bypassing Load [sn:7] speculatively.
-  79500: system.cpu.rename: [tid:0] Renaming arch reg 3 (integer) to physical reg 41 (41) due to SMB bypass.
+  79500: system.cpu.rename: [tid:0] Renaming arch reg 3 (integer) to physical reg 42 (42) due to SMB bypass.
   79500: system.cpu.rename: [tid:0] [sn:5] Adding instruction to history buffer (size=9).
   79500: system.cpu.rename: [tid:0] Sending instructions to IEW.
   79500: system.cpu.rename: [tid:0] Processing instruction [sn:8] with PC (0x401018=>0x40101f).(0=>1).
@@ -999,8 +999,8 @@ O3CPU: Ticking main, O3CPU.
   79500: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
   79500: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
   79500: global: [sn:9] has 1 ready out of 3 sources. RTI 0)
-  79500: system.cpu.rename: [tid:0] Looking up integer arch reg 3, got phys reg 41 (integer)
-  79500: system.cpu.rename: [tid:0] Register 41 (flat: 41) (integer) is not ready.
+  79500: system.cpu.rename: [tid:0] Looking up integer arch reg 3, got phys reg 42 (integer)
+  79500: system.cpu.rename: [tid:0] Register 42 (flat: 42) (integer) is not ready.
   79500: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
   79500: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
   79500: global: [sn:9] has 2 ready out of 3 sources. RTI 0)
@@ -1813,7 +1813,7 @@ O3CPU: Ticking main, O3CPU.
   80500: system.cpu.iq: Instruction is ready to issue, putting it onto the ready list, PC (0x401018=>0x40101f).(0=>1) opclass:1 [sn:8].
   80500: system.cpu.iew: [tid:0] Issue: Adding PC (0x40101f=>0x401022).(0=>1) [sn:9] [tid:0] to IQ.
   80500: system.cpu.iq: Adding instruction [sn:9] PC (0x40101f=>0x401022).(0=>1) to the IQ.
-  80500: system.cpu.iq: Instruction PC (0x40101f=>0x401022).(0=>1) has src reg 41 (integer) that is being added to the dependency chain.
+  80500: system.cpu.iq: Instruction PC (0x40101f=>0x401022).(0=>1) has src reg 42 (integer) that is being added to the dependency chain.
   80500: system.cpu.iew: [tid:0] Issue: Adding PC (0x401022=>0x401026).(0=>1) [sn:10] [tid:0] to IQ.
   80500: system.cpu.iq: Adding instruction [sn:10] PC (0x401022=>0x401026).(0=>1) to the IQ.
   80500: system.cpu.iq: Instruction is ready to issue, putting it onto the ready list, PC (0x401022=>0x401026).(0=>1) opclass:1 [sn:10].
@@ -2220,9 +2220,6 @@ wbActual:4
   81000: system.cpu.iew: Sending instructions to commit, [sn:3] PC (0x401004=>0x40100a).(0=>1).
   81000: system.cpu.iq: Waking dependents of completed instruction.
   81000: system.cpu.iq: Waking any dependents on register 41 (integer).
-  81000: system.cpu.iq: Waking up a dependent instruction, [sn:9] PC (0x40101f=>0x401022).(0=>1).
-  81000: global: [sn:9] has 3 ready out of 3 sources. RTI 0)
-  81000: system.cpu.iq: Instruction is ready to issue, putting it onto the ready list, PC (0x40101f=>0x401022).(0=>1) opclass:1 [sn:9].
   81000: system.cpu.iq: Waking up a dependent instruction, [sn:4] PC (0x40100a=>0x40100e).(0=>1).
   81000: global: [sn:4] has 3 ready out of 4 sources. RTI 0)
   81000: system.cpu.iew: Setting Destination Register 41 (integer)
@@ -2230,6 +2227,9 @@ wbActual:4
   81000: system.cpu.iew: Sending instructions to commit, [sn:5] PC (0x40100e=>0x401015).(0=>1).
   81000: system.cpu.iq: Waking dependents of completed instruction.
   81000: system.cpu.iq: Waking any dependents on register 42 (integer).
+  81000: system.cpu.iq: Waking up a dependent instruction, [sn:9] PC (0x40101f=>0x401022).(0=>1).
+  81000: global: [sn:9] has 3 ready out of 3 sources. RTI 0)
+  81000: system.cpu.iq: Instruction is ready to issue, putting it onto the ready list, PC (0x40101f=>0x401022).(0=>1) opclass:1 [sn:9].
   81000: system.cpu.iq: Waking up a dependent instruction, [sn:6] PC (0x40100e=>0x401015).(1=>2).
   81000: global: [sn:6] has 3 ready out of 4 sources. RTI 0)
   81000: system.cpu.iew: Setting Destination Register 42 (integer)
@@ -2630,8 +2630,8 @@ O3CPU: Ticking main, O3CPU.
 wbActual:0
   81500: system.cpu.iew: Execute: Executing instructions from IQ.
   81500: system.cpu.iew: Execute: Processing PC (0x40101f=>0x401022).(0=>1), [tid:0] [sn:9].
-  81500: global: RegFile: Access to int register 41, has data 0x8
-  81500: global: RegFile: Setting int register 45 to 0x8
+  81500: global: RegFile: Access to int register 42, has data 0xa
+  81500: global: RegFile: Setting int register 45 to 0xa
   81500: system.cpu.iew: [tid:0] Adding inst [sn:9] to commit queue.
   81500: system.cpu.iew: Current wb cycle: 0, width: 19, numInst: 1
 wbActual:1
@@ -3175,10 +3175,8 @@ O3CPU: Ticking main, O3CPU.
   83500: system.cpu.commit: Getting instructions from Rename stage.
   83500: system.cpu.commit: Trying to commit instructions in the ROB.
   83500: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:7]
-  83500: system.cpu.commit: [tid:0] [sn:7] Bypassed load violation!
   83500: global: RegFile: Access to int register 43, has data 0xa
-  83500: global: RegFile: Access to int register 41, has data 0x8
-  83500: system.cpu.commit: [tid:0] [sn:7] Bypassed load value mismatch! actual value: 0xa, speculated value: 0x8
+  83500: global: RegFile: Access to int register 42, has data 0xa
   83500: system.cpu.commit: [tid:0] [sn:7] Committing instruction with PC (0x401015=>0x401018).(0=>1)
   83500: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x401015=>0x401018).(0=>1), [sn:7]
   83500: system.cpu: Removing committed instruction [tid:0] PC (0x401015=>0x401018).(0=>1) [sn:7]
@@ -3256,7 +3254,6 @@ O3CPU: Ticking main, O3CPU.
   84000: system.cpu.rename: [tid:0] Freeing up older rename of reg 0 (integer), [sn:8].
   84000: system.cpu.rename: [tid:0] Freeing up older rename of reg 7 (integer), [sn:9].
   84000: system.cpu.rename: [tid:0] Freeing up older rename of reg 42 (integer), [sn:10].
-  84000: system.cpu.rename: [tid:0] Adding phys reg 42 (integer) to free list, since it has no more logical dependents [sn:10].
   84000: system.cpu.rename: [tid:0] Freeing up older rename of reg 40 (integer), [sn:11].
   84000: system.cpu.rename: [tid:0] Adding phys reg 40 (integer) to free list, since it has no more logical dependents [sn:11].
   84000: system.cpu.rename: [tid:0] Freeing up older rename of reg 5 (condition_code), [sn:11].
@@ -3335,7 +3332,7 @@ O3CPU: Ticking main, O3CPU.
   84500: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
   84500: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
   84500: system.cpu.rename: Processing [tid:0]
-  84500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+  84500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
   84500: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
   84500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
   84500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -3382,7 +3379,7 @@ O3CPU: Ticking main, O3CPU.
   85000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
   85000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
   85000: system.cpu.rename: Processing [tid:0]
-  85000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+  85000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
   85000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
   85000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
   85000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -3417,7 +3414,7 @@ O3CPU: Ticking main, O3CPU.
   85500: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
   85500: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
   85500: system.cpu.rename: Processing [tid:0]
-  85500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+  85500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
   85500: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
   85500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
   85500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -3452,7 +3449,7 @@ O3CPU: Ticking main, O3CPU.
   86000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
   86000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
   86000: system.cpu.rename: Processing [tid:0]
-  86000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+  86000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
   86000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
   86000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
   86000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -3487,7 +3484,7 @@ O3CPU: Ticking main, O3CPU.
   86500: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
   86500: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
   86500: system.cpu.rename: Processing [tid:0]
-  86500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+  86500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
   86500: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
   86500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
   86500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -3522,7 +3519,7 @@ O3CPU: Ticking main, O3CPU.
   87000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
   87000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
   87000: system.cpu.rename: Processing [tid:0]
-  87000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+  87000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
   87000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
   87000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
   87000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -3557,7 +3554,7 @@ O3CPU: Ticking main, O3CPU.
   87500: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
   87500: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
   87500: system.cpu.rename: Processing [tid:0]
-  87500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+  87500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
   87500: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
   87500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
   87500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -3592,7 +3589,7 @@ O3CPU: Ticking main, O3CPU.
   88000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
   88000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
   88000: system.cpu.rename: Processing [tid:0]
-  88000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+  88000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
   88000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
   88000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
   88000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -3627,7 +3624,7 @@ O3CPU: Ticking main, O3CPU.
   88500: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
   88500: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
   88500: system.cpu.rename: Processing [tid:0]
-  88500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+  88500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
   88500: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
   88500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
   88500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -3662,7 +3659,7 @@ O3CPU: Ticking main, O3CPU.
   89000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
   89000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
   89000: system.cpu.rename: Processing [tid:0]
-  89000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+  89000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
   89000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
   89000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
   89000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -3697,7 +3694,7 @@ O3CPU: Ticking main, O3CPU.
   89500: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
   89500: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
   89500: system.cpu.rename: Processing [tid:0]
-  89500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+  89500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
   89500: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
   89500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
   89500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -3732,7 +3729,7 @@ O3CPU: Ticking main, O3CPU.
   90000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
   90000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
   90000: system.cpu.rename: Processing [tid:0]
-  90000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+  90000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
   90000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
   90000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
   90000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -3766,7 +3763,7 @@ O3CPU: Ticking main, O3CPU.
   90500: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
   90500: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
   90500: system.cpu.rename: Processing [tid:0]
-  90500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+  90500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
   90500: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
   90500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
   90500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -3800,7 +3797,7 @@ O3CPU: Ticking main, O3CPU.
   91000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
   91000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
   91000: system.cpu.rename: Processing [tid:0]
-  91000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+  91000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
   91000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
   91000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
   91000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -3834,7 +3831,7 @@ O3CPU: Ticking main, O3CPU.
   91500: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
   91500: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
   91500: system.cpu.rename: Processing [tid:0]
-  91500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+  91500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
   91500: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
   91500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
   91500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -3868,7 +3865,7 @@ O3CPU: Ticking main, O3CPU.
   92000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
   92000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
   92000: system.cpu.rename: Processing [tid:0]
-  92000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+  92000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
   92000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
   92000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
   92000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -3902,7 +3899,7 @@ O3CPU: Ticking main, O3CPU.
   92500: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
   92500: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
   92500: system.cpu.rename: Processing [tid:0]
-  92500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+  92500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
   92500: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
   92500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
   92500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -3936,7 +3933,7 @@ O3CPU: Ticking main, O3CPU.
   93000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
   93000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
   93000: system.cpu.rename: Processing [tid:0]
-  93000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+  93000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
   93000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
   93000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
   93000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -3970,7 +3967,7 @@ O3CPU: Ticking main, O3CPU.
   93500: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
   93500: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
   93500: system.cpu.rename: Processing [tid:0]
-  93500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+  93500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
   93500: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
   93500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
   93500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -4004,7 +4001,7 @@ O3CPU: Ticking main, O3CPU.
   94000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
   94000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
   94000: system.cpu.rename: Processing [tid:0]
-  94000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+  94000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
   94000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
   94000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
   94000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -4038,7 +4035,7 @@ O3CPU: Ticking main, O3CPU.
   94500: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
   94500: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
   94500: system.cpu.rename: Processing [tid:0]
-  94500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+  94500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
   94500: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
   94500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
   94500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -4072,7 +4069,7 @@ O3CPU: Ticking main, O3CPU.
   95000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
   95000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
   95000: system.cpu.rename: Processing [tid:0]
-  95000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+  95000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
   95000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
   95000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
   95000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -4106,7 +4103,7 @@ O3CPU: Ticking main, O3CPU.
   95500: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
   95500: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
   95500: system.cpu.rename: Processing [tid:0]
-  95500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+  95500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
   95500: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
   95500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
   95500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -4140,7 +4137,7 @@ O3CPU: Ticking main, O3CPU.
   96000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
   96000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
   96000: system.cpu.rename: Processing [tid:0]
-  96000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+  96000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
   96000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
   96000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
   96000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -4174,7 +4171,7 @@ O3CPU: Ticking main, O3CPU.
   96500: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
   96500: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
   96500: system.cpu.rename: Processing [tid:0]
-  96500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+  96500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
   96500: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
   96500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
   96500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -4208,7 +4205,7 @@ O3CPU: Ticking main, O3CPU.
   97000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
   97000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
   97000: system.cpu.rename: Processing [tid:0]
-  97000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+  97000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
   97000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
   97000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
   97000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -4242,7 +4239,7 @@ O3CPU: Ticking main, O3CPU.
   97500: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
   97500: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
   97500: system.cpu.rename: Processing [tid:0]
-  97500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+  97500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
   97500: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
   97500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
   97500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -4276,7 +4273,7 @@ O3CPU: Ticking main, O3CPU.
   98000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
   98000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
   98000: system.cpu.rename: Processing [tid:0]
-  98000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+  98000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
   98000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
   98000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
   98000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -4310,7 +4307,7 @@ O3CPU: Ticking main, O3CPU.
   98500: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
   98500: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
   98500: system.cpu.rename: Processing [tid:0]
-  98500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+  98500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
   98500: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
   98500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
   98500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -4344,7 +4341,7 @@ O3CPU: Ticking main, O3CPU.
   99000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
   99000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
   99000: system.cpu.rename: Processing [tid:0]
-  99000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+  99000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
   99000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
   99000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
   99000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -4378,7 +4375,7 @@ O3CPU: Ticking main, O3CPU.
   99500: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
   99500: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
   99500: system.cpu.rename: Processing [tid:0]
-  99500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+  99500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
   99500: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
   99500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
   99500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -4412,7 +4409,7 @@ O3CPU: Ticking main, O3CPU.
  100000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  100000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  100000: system.cpu.rename: Processing [tid:0]
- 100000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+ 100000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
  100000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  100000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  100000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -4446,7 +4443,7 @@ O3CPU: Ticking main, O3CPU.
  100500: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  100500: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  100500: system.cpu.rename: Processing [tid:0]
- 100500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+ 100500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
  100500: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  100500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  100500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -4480,7 +4477,7 @@ O3CPU: Ticking main, O3CPU.
  101000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  101000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  101000: system.cpu.rename: Processing [tid:0]
- 101000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+ 101000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
  101000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  101000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  101000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -4514,7 +4511,7 @@ O3CPU: Ticking main, O3CPU.
  101500: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  101500: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  101500: system.cpu.rename: Processing [tid:0]
- 101500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+ 101500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
  101500: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  101500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  101500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -4548,7 +4545,7 @@ O3CPU: Ticking main, O3CPU.
  102000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  102000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  102000: system.cpu.rename: Processing [tid:0]
- 102000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+ 102000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
  102000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  102000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  102000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -4582,7 +4579,7 @@ O3CPU: Ticking main, O3CPU.
  102500: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  102500: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  102500: system.cpu.rename: Processing [tid:0]
- 102500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+ 102500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
  102500: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  102500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  102500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -4616,7 +4613,7 @@ O3CPU: Ticking main, O3CPU.
  103000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  103000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  103000: system.cpu.rename: Processing [tid:0]
- 103000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+ 103000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
  103000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  103000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  103000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -4650,7 +4647,7 @@ O3CPU: Ticking main, O3CPU.
  103500: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  103500: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  103500: system.cpu.rename: Processing [tid:0]
- 103500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+ 103500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
  103500: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  103500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  103500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -4684,7 +4681,7 @@ O3CPU: Ticking main, O3CPU.
  104000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  104000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  104000: system.cpu.rename: Processing [tid:0]
- 104000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+ 104000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
  104000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  104000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  104000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -4718,7 +4715,7 @@ O3CPU: Ticking main, O3CPU.
  104500: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  104500: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  104500: system.cpu.rename: Processing [tid:0]
- 104500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+ 104500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
  104500: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  104500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  104500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -4752,7 +4749,7 @@ O3CPU: Ticking main, O3CPU.
  105000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  105000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  105000: system.cpu.rename: Processing [tid:0]
- 105000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+ 105000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
  105000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  105000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  105000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -4786,7 +4783,7 @@ O3CPU: Ticking main, O3CPU.
  105500: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  105500: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  105500: system.cpu.rename: Processing [tid:0]
- 105500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+ 105500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
  105500: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  105500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  105500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -4820,7 +4817,7 @@ O3CPU: Ticking main, O3CPU.
  106000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  106000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  106000: system.cpu.rename: Processing [tid:0]
- 106000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+ 106000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
  106000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  106000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  106000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -4854,7 +4851,7 @@ O3CPU: Ticking main, O3CPU.
  106500: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  106500: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  106500: system.cpu.rename: Processing [tid:0]
- 106500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+ 106500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
  106500: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  106500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  106500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -4888,7 +4885,7 @@ O3CPU: Ticking main, O3CPU.
  107000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  107000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  107000: system.cpu.rename: Processing [tid:0]
- 107000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+ 107000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
  107000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  107000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  107000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -4922,7 +4919,7 @@ O3CPU: Ticking main, O3CPU.
  107500: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  107500: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  107500: system.cpu.rename: Processing [tid:0]
- 107500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+ 107500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
  107500: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  107500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  107500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -4956,7 +4953,7 @@ O3CPU: Ticking main, O3CPU.
  108000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  108000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  108000: system.cpu.rename: Processing [tid:0]
- 108000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+ 108000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
  108000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  108000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  108000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -4990,7 +4987,7 @@ O3CPU: Ticking main, O3CPU.
  108500: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  108500: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  108500: system.cpu.rename: Processing [tid:0]
- 108500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+ 108500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
  108500: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  108500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  108500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -5024,7 +5021,7 @@ O3CPU: Ticking main, O3CPU.
  109000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  109000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  109000: system.cpu.rename: Processing [tid:0]
- 109000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+ 109000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
  109000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  109000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  109000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -5058,7 +5055,7 @@ O3CPU: Ticking main, O3CPU.
  109500: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  109500: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  109500: system.cpu.rename: Processing [tid:0]
- 109500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+ 109500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
  109500: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  109500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  109500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -5092,7 +5089,7 @@ O3CPU: Ticking main, O3CPU.
  110000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  110000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  110000: system.cpu.rename: Processing [tid:0]
- 110000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+ 110000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
  110000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  110000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  110000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -5126,7 +5123,7 @@ O3CPU: Ticking main, O3CPU.
  110500: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  110500: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  110500: system.cpu.rename: Processing [tid:0]
- 110500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+ 110500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
  110500: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  110500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  110500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -5160,7 +5157,7 @@ O3CPU: Ticking main, O3CPU.
  111000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  111000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  111000: system.cpu.rename: Processing [tid:0]
- 111000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+ 111000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
  111000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  111000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  111000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -5194,7 +5191,7 @@ O3CPU: Ticking main, O3CPU.
  111500: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  111500: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  111500: system.cpu.rename: Processing [tid:0]
- 111500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+ 111500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
  111500: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  111500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  111500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -5228,7 +5225,7 @@ O3CPU: Ticking main, O3CPU.
  112000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  112000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  112000: system.cpu.rename: Processing [tid:0]
- 112000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+ 112000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
  112000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  112000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  112000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -5262,7 +5259,7 @@ O3CPU: Ticking main, O3CPU.
  112500: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  112500: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  112500: system.cpu.rename: Processing [tid:0]
- 112500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+ 112500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
  112500: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  112500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  112500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -5296,7 +5293,7 @@ O3CPU: Ticking main, O3CPU.
  113000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  113000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  113000: system.cpu.rename: Processing [tid:0]
- 113000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+ 113000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
  113000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  113000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  113000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -5330,7 +5327,7 @@ O3CPU: Ticking main, O3CPU.
  113500: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  113500: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  113500: system.cpu.rename: Processing [tid:0]
- 113500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+ 113500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
  113500: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  113500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  113500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -5364,7 +5361,7 @@ O3CPU: Ticking main, O3CPU.
  114000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  114000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  114000: system.cpu.rename: Processing [tid:0]
- 114000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+ 114000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
  114000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  114000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  114000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -5398,7 +5395,7 @@ O3CPU: Ticking main, O3CPU.
  114500: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  114500: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  114500: system.cpu.rename: Processing [tid:0]
- 114500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+ 114500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
  114500: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  114500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  114500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -5432,7 +5429,7 @@ O3CPU: Ticking main, O3CPU.
  115000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  115000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  115000: system.cpu.rename: Processing [tid:0]
- 115000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+ 115000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
  115000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  115000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  115000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -5466,7 +5463,7 @@ O3CPU: Ticking main, O3CPU.
  115500: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  115500: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  115500: system.cpu.rename: Processing [tid:0]
- 115500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+ 115500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
  115500: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  115500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  115500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -5500,7 +5497,7 @@ O3CPU: Ticking main, O3CPU.
  116000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  116000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  116000: system.cpu.rename: Processing [tid:0]
- 116000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+ 116000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
  116000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  116000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  116000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -5534,7 +5531,7 @@ O3CPU: Ticking main, O3CPU.
  116500: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  116500: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  116500: system.cpu.rename: Processing [tid:0]
- 116500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+ 116500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
  116500: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  116500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  116500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -5568,7 +5565,7 @@ O3CPU: Ticking main, O3CPU.
  117000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  117000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  117000: system.cpu.rename: Processing [tid:0]
- 117000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+ 117000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
  117000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  117000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  117000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -5602,7 +5599,7 @@ O3CPU: Ticking main, O3CPU.
  117500: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  117500: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  117500: system.cpu.rename: Processing [tid:0]
- 117500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+ 117500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
  117500: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  117500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  117500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -5636,7 +5633,7 @@ O3CPU: Ticking main, O3CPU.
  118000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  118000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  118000: system.cpu.rename: Processing [tid:0]
- 118000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+ 118000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
  118000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  118000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  118000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -5670,7 +5667,7 @@ O3CPU: Ticking main, O3CPU.
  118500: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  118500: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  118500: system.cpu.rename: Processing [tid:0]
- 118500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+ 118500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
  118500: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  118500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  118500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -5704,7 +5701,7 @@ O3CPU: Ticking main, O3CPU.
  119000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  119000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  119000: system.cpu.rename: Processing [tid:0]
- 119000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+ 119000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
  119000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  119000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  119000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -5738,7 +5735,7 @@ O3CPU: Ticking main, O3CPU.
  119500: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  119500: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  119500: system.cpu.rename: Processing [tid:0]
- 119500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+ 119500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
  119500: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  119500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  119500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -5772,7 +5769,7 @@ O3CPU: Ticking main, O3CPU.
  120000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  120000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  120000: system.cpu.rename: Processing [tid:0]
- 120000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+ 120000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
  120000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  120000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  120000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -5806,7 +5803,7 @@ O3CPU: Ticking main, O3CPU.
  120500: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  120500: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  120500: system.cpu.rename: Processing [tid:0]
- 120500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+ 120500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
  120500: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  120500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  120500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -5840,7 +5837,7 @@ O3CPU: Ticking main, O3CPU.
  121000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  121000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  121000: system.cpu.rename: Processing [tid:0]
- 121000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+ 121000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
  121000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  121000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  121000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -5874,7 +5871,7 @@ O3CPU: Ticking main, O3CPU.
  121500: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  121500: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  121500: system.cpu.rename: Processing [tid:0]
- 121500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+ 121500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
  121500: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  121500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  121500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -5908,7 +5905,7 @@ O3CPU: Ticking main, O3CPU.
  122000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  122000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  122000: system.cpu.rename: Processing [tid:0]
- 122000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+ 122000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
  122000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  122000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  122000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -5942,7 +5939,7 @@ O3CPU: Ticking main, O3CPU.
  122500: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  122500: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  122500: system.cpu.rename: Processing [tid:0]
- 122500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+ 122500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
  122500: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  122500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  122500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -5976,7 +5973,7 @@ O3CPU: Ticking main, O3CPU.
  123000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  123000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  123000: system.cpu.rename: Processing [tid:0]
- 123000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+ 123000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
  123000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  123000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  123000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -6010,7 +6007,7 @@ O3CPU: Ticking main, O3CPU.
  123500: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  123500: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  123500: system.cpu.rename: Processing [tid:0]
- 123500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+ 123500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
  123500: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  123500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  123500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -6044,7 +6041,7 @@ O3CPU: Ticking main, O3CPU.
  124000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  124000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  124000: system.cpu.rename: Processing [tid:0]
- 124000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+ 124000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
  124000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  124000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  124000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -6078,7 +6075,7 @@ O3CPU: Ticking main, O3CPU.
  124500: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  124500: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  124500: system.cpu.rename: Processing [tid:0]
- 124500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+ 124500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
  124500: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  124500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  124500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -6112,7 +6109,7 @@ O3CPU: Ticking main, O3CPU.
  125000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  125000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  125000: system.cpu.rename: Processing [tid:0]
- 125000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+ 125000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
  125000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  125000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  125000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -6146,7 +6143,7 @@ O3CPU: Ticking main, O3CPU.
  125500: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  125500: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  125500: system.cpu.rename: Processing [tid:0]
- 125500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+ 125500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
  125500: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  125500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  125500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -6180,7 +6177,7 @@ O3CPU: Ticking main, O3CPU.
  126000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  126000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  126000: system.cpu.rename: Processing [tid:0]
- 126000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+ 126000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
  126000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  126000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  126000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -6214,7 +6211,7 @@ O3CPU: Ticking main, O3CPU.
  126500: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  126500: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  126500: system.cpu.rename: Processing [tid:0]
- 126500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+ 126500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
  126500: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  126500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  126500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -6248,7 +6245,7 @@ O3CPU: Ticking main, O3CPU.
  127000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  127000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  127000: system.cpu.rename: Processing [tid:0]
- 127000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+ 127000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
  127000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  127000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  127000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -6282,7 +6279,7 @@ O3CPU: Ticking main, O3CPU.
  127500: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  127500: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  127500: system.cpu.rename: Processing [tid:0]
- 127500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+ 127500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
  127500: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  127500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  127500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -6316,7 +6313,7 @@ O3CPU: Ticking main, O3CPU.
  128000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  128000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  128000: system.cpu.rename: Processing [tid:0]
- 128000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+ 128000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
  128000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  128000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  128000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -6350,7 +6347,7 @@ O3CPU: Ticking main, O3CPU.
  128500: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  128500: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  128500: system.cpu.rename: Processing [tid:0]
- 128500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+ 128500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
  128500: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  128500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  128500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -6384,7 +6381,7 @@ O3CPU: Ticking main, O3CPU.
  129000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  129000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  129000: system.cpu.rename: Processing [tid:0]
- 129000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+ 129000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
  129000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  129000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  129000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -6418,7 +6415,7 @@ O3CPU: Ticking main, O3CPU.
  129500: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  129500: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  129500: system.cpu.rename: Processing [tid:0]
- 129500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+ 129500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
  129500: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  129500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  129500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -6452,7 +6449,7 @@ O3CPU: Ticking main, O3CPU.
  130000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  130000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  130000: system.cpu.rename: Processing [tid:0]
- 130000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+ 130000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
  130000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  130000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  130000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -6486,7 +6483,7 @@ O3CPU: Ticking main, O3CPU.
  130500: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  130500: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  130500: system.cpu.rename: Processing [tid:0]
- 130500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+ 130500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
  130500: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  130500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  130500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -6520,7 +6517,7 @@ O3CPU: Ticking main, O3CPU.
  131000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  131000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  131000: system.cpu.rename: Processing [tid:0]
- 131000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+ 131000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
  131000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  131000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  131000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -6554,7 +6551,7 @@ O3CPU: Ticking main, O3CPU.
  131500: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  131500: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  131500: system.cpu.rename: Processing [tid:0]
- 131500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+ 131500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
  131500: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  131500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  131500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -6708,7 +6705,7 @@ O3CPU: Ticking main, O3CPU.
  132000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  132000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  132000: system.cpu.rename: Processing [tid:0]
- 132000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+ 132000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
  132000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  132000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  132000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -6851,7 +6848,7 @@ O3CPU: Ticking main, O3CPU.
  132500: system.cpu.decode: [tid:0] Processing instruction [sn:58] with PC (0x401046=>0x401048).(0=>1)
  132500: system.cpu.decode: Activity this cycle.
  132500: system.cpu.rename: Processing [tid:0]
- 132500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+ 132500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
  132500: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  132500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  132500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -6994,7 +6991,7 @@ O3CPU: Ticking main, O3CPU.
  133000: system.cpu.decode: [tid:0] Processing instruction [sn:68] with PC (0x40104c=>0x40104e).(1=>2)
  133000: system.cpu.decode: Activity this cycle.
  133000: system.cpu.rename: Processing [tid:0]
- 133000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(849 870 917 1834 127 8 4559)
+ 133000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(848 870 917 1834 127 8 4559)
  133000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  133000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  133000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -7388,7 +7385,7 @@ O3CPU: Ticking main, O3CPU.
  133500: system.cpu.decode: [tid:0] Processing instruction [sn:78] with PC (0x401052=>0x401054).(2=>3)
  133500: system.cpu.decode: Activity this cycle.
  133500: system.cpu.rename: Processing [tid:0]
- 133500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(842 870 917 1834 127 8 4553)
+ 133500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 881, Free LQ: 120, Free SQ: 58, FreeRM 127(841 870 917 1834 127 8 4553)
  133500: system.cpu.rename: [tid:0] 10 instructions not yet in ROB
  133500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 4, loads dispatchedToLQ: 0
  133500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -7819,7 +7816,7 @@ O3CPU: Ticking main, O3CPU.
  134000: system.cpu.decode: [tid:0] Processing instruction [sn:88] with PC (0x40105a=>0x40105c).(0=>1)
  134000: system.cpu.decode: Activity this cycle.
  134000: system.cpu.rename: Processing [tid:0]
- 134000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 871, Free LQ: 120, Free SQ: 58, FreeRM 127(835 870 917 1834 127 8 4545)
+ 134000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 871, Free LQ: 120, Free SQ: 58, FreeRM 127(834 870 917 1834 127 8 4545)
  134000: system.cpu.rename: [tid:0] 20 instructions not yet in ROB
  134000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 7, loads dispatchedToLQ: 0
  134000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -8287,7 +8284,7 @@ O3CPU: Ticking main, O3CPU.
  134500: system.cpu.decode: [tid:0] Processing instruction [sn:98] with PC (0x401060=>0x401062).(1=>2)
  134500: system.cpu.decode: Activity this cycle.
  134500: system.cpu.rename: Processing [tid:0]
- 134500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 861, Free LQ: 120, Free SQ: 58, FreeRM 127(829 870 917 1834 127 8 4539)
+ 134500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 861, Free LQ: 120, Free SQ: 58, FreeRM 127(828 870 917 1834 127 8 4539)
  134500: system.cpu.rename: [tid:0] 30 instructions not yet in ROB
  134500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 10, loads dispatchedToLQ: 4
  134500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -8770,7 +8767,7 @@ O3CPU: Ticking main, O3CPU.
  135000: system.cpu.decode: [tid:0] Processing instruction [sn:108] with PC (0x401066=>0x401068).(2=>3)
  135000: system.cpu.decode: Activity this cycle.
  135000: system.cpu.rename: Processing [tid:0]
- 135000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 851, Free LQ: 120, Free SQ: 58, FreeRM 127(822 870 917 1834 127 8 4533)
+ 135000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 851, Free LQ: 120, Free SQ: 58, FreeRM 127(821 870 917 1834 127 8 4533)
  135000: system.cpu.rename: [tid:0] 30 instructions not yet in ROB
  135000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 10, loads dispatchedToLQ: 3
  135000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -9262,7 +9259,7 @@ O3CPU: Ticking main, O3CPU.
  135500: system.cpu.decode: [tid:0] Processing instruction [sn:118] with PC (0x40106e=>0x401070).(0=>1)
  135500: system.cpu.decode: Activity this cycle.
  135500: system.cpu.rename: Processing [tid:0]
- 135500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 841, Free LQ: 120, Free SQ: 58, FreeRM 127(815 870 917 1834 127 8 4525)
+ 135500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 841, Free LQ: 120, Free SQ: 58, FreeRM 127(814 870 917 1834 127 8 4525)
  135500: system.cpu.rename: [tid:0] 30 instructions not yet in ROB
  135500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 10, loads dispatchedToLQ: 3
  135500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -9730,7 +9727,7 @@ O3CPU: Ticking main, O3CPU.
  136000: system.cpu.decode: [tid:0] Processing instruction [sn:128] with PC (0x401074=>0x401076).(1=>2)
  136000: system.cpu.decode: Activity this cycle.
  136000: system.cpu.rename: Processing [tid:0]
- 136000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 831, Free LQ: 120, Free SQ: 58, FreeRM 127(809 870 917 1834 127 8 4519)
+ 136000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 831, Free LQ: 120, Free SQ: 58, FreeRM 127(808 870 917 1834 127 8 4519)
  136000: system.cpu.rename: [tid:0] 30 instructions not yet in ROB
  136000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 10, loads dispatchedToLQ: 4
  136000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -10170,7 +10167,7 @@ O3CPU: Ticking main, O3CPU.
  136500: system.cpu.decode: [tid:0] Processing instruction [sn:138] with PC (0x40107a=>0x40107c).(2=>3)
  136500: system.cpu.decode: Activity this cycle.
  136500: system.cpu.rename: Processing [tid:0]
- 136500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 821, Free LQ: 120, Free SQ: 58, FreeRM 127(802 870 917 1834 127 8 4513)
+ 136500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 821, Free LQ: 120, Free SQ: 58, FreeRM 127(801 870 917 1834 127 8 4513)
  136500: system.cpu.rename: [tid:0] 30 instructions not yet in ROB
  136500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 10, loads dispatchedToLQ: 3
  136500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -10561,7 +10558,7 @@ O3CPU: Ticking main, O3CPU.
  137000: system.cpu.decode: Activity this cycle.
  137000: system.cpu: Activity: 13
  137000: system.cpu.rename: Processing [tid:0]
- 137000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 811, Free LQ: 120, Free SQ: 58, FreeRM 127(795 870 917 1834 127 8 4505)
+ 137000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 811, Free LQ: 120, Free SQ: 58, FreeRM 127(794 870 917 1834 127 8 4505)
  137000: system.cpu.rename: [tid:0] 30 instructions not yet in ROB
  137000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 10, loads dispatchedToLQ: 3
  137000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -10921,7 +10918,7 @@ O3CPU: Ticking main, O3CPU.
  137500: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  137500: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  137500: system.cpu.rename: Processing [tid:0]
- 137500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 801, Free LQ: 120, Free SQ: 58, FreeRM 127(789 870 917 1834 127 8 4499)
+ 137500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 801, Free LQ: 120, Free SQ: 58, FreeRM 127(788 870 917 1834 127 8 4499)
  137500: system.cpu.rename: [tid:0] 30 instructions not yet in ROB
  137500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 10, loads dispatchedToLQ: 4
  137500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -11192,7 +11189,7 @@ O3CPU: Ticking main, O3CPU.
  138000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  138000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  138000: system.cpu.rename: Processing [tid:0]
- 138000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 791, Free LQ: 120, Free SQ: 58, FreeRM 127(785 870 917 1834 127 8 4495)
+ 138000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 791, Free LQ: 120, Free SQ: 58, FreeRM 127(784 870 917 1834 127 8 4495)
  138000: system.cpu.rename: [tid:0] 26 instructions not yet in ROB
  138000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 8, loads dispatchedToLQ: 3
  138000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -11308,7 +11305,7 @@ O3CPU: Ticking main, O3CPU.
  138500: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  138500: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  138500: system.cpu.rename: Processing [tid:0]
- 138500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 785, Free LQ: 120, Free SQ: 58, FreeRM 127(785 870 917 1834 127 8 4495)
+ 138500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 785, Free LQ: 120, Free SQ: 58, FreeRM 127(784 870 917 1834 127 8 4495)
  138500: system.cpu.rename: [tid:0] 16 instructions not yet in ROB
  138500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 5, loads dispatchedToLQ: 3
  138500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -11379,7 +11376,7 @@ O3CPU: Ticking main, O3CPU.
  139000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  139000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  139000: system.cpu.rename: Processing [tid:0]
- 139000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 785, Free LQ: 120, Free SQ: 58, FreeRM 127(785 870 917 1834 127 8 4495)
+ 139000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 785, Free LQ: 120, Free SQ: 58, FreeRM 127(784 870 917 1834 127 8 4495)
  139000: system.cpu.rename: [tid:0] 6 instructions not yet in ROB
  139000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 2, loads dispatchedToLQ: 2
  139000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -11414,7 +11411,7 @@ O3CPU: Ticking main, O3CPU.
  139500: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  139500: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  139500: system.cpu.rename: Processing [tid:0]
- 139500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 785, Free LQ: 120, Free SQ: 58, FreeRM 127(785 870 917 1834 127 8 4495)
+ 139500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 785, Free LQ: 120, Free SQ: 58, FreeRM 127(784 870 917 1834 127 8 4495)
  139500: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  139500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  139500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -11449,7 +11446,7 @@ O3CPU: Ticking main, O3CPU.
  140000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  140000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  140000: system.cpu.rename: Processing [tid:0]
- 140000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 785, Free LQ: 120, Free SQ: 58, FreeRM 127(785 870 917 1834 127 8 4495)
+ 140000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 785, Free LQ: 120, Free SQ: 58, FreeRM 127(784 870 917 1834 127 8 4495)
  140000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  140000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  140000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -11484,7 +11481,7 @@ O3CPU: Ticking main, O3CPU.
  140500: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  140500: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  140500: system.cpu.rename: Processing [tid:0]
- 140500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 785, Free LQ: 120, Free SQ: 58, FreeRM 127(785 870 917 1834 127 8 4495)
+ 140500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 785, Free LQ: 120, Free SQ: 58, FreeRM 127(784 870 917 1834 127 8 4495)
  140500: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  140500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  140500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -11519,7 +11516,7 @@ O3CPU: Ticking main, O3CPU.
  141000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  141000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  141000: system.cpu.rename: Processing [tid:0]
- 141000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 785, Free LQ: 120, Free SQ: 58, FreeRM 127(785 870 917 1834 127 8 4495)
+ 141000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 785, Free LQ: 120, Free SQ: 58, FreeRM 127(784 870 917 1834 127 8 4495)
  141000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  141000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  141000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -11554,7 +11551,7 @@ O3CPU: Ticking main, O3CPU.
  141500: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  141500: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  141500: system.cpu.rename: Processing [tid:0]
- 141500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 785, Free LQ: 120, Free SQ: 58, FreeRM 127(785 870 917 1834 127 8 4495)
+ 141500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 785, Free LQ: 120, Free SQ: 58, FreeRM 127(784 870 917 1834 127 8 4495)
  141500: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  141500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  141500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -11589,7 +11586,7 @@ O3CPU: Ticking main, O3CPU.
  142000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  142000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  142000: system.cpu.rename: Processing [tid:0]
- 142000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 785, Free LQ: 120, Free SQ: 58, FreeRM 127(785 870 917 1834 127 8 4495)
+ 142000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 785, Free LQ: 120, Free SQ: 58, FreeRM 127(784 870 917 1834 127 8 4495)
  142000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  142000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  142000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -11624,7 +11621,7 @@ O3CPU: Ticking main, O3CPU.
  142500: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  142500: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  142500: system.cpu.rename: Processing [tid:0]
- 142500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 785, Free LQ: 120, Free SQ: 58, FreeRM 127(785 870 917 1834 127 8 4495)
+ 142500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 785, Free LQ: 120, Free SQ: 58, FreeRM 127(784 870 917 1834 127 8 4495)
  142500: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  142500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  142500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -11659,7 +11656,7 @@ O3CPU: Ticking main, O3CPU.
  143000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  143000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  143000: system.cpu.rename: Processing [tid:0]
- 143000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 785, Free LQ: 120, Free SQ: 58, FreeRM 127(785 870 917 1834 127 8 4495)
+ 143000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 785, Free LQ: 120, Free SQ: 58, FreeRM 127(784 870 917 1834 127 8 4495)
  143000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  143000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  143000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -11694,7 +11691,7 @@ O3CPU: Ticking main, O3CPU.
  143500: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  143500: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  143500: system.cpu.rename: Processing [tid:0]
- 143500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 785, Free LQ: 120, Free SQ: 58, FreeRM 127(785 870 917 1834 127 8 4495)
+ 143500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 785, Free LQ: 120, Free SQ: 58, FreeRM 127(784 870 917 1834 127 8 4495)
  143500: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  143500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  143500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -11728,7 +11725,7 @@ O3CPU: Ticking main, O3CPU.
  144000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  144000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  144000: system.cpu.rename: Processing [tid:0]
- 144000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 785, Free LQ: 120, Free SQ: 58, FreeRM 127(785 870 917 1834 127 8 4495)
+ 144000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 785, Free LQ: 120, Free SQ: 58, FreeRM 127(784 870 917 1834 127 8 4495)
  144000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  144000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  144000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -11762,7 +11759,7 @@ O3CPU: Ticking main, O3CPU.
  144500: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  144500: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  144500: system.cpu.rename: Processing [tid:0]
- 144500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 785, Free LQ: 120, Free SQ: 58, FreeRM 127(785 870 917 1834 127 8 4495)
+ 144500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 785, Free LQ: 120, Free SQ: 58, FreeRM 127(784 870 917 1834 127 8 4495)
  144500: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  144500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  144500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -11796,7 +11793,7 @@ O3CPU: Ticking main, O3CPU.
  145000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  145000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  145000: system.cpu.rename: Processing [tid:0]
- 145000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 785, Free LQ: 120, Free SQ: 58, FreeRM 127(785 870 917 1834 127 8 4495)
+ 145000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 785, Free LQ: 120, Free SQ: 58, FreeRM 127(784 870 917 1834 127 8 4495)
  145000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  145000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  145000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -11830,7 +11827,7 @@ O3CPU: Ticking main, O3CPU.
  145500: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  145500: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  145500: system.cpu.rename: Processing [tid:0]
- 145500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 785, Free LQ: 120, Free SQ: 58, FreeRM 127(785 870 917 1834 127 8 4495)
+ 145500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 785, Free LQ: 120, Free SQ: 58, FreeRM 127(784 870 917 1834 127 8 4495)
  145500: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  145500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  145500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -11864,7 +11861,7 @@ O3CPU: Ticking main, O3CPU.
  146000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  146000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  146000: system.cpu.rename: Processing [tid:0]
- 146000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 785, Free LQ: 120, Free SQ: 58, FreeRM 127(785 870 917 1834 127 8 4495)
+ 146000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 785, Free LQ: 120, Free SQ: 58, FreeRM 127(784 870 917 1834 127 8 4495)
  146000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  146000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  146000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -11898,7 +11895,7 @@ O3CPU: Ticking main, O3CPU.
  146500: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  146500: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  146500: system.cpu.rename: Processing [tid:0]
- 146500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 785, Free LQ: 120, Free SQ: 58, FreeRM 127(785 870 917 1834 127 8 4495)
+ 146500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 785, Free LQ: 120, Free SQ: 58, FreeRM 127(784 870 917 1834 127 8 4495)
  146500: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  146500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  146500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -11932,7 +11929,7 @@ O3CPU: Ticking main, O3CPU.
  147000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  147000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  147000: system.cpu.rename: Processing [tid:0]
- 147000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 785, Free LQ: 120, Free SQ: 58, FreeRM 127(785 870 917 1834 127 8 4495)
+ 147000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 785, Free LQ: 120, Free SQ: 58, FreeRM 127(784 870 917 1834 127 8 4495)
  147000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  147000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  147000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -11966,7 +11963,7 @@ O3CPU: Ticking main, O3CPU.
  147500: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  147500: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  147500: system.cpu.rename: Processing [tid:0]
- 147500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 785, Free LQ: 120, Free SQ: 58, FreeRM 127(785 870 917 1834 127 8 4495)
+ 147500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 785, Free LQ: 120, Free SQ: 58, FreeRM 127(784 870 917 1834 127 8 4495)
  147500: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  147500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  147500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -12000,7 +11997,7 @@ O3CPU: Ticking main, O3CPU.
  148000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  148000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  148000: system.cpu.rename: Processing [tid:0]
- 148000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 785, Free LQ: 120, Free SQ: 58, FreeRM 127(785 870 917 1834 127 8 4495)
+ 148000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 785, Free LQ: 120, Free SQ: 58, FreeRM 127(784 870 917 1834 127 8 4495)
  148000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  148000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  148000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -12034,7 +12031,7 @@ O3CPU: Ticking main, O3CPU.
  148500: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  148500: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  148500: system.cpu.rename: Processing [tid:0]
- 148500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 785, Free LQ: 120, Free SQ: 58, FreeRM 127(785 870 917 1834 127 8 4495)
+ 148500: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 785, Free LQ: 120, Free SQ: 58, FreeRM 127(784 870 917 1834 127 8 4495)
  148500: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  148500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  148500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -12079,7 +12076,7 @@ O3CPU: Ticking main, O3CPU.
  149000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  149000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  149000: system.cpu.rename: Processing [tid:0]
- 149000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 785, Free LQ: 120, Free SQ: 58, FreeRM 127(785 870 917 1834 127 8 4495)
+ 149000: system.cpu.rename: [tid:0] Free IQ: 523, Free ROB: 785, Free LQ: 120, Free SQ: 58, FreeRM 127(784 870 917 1834 127 8 4495)
  149000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  149000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 120, loadsInProgress: 0, loads dispatchedToLQ: 0
  149000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -12121,7 +12118,7 @@ O3CPU: Ticking main, O3CPU.
  149500: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  149500: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  149500: system.cpu.rename: Processing [tid:0]
- 149500: system.cpu.rename: [tid:0] Free IQ: 427, Free ROB: 785, Free LQ: 88, Free SQ: 27, FreeRM 127(785 870 917 1834 127 8 4495)
+ 149500: system.cpu.rename: [tid:0] Free IQ: 427, Free ROB: 785, Free LQ: 88, Free SQ: 27, FreeRM 127(784 870 917 1834 127 8 4495)
  149500: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  149500: system.cpu.rename: calcFreeLQEntries: free lqEntries: 88, loadsInProgress: 0, loads dispatchedToLQ: 0
  149500: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -12166,7 +12163,7 @@ O3CPU: Ticking main, O3CPU.
  150000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  150000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  150000: system.cpu.rename: Processing [tid:0]
- 150000: system.cpu.rename: [tid:0] Free IQ: 427, Free ROB: 785, Free LQ: 88, Free SQ: 27, FreeRM 127(785 870 917 1834 127 8 4495)
+ 150000: system.cpu.rename: [tid:0] Free IQ: 427, Free ROB: 785, Free LQ: 88, Free SQ: 27, FreeRM 127(784 870 917 1834 127 8 4495)
  150000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  150000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 88, loadsInProgress: 0, loads dispatchedToLQ: 0
  150000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -12188,10 +12185,10 @@ O3CPU: Ticking main, O3CPU.
  150000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
  150000: system.cpu.commit: Inst [tid:0] [sn:12] PC (0x401026=>0x401028).(0=>1) has a fault
  150000: global: RegFile: Access to int register 44, has data 0x3c
- 150000: global: RegFile: Access to int register 45, has data 0x8
+ 150000: global: RegFile: Access to int register 45, has data 0xa
  150000: global: Calling halt on Thread Context 0
  150000: system.cpu: Thread 0 is inserted to exitingThreads list
- 150000: global: RegFile: Setting int register 44 to 0x8
+ 150000: global: RegFile: Setting int register 44 to 0xa
  150000: system.cpu.commit: [tid:0] [sn:12] Committing instruction with fault
  150000: system.cpu.commit: Generating trap event for [tid:0]
  150000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
