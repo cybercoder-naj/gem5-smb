@@ -3402,6 +3402,14 @@ O3CPU: Ticking main, O3CPU.
   85000: system.cpu.commit: Unable to commit head instruction PC:(0x401026=>0x401028).(0=>1) [tid:0] [sn:12].
   85000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x401028).(0=>1) is head of ROB and ready to commit
   85000: system.cpu.commit: [tid:0] ROB has 37 insts & 881 free entries.
+O3PipeView:fetch:78500:0x00401015:0:7:  MOV_R_M : ld   ebx, SS:[t0 + rsp]
+O3PipeView:decode:79000
+O3PipeView:rename:79500
+O3PipeView:dispatch:80500
+O3PipeView:issue:81500
+O3PipeView:complete:82000
+O3PipeView:retire:83500:store:0
+  85000: global: DynInst: [sn:7] Instruction destroyed. Instcount for system.cpu = 39
   85000: system.cpu: Activity: 11
   85000: system.cpu: Scheduling next tick!
   85500: system.cpu: 
@@ -6603,15 +6611,15 @@ O3CPU: Ticking main, O3CPU.
 	displacement = 0
 	dispSize = 0}
 
- 132000: global: DynInst: [sn:49] Instruction created. Instcount for system.cpu = 41
+ 132000: global: DynInst: [sn:49] Instruction created. Instcount for system.cpu = 40
  132000: system.cpu.fetch: [tid:0] Instruction PC (0x401040=>0x401042).(0=>1) created [sn:49].
  132000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
  132000: system.cpu.fetch: [tid:0] Fetch queue entry created (1/128).
- 132000: global: DynInst: [sn:50] Instruction created. Instcount for system.cpu = 42
+ 132000: global: DynInst: [sn:50] Instruction created. Instcount for system.cpu = 41
  132000: system.cpu.fetch: [tid:0] Instruction PC (0x401040=>0x401042).(1=>2) created [sn:50].
  132000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : add   t1b, t1b, al
  132000: system.cpu.fetch: [tid:0] Fetch queue entry created (2/128).
- 132000: global: DynInst: [sn:51] Instruction created. Instcount for system.cpu = 43
+ 132000: global: DynInst: [sn:51] Instruction created. Instcount for system.cpu = 42
  132000: system.cpu.fetch: [tid:0] Instruction PC (0x401040=>0x401042).(2=>3) created [sn:51].
  132000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : st   t1b, DS:[rax]
  132000: system.cpu.fetch: [tid:0] Fetch queue entry created (3/128).
@@ -6630,15 +6638,15 @@ O3CPU: Ticking main, O3CPU.
 	displacement = 0
 	dispSize = 0}
 
- 132000: global: DynInst: [sn:52] Instruction created. Instcount for system.cpu = 44
+ 132000: global: DynInst: [sn:52] Instruction created. Instcount for system.cpu = 43
  132000: system.cpu.fetch: [tid:0] Instruction PC (0x401042=>0x401044).(0=>1) created [sn:52].
  132000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
  132000: system.cpu.fetch: [tid:0] Fetch queue entry created (4/128).
- 132000: global: DynInst: [sn:53] Instruction created. Instcount for system.cpu = 45
+ 132000: global: DynInst: [sn:53] Instruction created. Instcount for system.cpu = 44
  132000: system.cpu.fetch: [tid:0] Instruction PC (0x401042=>0x401044).(1=>2) created [sn:53].
  132000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : add   t1b, t1b, al
  132000: system.cpu.fetch: [tid:0] Fetch queue entry created (5/128).
- 132000: global: DynInst: [sn:54] Instruction created. Instcount for system.cpu = 46
+ 132000: global: DynInst: [sn:54] Instruction created. Instcount for system.cpu = 45
  132000: system.cpu.fetch: [tid:0] Instruction PC (0x401042=>0x401044).(2=>3) created [sn:54].
  132000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : st   t1b, DS:[rax]
  132000: system.cpu.fetch: [tid:0] Fetch queue entry created (6/128).
@@ -6657,15 +6665,15 @@ O3CPU: Ticking main, O3CPU.
 	displacement = 0
 	dispSize = 0}
 
- 132000: global: DynInst: [sn:55] Instruction created. Instcount for system.cpu = 47
+ 132000: global: DynInst: [sn:55] Instruction created. Instcount for system.cpu = 46
  132000: system.cpu.fetch: [tid:0] Instruction PC (0x401044=>0x401046).(0=>1) created [sn:55].
  132000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
  132000: system.cpu.fetch: [tid:0] Fetch queue entry created (7/128).
- 132000: global: DynInst: [sn:56] Instruction created. Instcount for system.cpu = 48
+ 132000: global: DynInst: [sn:56] Instruction created. Instcount for system.cpu = 47
  132000: system.cpu.fetch: [tid:0] Instruction PC (0x401044=>0x401046).(1=>2) created [sn:56].
  132000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : add   t1b, t1b, al
  132000: system.cpu.fetch: [tid:0] Fetch queue entry created (8/128).
- 132000: global: DynInst: [sn:57] Instruction created. Instcount for system.cpu = 49
+ 132000: global: DynInst: [sn:57] Instruction created. Instcount for system.cpu = 48
  132000: system.cpu.fetch: [tid:0] Instruction PC (0x401044=>0x401046).(2=>3) created [sn:57].
  132000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : st   t1b, DS:[rax]
  132000: system.cpu.fetch: [tid:0] Fetch queue entry created (9/128).
@@ -6684,7 +6692,7 @@ O3CPU: Ticking main, O3CPU.
 	displacement = 0
 	dispSize = 0}
 
- 132000: global: DynInst: [sn:58] Instruction created. Instcount for system.cpu = 50
+ 132000: global: DynInst: [sn:58] Instruction created. Instcount for system.cpu = 49
  132000: system.cpu.fetch: [tid:0] Instruction PC (0x401046=>0x401048).(0=>1) created [sn:58].
  132000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
  132000: system.cpu.fetch: [tid:0] Fetch queue entry created (10/128).
@@ -6735,11 +6743,11 @@ O3CPU: Ticking main, O3CPU.
  132500: system.cpu.fetch: Running stage.
  132500: system.cpu.fetch: Attempting to fetch from [tid:0]
  132500: system.cpu.fetch: [tid:0] Adding instructions to queue to decode.
- 132500: global: DynInst: [sn:59] Instruction created. Instcount for system.cpu = 51
+ 132500: global: DynInst: [sn:59] Instruction created. Instcount for system.cpu = 50
  132500: system.cpu.fetch: [tid:0] Instruction PC (0x401046=>0x401048).(1=>2) created [sn:59].
  132500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : add   t1b, t1b, al
  132500: system.cpu.fetch: [tid:0] Fetch queue entry created (1/128).
- 132500: global: DynInst: [sn:60] Instruction created. Instcount for system.cpu = 52
+ 132500: global: DynInst: [sn:60] Instruction created. Instcount for system.cpu = 51
  132500: system.cpu.fetch: [tid:0] Instruction PC (0x401046=>0x401048).(2=>3) created [sn:60].
  132500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : st   t1b, DS:[rax]
  132500: system.cpu.fetch: [tid:0] Fetch queue entry created (2/128).
@@ -6758,15 +6766,15 @@ O3CPU: Ticking main, O3CPU.
 	displacement = 0
 	dispSize = 0}
 
- 132500: global: DynInst: [sn:61] Instruction created. Instcount for system.cpu = 53
+ 132500: global: DynInst: [sn:61] Instruction created. Instcount for system.cpu = 52
  132500: system.cpu.fetch: [tid:0] Instruction PC (0x401048=>0x40104a).(0=>1) created [sn:61].
  132500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
  132500: system.cpu.fetch: [tid:0] Fetch queue entry created (3/128).
- 132500: global: DynInst: [sn:62] Instruction created. Instcount for system.cpu = 54
+ 132500: global: DynInst: [sn:62] Instruction created. Instcount for system.cpu = 53
  132500: system.cpu.fetch: [tid:0] Instruction PC (0x401048=>0x40104a).(1=>2) created [sn:62].
  132500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : add   t1b, t1b, al
  132500: system.cpu.fetch: [tid:0] Fetch queue entry created (4/128).
- 132500: global: DynInst: [sn:63] Instruction created. Instcount for system.cpu = 55
+ 132500: global: DynInst: [sn:63] Instruction created. Instcount for system.cpu = 54
  132500: system.cpu.fetch: [tid:0] Instruction PC (0x401048=>0x40104a).(2=>3) created [sn:63].
  132500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : st   t1b, DS:[rax]
  132500: system.cpu.fetch: [tid:0] Fetch queue entry created (5/128).
@@ -6785,15 +6793,15 @@ O3CPU: Ticking main, O3CPU.
 	displacement = 0
 	dispSize = 0}
 
- 132500: global: DynInst: [sn:64] Instruction created. Instcount for system.cpu = 56
+ 132500: global: DynInst: [sn:64] Instruction created. Instcount for system.cpu = 55
  132500: system.cpu.fetch: [tid:0] Instruction PC (0x40104a=>0x40104c).(0=>1) created [sn:64].
  132500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
  132500: system.cpu.fetch: [tid:0] Fetch queue entry created (6/128).
- 132500: global: DynInst: [sn:65] Instruction created. Instcount for system.cpu = 57
+ 132500: global: DynInst: [sn:65] Instruction created. Instcount for system.cpu = 56
  132500: system.cpu.fetch: [tid:0] Instruction PC (0x40104a=>0x40104c).(1=>2) created [sn:65].
  132500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : add   t1b, t1b, al
  132500: system.cpu.fetch: [tid:0] Fetch queue entry created (7/128).
- 132500: global: DynInst: [sn:66] Instruction created. Instcount for system.cpu = 58
+ 132500: global: DynInst: [sn:66] Instruction created. Instcount for system.cpu = 57
  132500: system.cpu.fetch: [tid:0] Instruction PC (0x40104a=>0x40104c).(2=>3) created [sn:66].
  132500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : st   t1b, DS:[rax]
  132500: system.cpu.fetch: [tid:0] Fetch queue entry created (8/128).
@@ -6812,11 +6820,11 @@ O3CPU: Ticking main, O3CPU.
 	displacement = 0
 	dispSize = 0}
 
- 132500: global: DynInst: [sn:67] Instruction created. Instcount for system.cpu = 59
+ 132500: global: DynInst: [sn:67] Instruction created. Instcount for system.cpu = 58
  132500: system.cpu.fetch: [tid:0] Instruction PC (0x40104c=>0x40104e).(0=>1) created [sn:67].
  132500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
  132500: system.cpu.fetch: [tid:0] Fetch queue entry created (9/128).
- 132500: global: DynInst: [sn:68] Instruction created. Instcount for system.cpu = 60
+ 132500: global: DynInst: [sn:68] Instruction created. Instcount for system.cpu = 59
  132500: system.cpu.fetch: [tid:0] Instruction PC (0x40104c=>0x40104e).(1=>2) created [sn:68].
  132500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : add   t1b, t1b, al
  132500: system.cpu.fetch: [tid:0] Fetch queue entry created (10/128).
@@ -6878,7 +6886,7 @@ O3CPU: Ticking main, O3CPU.
  133000: system.cpu.fetch: Running stage.
  133000: system.cpu.fetch: Attempting to fetch from [tid:0]
  133000: system.cpu.fetch: [tid:0] Adding instructions to queue to decode.
- 133000: global: DynInst: [sn:69] Instruction created. Instcount for system.cpu = 61
+ 133000: global: DynInst: [sn:69] Instruction created. Instcount for system.cpu = 60
  133000: system.cpu.fetch: [tid:0] Instruction PC (0x40104c=>0x40104e).(2=>3) created [sn:69].
  133000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : st   t1b, DS:[rax]
  133000: system.cpu.fetch: [tid:0] Fetch queue entry created (1/128).
@@ -6897,15 +6905,15 @@ O3CPU: Ticking main, O3CPU.
 	displacement = 0
 	dispSize = 0}
 
- 133000: global: DynInst: [sn:70] Instruction created. Instcount for system.cpu = 62
+ 133000: global: DynInst: [sn:70] Instruction created. Instcount for system.cpu = 61
  133000: system.cpu.fetch: [tid:0] Instruction PC (0x40104e=>0x401050).(0=>1) created [sn:70].
  133000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
  133000: system.cpu.fetch: [tid:0] Fetch queue entry created (2/128).
- 133000: global: DynInst: [sn:71] Instruction created. Instcount for system.cpu = 63
+ 133000: global: DynInst: [sn:71] Instruction created. Instcount for system.cpu = 62
  133000: system.cpu.fetch: [tid:0] Instruction PC (0x40104e=>0x401050).(1=>2) created [sn:71].
  133000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : add   t1b, t1b, al
  133000: system.cpu.fetch: [tid:0] Fetch queue entry created (3/128).
- 133000: global: DynInst: [sn:72] Instruction created. Instcount for system.cpu = 64
+ 133000: global: DynInst: [sn:72] Instruction created. Instcount for system.cpu = 63
  133000: system.cpu.fetch: [tid:0] Instruction PC (0x40104e=>0x401050).(2=>3) created [sn:72].
  133000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : st   t1b, DS:[rax]
  133000: system.cpu.fetch: [tid:0] Fetch queue entry created (4/128).
@@ -6924,15 +6932,15 @@ O3CPU: Ticking main, O3CPU.
 	displacement = 0
 	dispSize = 0}
 
- 133000: global: DynInst: [sn:73] Instruction created. Instcount for system.cpu = 65
+ 133000: global: DynInst: [sn:73] Instruction created. Instcount for system.cpu = 64
  133000: system.cpu.fetch: [tid:0] Instruction PC (0x401050=>0x401052).(0=>1) created [sn:73].
  133000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
  133000: system.cpu.fetch: [tid:0] Fetch queue entry created (5/128).
- 133000: global: DynInst: [sn:74] Instruction created. Instcount for system.cpu = 66
+ 133000: global: DynInst: [sn:74] Instruction created. Instcount for system.cpu = 65
  133000: system.cpu.fetch: [tid:0] Instruction PC (0x401050=>0x401052).(1=>2) created [sn:74].
  133000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : add   t1b, t1b, al
  133000: system.cpu.fetch: [tid:0] Fetch queue entry created (6/128).
- 133000: global: DynInst: [sn:75] Instruction created. Instcount for system.cpu = 67
+ 133000: global: DynInst: [sn:75] Instruction created. Instcount for system.cpu = 66
  133000: system.cpu.fetch: [tid:0] Instruction PC (0x401050=>0x401052).(2=>3) created [sn:75].
  133000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : st   t1b, DS:[rax]
  133000: system.cpu.fetch: [tid:0] Fetch queue entry created (7/128).
@@ -6951,15 +6959,15 @@ O3CPU: Ticking main, O3CPU.
 	displacement = 0
 	dispSize = 0}
 
- 133000: global: DynInst: [sn:76] Instruction created. Instcount for system.cpu = 68
+ 133000: global: DynInst: [sn:76] Instruction created. Instcount for system.cpu = 67
  133000: system.cpu.fetch: [tid:0] Instruction PC (0x401052=>0x401054).(0=>1) created [sn:76].
  133000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
  133000: system.cpu.fetch: [tid:0] Fetch queue entry created (8/128).
- 133000: global: DynInst: [sn:77] Instruction created. Instcount for system.cpu = 69
+ 133000: global: DynInst: [sn:77] Instruction created. Instcount for system.cpu = 68
  133000: system.cpu.fetch: [tid:0] Instruction PC (0x401052=>0x401054).(1=>2) created [sn:77].
  133000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : add   t1b, t1b, al
  133000: system.cpu.fetch: [tid:0] Fetch queue entry created (9/128).
- 133000: global: DynInst: [sn:78] Instruction created. Instcount for system.cpu = 70
+ 133000: global: DynInst: [sn:78] Instruction created. Instcount for system.cpu = 69
  133000: system.cpu.fetch: [tid:0] Instruction PC (0x401052=>0x401054).(2=>3) created [sn:78].
  133000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : st   t1b, DS:[rax]
  133000: system.cpu.fetch: [tid:0] Fetch queue entry created (10/128).
@@ -7272,15 +7280,15 @@ O3CPU: Ticking main, O3CPU.
 	displacement = 0
 	dispSize = 0}
 
- 133500: global: DynInst: [sn:79] Instruction created. Instcount for system.cpu = 71
+ 133500: global: DynInst: [sn:79] Instruction created. Instcount for system.cpu = 70
  133500: system.cpu.fetch: [tid:0] Instruction PC (0x401054=>0x401056).(0=>1) created [sn:79].
  133500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
  133500: system.cpu.fetch: [tid:0] Fetch queue entry created (1/128).
- 133500: global: DynInst: [sn:80] Instruction created. Instcount for system.cpu = 72
+ 133500: global: DynInst: [sn:80] Instruction created. Instcount for system.cpu = 71
  133500: system.cpu.fetch: [tid:0] Instruction PC (0x401054=>0x401056).(1=>2) created [sn:80].
  133500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : add   t1b, t1b, al
  133500: system.cpu.fetch: [tid:0] Fetch queue entry created (2/128).
- 133500: global: DynInst: [sn:81] Instruction created. Instcount for system.cpu = 73
+ 133500: global: DynInst: [sn:81] Instruction created. Instcount for system.cpu = 72
  133500: system.cpu.fetch: [tid:0] Instruction PC (0x401054=>0x401056).(2=>3) created [sn:81].
  133500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : st   t1b, DS:[rax]
  133500: system.cpu.fetch: [tid:0] Fetch queue entry created (3/128).
@@ -7299,15 +7307,15 @@ O3CPU: Ticking main, O3CPU.
 	displacement = 0
 	dispSize = 0}
 
- 133500: global: DynInst: [sn:82] Instruction created. Instcount for system.cpu = 74
+ 133500: global: DynInst: [sn:82] Instruction created. Instcount for system.cpu = 73
  133500: system.cpu.fetch: [tid:0] Instruction PC (0x401056=>0x401058).(0=>1) created [sn:82].
  133500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
  133500: system.cpu.fetch: [tid:0] Fetch queue entry created (4/128).
- 133500: global: DynInst: [sn:83] Instruction created. Instcount for system.cpu = 75
+ 133500: global: DynInst: [sn:83] Instruction created. Instcount for system.cpu = 74
  133500: system.cpu.fetch: [tid:0] Instruction PC (0x401056=>0x401058).(1=>2) created [sn:83].
  133500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : add   t1b, t1b, al
  133500: system.cpu.fetch: [tid:0] Fetch queue entry created (5/128).
- 133500: global: DynInst: [sn:84] Instruction created. Instcount for system.cpu = 76
+ 133500: global: DynInst: [sn:84] Instruction created. Instcount for system.cpu = 75
  133500: system.cpu.fetch: [tid:0] Instruction PC (0x401056=>0x401058).(2=>3) created [sn:84].
  133500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : st   t1b, DS:[rax]
  133500: system.cpu.fetch: [tid:0] Fetch queue entry created (6/128).
@@ -7326,15 +7334,15 @@ O3CPU: Ticking main, O3CPU.
 	displacement = 0
 	dispSize = 0}
 
- 133500: global: DynInst: [sn:85] Instruction created. Instcount for system.cpu = 77
+ 133500: global: DynInst: [sn:85] Instruction created. Instcount for system.cpu = 76
  133500: system.cpu.fetch: [tid:0] Instruction PC (0x401058=>0x40105a).(0=>1) created [sn:85].
  133500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
  133500: system.cpu.fetch: [tid:0] Fetch queue entry created (7/128).
- 133500: global: DynInst: [sn:86] Instruction created. Instcount for system.cpu = 78
+ 133500: global: DynInst: [sn:86] Instruction created. Instcount for system.cpu = 77
  133500: system.cpu.fetch: [tid:0] Instruction PC (0x401058=>0x40105a).(1=>2) created [sn:86].
  133500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : add   t1b, t1b, al
  133500: system.cpu.fetch: [tid:0] Fetch queue entry created (8/128).
- 133500: global: DynInst: [sn:87] Instruction created. Instcount for system.cpu = 79
+ 133500: global: DynInst: [sn:87] Instruction created. Instcount for system.cpu = 78
  133500: system.cpu.fetch: [tid:0] Instruction PC (0x401058=>0x40105a).(2=>3) created [sn:87].
  133500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : st   t1b, DS:[rax]
  133500: system.cpu.fetch: [tid:0] Fetch queue entry created (9/128).
@@ -7353,7 +7361,7 @@ O3CPU: Ticking main, O3CPU.
 	displacement = 0
 	dispSize = 0}
 
- 133500: global: DynInst: [sn:88] Instruction created. Instcount for system.cpu = 80
+ 133500: global: DynInst: [sn:88] Instruction created. Instcount for system.cpu = 79
  133500: system.cpu.fetch: [tid:0] Instruction PC (0x40105a=>0x40105c).(0=>1) created [sn:88].
  133500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
  133500: system.cpu.fetch: [tid:0] Fetch queue entry created (10/128).
@@ -7703,11 +7711,11 @@ O3CPU: Ticking main, O3CPU.
  134000: system.cpu.fetch: Running stage.
  134000: system.cpu.fetch: Attempting to fetch from [tid:0]
  134000: system.cpu.fetch: [tid:0] Adding instructions to queue to decode.
- 134000: global: DynInst: [sn:89] Instruction created. Instcount for system.cpu = 81
+ 134000: global: DynInst: [sn:89] Instruction created. Instcount for system.cpu = 80
  134000: system.cpu.fetch: [tid:0] Instruction PC (0x40105a=>0x40105c).(1=>2) created [sn:89].
  134000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : add   t1b, t1b, al
  134000: system.cpu.fetch: [tid:0] Fetch queue entry created (1/128).
- 134000: global: DynInst: [sn:90] Instruction created. Instcount for system.cpu = 82
+ 134000: global: DynInst: [sn:90] Instruction created. Instcount for system.cpu = 81
  134000: system.cpu.fetch: [tid:0] Instruction PC (0x40105a=>0x40105c).(2=>3) created [sn:90].
  134000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : st   t1b, DS:[rax]
  134000: system.cpu.fetch: [tid:0] Fetch queue entry created (2/128).
@@ -7726,15 +7734,15 @@ O3CPU: Ticking main, O3CPU.
 	displacement = 0
 	dispSize = 0}
 
- 134000: global: DynInst: [sn:91] Instruction created. Instcount for system.cpu = 83
+ 134000: global: DynInst: [sn:91] Instruction created. Instcount for system.cpu = 82
  134000: system.cpu.fetch: [tid:0] Instruction PC (0x40105c=>0x40105e).(0=>1) created [sn:91].
  134000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
  134000: system.cpu.fetch: [tid:0] Fetch queue entry created (3/128).
- 134000: global: DynInst: [sn:92] Instruction created. Instcount for system.cpu = 84
+ 134000: global: DynInst: [sn:92] Instruction created. Instcount for system.cpu = 83
  134000: system.cpu.fetch: [tid:0] Instruction PC (0x40105c=>0x40105e).(1=>2) created [sn:92].
  134000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : add   t1b, t1b, al
  134000: system.cpu.fetch: [tid:0] Fetch queue entry created (4/128).
- 134000: global: DynInst: [sn:93] Instruction created. Instcount for system.cpu = 85
+ 134000: global: DynInst: [sn:93] Instruction created. Instcount for system.cpu = 84
  134000: system.cpu.fetch: [tid:0] Instruction PC (0x40105c=>0x40105e).(2=>3) created [sn:93].
  134000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : st   t1b, DS:[rax]
  134000: system.cpu.fetch: [tid:0] Fetch queue entry created (5/128).
@@ -7753,15 +7761,15 @@ O3CPU: Ticking main, O3CPU.
 	displacement = 0
 	dispSize = 0}
 
- 134000: global: DynInst: [sn:94] Instruction created. Instcount for system.cpu = 86
+ 134000: global: DynInst: [sn:94] Instruction created. Instcount for system.cpu = 85
  134000: system.cpu.fetch: [tid:0] Instruction PC (0x40105e=>0x401060).(0=>1) created [sn:94].
  134000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
  134000: system.cpu.fetch: [tid:0] Fetch queue entry created (6/128).
- 134000: global: DynInst: [sn:95] Instruction created. Instcount for system.cpu = 87
+ 134000: global: DynInst: [sn:95] Instruction created. Instcount for system.cpu = 86
  134000: system.cpu.fetch: [tid:0] Instruction PC (0x40105e=>0x401060).(1=>2) created [sn:95].
  134000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : add   t1b, t1b, al
  134000: system.cpu.fetch: [tid:0] Fetch queue entry created (7/128).
- 134000: global: DynInst: [sn:96] Instruction created. Instcount for system.cpu = 88
+ 134000: global: DynInst: [sn:96] Instruction created. Instcount for system.cpu = 87
  134000: system.cpu.fetch: [tid:0] Instruction PC (0x40105e=>0x401060).(2=>3) created [sn:96].
  134000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : st   t1b, DS:[rax]
  134000: system.cpu.fetch: [tid:0] Fetch queue entry created (8/128).
@@ -7780,11 +7788,11 @@ O3CPU: Ticking main, O3CPU.
 	displacement = 0
 	dispSize = 0}
 
- 134000: global: DynInst: [sn:97] Instruction created. Instcount for system.cpu = 89
+ 134000: global: DynInst: [sn:97] Instruction created. Instcount for system.cpu = 88
  134000: system.cpu.fetch: [tid:0] Instruction PC (0x401060=>0x401062).(0=>1) created [sn:97].
  134000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
  134000: system.cpu.fetch: [tid:0] Fetch queue entry created (9/128).
- 134000: global: DynInst: [sn:98] Instruction created. Instcount for system.cpu = 90
+ 134000: global: DynInst: [sn:98] Instruction created. Instcount for system.cpu = 89
  134000: system.cpu.fetch: [tid:0] Instruction PC (0x401060=>0x401062).(1=>2) created [sn:98].
  134000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : add   t1b, t1b, al
  134000: system.cpu.fetch: [tid:0] Fetch queue entry created (10/128).
@@ -8171,7 +8179,7 @@ O3CPU: Ticking main, O3CPU.
  134500: system.cpu.fetch: Running stage.
  134500: system.cpu.fetch: Attempting to fetch from [tid:0]
  134500: system.cpu.fetch: [tid:0] Adding instructions to queue to decode.
- 134500: global: DynInst: [sn:99] Instruction created. Instcount for system.cpu = 91
+ 134500: global: DynInst: [sn:99] Instruction created. Instcount for system.cpu = 90
  134500: system.cpu.fetch: [tid:0] Instruction PC (0x401060=>0x401062).(2=>3) created [sn:99].
  134500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : st   t1b, DS:[rax]
  134500: system.cpu.fetch: [tid:0] Fetch queue entry created (1/128).
@@ -8190,15 +8198,15 @@ O3CPU: Ticking main, O3CPU.
 	displacement = 0
 	dispSize = 0}
 
- 134500: global: DynInst: [sn:100] Instruction created. Instcount for system.cpu = 92
+ 134500: global: DynInst: [sn:100] Instruction created. Instcount for system.cpu = 91
  134500: system.cpu.fetch: [tid:0] Instruction PC (0x401062=>0x401064).(0=>1) created [sn:100].
  134500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
  134500: system.cpu.fetch: [tid:0] Fetch queue entry created (2/128).
- 134500: global: DynInst: [sn:101] Instruction created. Instcount for system.cpu = 93
+ 134500: global: DynInst: [sn:101] Instruction created. Instcount for system.cpu = 92
  134500: system.cpu.fetch: [tid:0] Instruction PC (0x401062=>0x401064).(1=>2) created [sn:101].
  134500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : add   t1b, t1b, al
  134500: system.cpu.fetch: [tid:0] Fetch queue entry created (3/128).
- 134500: global: DynInst: [sn:102] Instruction created. Instcount for system.cpu = 94
+ 134500: global: DynInst: [sn:102] Instruction created. Instcount for system.cpu = 93
  134500: system.cpu.fetch: [tid:0] Instruction PC (0x401062=>0x401064).(2=>3) created [sn:102].
  134500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : st   t1b, DS:[rax]
  134500: system.cpu.fetch: [tid:0] Fetch queue entry created (4/128).
@@ -8217,15 +8225,15 @@ O3CPU: Ticking main, O3CPU.
 	displacement = 0
 	dispSize = 0}
 
- 134500: global: DynInst: [sn:103] Instruction created. Instcount for system.cpu = 95
+ 134500: global: DynInst: [sn:103] Instruction created. Instcount for system.cpu = 94
  134500: system.cpu.fetch: [tid:0] Instruction PC (0x401064=>0x401066).(0=>1) created [sn:103].
  134500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
  134500: system.cpu.fetch: [tid:0] Fetch queue entry created (5/128).
- 134500: global: DynInst: [sn:104] Instruction created. Instcount for system.cpu = 96
+ 134500: global: DynInst: [sn:104] Instruction created. Instcount for system.cpu = 95
  134500: system.cpu.fetch: [tid:0] Instruction PC (0x401064=>0x401066).(1=>2) created [sn:104].
  134500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : add   t1b, t1b, al
  134500: system.cpu.fetch: [tid:0] Fetch queue entry created (6/128).
- 134500: global: DynInst: [sn:105] Instruction created. Instcount for system.cpu = 97
+ 134500: global: DynInst: [sn:105] Instruction created. Instcount for system.cpu = 96
  134500: system.cpu.fetch: [tid:0] Instruction PC (0x401064=>0x401066).(2=>3) created [sn:105].
  134500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : st   t1b, DS:[rax]
  134500: system.cpu.fetch: [tid:0] Fetch queue entry created (7/128).
@@ -8244,15 +8252,15 @@ O3CPU: Ticking main, O3CPU.
 	displacement = 0
 	dispSize = 0}
 
- 134500: global: DynInst: [sn:106] Instruction created. Instcount for system.cpu = 98
+ 134500: global: DynInst: [sn:106] Instruction created. Instcount for system.cpu = 97
  134500: system.cpu.fetch: [tid:0] Instruction PC (0x401066=>0x401068).(0=>1) created [sn:106].
  134500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
  134500: system.cpu.fetch: [tid:0] Fetch queue entry created (8/128).
- 134500: global: DynInst: [sn:107] Instruction created. Instcount for system.cpu = 99
+ 134500: global: DynInst: [sn:107] Instruction created. Instcount for system.cpu = 98
  134500: system.cpu.fetch: [tid:0] Instruction PC (0x401066=>0x401068).(1=>2) created [sn:107].
  134500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : add   t1b, t1b, al
  134500: system.cpu.fetch: [tid:0] Fetch queue entry created (9/128).
- 134500: global: DynInst: [sn:108] Instruction created. Instcount for system.cpu = 100
+ 134500: global: DynInst: [sn:108] Instruction created. Instcount for system.cpu = 99
  134500: system.cpu.fetch: [tid:0] Instruction PC (0x401066=>0x401068).(2=>3) created [sn:108].
  134500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : st   t1b, DS:[rax]
  134500: system.cpu.fetch: [tid:0] Fetch queue entry created (10/128).
@@ -8654,15 +8662,15 @@ O3CPU: Ticking main, O3CPU.
 	displacement = 0
 	dispSize = 0}
 
- 135000: global: DynInst: [sn:109] Instruction created. Instcount for system.cpu = 101
+ 135000: global: DynInst: [sn:109] Instruction created. Instcount for system.cpu = 100
  135000: system.cpu.fetch: [tid:0] Instruction PC (0x401068=>0x40106a).(0=>1) created [sn:109].
  135000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
  135000: system.cpu.fetch: [tid:0] Fetch queue entry created (1/128).
- 135000: global: DynInst: [sn:110] Instruction created. Instcount for system.cpu = 102
+ 135000: global: DynInst: [sn:110] Instruction created. Instcount for system.cpu = 101
  135000: system.cpu.fetch: [tid:0] Instruction PC (0x401068=>0x40106a).(1=>2) created [sn:110].
  135000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : add   t1b, t1b, al
  135000: system.cpu.fetch: [tid:0] Fetch queue entry created (2/128).
- 135000: global: DynInst: [sn:111] Instruction created. Instcount for system.cpu = 103
+ 135000: global: DynInst: [sn:111] Instruction created. Instcount for system.cpu = 102
  135000: system.cpu.fetch: [tid:0] Instruction PC (0x401068=>0x40106a).(2=>3) created [sn:111].
  135000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : st   t1b, DS:[rax]
  135000: system.cpu.fetch: [tid:0] Fetch queue entry created (3/128).
@@ -8681,15 +8689,15 @@ O3CPU: Ticking main, O3CPU.
 	displacement = 0
 	dispSize = 0}
 
- 135000: global: DynInst: [sn:112] Instruction created. Instcount for system.cpu = 104
+ 135000: global: DynInst: [sn:112] Instruction created. Instcount for system.cpu = 103
  135000: system.cpu.fetch: [tid:0] Instruction PC (0x40106a=>0x40106c).(0=>1) created [sn:112].
  135000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
  135000: system.cpu.fetch: [tid:0] Fetch queue entry created (4/128).
- 135000: global: DynInst: [sn:113] Instruction created. Instcount for system.cpu = 105
+ 135000: global: DynInst: [sn:113] Instruction created. Instcount for system.cpu = 104
  135000: system.cpu.fetch: [tid:0] Instruction PC (0x40106a=>0x40106c).(1=>2) created [sn:113].
  135000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : add   t1b, t1b, al
  135000: system.cpu.fetch: [tid:0] Fetch queue entry created (5/128).
- 135000: global: DynInst: [sn:114] Instruction created. Instcount for system.cpu = 106
+ 135000: global: DynInst: [sn:114] Instruction created. Instcount for system.cpu = 105
  135000: system.cpu.fetch: [tid:0] Instruction PC (0x40106a=>0x40106c).(2=>3) created [sn:114].
  135000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : st   t1b, DS:[rax]
  135000: system.cpu.fetch: [tid:0] Fetch queue entry created (6/128).
@@ -8708,15 +8716,15 @@ O3CPU: Ticking main, O3CPU.
 	displacement = 0
 	dispSize = 0}
 
- 135000: global: DynInst: [sn:115] Instruction created. Instcount for system.cpu = 107
+ 135000: global: DynInst: [sn:115] Instruction created. Instcount for system.cpu = 106
  135000: system.cpu.fetch: [tid:0] Instruction PC (0x40106c=>0x40106e).(0=>1) created [sn:115].
  135000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
  135000: system.cpu.fetch: [tid:0] Fetch queue entry created (7/128).
- 135000: global: DynInst: [sn:116] Instruction created. Instcount for system.cpu = 108
+ 135000: global: DynInst: [sn:116] Instruction created. Instcount for system.cpu = 107
  135000: system.cpu.fetch: [tid:0] Instruction PC (0x40106c=>0x40106e).(1=>2) created [sn:116].
  135000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : add   t1b, t1b, al
  135000: system.cpu.fetch: [tid:0] Fetch queue entry created (8/128).
- 135000: global: DynInst: [sn:117] Instruction created. Instcount for system.cpu = 109
+ 135000: global: DynInst: [sn:117] Instruction created. Instcount for system.cpu = 108
  135000: system.cpu.fetch: [tid:0] Instruction PC (0x40106c=>0x40106e).(2=>3) created [sn:117].
  135000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : st   t1b, DS:[rax]
  135000: system.cpu.fetch: [tid:0] Fetch queue entry created (9/128).
@@ -8735,7 +8743,7 @@ O3CPU: Ticking main, O3CPU.
 	displacement = 0
 	dispSize = 0}
 
- 135000: global: DynInst: [sn:118] Instruction created. Instcount for system.cpu = 110
+ 135000: global: DynInst: [sn:118] Instruction created. Instcount for system.cpu = 109
  135000: system.cpu.fetch: [tid:0] Instruction PC (0x40106e=>0x401070).(0=>1) created [sn:118].
  135000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
  135000: system.cpu.fetch: [tid:0] Fetch queue entry created (10/128).
@@ -9146,11 +9154,11 @@ O3CPU: Ticking main, O3CPU.
  135500: system.cpu.fetch: Running stage.
  135500: system.cpu.fetch: Attempting to fetch from [tid:0]
  135500: system.cpu.fetch: [tid:0] Adding instructions to queue to decode.
- 135500: global: DynInst: [sn:119] Instruction created. Instcount for system.cpu = 111
+ 135500: global: DynInst: [sn:119] Instruction created. Instcount for system.cpu = 110
  135500: system.cpu.fetch: [tid:0] Instruction PC (0x40106e=>0x401070).(1=>2) created [sn:119].
  135500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : add   t1b, t1b, al
  135500: system.cpu.fetch: [tid:0] Fetch queue entry created (1/128).
- 135500: global: DynInst: [sn:120] Instruction created. Instcount for system.cpu = 112
+ 135500: global: DynInst: [sn:120] Instruction created. Instcount for system.cpu = 111
  135500: system.cpu.fetch: [tid:0] Instruction PC (0x40106e=>0x401070).(2=>3) created [sn:120].
  135500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : st   t1b, DS:[rax]
  135500: system.cpu.fetch: [tid:0] Fetch queue entry created (2/128).
@@ -9169,15 +9177,15 @@ O3CPU: Ticking main, O3CPU.
 	displacement = 0
 	dispSize = 0}
 
- 135500: global: DynInst: [sn:121] Instruction created. Instcount for system.cpu = 113
+ 135500: global: DynInst: [sn:121] Instruction created. Instcount for system.cpu = 112
  135500: system.cpu.fetch: [tid:0] Instruction PC (0x401070=>0x401072).(0=>1) created [sn:121].
  135500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
  135500: system.cpu.fetch: [tid:0] Fetch queue entry created (3/128).
- 135500: global: DynInst: [sn:122] Instruction created. Instcount for system.cpu = 114
+ 135500: global: DynInst: [sn:122] Instruction created. Instcount for system.cpu = 113
  135500: system.cpu.fetch: [tid:0] Instruction PC (0x401070=>0x401072).(1=>2) created [sn:122].
  135500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : add   t1b, t1b, al
  135500: system.cpu.fetch: [tid:0] Fetch queue entry created (4/128).
- 135500: global: DynInst: [sn:123] Instruction created. Instcount for system.cpu = 115
+ 135500: global: DynInst: [sn:123] Instruction created. Instcount for system.cpu = 114
  135500: system.cpu.fetch: [tid:0] Instruction PC (0x401070=>0x401072).(2=>3) created [sn:123].
  135500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : st   t1b, DS:[rax]
  135500: system.cpu.fetch: [tid:0] Fetch queue entry created (5/128).
@@ -9196,15 +9204,15 @@ O3CPU: Ticking main, O3CPU.
 	displacement = 0
 	dispSize = 0}
 
- 135500: global: DynInst: [sn:124] Instruction created. Instcount for system.cpu = 116
+ 135500: global: DynInst: [sn:124] Instruction created. Instcount for system.cpu = 115
  135500: system.cpu.fetch: [tid:0] Instruction PC (0x401072=>0x401074).(0=>1) created [sn:124].
  135500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
  135500: system.cpu.fetch: [tid:0] Fetch queue entry created (6/128).
- 135500: global: DynInst: [sn:125] Instruction created. Instcount for system.cpu = 117
+ 135500: global: DynInst: [sn:125] Instruction created. Instcount for system.cpu = 116
  135500: system.cpu.fetch: [tid:0] Instruction PC (0x401072=>0x401074).(1=>2) created [sn:125].
  135500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : add   t1b, t1b, al
  135500: system.cpu.fetch: [tid:0] Fetch queue entry created (7/128).
- 135500: global: DynInst: [sn:126] Instruction created. Instcount for system.cpu = 118
+ 135500: global: DynInst: [sn:126] Instruction created. Instcount for system.cpu = 117
  135500: system.cpu.fetch: [tid:0] Instruction PC (0x401072=>0x401074).(2=>3) created [sn:126].
  135500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : st   t1b, DS:[rax]
  135500: system.cpu.fetch: [tid:0] Fetch queue entry created (8/128).
@@ -9223,11 +9231,11 @@ O3CPU: Ticking main, O3CPU.
 	displacement = 0
 	dispSize = 0}
 
- 135500: global: DynInst: [sn:127] Instruction created. Instcount for system.cpu = 119
+ 135500: global: DynInst: [sn:127] Instruction created. Instcount for system.cpu = 118
  135500: system.cpu.fetch: [tid:0] Instruction PC (0x401074=>0x401076).(0=>1) created [sn:127].
  135500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
  135500: system.cpu.fetch: [tid:0] Fetch queue entry created (9/128).
- 135500: global: DynInst: [sn:128] Instruction created. Instcount for system.cpu = 120
+ 135500: global: DynInst: [sn:128] Instruction created. Instcount for system.cpu = 119
  135500: system.cpu.fetch: [tid:0] Instruction PC (0x401074=>0x401076).(1=>2) created [sn:128].
  135500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : add   t1b, t1b, al
  135500: system.cpu.fetch: [tid:0] Fetch queue entry created (10/128).
@@ -9614,7 +9622,7 @@ O3CPU: Ticking main, O3CPU.
  136000: system.cpu.fetch: Running stage.
  136000: system.cpu.fetch: Attempting to fetch from [tid:0]
  136000: system.cpu.fetch: [tid:0] Adding instructions to queue to decode.
- 136000: global: DynInst: [sn:129] Instruction created. Instcount for system.cpu = 121
+ 136000: global: DynInst: [sn:129] Instruction created. Instcount for system.cpu = 120
  136000: system.cpu.fetch: [tid:0] Instruction PC (0x401074=>0x401076).(2=>3) created [sn:129].
  136000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : st   t1b, DS:[rax]
  136000: system.cpu.fetch: [tid:0] Fetch queue entry created (1/128).
@@ -9633,15 +9641,15 @@ O3CPU: Ticking main, O3CPU.
 	displacement = 0
 	dispSize = 0}
 
- 136000: global: DynInst: [sn:130] Instruction created. Instcount for system.cpu = 122
+ 136000: global: DynInst: [sn:130] Instruction created. Instcount for system.cpu = 121
  136000: system.cpu.fetch: [tid:0] Instruction PC (0x401076=>0x401078).(0=>1) created [sn:130].
  136000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
  136000: system.cpu.fetch: [tid:0] Fetch queue entry created (2/128).
- 136000: global: DynInst: [sn:131] Instruction created. Instcount for system.cpu = 123
+ 136000: global: DynInst: [sn:131] Instruction created. Instcount for system.cpu = 122
  136000: system.cpu.fetch: [tid:0] Instruction PC (0x401076=>0x401078).(1=>2) created [sn:131].
  136000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : add   t1b, t1b, al
  136000: system.cpu.fetch: [tid:0] Fetch queue entry created (3/128).
- 136000: global: DynInst: [sn:132] Instruction created. Instcount for system.cpu = 124
+ 136000: global: DynInst: [sn:132] Instruction created. Instcount for system.cpu = 123
  136000: system.cpu.fetch: [tid:0] Instruction PC (0x401076=>0x401078).(2=>3) created [sn:132].
  136000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : st   t1b, DS:[rax]
  136000: system.cpu.fetch: [tid:0] Fetch queue entry created (4/128).
@@ -9660,15 +9668,15 @@ O3CPU: Ticking main, O3CPU.
 	displacement = 0
 	dispSize = 0}
 
- 136000: global: DynInst: [sn:133] Instruction created. Instcount for system.cpu = 125
+ 136000: global: DynInst: [sn:133] Instruction created. Instcount for system.cpu = 124
  136000: system.cpu.fetch: [tid:0] Instruction PC (0x401078=>0x40107a).(0=>1) created [sn:133].
  136000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
  136000: system.cpu.fetch: [tid:0] Fetch queue entry created (5/128).
- 136000: global: DynInst: [sn:134] Instruction created. Instcount for system.cpu = 126
+ 136000: global: DynInst: [sn:134] Instruction created. Instcount for system.cpu = 125
  136000: system.cpu.fetch: [tid:0] Instruction PC (0x401078=>0x40107a).(1=>2) created [sn:134].
  136000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : add   t1b, t1b, al
  136000: system.cpu.fetch: [tid:0] Fetch queue entry created (6/128).
- 136000: global: DynInst: [sn:135] Instruction created. Instcount for system.cpu = 127
+ 136000: global: DynInst: [sn:135] Instruction created. Instcount for system.cpu = 126
  136000: system.cpu.fetch: [tid:0] Instruction PC (0x401078=>0x40107a).(2=>3) created [sn:135].
  136000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : st   t1b, DS:[rax]
  136000: system.cpu.fetch: [tid:0] Fetch queue entry created (7/128).
@@ -9687,15 +9695,15 @@ O3CPU: Ticking main, O3CPU.
 	displacement = 0
 	dispSize = 0}
 
- 136000: global: DynInst: [sn:136] Instruction created. Instcount for system.cpu = 128
+ 136000: global: DynInst: [sn:136] Instruction created. Instcount for system.cpu = 127
  136000: system.cpu.fetch: [tid:0] Instruction PC (0x40107a=>0x40107c).(0=>1) created [sn:136].
  136000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
  136000: system.cpu.fetch: [tid:0] Fetch queue entry created (8/128).
- 136000: global: DynInst: [sn:137] Instruction created. Instcount for system.cpu = 129
+ 136000: global: DynInst: [sn:137] Instruction created. Instcount for system.cpu = 128
  136000: system.cpu.fetch: [tid:0] Instruction PC (0x40107a=>0x40107c).(1=>2) created [sn:137].
  136000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : add   t1b, t1b, al
  136000: system.cpu.fetch: [tid:0] Fetch queue entry created (9/128).
- 136000: global: DynInst: [sn:138] Instruction created. Instcount for system.cpu = 130
+ 136000: global: DynInst: [sn:138] Instruction created. Instcount for system.cpu = 129
  136000: system.cpu.fetch: [tid:0] Instruction PC (0x40107a=>0x40107c).(2=>3) created [sn:138].
  136000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : st   t1b, DS:[rax]
  136000: system.cpu.fetch: [tid:0] Fetch queue entry created (10/128).
@@ -10097,15 +10105,15 @@ O3CPU: Ticking main, O3CPU.
 	displacement = 0
 	dispSize = 0}
 
- 136500: global: DynInst: [sn:139] Instruction created. Instcount for system.cpu = 131
+ 136500: global: DynInst: [sn:139] Instruction created. Instcount for system.cpu = 130
  136500: system.cpu.fetch: [tid:0] Instruction PC (0x40107c=>0x40107e).(0=>1) created [sn:139].
  136500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
  136500: system.cpu.fetch: [tid:0] Fetch queue entry created (1/128).
- 136500: global: DynInst: [sn:140] Instruction created. Instcount for system.cpu = 132
+ 136500: global: DynInst: [sn:140] Instruction created. Instcount for system.cpu = 131
  136500: system.cpu.fetch: [tid:0] Instruction PC (0x40107c=>0x40107e).(1=>2) created [sn:140].
  136500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : add   t1b, t1b, al
  136500: system.cpu.fetch: [tid:0] Fetch queue entry created (2/128).
- 136500: global: DynInst: [sn:141] Instruction created. Instcount for system.cpu = 133
+ 136500: global: DynInst: [sn:141] Instruction created. Instcount for system.cpu = 132
  136500: system.cpu.fetch: [tid:0] Instruction PC (0x40107c=>0x40107e).(2=>3) created [sn:141].
  136500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : st   t1b, DS:[rax]
  136500: system.cpu.fetch: [tid:0] Fetch queue entry created (3/128).
@@ -10124,15 +10132,15 @@ O3CPU: Ticking main, O3CPU.
 	displacement = 0
 	dispSize = 0}
 
- 136500: global: DynInst: [sn:142] Instruction created. Instcount for system.cpu = 134
+ 136500: global: DynInst: [sn:142] Instruction created. Instcount for system.cpu = 133
  136500: system.cpu.fetch: [tid:0] Instruction PC (0x40107e=>0x401080).(0=>1) created [sn:142].
  136500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
  136500: system.cpu.fetch: [tid:0] Fetch queue entry created (4/128).
- 136500: global: DynInst: [sn:143] Instruction created. Instcount for system.cpu = 135
+ 136500: global: DynInst: [sn:143] Instruction created. Instcount for system.cpu = 134
  136500: system.cpu.fetch: [tid:0] Instruction PC (0x40107e=>0x401080).(1=>2) created [sn:143].
  136500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : add   t1b, t1b, al
  136500: system.cpu.fetch: [tid:0] Fetch queue entry created (5/128).
- 136500: global: DynInst: [sn:144] Instruction created. Instcount for system.cpu = 136
+ 136500: global: DynInst: [sn:144] Instruction created. Instcount for system.cpu = 135
  136500: system.cpu.fetch: [tid:0] Instruction PC (0x40107e=>0x401080).(2=>3) created [sn:144].
  136500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : st   t1b, DS:[rax]
  136500: system.cpu.fetch: [tid:0] Fetch queue entry created (6/128).
@@ -12065,7 +12073,7 @@ O3PipeView:dispatch:80500
 O3PipeView:issue:81500
 O3PipeView:complete:82000
 O3PipeView:retire:83000:store:149000
- 149000: global: DynInst: [sn:4] Instruction destroyed. Instcount for system.cpu = 135
+ 149000: global: DynInst: [sn:4] Instruction destroyed. Instcount for system.cpu = 134
  149000: system.cpu: 
 
 O3CPU: Ticking main, O3CPU.
@@ -12152,7 +12160,7 @@ O3PipeView:dispatch:80500
 O3PipeView:issue:81500
 O3PipeView:complete:82000
 O3PipeView:retire:83000:store:150000
- 150000: global: DynInst: [sn:6] Instruction destroyed. Instcount for system.cpu = 134
+ 150000: global: DynInst: [sn:6] Instruction destroyed. Instcount for system.cpu = 133
  150000: system.cpu: 
 
 O3CPU: Ticking main, O3CPU.

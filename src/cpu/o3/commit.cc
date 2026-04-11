@@ -969,6 +969,10 @@ Commit::commitInsts()
 
             rob->retireHead(commit_thread);
 
+            if (head_inst->isLoad() && head_inst->isBypassedLoad()) {
+                head_inst->savedRequest->discard();
+            }
+
             // PHAST training
             // only want to report a violation when we're not on a misspeculated path
             if (head_inst->squashedDueToMemOrder && !updatedMemDep
@@ -1314,7 +1318,6 @@ Commit::commitHead(const DynInstPtr &head_inst, unsigned inst_num)
             renameMap[tid]->setEntry(head_inst->flattenedDestIdx(0), actualValueReg);
 
             commitStatus[tid] = ROBSquashing;
-            //? Do we squash everything or just dependent instructions? 
             squashAll(tid);
             return false;
         }
@@ -1353,6 +1356,10 @@ Commit::commitHead(const DynInstPtr &head_inst, unsigned inst_num)
 
     // Finally clear the head ROB entry.
     rob->retireHead(tid);
+
+    if (head_inst->isLoad() && head_inst->isBypassedLoad()) {
+        head_inst->savedRequest->discard();
+    }
 
 #if TRACING_ON
     if (debug::O3PipeView) {
