@@ -25,7 +25,7 @@ SMB::predictSourceStore(InstSeqNum load_seq_num)
     }
 
     if (predictions.find(load_seq_num) == predictions.end()) {
-        return -1;
+        return 0;
     }
     return predictions[load_seq_num];
 }
