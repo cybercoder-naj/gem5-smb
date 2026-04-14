@@ -7,7 +7,7 @@ set -e
 pwd=`dirname $0`
 filename=`basename $1`
 
-./my-progs/build
+scons build/X86/gem5.opt --ignore-style -j20
 
 echo -en "Compiling $filename.s..."
 gcc -nostdlib -no-pie $pwd/$filename.s -o $pwd/$filename
