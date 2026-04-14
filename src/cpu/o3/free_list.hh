@@ -80,7 +80,10 @@ class SimpleFreeList
     SimpleFreeList() {};
 
     /** Add a physical register to the free list */
-    void addReg(PhysRegIdPtr reg) { freeRegs.push(reg); }
+    void addReg(PhysRegIdPtr reg) { 
+        assert(reg->getLogicalDependents() <= 0);
+        freeRegs.push(reg); 
+    }
 
     /** Add physical registers to the free list */
     template<class InputIt>

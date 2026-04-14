@@ -122,6 +122,7 @@ class SimpleRenameMap
     lookup(const RegId& arch_reg) const
     {
         assert(arch_reg.index() <= map.size());
+        // todo assert the phys reg logical dependents
         return map[arch_reg.index()];
     }
 

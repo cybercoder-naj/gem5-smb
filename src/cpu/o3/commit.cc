@@ -1290,6 +1290,36 @@ Commit::commitHead(const DynInstPtr &head_inst, unsigned inst_num)
         return false;
     }
 
+    if (head_inst->isBypassedLoad()) {
+        bool addrOrMemOrderViolation = iewStage->ldstQueue.checkSmbViolation(tid, head_inst);
+        
+        PhysRegIdPtr actualValueReg = head_inst->renamedDestIdx(0);
+        PhysRegIdPtr specValueReg = head_inst->smbSrcStorePhysReg;
+        assert(specValueReg);
+        RegVal actualValue = cpu->getReg(actualValueReg, tid);
+        RegVal specValue = cpu->getReg(specValueReg, tid);
+        bool valueMismatch = actualValue != specValue;
+
+        if (addrOrMemOrderViolation && valueMismatch) {
+            DPRINTF(Commit, "[tid:%i] [sn:%llu] Bypassed load has both address/mem order violation and value mismatch. "
+                    "Actual value: %#x, Speculated value: %#x\n",
+                    tid, head_inst->seqNum, actualValue, specValue);
+            
+            commitStatus[tid] = ROBSquashing;
+            squashAll(tid);
+            return false;
+        } else if (addrOrMemOrderViolation || valueMismatch) {
+            DPRINTF(Commit, "[tid:%i] [sn:%llu] FARTS bypassed load may have an issue. "
+                    "Address/Mem order violation: %s, Value mismatch: %s. ",
+                    tid, head_inst->seqNum,
+                    addrOrMemOrderViolation ? "Yes" : "No",
+                    valueMismatch ? "Yes" : "No");
+            return false;
+        }
+
+        head_inst->setCompleted();
+    }
+
     updateComInstStats(head_inst);
 
     DPRINTF(Commit,

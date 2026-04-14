@@ -190,6 +190,7 @@ class DynInst : public ExecContext, public RefCounted
         ReqMade,
         MemOpDone,
         HtmFromTransaction,
+        BypassedLoad,
         MaxFlags
     };
 
@@ -340,6 +341,9 @@ class DynInst : public ExecContext, public RefCounted
     /** The effective physical address. */
     Addr physEffAddr = 0;
 
+    /** The source store sequence number predicted by SMB. */
+    InstSeqNum smbStoreSeqNum = 0;
+
     /** The memory request flags (from translation). */
     unsigned memReqFlags = 0;
 
@@ -356,6 +360,8 @@ class DynInst : public ExecContext, public RefCounted
     /** Store queue index. */
     ssize_t sqIdx = -1;
     typename LSQUnit::SQIterator sqIt;
+    /** Iterator of the SQ pointing to the SMB predicted source store. */
+    typename LSQUnit::SQIterator smbPredStoreIt;
 
     /** Info needed for each load for PHAST */
     struct MemDepInfo {
@@ -376,6 +382,8 @@ class DynInst : public ExecContext, public RefCounted
         /** Was this load predicted to be dependent by the depPred? */
         bool predicted = false;
     } memDepInfo;
+
+    PhysRegIdPtr smbSrcStorePhysReg = nullptr;
 
     /////////////////////// TLB Miss //////////////////////
     /**
@@ -608,6 +616,17 @@ class DynInst : public ExecContext, public RefCounted
     bool isHtmStop() const { return staticInst->isHtmStop(); }
     bool isHtmCancel() const { return staticInst->isHtmCancel(); }
     bool isHtmCmd() const { return staticInst->isHtmCmd(); }
+
+    bool isBypassedLoad() const {
+        return staticInst->isLoad() && instFlags.test(BypassedLoad);
+    }
+
+    void setBypassedLoad(PhysRegIdPtr phys_reg_id) {
+        assert(staticInst->isLoad());
+        instFlags.set(BypassedLoad);
+        smbSrcStorePhysReg = phys_reg_id;
+        
+    }
 
     uint64_t
     getHtmTransactionUid() const override

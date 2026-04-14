@@ -52,6 +52,7 @@
 #include "cpu/o3/free_list.hh"
 #include "cpu/o3/iew.hh"
 #include "cpu/o3/limits.hh"
+#include "cpu/o3/smb.hh"
 #include "cpu/timebuf.hh"
 #include "sim/probe/probe.hh"
 
@@ -461,6 +462,12 @@ class Rename
 
     /** The maximum skid buffer size. */
     unsigned skidBufferMax;
+
+    /** Map of store instructions to their physical register mappings containing the value. */
+    std::unordered_map<InstSeqNum, PhysRegIdPtr> storeToPhysReg;
+
+    /** The predictor for speculative memory bypassing. */
+    SMB smb;
 
     /** Enum to record the source of a structure full stall.  Can come from
      * either ROB, IQ, LSQ, and it is priortized in that order.

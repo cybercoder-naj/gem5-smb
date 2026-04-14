@@ -726,6 +726,13 @@ class LSQ
      */
     bool violation(ThreadID tid);
 
+    /**
+     * Checks if a load-predicted store causes a memory ordering violation.
+     * @param tid Thread ID of the load.
+     * @param load_inst The load instruction that is being checked.
+     */
+    bool checkSmbViolation(ThreadID tid, DynInstPtr load_inst);
+
     /** Gets the instruction that caused the memory ordering violation. */
     DynInstPtr getMemDepViolator(ThreadID tid);
 
