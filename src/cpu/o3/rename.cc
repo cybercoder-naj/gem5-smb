@@ -1020,7 +1020,7 @@ Rename::removeFromHistory(InstSeqNum inst_seq_num, ThreadID tid)
                 DPRINTF(Rename, "[tid:%i] Cannot free phys reg %i (%s), logical dependents %i\n",
                         tid, hb_it->prevPhysReg->index(),
                         hb_it->prevPhysReg->className(),
-                        hb_it->prevPhysReg->getLogicalDependents()); 
+                        hb_it->prevPhysReg->getLogicalDependents());
             }
         }
 
@@ -1163,11 +1163,11 @@ Rename::renameDestRegs(const DynInstPtr &inst, ThreadID tid)
                     PhysRegIdPtr store_phys_reg = storeToPhysReg[smb_store_seqnum];
                     assert(store_phys_reg);
                     assert(store_phys_reg->getLogicalDependents() > 0);
-                    // Also since we know that the store has not yet committed, 
-                    // We guarantee that the physical register has not yet been freed, 
+                    // Also since we know that the store has not yet committed,
+                    // We guarantee that the physical register has not yet been freed,
                     // AND it does not point to an overwritten value.
 
-                    inst->setBypassedLoad(store_phys_reg);
+                    inst->setBypassedLoad(smb_store_seqnum, store_phys_reg);
 
                     // Rewrite the RAT entry so the load dest_reg -> smb_phys_reg
                     map->setEntry(flat_dest_regid, store_phys_reg);

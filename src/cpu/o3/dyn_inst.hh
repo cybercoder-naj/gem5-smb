@@ -621,11 +621,11 @@ class DynInst : public ExecContext, public RefCounted
         return staticInst->isLoad() && instFlags.test(BypassedLoad);
     }
 
-    void setBypassedLoad(PhysRegIdPtr phys_reg_id) {
+    void setBypassedLoad(InstSeqNum seq_num, PhysRegIdPtr phys_reg_id) {
         assert(staticInst->isLoad());
         instFlags.set(BypassedLoad);
         smbSrcStorePhysReg = phys_reg_id;
-        
+        smbStoreSeqNum = seq_num;
     }
 
     uint64_t

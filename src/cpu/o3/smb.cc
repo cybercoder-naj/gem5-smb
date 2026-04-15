@@ -33,7 +33,7 @@ SMB::predictSourceStore(InstSeqNum load_seq_num)
 void
 SMB::loadPredictions()
 {
-  std::ifstream infile("/home/nishant/Programming/gem5-smb/my-progs/exit.pred");
+  std::ifstream infile("/workspaces/gem5-smb/my-progs/exit.pred");
   if (!infile.is_open()) {
     throw std::runtime_error("Could not open SMB predictions file.");
   }

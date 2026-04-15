@@ -343,7 +343,6 @@ LSQUnit::insertLoad(const DynInstPtr &load_inst)
 
         while (smb_store_it != storeQueue.begin()) {
             if (smb_store_it->instruction()->seqNum == load_inst->smbStoreSeqNum) {
-                load_inst->sqIt = smb_store_it;
                 break;
             }
             --smb_store_it;
@@ -614,7 +613,7 @@ LSQUnit::checkViolations(typename LoadQueue::iterator& loadIt,
     return NoFault;
 }
 
-bool 
+bool
 LSQUnit::checkSmbViolation(DynInstPtr load_inst) {
     auto store_it = load_inst->smbPredStoreIt;
     assert(store_it->valid());
@@ -642,11 +641,11 @@ LSQUnit::checkSmbViolation(DynInstPtr load_inst) {
 
         if (load_addr_end >= store_addr_start && load_addr_start <= store_addr_end) {
             DPRINTF(LSQUnit, "Detected intervening store SMB violation with load [sn:%lli] and store [sn:%lli]. Load address: %#x, Store address: %#x\n",
-                    load_inst->seqNum, store_it->instruction()->seqNum, load_inst->effAddr, store_it->instruction()->effAddr); 
+                    load_inst->seqNum, store_it->instruction()->seqNum, load_inst->effAddr, store_it->instruction()->effAddr);
 
             return true;
         }
-    } 
+    }
 
     return false;
 }
