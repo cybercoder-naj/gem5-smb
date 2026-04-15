@@ -1292,7 +1292,7 @@ Commit::commitHead(const DynInstPtr &head_inst, unsigned inst_num)
 
     if (head_inst->isBypassedLoad()) {
         bool addrOrMemOrderViolation = iewStage->ldstQueue.checkSmbViolation(tid, head_inst);
-        
+
         PhysRegIdPtr actualValueReg = head_inst->renamedDestIdx(0);
         PhysRegIdPtr specValueReg = head_inst->smbSrcStorePhysReg;
         assert(specValueReg);
@@ -1304,7 +1304,7 @@ Commit::commitHead(const DynInstPtr &head_inst, unsigned inst_num)
             DPRINTF(Commit, "[tid:%i] [sn:%llu] Bypassed load has both address/mem order violation and value mismatch. "
                     "Actual value: %#x, Speculated value: %#x\n",
                     tid, head_inst->seqNum, actualValue, specValue);
-            
+
             commitStatus[tid] = ROBSquashing;
             squashAll(tid);
             return false;
@@ -1314,6 +1314,9 @@ Commit::commitHead(const DynInstPtr &head_inst, unsigned inst_num)
                     tid, head_inst->seqNum,
                     addrOrMemOrderViolation ? "Yes" : "No",
                     valueMismatch ? "Yes" : "No");
+
+            commitStatus[tid] = ROBSquashing;
+            squashAll(tid);
             return false;
         }
 
