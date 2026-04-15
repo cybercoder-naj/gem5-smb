@@ -148,7 +148,11 @@ Rename::RenameStats::RenameStats(statistics::Group *parent)
       ADD_STAT(tempSerializing, statistics::units::Count::get(),
                "count of temporary serializing insts renamed"),
       ADD_STAT(skidInsts, statistics::units::Count::get(),
-               "count of insts added to the skid buffer")
+               "count of insts added to the skid buffer"),
+      ADD_STAT(bypassedLoads, statistics::units::Count::get(),
+               "count of bypassed loads renamed"),
+      ADD_STAT(smbStoreOutsideInstWindow, statistics::units::Count::get(),
+               "count of stores that are outside the instruction window")
 {
     squashCycles.prereq(squashCycles);
     idleCycles.prereq(idleCycles);
@@ -179,6 +183,9 @@ Rename::RenameStats::RenameStats(statistics::Group *parent)
     serializing.flags(statistics::total);
     tempSerializing.flags(statistics::total);
     skidInsts.flags(statistics::total);
+
+    bypassedLoads.flags(statistics::total);
+    smbStoreOutsideInstWindow.flags(statistics::total);
 }
 
 void
@@ -1159,6 +1166,8 @@ Rename::renameDestRegs(const DynInstPtr &inst, ThreadID tid)
                             "Cannot bypass load [sn:%llu]."
                             "SMB source store has already committed.\n",
                             tid, inst->seqNum);
+            
+                    ++stats.smbStoreOutsideInstWindow;
                 } else {
                     PhysRegIdPtr store_phys_reg = storeToPhysReg[smb_store_seqnum];
                     assert(store_phys_reg);
@@ -1168,6 +1177,7 @@ Rename::renameDestRegs(const DynInstPtr &inst, ThreadID tid)
                     // AND it does not point to an overwritten value.
 
                     inst->setBypassedLoad(smb_store_seqnum, store_phys_reg);
+                    ++stats.bypassedLoads;
 
                     // Rewrite the RAT entry so the load dest_reg -> smb_phys_reg
                     map->setEntry(flat_dest_regid, store_phys_reg);

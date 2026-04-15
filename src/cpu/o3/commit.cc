@@ -169,6 +169,8 @@ Commit::CommitStats::CommitStats(CPU *cpu, Commit *commit)
                "Class of committed instruction"),
       ADD_STAT(memOrderViolationEvents, statistics::units::Count::get(),
                "Number of memory order violations"),
+      ADD_STAT(bypassedLoadViolationEvents, statistics::units::Count::get(),
+               "Number of bypassed load violations"),
       ADD_STAT(commitEligibleSamples, statistics::units::Cycle::get(),
                "number cycles where commit BW limit reached")
 {
@@ -1306,6 +1308,7 @@ Commit::commitHead(const DynInstPtr &head_inst, unsigned inst_num)
                     tid, head_inst->seqNum, actualValue, specValue);
 
             commitStatus[tid] = ROBSquashing;
+            ++stats.bypassedLoadViolationEvents;
             squashAll(tid);
             return false;
         } else if (addrOrMemOrderViolation || valueMismatch) {
@@ -1316,6 +1319,7 @@ Commit::commitHead(const DynInstPtr &head_inst, unsigned inst_num)
                     valueMismatch ? "Yes" : "No");
 
             commitStatus[tid] = ROBSquashing;
+            ++stats.bypassedLoadViolationEvents;
             squashAll(tid);
             return false;
         }
