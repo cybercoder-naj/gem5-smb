@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+set -e
+
+pwd=`dirname $0`
+filename=`basename $1`
+debugflags=$2
+
+if [ -z "$debugflags" ]; then
+  debugflags="Exec"
+fi
+
+scons build/ARM/gem5.opt --ignore-style -j32
+
+export ADDR_FILE=$1-addrs
+./build/ARM/gem5.opt \
+  --debug-flags=$debugflags \
+  --debug-file=../$pwd/coremark-$filename.debug \
+  configs/deprecated/example/se.py \
+  --cmd=$1 \
+  -n 1 \
+  --mem-type SimpleMemory \
+  --caches \
+  --l2cache \
+  --cpu-type O3CPU \
+  --cpu-clock 1GHz \
+  -I 1000000

@@ -79,6 +79,7 @@ Fetch::IcachePort::IcachePort(Fetch *_fetch, CPU *_cpu) :
         RequestPort(_cpu->name() + ".icache_port"), fetch(_fetch)
 {}
 
+static void load_addresses();
 
 Fetch::Fetch(CPU *_cpu, const BaseO3CPUParams &params)
     : fetchPolicy(params.smtFetchPolicy),
@@ -143,6 +144,8 @@ Fetch::Fetch(CPU *_cpu, const BaseO3CPUParams &params)
 
     // Get the size of an instruction.
     instSize = decoder[0]->moreBytesSize();
+
+    load_addresses();
 }
 
 std::string Fetch::name() const { return cpu->name() + ".fetch"; }
@@ -1016,6 +1019,35 @@ Fetch::checkSignalsAndUpdate(ThreadID tid)
     return false;
 }
 
+std::unordered_set<Addr> stack_acc_addrs;
+static void load_addresses() {
+    std::string filename = std::string(std::getenv("ADDR_FILE"));
+
+    std::ifstream inputFile(filename);
+
+    if (!inputFile.is_open()) {
+        std::cerr << "Error opening file: " << filename << std::endl;
+        exit(1);
+    }
+
+    std::string line;
+    while (std::getline(inputFile, line)) {
+        std::istringstream iss(line);
+        uint64_t address;
+        int flag;
+        if (iss >> address >> flag) {
+            if (flag == 1) {}
+            else if (flag == 0) {
+                stack_acc_addrs.insert(address);
+            } else {
+                std::cerr << "Invalid flag (expected 0 or 1): " << line << std::endl;
+            }
+        } else {
+            std::cerr << "Invalid input: " << line << std::endl;
+        }
+    }
+}
+
 DynInstPtr
 Fetch::buildInst(ThreadID tid, StaticInstPtr staticInst,
         StaticInstPtr curMacroop, const PCStateBase &this_pc,
@@ -1065,6 +1097,10 @@ Fetch::buildInst(ThreadID tid, StaticInstPtr staticInst,
 
     // Keep track of if we can take an interrupt at this boundary
     delayedCommit[tid] = instruction->isDelayedCommit();
+
+    if ((instruction->isLoad() || instruction->isStore()) && stack_acc_addrs.count(this_pc.instAddr())) {
+        instruction->isStackAcc = true;
+    }
 
     return instruction;
 }

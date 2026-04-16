@@ -1106,12 +1106,35 @@ Rename::renameSrcRegs(const DynInstPtr &inst, ThreadID tid)
                     renamed_reg->className());
         }
 
-        if (inst->isStore() && src_idx == 2) {
+        if (inst->isStore() && inst->isStackAcc) {
+            DPRINTF(Rename,
+                    "[tid:%i] "
+                    "Store instruction with PC %s accesses stack. "
+                    "Registering sequence number %llu in SMB predictor.\n",
+                    tid, inst->pcState(), inst->seqNum);
+            smb.registerStore(inst->seqNum);
             storeToPhysReg[inst->seqNum] = renamed_reg;
         }
 
         ++stats.lookups;
     }
+
+    if (inst->isStore()) {
+        DPRINTF(Rename,
+                "[tid:%i] "
+                "FARTS Store inst [sn:%llu] of PC %s disassembled: %s\n",
+                tid, inst->seqNum, inst->pcState(), inst->staticInst->disassemble(inst->pcState().instAddr()) );
+
+        for (int src_idx = 0; src_idx < num_src_regs; src_idx++) {
+            const RegId& src_reg = inst->srcRegIdx(src_idx);
+            const PhysRegIdPtr renamed_reg = inst->renamedSrcIdx(src_idx);
+            DPRINTF(Rename,
+                    "[tid:%i] "
+                    "Source register %i: %s ==> Register %i (flat: %d) %s\n",
+                    tid, src_idx, src_reg.regClass().regName(src_reg), renamed_reg->index(), renamed_reg->flatIndex(), renamed_reg->className());
+        }
+    }
+
 }
 
 void
@@ -1146,14 +1169,14 @@ Rename::renameDestRegs(const DynInstPtr &inst, ThreadID tid)
                             rename_result.second);
 
 
-        if (inst->isLoad() && dest_idx == 0) {
+        if (dest_idx == 0 && inst->isLoad() && inst->isStackAcc) {
             DPRINTF(Rename,
                     "[tid:%i] "
                     "Querying SMB Predictor for load [sn:%llu] with PC %s.\n",
                     tid, inst->seqNum, inst->pcState());
 
-            InstSeqNum smb_store_seqnum = smb.predictSourceStore(inst->seqNum);
-            if (smb_store_seqnum != 0) {
+            InstSeqNum smb_store_seqnum = smb.predictSourceStore();
+            if (false && smb_store_seqnum != 0) {
                 DPRINTF(Rename,
                         "[tid:%i] "
                         "SMB Predictor predicted store with sequence number "

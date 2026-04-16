@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+set -e
+
+scons build/X86/gem5.$1 --ignore-style -j32

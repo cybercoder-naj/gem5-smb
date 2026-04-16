@@ -385,6 +385,9 @@ class DynInst : public ExecContext, public RefCounted
 
     PhysRegIdPtr smbSrcStorePhysReg = nullptr;
 
+    /** valid if isMemRef() => true. If true, this instruction accesses the stack. */
+    bool isStackAcc = false;
+
     /////////////////////// TLB Miss //////////////////////
     /**
      * Saved memory request (needed when the DTB address translation is

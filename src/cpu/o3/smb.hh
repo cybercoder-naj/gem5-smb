@@ -5,6 +5,7 @@
 #ifndef __CPU_O3_SMB_HH__
 #define __CPU_O3_SMB_HH__
 
+#include <stack>
 #include <string>
 #include <unordered_map>
 
@@ -23,6 +24,9 @@ class SMB
     /** The object name, for DPRINTF. */
     const std::string _name;
 
+    /** Stack of source stores. */
+    std::stack<InstSeqNum> sourceStores;
+
     std::unordered_map<InstSeqNum, InstSeqNum> predictions;
 
     void loadPredictions();
@@ -36,7 +40,9 @@ class SMB
 
     std::string name() const { return _name; }
 
-    InstSeqNum predictSourceStore(InstSeqNum load_seq_num);
+    InstSeqNum predictSourceStore();
+
+    void registerStore(InstSeqNum store);
 };
 
 } // namespace o3

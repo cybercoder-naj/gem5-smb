@@ -4,8 +4,12 @@
 
 #include "cpu/o3/smb.hh"
 
+#include <cassert>
 #include <fstream>
 #include <sstream>
+
+#include "base/trace.hh"
+#include "debug/SMB.hh"
 
 namespace gem5
 {
@@ -17,17 +21,26 @@ SMB::SMB(const std::string &_my_name) :
     _name(_my_name)
 {}
 
-InstSeqNum
-SMB::predictSourceStore(InstSeqNum load_seq_num)
-{
-    if (predictions.empty()) {
-      loadPredictions();
-    }
+void 
+SMB::registerStore(InstSeqNum store) {
+    DPRINTF(SMB, "Registering store [sn:%llu]\n", store);
 
-    if (predictions.find(load_seq_num) == predictions.end()) {
-        return 0;
-    }
-    return predictions[load_seq_num];
+    sourceStores.push(store);
+}
+
+InstSeqNum
+SMB::predictSourceStore()
+{
+  if (sourceStores.empty()) {
+    DPRINTF(SMB, "No source store predictions available.\n");
+    return 0; 
+  }
+
+  auto seq_num = sourceStores.top();
+  DPRINTF(SMB, "Predicting source store [sn:%llu]\n", seq_num);
+
+  sourceStores.pop();
+  return seq_num;
 }
 
 void
