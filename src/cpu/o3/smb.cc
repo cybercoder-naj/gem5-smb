@@ -32,12 +32,12 @@ InstSeqNum
 SMB::predictSourceStore()
 {
   if (sourceStores.empty()) {
-    DPRINTF(SMB, "No source store predictions available.\n");
+    DPRINTF(SMB, "No SMB predictions available.\n");
     return 0; 
   }
 
   auto seq_num = sourceStores.top();
-  DPRINTF(SMB, "Predicting source store [sn:%llu]\n", seq_num);
+  DPRINTF(SMB, "SMB predicting source store [sn:%llu]\n", seq_num);
 
   sourceStores.pop();
   return seq_num;

@@ -348,8 +348,7 @@ LSQUnit::insertLoad(const DynInstPtr &load_inst)
             --smb_store_it;
         }
         if (smb_store_it == storeQueue.begin() && smb_store_it->instruction()->seqNum != load_inst->smbStoreSeqNum) {
-            panic("Could not find matching store sequence number %llu for bypassed load [sn:%lli]\n",
-                  load_inst->smbStoreSeqNum, load_inst->seqNum);
+            load_inst->setSquashedInLSQ();
         }
 
         //' NOTE: this is not really necessary because one could

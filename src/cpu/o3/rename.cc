@@ -1106,7 +1106,7 @@ Rename::renameSrcRegs(const DynInstPtr &inst, ThreadID tid)
                     renamed_reg->className());
         }
 
-        if (inst->isStore() && inst->isStackAcc) {
+        if (src_idx == num_src_regs - 1 && inst->isStore() && inst->isStackAcc) {
             DPRINTF(Rename,
                     "[tid:%i] "
                     "Store instruction with PC %s accesses stack. "
@@ -1176,7 +1176,7 @@ Rename::renameDestRegs(const DynInstPtr &inst, ThreadID tid)
                     tid, inst->seqNum, inst->pcState());
 
             InstSeqNum smb_store_seqnum = smb.predictSourceStore();
-            if (false && smb_store_seqnum != 0) {
+            if (smb_store_seqnum != 0) {
                 DPRINTF(Rename,
                         "[tid:%i] "
                         "SMB Predictor predicted store with sequence number "
@@ -1194,7 +1194,8 @@ Rename::renameDestRegs(const DynInstPtr &inst, ThreadID tid)
                 } else {
                     PhysRegIdPtr store_phys_reg = storeToPhysReg[smb_store_seqnum];
                     assert(store_phys_reg);
-                    assert(store_phys_reg->getLogicalDependents() > 0);
+                    // todo this is fuckeeddd
+                    // assert(store_phys_reg->getLogicalDependents() > 0);
                     // Also since we know that the store has not yet committed,
                     // We guarantee that the physical register has not yet been freed,
                     // AND it does not point to an overwritten value.

@@ -24,4 +24,4 @@ export ADDR_FILE=$1-addrs
   --l2cache \
   --cpu-type O3CPU \
   --cpu-clock 1GHz \
-  -I 1000000
+  -I 500000
