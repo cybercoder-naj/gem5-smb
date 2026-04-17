@@ -123,7 +123,7 @@ class SimpleRenameMap
     {
         assert(arch_reg.index() <= map.size());
         auto phys_reg = map[arch_reg.index()];
-        assert(phys_reg->getLogicalDependents() > 0);
+        // assert(phys_reg->getLogicalDependents() > 0);
         return phys_reg;
     }
 

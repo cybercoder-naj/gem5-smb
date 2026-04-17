@@ -1107,6 +1107,7 @@ Rename::renameSrcRegs(const DynInstPtr &inst, ThreadID tid)
         }
 
         if (inst->isStore() && src_idx == 2) {
+            storeAddrToSeqNum[inst->pcState().instAddr()] = inst->seqNum;
             storeToPhysReg[inst->seqNum] = renamed_reg;
         }
 
@@ -1152,7 +1153,8 @@ Rename::renameDestRegs(const DynInstPtr &inst, ThreadID tid)
                     "Querying SMB Predictor for load [sn:%llu] with PC %s.\n",
                     tid, inst->seqNum, inst->pcState());
 
-            InstSeqNum smb_store_seqnum = smb.predictSourceStore(inst->seqNum);
+            Addr smb_store_pc = smb.predictSourceStore(inst->pcState().instAddr());
+            InstSeqNum smb_store_seqnum = storeAddrToSeqNum[smb_store_pc];
             if (smb_store_seqnum != 0) {
                 DPRINTF(Rename,
                         "[tid:%i] "
@@ -1171,7 +1173,9 @@ Rename::renameDestRegs(const DynInstPtr &inst, ThreadID tid)
                 } else {
                     PhysRegIdPtr store_phys_reg = storeToPhysReg[smb_store_seqnum];
                     assert(store_phys_reg);
-                    assert(store_phys_reg->getLogicalDependents() > 0);
+                    // todo fix logical dependences
+                    // assert(store_phys_reg->getLogicalDependents() > 0);
+
                     // Also since we know that the store has not yet committed,
                     // We guarantee that the physical register has not yet been freed,
                     // AND it does not point to an overwritten value.

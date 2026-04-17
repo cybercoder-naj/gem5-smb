@@ -1109,6 +1109,34 @@ Commit::commitInsts()
                     }
                 }
 
+                if (head_inst->isLoad() || head_inst->isStore()) {
+                    assert(head_inst->effAddrValid());
+
+                    const char* env = std::getenv("MEM_TRACE_FILE");
+                    if (!env) {
+                        DPRINTF(Commit, "MEM_TRACE_FILE environment variable not set. No predictions loaded.\n");
+                        return;
+                    }
+
+                    std::string trace_file = std::string(env);
+                    std::ofstream outfile(trace_file, std::ios::app);
+                    if (!outfile.is_open()) {
+                        DPRINTF(Commit, "Could not open MEM_TRACE_FILE\n");
+                        return;
+                    }
+
+                    InstSeqNum seq_num = head_inst->seqNum;
+                    Addr pc_state = head_inst->pcState().instAddr();
+                    Addr eff_addr = head_inst->effAddr;
+                    bool is_load = head_inst->isLoad();
+
+                    outfile << "# " << head_inst->staticInst->disassemble(head_inst->pcState().instAddr()) << "\n"; 
+                    outfile << seq_num << " "
+                        << std::hex << pc_state << " "
+                        << std::hex << eff_addr << " "
+                        << (is_load ? "L" : "S") << "\n";
+                }
+
                 // Check if an instruction just enabled interrupts and we've
                 // previously had an interrupt pending that was not handled
                 // because interrupts were subsequently disabled before the

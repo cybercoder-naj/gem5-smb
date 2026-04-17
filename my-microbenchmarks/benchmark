@@ -1,0 +1,72 @@
+#!/usr/bin/env bash
+
+set -e
+
+pwd=`dirname $0`
+
+progs=$(ls $pwd/*/*.s)
+
+scons build/X86/gem5.opt --ignore-style -j32
+
+for filename in $progs; do
+  gcc -nostdlib -no-pie $filename -o ${filename%.s}
+  # objdump -d ${filename%.s} > ${filename%.s}.dump
+done
+
+read -p "Continue? [Y/n] " yn
+case $yn in
+    [Nn]* ) echo "Aborted."; exit 1;;
+    * ) ;;  # anything else (including Enter) continues
+esac
+
+for filename in $progs; do
+  base=$(basename $filename .s)
+  prog_wd=$(dirname $filename)
+
+  export MEM_TRACE_FILE="$prog_wd/$base.memtrace"
+  echo "" > $MEM_TRACE_FILE
+
+  echo "=== Running $base (no SMB) ==="
+  if ! ./build/X86/gem5.opt \
+    --debug-flags=O3CPUAll,O3PipeView \
+    --debug-file=../$prog_wd/$base-trace-no-smb.out \
+    configs/deprecated/example/se.py \
+    --cmd=$prog_wd/$base \
+    -n 1 \
+    --mem-type SimpleMemory \
+    --caches \
+    --l2cache \
+    --cpu-type X86O3CPU \
+    --cpu-clock 1GHz \
+    -I 1000000; then
+      echo "  [FAILED] $base (no SMB) run failed. skipping."
+      unset MEM_TRACE_FILE
+      continue
+  fi
+  cp m5out/stats.txt $prog_wd/$base-stats-no-smb.txt
+
+  export SMB_PREDICTIONS_FILE="$prog_wd/$base.predictions"
+  echo "" > $SMB_PREDICTIONS_FILE
+  $pwd/memprofile $MEM_TRACE_FILE $SMB_PREDICTIONS_FILE
+  unset MEM_TRACE_FILE
+
+  echo "=== Running $base (with SMB) ==="
+  if ! ./build/X86/gem5.opt \
+    --debug-flags=O3CPUAll,O3PipeView \
+    --debug-file=../$prog_wd/$base-trace-smb.out \
+    configs/deprecated/example/se.py \
+    --cmd=$prog_wd/$base \
+    -n 1 \
+    --mem-type SimpleMemory \
+    --caches \
+    --l2cache \
+    --cpu-type X86O3CPU \
+    --cpu-clock 1GHz \
+    -I 1000000; then
+      echo "  [FAILED] $base (with SMB) run failed. skipping."
+      unset SMB_PREDICTIONS_FILE
+      continue
+  fi
+  cp m5out/stats.txt $prog_wd/$base-stats-smb.txt
+  unset SMB_PREDICTIONS_FILE
+done

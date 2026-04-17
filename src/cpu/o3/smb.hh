@@ -5,9 +5,11 @@
 #ifndef __CPU_O3_SMB_HH__
 #define __CPU_O3_SMB_HH__
 
+#include <fstream>
 #include <string>
 #include <unordered_map>
 
+#include "base/types.hh"
 #include "cpu/o3/dyn_inst_ptr.hh"
 
 namespace gem5
@@ -22,10 +24,8 @@ class SMB
   private:
     /** The object name, for DPRINTF. */
     const std::string _name;
-
-    std::unordered_map<InstSeqNum, InstSeqNum> predictions;
-
-    void loadPredictions();
+    std::ifstream infile;
+    std::unordered_map<Addr, Addr> predictions;
 
   public:
     /** Constructor. */
@@ -36,7 +36,7 @@ class SMB
 
     std::string name() const { return _name; }
 
-    InstSeqNum predictSourceStore(InstSeqNum load_seq_num);
+    Addr predictSourceStore(Addr load_pc);
 };
 
 } // namespace o3

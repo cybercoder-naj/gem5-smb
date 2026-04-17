@@ -1,0 +1,5 @@
+
+#   MOV_M_R : st   rax, SS:[t0 + rsp + 0xffffffffffffffd8]
+2 401007 7fffffffee08 S
+#   MOV_R_M : ld   rbx, SS:[t0 + rsp + 0xffffffffffffffd8]
+43 401058 7fffffffee08 L

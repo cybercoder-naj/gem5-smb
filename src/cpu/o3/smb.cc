@@ -7,6 +7,9 @@
 #include <fstream>
 #include <sstream>
 
+#include "base/trace.hh"
+#include "debug/SMB.hh"
+
 namespace gem5
 {
 
@@ -15,41 +18,42 @@ namespace o3
 
 SMB::SMB(const std::string &_my_name) :
     _name(_my_name)
-{}
-
-InstSeqNum
-SMB::predictSourceStore(InstSeqNum load_seq_num)
 {
-    if (predictions.empty()) {
-      loadPredictions();
-    }
+  const char* env = std::getenv("SMB_PREDICTIONS_FILE");
+  if (!env) {
+    DPRINTF(SMB, "SMB_PREDICTIONS_FILE environment variable not set. No predictions loaded.\n");
+    return;
+  }
 
-    if (predictions.find(load_seq_num) == predictions.end()) {
-        return 0;
-    }
-    return predictions[load_seq_num];
+  infile.open(env);
+  if (!infile.is_open()) {
+    DPRINTF(SMB, "Could not open SMB predictions file\n");
+  }
 }
 
-void
-SMB::loadPredictions()
+InstSeqNum
+SMB::predictSourceStore(Addr load_pc)
 {
-  std::ifstream infile("/workspaces/gem5-smb/my-progs/exit.pred");
-  if (!infile.is_open()) {
-    throw std::runtime_error("Could not open SMB predictions file.");
+  if (predictions.count(load_pc)) {
+    return predictions[load_pc];
   }
-
+  
   std::string line;
   while (std::getline(infile, line)) {
-    std::stringstream ss(line);
-    int load_seq_num, store_seq_num;
-    char comma;
+    if (line.empty()) continue;
 
-    if (ss >> load_seq_num >> comma >> store_seq_num) {
-      predictions[load_seq_num] = store_seq_num;
-    } else {
-      throw std::runtime_error("Invalid line in SMB predictions file: " + line);
+    std::stringstream ss(line);
+    Addr l_pc, s_pc;
+    if (!(ss >> l_pc >> s_pc)) continue;
+
+    predictions[l_pc] = s_pc;
+
+    if (l_pc == load_pc) {
+      return s_pc;
     }
   }
+
+  return 0;
 }
 
 } // namespace o3
