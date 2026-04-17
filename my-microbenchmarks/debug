@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+set -e
+
+# Usage: ./my-microbenchmarks/debug <prog> [--smb <file>] [--mem-trace <file>] [--debug-flags <flags>]
+prog=$1
+shift
+
+smb_file=""
+mem_trace_file=""
+debugflags="O3CPUAll"
+
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    --smb)          smb_file=$2;       shift 2;;
+    --mem-trace)    mem_trace_file=$2; shift 2;;
+    --debug-flags)  debugflags=$2;     shift 2;;
+    *) echo "Unknown argument: $1"; exit 1;;
+  esac
+done
+
+# Set env vars if provided
+[[ -n $smb_file ]]       && export SMB_PREDICTIONS_FILE=$smb_file
+[[ -n $mem_trace_file ]] && export MEM_TRACE_FILE=$mem_trace_file
+
+scons build/X86/gem5.debug --ignore-style -j32
+
+gdb \
+  -ex "set args --debug-flags=$debugflags configs/deprecated/example/se.py --cmd=$prog -n 1 --mem-type SimpleMemory --caches --l2cache --cpu-type O3CPU --maxinsts=1000000" \
+  ./build/X86/gem5.debug
