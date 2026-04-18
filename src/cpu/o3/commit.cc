@@ -969,6 +969,10 @@ Commit::commitInsts()
 
             rob->retireHead(commit_thread);
 
+            if (head_inst->isLoad() && head_inst->isBypassedLoad()) {
+                head_inst->savedRequest->discard();
+            }
+
             // PHAST training
             // only want to report a violation when we're not on a misspeculated path
             if (head_inst->squashedDueToMemOrder && !updatedMemDep
@@ -1290,6 +1294,37 @@ Commit::commitHead(const DynInstPtr &head_inst, unsigned inst_num)
         return false;
     }
 
+    if (head_inst->isBypassedLoad()) {
+        //? Can we guarantee that smbStoreEffAddr is calculated by this time?
+        if (iewStage->ldstQueue.checkSmbViolation(tid, head_inst)) {
+            DPRINTF(Commit, "[tid:%i] [sn:%llu] Bypassed load violation!\n", tid, head_inst->seqNum);
+
+            // todo update Mascot predictor to fix the mis-speculation. For now, just print a warning.
+            //? Do we need to squash? What if the value is correct but the address is wrong? 
+        }
+
+        auto actualValueReg = head_inst->renamedDestIdx(0); //' fixed because x86 logs
+        auto specValueReg = head_inst->smbSpeculatedReg;
+        assert(specValueReg);
+
+        auto actualValue = cpu->getReg(actualValueReg, tid);
+        auto specValue = cpu->getReg(specValueReg, tid);
+
+        if (actualValue != specValue) {
+            DPRINTF(Commit, "[tid:%i] [sn:%llu] Bypassed load value mismatch! actual value: %#x, speculated value: %#x\n",
+                    tid, head_inst->seqNum, actualValue, specValue);
+
+            //? Is this the correct way to correct the speculation?
+            renameMap[tid]->setEntry(head_inst->flattenedDestIdx(0), actualValueReg);
+
+            commitStatus[tid] = ROBSquashing;
+            squashAll(tid);
+            return false;
+        }
+
+        head_inst->setCompleted();
+    }
+
     updateComInstStats(head_inst);
 
     DPRINTF(Commit,
@@ -1321,6 +1356,10 @@ Commit::commitHead(const DynInstPtr &head_inst, unsigned inst_num)
 
     // Finally clear the head ROB entry.
     rob->retireHead(tid);
+
+    if (head_inst->isLoad() && head_inst->isBypassedLoad()) {
+        head_inst->savedRequest->discard();
+    }
 
 #if TRACING_ON
     if (debug::O3PipeView) {

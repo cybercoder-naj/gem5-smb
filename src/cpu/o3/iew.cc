@@ -544,6 +544,8 @@ IEW::cacheUnblocked()
 void
 IEW::instToCommit(const DynInstPtr& inst)
 {
+    DPRINTF(IEW, "[tid:%i] Adding inst [sn:%llu] to commit queue.\n",
+            inst->thread->threadId(), inst->seqNum);
     // This function should not be called after writebackInsts in a
     // single cycle.  That will cause problems with an instruction
     // being added to the queue to commit without being processed by
@@ -930,7 +932,7 @@ IEW::dispatchInsts(ThreadID tid)
 
         // Check LSQ if inst is LD/ST
         if ((inst->isAtomic() && ldstQueue.sqFull(tid)) ||
-            (inst->isLoad() && ldstQueue.lqFull(tid)) ||
+            (inst->isLoad() && !inst->isBypassedLoad() && ldstQueue.lqFull(tid)) ||
             (inst->isStore() && ldstQueue.sqFull(tid))) {
             DPRINTF(IEW, "[tid:%i] Issue: %s has become full.\n",tid,
                     inst->isLoad() ? "LQ" : "SQ");
@@ -981,18 +983,24 @@ IEW::dispatchInsts(ThreadID tid)
 
             toRename->iewInfo[tid].dispatchedToSQ++;
         } else if (inst->isLoad()) {
-            DPRINTF(IEW, "[tid:%i] Issue: Memory instruction "
-                    "encountered, adding to LSQ.\n", tid);
+            DPRINTF(IEW, "[tid:%i] Issue: Load instruction "
+                    "encountered, attempting to add to LSQ.\n", tid);
 
             // Reserve a spot in the load store queue for this
             // memory access.
-            ldstQueue.insertLoad(inst);
+            if (ldstQueue.maybeInsertLoad(inst)) {
+                DPRINTF(IEW, "[tid:%i] Issue: Successfully added to LSQ.\n",
+                        tid);
+            } else {
+                assert(inst->isBypassedLoad());
+                DPRINTF(IEW, "[tid:%i] Issue: Load was not added to LSQ.\n", tid);
+            }
+
+            toRename->iewInfo[tid].dispatchedToLQ++;
 
             ++iewStats.dispLoadInsts;
 
             add_to_iq = true;
-
-            toRename->iewInfo[tid].dispatchedToLQ++;
         } else if (inst->isStore()) {
             DPRINTF(IEW, "[tid:%i] Issue: Memory instruction "
                     "encountered, adding to LSQ.\n", tid);

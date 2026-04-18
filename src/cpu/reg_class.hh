@@ -417,17 +417,24 @@ class PhysRegId : private RegId
     RegIndex flatIdx;
     int numPinnedWritesToComplete;
     bool pinned;
+    
+    /** 
+     * SMB enables multiple logical registers to be associated with the same physical register.
+     * logicalDependents is needed only if the physical register is holding the value of a store memory operation.
+     * When this variable equals 1, the physical register is only associated with one logical register.
+     */
+    unsigned logicalDependents;
 
   public:
     explicit PhysRegId() : RegId(invalidRegClass, -1), flatIdx(-1),
-                           numPinnedWritesToComplete(0)
+                           numPinnedWritesToComplete(0), logicalDependents(0)
     {}
-
+    
     /** Scalar PhysRegId constructor. */
     explicit PhysRegId(const RegClass &reg_class, RegIndex _regIdx,
               RegIndex _flatIdx)
         : RegId(reg_class, _regIdx), flatIdx(_flatIdx),
-          numPinnedWritesToComplete(0), pinned(false)
+          numPinnedWritesToComplete(0), pinned(false), logicalDependents(0)
     {}
 
     /** Visible RegId methods */
@@ -488,6 +495,10 @@ class PhysRegId : private RegId
 
     void decrNumPinnedWrites() { --numPinnedWrites; }
     void incrNumPinnedWrites() { ++numPinnedWrites; }
+
+    void incrLogicalDependents() { ++logicalDependents; }
+    void decrLogicalDependents() { --logicalDependents; }
+    unsigned getLogicalDependents() const { return logicalDependents; }
 
     bool isPinned() const { return pinned; }
 

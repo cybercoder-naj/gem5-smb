@@ -1,0 +1,15 @@
+
+./my-progs/exit:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+0000000000401000 <_start>:
+  401000:	48 83 ec 08          	sub    $0x8,%rsp
+  401004:	48 c7 c0 ad de 00 00 	mov    $0xdead,%rax
+  40100b:	48 89 04 24          	mov    %rax,(%rsp)
+  40100f:	48 8b 1c 24          	mov    (%rsp),%rbx
+  401013:	48 83 c4 08          	add    $0x8,%rsp
+  401017:	48 c7 c0 3c 00 00 00 	mov    $0x3c,%rax
+  40101e:	48 31 ff             	xor    %rdi,%rdi
+  401021:	0f 05                	syscall

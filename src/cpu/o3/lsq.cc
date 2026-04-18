@@ -217,12 +217,18 @@ LSQ::cachePortBusy(bool is_load)
     }
 }
 
-void
-LSQ::insertLoad(const DynInstPtr &load_inst)
+bool
+LSQ::maybeInsertLoad(const DynInstPtr &load_inst)
 {
     ThreadID tid = load_inst->threadNumber;
 
+    if (load_inst->isBypassedLoad()) {
+        thread[tid].handleBypassedLoad(load_inst);
+        return false;
+    } 
+
     thread[tid].insertLoad(load_inst);
+    return true;
 }
 
 void
@@ -303,6 +309,10 @@ LSQ::violation()
 }
 
 bool LSQ::violation(ThreadID tid) { return thread.at(tid).violation(); }
+
+bool LSQ::checkSmbViolation(ThreadID tid, DynInstPtr load_inst) {
+    return thread.at(tid).checkSmbViolation(load_inst);
+}
 
 DynInstPtr
 LSQ::getMemDepViolator(ThreadID tid)
@@ -1091,7 +1101,8 @@ void
 LSQ::LSQRequest::install()
 {
     if (isLoad()) {
-        _port.loadQueue[_inst->lqIdx].setRequest(this);
+        if (!_inst->isBypassedLoad())
+            _port.loadQueue[_inst->lqIdx].setRequest(this);
     } else {
         // Store, StoreConditional, and Atomic requests are pushed
         // to this storeQueue

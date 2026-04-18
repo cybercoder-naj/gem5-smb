@@ -683,8 +683,11 @@ class LSQ
     /** Ticks the LSQ. */
     void tick();
 
-    /** Inserts a load into the LSQ. */
-    void insertLoad(const DynInstPtr &load_inst);
+    /** 
+     * Inserts a load into the LSQ if it is not bypassed.
+     * @return whether or not the load was inserted into the LSQ (i.e. not bypassed).
+     */
+    bool maybeInsertLoad(const DynInstPtr &load_inst);
     /** Inserts a store into the LSQ. */
     void insertStore(const DynInstPtr &store_inst);
 
@@ -719,6 +722,14 @@ class LSQ
 
     /** Returns whether or not there was a memory ordering violation. */
     bool violation();
+
+    /** 
+     * Checks if a load-predicted store causes a memory ordering violation. 
+     * @param addr The actual address of the load.
+     * @param tid The thread of the load+store.
+     * @param store_it The iterator of the predicted store in the store queue. 
+    */
+    bool checkSmbViolation(ThreadID tid, DynInstPtr load_inst);
 
     /**
      * Returns whether or not there was a memory ordering violation for a

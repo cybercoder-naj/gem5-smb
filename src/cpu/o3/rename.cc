@@ -65,7 +65,8 @@ Rename::Rename(CPU *_cpu, const BaseO3CPUParams &params)
       commitToRenameDelay(params.commitToRenameDelay),
       renameWidth(params.renameWidth),
       numThreads(params.numThreads),
-      stats(_cpu)
+      stats(_cpu),
+      smb(_cpu->name() + ".smb")
 {
     if (renameWidth > MaxWidth)
         fatal("renameWidth (%d) is larger than compiled limit (%d),\n"
@@ -86,6 +87,9 @@ Rename::Rename(CPU *_cpu, const BaseO3CPUParams &params)
         serializeInst[tid] = nullptr;
         serializeOnNextInst[tid] = false;
     }
+
+    //? Should this ever result in memory leaks?
+    storeToPhysReg.clear();
 }
 
 std::string
@@ -609,7 +613,7 @@ Rename::renameInsts(ThreadID tid)
         //For store instruction, check SQ size and take into account the
         //inflight stores
 
-        if (inst->isLoad()) {
+        if (inst->isLoad()) { // todo but bypassed loads don't need to check LQ entries,
             if (calcFreeLQEntries(tid) <= 0) {
                 DPRINTF(Rename, "[tid:%i] Cannot rename due to no free LQ\n",
                         tid);
@@ -1005,7 +1009,18 @@ Rename::removeFromHistory(InstSeqNum inst_seq_num, ThreadID tid)
         // can be recognized because the new mapping is the same as
         // the old one.
         if (hb_it->newPhysReg != hb_it->prevPhysReg) {
-            freeList->addReg(hb_it->prevPhysReg);
+            // Instructions that are committed, theres one less logical dependent.
+            hb_it->prevPhysReg->decrLogicalDependents();
+
+            if (hb_it->prevPhysReg->getLogicalDependents() <= 0) {
+                DPRINTF(Rename, "[tid:%i] Adding phys reg %i (%s) to free list, "
+                        "since it has no more logical dependents [sn:%llu].\n",
+                        tid, hb_it->prevPhysReg->index(),
+                        hb_it->prevPhysReg->className(),
+                        hb_it->instSeqNum);
+
+                freeList->addReg(hb_it->prevPhysReg);
+            }
         }
 
         ++stats.committedMaps;
@@ -1030,6 +1045,9 @@ Rename::renameSrcRegs(const DynInstPtr &inst, ThreadID tid)
         PhysRegIdPtr renamed_reg;
 
         renamed_reg = map->lookup(flat_reg);
+        //! This assertion is false
+        // assert(!flat_reg.isRenameable() || renamed_reg->getLogicalDependents() > 0);
+
         switch (flat_reg.classValue()) {
           case InvalidRegClass:
             break;
@@ -1083,6 +1101,12 @@ Rename::renameSrcRegs(const DynInstPtr &inst, ThreadID tid)
                     renamed_reg->className());
         }
 
+        if (inst->isStore() && src_idx == 2) {
+            DPRINTF(Rename, "Recording store [sn:%llu] %s.\n",
+                    inst->seqNum, inst->staticInst->disassemble(inst->pcState().instAddr()));
+            storeToPhysReg[inst->seqNum] = renamed_reg; //' this index is confirmed with x86 debug logs.
+        }
+
         ++stats.lookups;
     }
 }
@@ -1109,6 +1133,57 @@ Rename::renameDestRegs(const DynInstPtr &inst, ThreadID tid)
 
         scoreboard->unsetReg(rename_result.first);
 
+        // Tell the instruction to rename the appropriate destination
+        // register (dest_idx) to the new physical register
+        // (rename_result.first), and record the previous physical
+        // register that the same logical register was renamed to
+        // (rename_result.second).
+        //
+        // For Bypassed loads, the actual memory value will fill up in this physical register.
+        inst->renameDestReg(dest_idx,
+                            rename_result.first,
+                            rename_result.second);
+
+        // renameMap[ebx] = P5
+        // rename(ebx) = P6, P5
+        // inst->renameDestReg(ebx, P6, P5)
+        // historyBuffer entry = (inst, ebx, P6, P5)
+
+        // BUT in bypassed load case:
+        // renameMap[ebx] = P10 (coming from store)
+        // we still must free P5
+        // and future renameMap[ebx] = PXX, P10
+        // But it is possible that P10 is still used by the other logical registers.
+        // SMB makes it such that 2 or more logical registers can be renamed to the same physical register.
+        // So we need to make sure to only free the physical register when all the logical registers that are renamed to it are squashed or committed.
+        if (inst->isLoad() && dest_idx == 0) { // works in x86 at least.
+            DPRINTF(Rename, "Checking for SMB bypass for Load [sn:%llu] %s.\n",
+                    inst->seqNum, inst->staticInst->disassemble(inst->pcState().instAddr()));
+
+            InstSeqNum smb_store_seqnum = smb.predictSourceStore(inst->seqNum);
+            if (smb_store_seqnum != 0) {
+                // SMB predicted a store that can forward to this load
+                // so we need to rename the load's destination register to the same physical register that the store was renamed to.
+                DPRINTF(Rename, "[sn:%llu] SMB predicted store for bypass.\n",
+                        inst->seqNum);
+                inst->smbStoreSeqNum = smb_store_seqnum;
+
+                auto smb_phys_reg = storeToPhysReg[smb_store_seqnum];
+                assert(smb_phys_reg);
+                inst->setBypassedLoad(smb_phys_reg);
+
+                // Re-write the mapping for this logical register to the physical register.
+                map->setEntry(flat_dest_regid, smb_phys_reg);
+
+                // Since the load is being renamed to the same physical register as the store,
+                // we need to increment the logical dependents of the physical register, since the load is now also depending on it.
+                smb_phys_reg->incrLogicalDependents();
+
+                // For subsequent operations, the load's destination register should be the same as the store's destination register.
+                rename_result.first = smb_phys_reg;
+            }
+        }
+
         DPRINTF(Rename,
                 "[tid:%i] "
                 "Renaming arch reg %i (%s) to physical reg %i (%i).\n",
@@ -1117,28 +1192,21 @@ Rename::renameDestRegs(const DynInstPtr &inst, ThreadID tid)
                 rename_result.first->flatIndex());
 
         // Record the rename information so that a history can be kept.
+        // seqNum of inst, logical instruction, new physical mapping, old physical mapping.
+        // At commit/squash time, the history is traversed to free the old mappings.
         RenameHistory hb_entry(inst->seqNum, flat_dest_regid,
-                               rename_result.first,
-                               rename_result.second);
-
-        historyBuffer[tid].push_front(hb_entry);
+                            rename_result.first,
+                            rename_result.second);
 
         DPRINTF(Rename, "[tid:%i] [sn:%llu] "
                 "Adding instruction to history buffer (size=%i).\n",
                 tid,(*historyBuffer[tid].begin()).instSeqNum,
                 historyBuffer[tid].size());
 
-        // Tell the instruction to rename the appropriate destination
-        // register (dest_idx) to the new physical register
-        // (rename_result.first), and record the previous physical
-        // register that the same logical register was renamed to
-        // (rename_result.second).
-        inst->renameDestReg(dest_idx,
-                            rename_result.first,
-                            rename_result.second);
-
-        ++stats.renamedOperands;
+        historyBuffer[tid].push_front(hb_entry);
     }
+
+    ++stats.renamedOperands;
 }
 
 int

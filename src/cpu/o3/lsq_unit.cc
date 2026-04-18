@@ -316,6 +316,61 @@ LSQUnit::insert(const DynInstPtr &inst)
 }
 
 void
+LSQUnit::handleBypassedLoad(const DynInstPtr &inst)
+{
+    assert(inst->isMemRef() && inst->isLoad() && inst->isBypassedLoad());
+    assert(inst->smbStoreSeqNum != 0);
+
+    auto spec_store_it = storeQueue.end();
+    --spec_store_it;
+
+    // Walking backwards through the store queue to find the store that this load is bypassing. 
+    // The sequence number of the stores are in increasing order.
+    //! CONFIRM
+    while (spec_store_it != storeQueue.begin() && spec_store_it->instruction()->seqNum > inst->smbStoreSeqNum) {
+        --spec_store_it;
+    }
+    if ((spec_store_it == storeQueue.begin() && spec_store_it->instruction()->seqNum != inst->smbStoreSeqNum)
+        || spec_store_it->instruction()->seqNum != inst->smbStoreSeqNum) {
+        panic("Couldn't find the store for this bypassed load!");
+    }
+
+    inst->smbPredStoreIt = spec_store_it;
+    inst->sqIt = storeQueue.end();
+    inst->lqIdx = loadQueue.tail();
+    inst->lqIt = loadQueue.getIterator(inst->lqIdx);
+}
+
+bool 
+LSQUnit::checkSmbViolation(DynInstPtr load_inst) {
+    auto store_it = load_inst->smbPredStoreIt;
+
+    //? Is it possible that Stores may not have resolved their address yet?
+    //? then should we wait?
+
+    // check for a full address match at the position of the store that the load is bypassing
+    if (store_it->valid() && store_it->instruction()->effAddrValid()
+        && (store_it->instruction()->effAddr != load_inst->effAddr)) {
+            return true;
+    }
+
+    ++store_it;
+    for (; store_it != load_inst->sqIt; ++store_it) {
+        Addr load_addr_start = load_inst->effAddr >> depCheckShift;
+        Addr load_addr_end = (load_inst->effAddr + load_inst->effSize - 1) >> depCheckShift;
+
+        auto store_inst = store_it->instruction();
+        Addr store_addr_start = store_inst->effAddr >> depCheckShift;
+        Addr store_addr_end = (store_inst->effAddr + store_inst->effSize - 1) >> depCheckShift;
+
+        if (load_addr_end >= store_addr_start && load_addr_start <= store_addr_end)
+            return true;
+    } 
+
+    return false;
+}
+
+void
 LSQUnit::insertLoad(const DynInstPtr &load_inst)
 {
     assert(!loadQueue.full());
@@ -593,9 +648,6 @@ LSQUnit::checkViolations(typename LoadQueue::iterator& loadIt,
     return NoFault;
 }
 
-
-
-
 Fault
 LSQUnit::executeLoad(const DynInstPtr &inst)
 {
@@ -655,7 +707,7 @@ LSQUnit::executeLoad(const DynInstPtr &inst)
             auto it = inst->lqIt;
             ++it;
 
-            if (checkLoads)
+            if (checkLoads) //? Should I block this check if inst is a bypassed load?
                 return checkViolations(it, inst);
         }
     }
@@ -1326,13 +1378,20 @@ LSQUnit::cacheLineSize()
 Fault
 LSQUnit::read(LSQRequest *request, ssize_t load_idx)
 {
-    LQEntry& load_entry = loadQueue[load_idx];
-    const DynInstPtr& load_inst = load_entry.instruction();
-
-    load_entry.setRequest(request);
+    const DynInstPtr& load_inst = request->instruction();
     assert(load_inst);
-
     assert(!load_inst->isExecuted());
+
+    bool hasLQEntry = load_inst->isLoad() && !load_inst->isBypassedLoad();
+
+    LQEntry* load_entry = nullptr;
+    if (hasLQEntry) {
+        load_entry = &loadQueue[load_idx];
+        assert(load_entry);
+    }
+
+    if (hasLQEntry)
+        load_entry->setRequest(request);
 
     // Make sure this isn't a strictly ordered load
     // A bit of a hackish way to get strictly ordered accesses to work
@@ -1353,7 +1412,8 @@ LSQUnit::read(LSQRequest *request, ssize_t load_idx)
         // Must delete request now that it wasn't handed off to
         // memory.  This is quite ugly.  @todo: Figure out the proper
         // place to really handle request deletes.
-        load_entry.setRequest(nullptr);
+        if(hasLQEntry)
+            load_entry->setRequest(nullptr);
         request->discard();
         return std::make_shared<GenericISA::M5PanicFault>(
             "Strictly ordered load [sn:%llx] PC %s\n",
@@ -1523,7 +1583,8 @@ LSQUnit::read(LSQRequest *request, ssize_t load_idx)
                     // that response packets should be discarded.
                     request->discard();
                     // Avoid checking snoops on this discarded request.
-                    load_entry.setRequest(nullptr);
+                    if (hasLQEntry)
+                        load_entry->setRequest(nullptr);
                 }
 
                 WritebackEvent *wb = new WritebackEvent(load_inst, data_pkt,
@@ -1573,7 +1634,8 @@ LSQUnit::read(LSQRequest *request, ssize_t load_idx)
 
                 // Must discard the request.
                 request->discard();
-                load_entry.setRequest(nullptr);
+                if (hasLQEntry)
+                    load_entry->setRequest(nullptr);
                 return NoFault;
             }
         }
