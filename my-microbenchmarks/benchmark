@@ -11,6 +11,8 @@ scons build/X86/gem5.opt --ignore-style -j32
 for filename in $progs; do
   gcc -nostdlib -no-pie $filename -o ${filename%.s}
   # objdump -d ${filename%.s} > ${filename%.s}.dump
+
+  rm -f ${filename%.s}.memtrace ${filename%.s}.predictions ${filename%.s}.debug ${filename%.s}-*.out ${filename%.s}-stats-*.txt
 done
 
 read -p "Continue? [Y/n] " yn

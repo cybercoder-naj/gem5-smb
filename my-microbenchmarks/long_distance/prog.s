@@ -5,8 +5,9 @@ _start:
     # TEST 7: long-distance dependence (many ops between store and load)
     # stresses the store buffer depth
     # ─────────────────────────────────────────
+    sub $8, %rsp
     movq $0xFEED, %rax
-    movq %rax,    -40(%rsp)     # STORE
+    movq %rax,    (%rsp)     # STORE
     # 20 independent ALU ops to push distance out
     xor %r8,  %r8
     xor %r9,  %r9
@@ -28,7 +29,8 @@ _start:
     imulq %r10, %r11
     imulq %r8,  %r11
     imulq %r9,  %r10
-    movq -40(%rsp), %rbx        # LOAD  (distance ~20)
+    movq (%rsp), %rbx        # LOAD  (distance ~20)
+    add $8, %rsp
     # ─────────────────────────────────────────
     # exit
     # ─────────────────────────────────────────
