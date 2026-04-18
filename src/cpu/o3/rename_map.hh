@@ -122,7 +122,9 @@ class SimpleRenameMap
     lookup(const RegId& arch_reg) const
     {
         assert(arch_reg.index() <= map.size());
-        return map[arch_reg.index()];
+        auto phys_reg = map[arch_reg.index()];
+        // assert(phys_reg->getLogicalDependents() > 0);
+        return phys_reg;
     }
 
     /**

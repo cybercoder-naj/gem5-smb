@@ -169,6 +169,8 @@ Commit::CommitStats::CommitStats(CPU *cpu, Commit *commit)
                "Class of committed instruction"),
       ADD_STAT(memOrderViolationEvents, statistics::units::Count::get(),
                "Number of memory order violations"),
+      ADD_STAT(bypassedLoadViolationEvents, statistics::units::Count::get(),
+               "Number of bypassed load violations"),
       ADD_STAT(commitEligibleSamples, statistics::units::Cycle::get(),
                "number cycles where commit BW limit reached")
 {
@@ -1107,6 +1109,34 @@ Commit::commitInsts()
                     }
                 }
 
+                if (head_inst->isLoad() || head_inst->isStore()) {
+                    assert(head_inst->effAddrValid());
+
+                    const char* env = std::getenv("MEM_TRACE_FILE");
+                    if (!env) {
+                        DPRINTF(Commit, "MEM_TRACE_FILE environment variable not set. No predictions loaded.\n");
+                        return;
+                    }
+
+                    std::string trace_file = std::string(env);
+                    std::ofstream outfile(trace_file, std::ios::app);
+                    if (!outfile.is_open()) {
+                        DPRINTF(Commit, "Could not open MEM_TRACE_FILE\n");
+                        return;
+                    }
+
+                    InstSeqNum seq_num = head_inst->seqNum;
+                    Addr pc_state = head_inst->pcState().instAddr();
+                    Addr eff_addr = head_inst->effAddr;
+                    bool is_load = head_inst->isLoad();
+
+                    outfile << "# " << head_inst->staticInst->disassemble(head_inst->pcState().instAddr()) << "\n"; 
+                    outfile << seq_num << " "
+                        << std::hex << pc_state << " "
+                        << std::hex << eff_addr << " "
+                        << (is_load ? "L" : "S") << "\n";
+                }
+
                 // Check if an instruction just enabled interrupts and we've
                 // previously had an interrupt pending that was not handled
                 // because interrupts were subsequently disabled before the
@@ -1288,6 +1318,41 @@ Commit::commitHead(const DynInstPtr &head_inst, unsigned inst_num)
         // Generate trap squash event.
         generateTrapEvent(tid, inst_fault);
         return false;
+    }
+
+    if (head_inst->isBypassedLoad()) {
+        bool addrOrMemOrderViolation = iewStage->ldstQueue.checkSmbViolation(tid, head_inst);
+
+        PhysRegIdPtr actualValueReg = head_inst->renamedDestIdx(0);
+        PhysRegIdPtr specValueReg = head_inst->smbSrcStorePhysReg;
+        assert(specValueReg);
+        RegVal actualValue = cpu->getReg(actualValueReg, tid);
+        RegVal specValue = cpu->getReg(specValueReg, tid);
+        bool valueMismatch = actualValue != specValue;
+
+        if (addrOrMemOrderViolation && valueMismatch) {
+            DPRINTF(Commit, "[tid:%i] [sn:%llu] Bypassed load has both address/mem order violation and value mismatch. "
+                    "Actual value: %#x, Speculated value: %#x\n",
+                    tid, head_inst->seqNum, actualValue, specValue);
+
+            commitStatus[tid] = ROBSquashing;
+            ++stats.bypassedLoadViolationEvents;
+            squashAll(tid);
+            return false;
+        } else if (addrOrMemOrderViolation || valueMismatch) {
+            DPRINTF(Commit, "[tid:%i] [sn:%llu] FARTS bypassed load may have an issue. "
+                    "Address/Mem order violation: %s, Value mismatch: %s. ",
+                    tid, head_inst->seqNum,
+                    addrOrMemOrderViolation ? "Yes" : "No",
+                    valueMismatch ? "Yes" : "No");
+
+            commitStatus[tid] = ROBSquashing;
+            ++stats.bypassedLoadViolationEvents;
+            squashAll(tid);
+            return false;
+        }
+
+        head_inst->setCompleted();
     }
 
     updateComInstStats(head_inst);

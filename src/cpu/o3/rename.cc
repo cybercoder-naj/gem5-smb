@@ -65,7 +65,8 @@ Rename::Rename(CPU *_cpu, const BaseO3CPUParams &params)
       commitToRenameDelay(params.commitToRenameDelay),
       renameWidth(params.renameWidth),
       numThreads(params.numThreads),
-      stats(_cpu)
+      stats(_cpu),
+      smb(_cpu->name() + ".smb")
 {
     if (renameWidth > MaxWidth)
         fatal("renameWidth (%d) is larger than compiled limit (%d),\n"
@@ -86,6 +87,8 @@ Rename::Rename(CPU *_cpu, const BaseO3CPUParams &params)
         serializeInst[tid] = nullptr;
         serializeOnNextInst[tid] = false;
     }
+
+    storeToPhysReg.clear();
 }
 
 std::string
@@ -145,7 +148,11 @@ Rename::RenameStats::RenameStats(statistics::Group *parent)
       ADD_STAT(tempSerializing, statistics::units::Count::get(),
                "count of temporary serializing insts renamed"),
       ADD_STAT(skidInsts, statistics::units::Count::get(),
-               "count of insts added to the skid buffer")
+               "count of insts added to the skid buffer"),
+      ADD_STAT(bypassedLoads, statistics::units::Count::get(),
+               "count of bypassed loads renamed"),
+      ADD_STAT(smbStoreOutsideInstWindow, statistics::units::Count::get(),
+               "count of stores that are outside the instruction window")
 {
     squashCycles.prereq(squashCycles);
     idleCycles.prereq(idleCycles);
@@ -176,6 +183,9 @@ Rename::RenameStats::RenameStats(statistics::Group *parent)
     serializing.flags(statistics::total);
     tempSerializing.flags(statistics::total);
     skidInsts.flags(statistics::total);
+
+    bypassedLoads.flags(statistics::total);
+    smbStoreOutsideInstWindow.flags(statistics::total);
 }
 
 void
@@ -1005,7 +1015,20 @@ Rename::removeFromHistory(InstSeqNum inst_seq_num, ThreadID tid)
         // can be recognized because the new mapping is the same as
         // the old one.
         if (hb_it->newPhysReg != hb_it->prevPhysReg) {
-            freeList->addReg(hb_it->prevPhysReg);
+            hb_it->prevPhysReg->decrLogicalDependents();
+
+            if (hb_it->prevPhysReg->getLogicalDependents() <= 0) {
+                DPRINTF(Rename, "[tid:%i] Adding phys reg %i (%s) to free list.\n",
+                        tid, hb_it->prevPhysReg->index(),
+                        hb_it->prevPhysReg->className());
+
+                freeList->addReg(hb_it->prevPhysReg);
+            } else {
+                DPRINTF(Rename, "[tid:%i] Cannot free phys reg %i (%s), logical dependents %i\n",
+                        tid, hb_it->prevPhysReg->index(),
+                        hb_it->prevPhysReg->className(),
+                        hb_it->prevPhysReg->getLogicalDependents());
+            }
         }
 
         ++stats.committedMaps;
@@ -1083,6 +1106,11 @@ Rename::renameSrcRegs(const DynInstPtr &inst, ThreadID tid)
                     renamed_reg->className());
         }
 
+        if (inst->isStore() && src_idx == 2) {
+            storeAddrToSeqNum[inst->pcState().instAddr()] = inst->seqNum;
+            storeToPhysReg[inst->seqNum] = renamed_reg;
+        }
+
         ++stats.lookups;
     }
 }
@@ -1109,6 +1137,64 @@ Rename::renameDestRegs(const DynInstPtr &inst, ThreadID tid)
 
         scoreboard->unsetReg(rename_result.first);
 
+        // Tell the instruction to rename the appropriate destination
+        // register (dest_idx) to the new physical register
+        // (rename_result.first), and record the previous physical
+        // register that the same logical register was renamed to
+        // (rename_result.second).
+        inst->renameDestReg(dest_idx,
+                            rename_result.first,
+                            rename_result.second);
+
+
+        if (inst->isLoad() && dest_idx == 0) {
+            DPRINTF(Rename,
+                    "[tid:%i] "
+                    "Querying SMB Predictor for load [sn:%llu] with PC %s.\n",
+                    tid, inst->seqNum, inst->pcState());
+
+            Addr smb_store_pc = smb.predictSourceStore(inst->pcState().instAddr());
+            InstSeqNum smb_store_seqnum = storeAddrToSeqNum[smb_store_pc];
+            if (smb_store_seqnum != 0) {
+                DPRINTF(Rename,
+                        "[tid:%i] "
+                        "SMB Predictor predicted store with sequence number "
+                        "%llu as source of load [sn:%llu].\n",
+                        tid, smb_store_seqnum, inst->seqNum);
+
+                if (fromCommit->commitInfo[tid].doneSeqNum >= smb_store_seqnum) {
+                    DPRINTF(Rename,
+                            "[tid:%i] "
+                            "Cannot bypass load [sn:%llu]."
+                            "SMB source store has already committed.\n",
+                            tid, inst->seqNum);
+            
+                    ++stats.smbStoreOutsideInstWindow;
+                } else {
+                    PhysRegIdPtr store_phys_reg = storeToPhysReg[smb_store_seqnum];
+                    assert(store_phys_reg);
+                    // todo fix logical dependences
+                    // assert(store_phys_reg->getLogicalDependents() > 0);
+
+                    // Also since we know that the store has not yet committed,
+                    // We guarantee that the physical register has not yet been freed,
+                    // AND it does not point to an overwritten value.
+
+                    inst->setBypassedLoad(smb_store_seqnum, store_phys_reg);
+                    ++stats.bypassedLoads;
+
+                    // Rewrite the RAT entry so the load dest_reg -> smb_phys_reg
+                    map->setEntry(flat_dest_regid, store_phys_reg);
+
+                    store_phys_reg->incrLogicalDependents();
+
+                    // Update the rename result so that the history buffer will record the
+                    // correct physical register.
+                    rename_result.first = store_phys_reg;
+                }
+            }
+        }
+
         DPRINTF(Rename,
                 "[tid:%i] "
                 "Renaming arch reg %i (%s) to physical reg %i (%i).\n",
@@ -1127,15 +1213,6 @@ Rename::renameDestRegs(const DynInstPtr &inst, ThreadID tid)
                 "Adding instruction to history buffer (size=%i).\n",
                 tid,(*historyBuffer[tid].begin()).instSeqNum,
                 historyBuffer[tid].size());
-
-        // Tell the instruction to rename the appropriate destination
-        // register (dest_idx) to the new physical register
-        // (rename_result.first), and record the previous physical
-        // register that the same logical register was renamed to
-        // (rename_result.second).
-        inst->renameDestReg(dest_idx,
-                            rename_result.first,
-                            rename_result.second);
 
         ++stats.renamedOperands;
     }
@@ -1309,8 +1386,21 @@ Rename::checkSignalsAndUpdate(ThreadID tid)
 
         auto reg_it = freeingInProgress[tid].cbegin();
         while ( reg_it != freeingInProgress[tid].cend()){
-            // Put the renamed physical register back on the free list.
-            freeList->addReg(*reg_it);
+            PhysRegIdPtr reg = *reg_it;
+            reg->decrLogicalDependents();
+
+            if (reg->getLogicalDependents() <= 0) {
+                DPRINTF(Rename, "[tid:%i] Adding phys reg %i (%s) to free list from squashing.\n",
+                        tid, reg->index(), reg->className());
+
+                // Put the renamed physical register back on the free list.
+                freeList->addReg(*reg_it);
+            } else {
+                DPRINTF(Rename, "[tid:%i] Cannot free phys reg %i (%s) from squashing, logical dependents %i\n",
+                        tid, reg->index(), reg->className(),
+                        reg->getLogicalDependents());
+            }
+
             ++reg_it;
         }
         freeingInProgress[tid].clear();

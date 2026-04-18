@@ -335,6 +335,31 @@ LSQUnit::insertLoad(const DynInstPtr &load_inst)
     assert(load_inst->lqIdx > 0);
     load_inst->lqIt = loadQueue.getIterator(load_inst->lqIdx);
 
+    if (load_inst->isBypassedLoad()) {
+        assert(load_inst->smbStoreSeqNum != 0);
+
+        auto smb_store_it = storeQueue.end();
+        --smb_store_it;
+
+        while (smb_store_it != storeQueue.begin()) {
+            if (smb_store_it->instruction()->seqNum == load_inst->smbStoreSeqNum) {
+                break;
+            }
+            --smb_store_it;
+        }
+        if (smb_store_it == storeQueue.begin() && smb_store_it->instruction()->seqNum != load_inst->smbStoreSeqNum) {
+            panic("Could not find matching store sequence number %llu for bypassed load [sn:%lli]\n",
+                  load_inst->smbStoreSeqNum, load_inst->seqNum);
+        }
+
+        //' NOTE: this is not really necessary because one could
+        //'     walk back the store queue from the load's sqIt and compare until finding the matching store.
+        //'     This is probably just a nice sanity check to make sure that smbStoreSeqNum exists in the SQ
+        //'     and report an error if it doesn't. Without this, this check is delayed to the commit.
+        //'     Overall, this does not really affect the functionality of the simulator since it's happening in one tick.
+        load_inst->smbPredStoreIt = smb_store_it;
+    }
+
     // hardware transactional memory
     // transactional state and nesting depth must be tracked
     // in the in-order part of the core.
@@ -593,8 +618,42 @@ LSQUnit::checkViolations(typename LoadQueue::iterator& loadIt,
     return NoFault;
 }
 
+bool
+LSQUnit::checkSmbViolation(DynInstPtr load_inst) {
+    auto store_it = load_inst->smbPredStoreIt;
+    assert(store_it->valid());
+    assert(store_it->instruction()->effAddrValid());
 
+    // check for a full address match at the position of the store that the load is bypassing
+    if (store_it->instruction()->effAddr != load_inst->effAddr) {
+        DPRINTF(LSQUnit, "Detected SMB violation with load [sn:%lli] and store [sn:%lli]. Load address: %#x, Store address: %#x\n",
+                load_inst->seqNum, store_it->instruction()->seqNum, load_inst->effAddr, store_it->instruction()->effAddr);
+        return true;
+    }
 
+    // check for any intervening stores that could cause a violation.
+    ++store_it;
+    for (; store_it != load_inst->sqIt; ++store_it) {
+        assert(store_it->valid());
+        assert(store_it->instruction()->effAddrValid());
+
+        Addr load_addr_start = load_inst->effAddr >> depCheckShift;
+        Addr load_addr_end = (load_inst->effAddr + load_inst->effSize - 1) >> depCheckShift;
+
+        auto store_inst = store_it->instruction();
+        Addr store_addr_start = store_inst->effAddr >> depCheckShift;
+        Addr store_addr_end = (store_inst->effAddr + store_inst->effSize - 1) >> depCheckShift;
+
+        if (load_addr_end >= store_addr_start && load_addr_start <= store_addr_end) {
+            DPRINTF(LSQUnit, "Detected intervening store SMB violation with load [sn:%lli] and store [sn:%lli]. Load address: %#x, Store address: %#x\n",
+                    load_inst->seqNum, store_it->instruction()->seqNum, load_inst->effAddr, store_it->instruction()->effAddr);
+
+            return true;
+        }
+    }
+
+    return false;
+}
 
 Fault
 LSQUnit::executeLoad(const DynInstPtr &inst)

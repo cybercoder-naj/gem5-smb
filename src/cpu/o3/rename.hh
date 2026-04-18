@@ -52,6 +52,7 @@
 #include "cpu/o3/free_list.hh"
 #include "cpu/o3/iew.hh"
 #include "cpu/o3/limits.hh"
+#include "cpu/o3/smb.hh"
 #include "cpu/timebuf.hh"
 #include "sim/probe/probe.hh"
 
@@ -462,6 +463,14 @@ class Rename
     /** The maximum skid buffer size. */
     unsigned skidBufferMax;
 
+    /** Map of store instructions to their physical register mappings containing the value. */
+    std::unordered_map<InstSeqNum, PhysRegIdPtr> storeToPhysReg;
+    /** Map of store instruction addresses to their sequence numbers. */
+    std::unordered_map<Addr, InstSeqNum> storeAddrToSeqNum;
+
+    /** The predictor for speculative memory bypassing. */
+    SMB smb;
+
     /** Enum to record the source of a structure full stall.  Can come from
      * either ROB, IQ, LSQ, and it is priortized in that order.
      */
@@ -536,6 +545,10 @@ class Rename
         statistics::Scalar tempSerializing;
         /** Number of instructions inserted into skid buffers. */
         statistics::Scalar skidInsts;
+        /** Number of loads that are bypassed. */
+        statistics::Scalar bypassedLoads;
+        /** Number of stores that are outside the instruction window. */
+        statistics::Scalar smbStoreOutsideInstWindow;
     } stats;
 };
 

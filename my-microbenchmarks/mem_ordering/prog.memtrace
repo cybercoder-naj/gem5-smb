@@ -1,0 +1,7 @@
+
+#   MOV_M_R : st   rax, SS:[t0 + rsp]
+4 40100b 7fffffffee28 S
+#   MOV_M_R : st   rax, SS:[t0 + rsp]
+6 401016 7fffffffee28 S
+#   MOV_R_M : ld   rbx, SS:[t0 + rsp]
+7 40101a 7fffffffee28 L
