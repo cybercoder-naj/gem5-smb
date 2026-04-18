@@ -2,14 +2,14 @@
 .globl _start
 
 _start:
-    sub  $4, %rsp
+    sub $8, %rsp
 
-    movl $5, (%rsp)
-    movl $10, (%rsp)
-    movl (%rsp), %ebx
+    movq $0xDEAD, %rax
+    movq %rax, (%rsp)
+    movq (%rsp), %rbx
+
+    add $8, %rsp
 
     mov  $60, %rax      # sys_exit
-    movq %rbx, %rdi     # status = 
-
-    add  $4, %rsp
+    xor  %rdi, %rdi
     syscall
