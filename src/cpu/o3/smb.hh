@@ -26,6 +26,8 @@ class SMB
     const std::string _name;
     std::ifstream infile;
     std::unordered_map<Addr, Addr> predictions;
+    std::unordered_map<Addr, InstSeqNum> storeAddrToSeqNum;
+    std::unordered_map<InstSeqNum, Addr> loadSeqNumToAddr;
 
   public:
     /** Constructor. */
@@ -36,7 +38,15 @@ class SMB
 
     std::string name() const { return _name; }
 
-    Addr predictSourceStore(Addr load_pc);
+    InstSeqNum predictSourceStore(InstSeqNum load_seq_num);
+
+    void registerMemoryAccess(const Addr addr, InstSeqNum seq_num, bool is_store) {
+        if (is_store) {
+            storeAddrToSeqNum[addr] = seq_num;
+        } else {
+            loadSeqNumToAddr[seq_num] = addr;
+        }
+    }
 };
 
 } // namespace o3

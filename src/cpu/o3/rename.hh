@@ -465,8 +465,6 @@ class Rename
 
     /** Map of store instructions to their physical register mappings containing the value. */
     std::unordered_map<InstSeqNum, PhysRegIdPtr> storeToPhysReg;
-    /** Map of store instruction addresses to their sequence numbers. */
-    std::unordered_map<Addr, InstSeqNum> storeAddrToSeqNum;
 
     /** The predictor for speculative memory bypassing. */
     SMB smb;

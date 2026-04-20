@@ -7101,3 +7101,1821 @@ O3CPU: Ticking main, O3CPU.
  197000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x401057=>0x40105b).(2=>3), [sn:44]
  197000: system.cpu: Removing committed instruction [tid:0] PC (0x401057=>0x40105b).(2=>3) [sn:44]
  197000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:45]
+ 197000: global: RegFile: Access to int register 82, has data 0xfeed
+ 197000: global: RegFile: Access to int register 41, has data 0xfeed
+ 197000: system.cpu.commit: [tid:0] [sn:45] FARTS bypassed load may have an issue. Address/Mem order violation: Yes, Value mismatch: No.  197000: system.cpu.rob: Starting to squash within the ROB.
+ 197000: system.cpu.rob: [tid:0] Squashing instructions until [sn:44].
+ 197000: system.cpu.rob: [tid:0] Squashing instruction PC (0x40107d=>0x40107f).(2=>3), seq num 74.
+ 197000: system.cpu.rob: [tid:0] Squashing instruction PC (0x40107d=>0x40107f).(1=>2), seq num 73.
+ 197000: system.cpu.rob: [tid:0] Squashing instruction PC (0x40107d=>0x40107f).(0=>1), seq num 72.
+ 197000: system.cpu.rob: [tid:0] Squashing instruction PC (0x40107b=>0x40107d).(2=>3), seq num 71.
+ 197000: system.cpu.rob: [tid:0] Squashing instruction PC (0x40107b=>0x40107d).(1=>2), seq num 70.
+ 197000: system.cpu.rob: [tid:0] Squashing instruction PC (0x40107b=>0x40107d).(0=>1), seq num 69.
+ 197000: system.cpu.rob: [tid:0] Squashing instruction PC (0x401079=>0x40107b).(2=>3), seq num 68.
+ 197000: system.cpu.rob: [tid:0] Squashing instruction PC (0x401079=>0x40107b).(1=>2), seq num 67.
+ 197000: system.cpu.rob: [tid:0] Squashing instruction PC (0x401079=>0x40107b).(0=>1), seq num 66.
+ 197000: system.cpu.rob: [tid:0] Squashing instruction PC (0x401077=>0x401079).(2=>3), seq num 65.
+ 197000: system.cpu.commit: Unable to commit head instruction PC:(0x40105b=>0x40105f).(0=>1) [tid:0] [sn:45].
+ 197000: system.cpu.commit: [tid:0] Instruction [sn:45] PC (0x40105b=>0x40105f).(0=>1) is head of ROB and ready to commit
+ 197000: system.cpu.commit: [tid:0] ROB has 30 insts & 888 free entries.
+ 197000: system.cpu.commit: Activity This Cycle.
+ 197000: system.cpu: Activity: 12
+O3PipeView:fetch:176000:0x00401053:2:41:  IMUL_R_R : muleh   t0, t0
+O3PipeView:decode:177000
+O3PipeView:rename:178000
+O3PipeView:dispatch:180000
+O3PipeView:issue:191000
+O3PipeView:complete:192000
+O3PipeView:retire:194000:store:0
+ 197000: global: DynInst: [sn:41] Instruction destroyed. Instcount for system.cpu = 34
+O3PipeView:fetch:176000:0x00401053:1:40:  IMUL_R_R : mulel   r11, r11
+O3PipeView:decode:177000
+O3PipeView:rename:178000
+O3PipeView:dispatch:180000
+O3PipeView:issue:191000
+O3PipeView:complete:192000
+O3PipeView:retire:194000:store:0
+ 197000: global: DynInst: [sn:40] Instruction destroyed. Instcount for system.cpu = 33
+ 197000: system.cpu: Activity: 11
+ 197000: system.cpu: Removing instruction, [tid:0] [sn:43] PC (0x401057=>0x40105b).(1=>2)
+ 197000: system.cpu: Removing instruction, [tid:0] [sn:44] PC (0x401057=>0x40105b).(2=>3)
+ 197000: system.cpu: Scheduling next tick!
+ 198000: system.cpu: 
+
+O3CPU: Ticking main, O3CPU.
+ 198000: system.cpu.fetch: [tid:0] Squashing instructions due to squash from commit.
+ 198000: system.cpu.fetch: [tid:0] Squash from commit.
+ 198000: system.cpu.fetch: [tid:0] Squashing, setting PC to: (0x40105b=>0x40105f).(0=>1).
+ 198000: system.cpu.fetch: [tid:0] Squashing outstanding Icache miss.
+ 198000: system.cpu: Thread 0: Deleting instructions from instruction list.
+ 198000: system.cpu: ROB is not empty, squashing insts not in ROB.
+ 198000: system.cpu.fetch: Running stage.
+ 198000: system.cpu.fetch: There are no more threads available to fetch from.
+ 198000: system.cpu.fetch: [tid:0] Fetch is squashing!
+ 198000: system.cpu.fetch: [tid:0] Activating stage.
+ 198000: system.cpu: Activity: 12
+ 198000: system.cpu.decode: Processing [tid:0]
+ 198000: system.cpu.decode: [tid:0] Squashing instructions due to squash from commit.
+ 198000: system.cpu.decode: [tid:0] Squashing.
+ 198000: system.cpu.rename: Processing [tid:0]
+ 198000: system.cpu.rename: [tid:0] Free IQ: 535, Free ROB: 888, Free LQ: 123, Free SQ: 64, FreeRM 127(857 870 917 1834 127 8 4565)
+ 198000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
+ 198000: system.cpu.rename: [tid:0] Squashing instructions due to squash from commit.
+ 198000: system.cpu.rename: [tid:0] [squash sn:44] Squashing instructions.
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 73 (archReg: 0, newPhysReg: 4294967295, prevPhysReg: 4294967295).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 73 (archReg: 0, newPhysReg: 4294967295, prevPhysReg: 4294967295).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 73 (archReg: 0, newPhysReg: 4294967295, prevPhysReg: 4294967295).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 73 (archReg: 1, newPhysReg: 62, prevPhysReg: 60).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 73 (archReg: 0, newPhysReg: 61, prevPhysReg: 59).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 73 (archReg: 17, newPhysReg: 102, prevPhysReg: 101).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 72 (archReg: 17, newPhysReg: 101, prevPhysReg: 100).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 70 (archReg: 0, newPhysReg: 4294967295, prevPhysReg: 4294967295).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 70 (archReg: 0, newPhysReg: 4294967295, prevPhysReg: 4294967295).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 70 (archReg: 0, newPhysReg: 4294967295, prevPhysReg: 4294967295).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 70 (archReg: 1, newPhysReg: 60, prevPhysReg: 58).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 70 (archReg: 0, newPhysReg: 59, prevPhysReg: 57).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 70 (archReg: 17, newPhysReg: 100, prevPhysReg: 99).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 69 (archReg: 17, newPhysReg: 99, prevPhysReg: 98).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 67 (archReg: 0, newPhysReg: 4294967295, prevPhysReg: 4294967295).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 67 (archReg: 0, newPhysReg: 4294967295, prevPhysReg: 4294967295).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 67 (archReg: 0, newPhysReg: 4294967295, prevPhysReg: 4294967295).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 67 (archReg: 1, newPhysReg: 58, prevPhysReg: 56).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 67 (archReg: 0, newPhysReg: 57, prevPhysReg: 55).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 67 (archReg: 17, newPhysReg: 98, prevPhysReg: 97).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 66 (archReg: 17, newPhysReg: 97, prevPhysReg: 96).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 64 (archReg: 0, newPhysReg: 4294967295, prevPhysReg: 4294967295).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 64 (archReg: 0, newPhysReg: 4294967295, prevPhysReg: 4294967295).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 64 (archReg: 0, newPhysReg: 4294967295, prevPhysReg: 4294967295).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 64 (archReg: 1, newPhysReg: 56, prevPhysReg: 54).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 64 (archReg: 0, newPhysReg: 55, prevPhysReg: 53).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 64 (archReg: 17, newPhysReg: 96, prevPhysReg: 95).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 63 (archReg: 17, newPhysReg: 95, prevPhysReg: 94).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 61 (archReg: 0, newPhysReg: 4294967295, prevPhysReg: 4294967295).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 61 (archReg: 0, newPhysReg: 4294967295, prevPhysReg: 4294967295).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 61 (archReg: 0, newPhysReg: 4294967295, prevPhysReg: 4294967295).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 61 (archReg: 1, newPhysReg: 54, prevPhysReg: 52).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 61 (archReg: 0, newPhysReg: 53, prevPhysReg: 51).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 61 (archReg: 17, newPhysReg: 94, prevPhysReg: 93).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 60 (archReg: 17, newPhysReg: 93, prevPhysReg: 92).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 58 (archReg: 0, newPhysReg: 4294967295, prevPhysReg: 4294967295).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 58 (archReg: 0, newPhysReg: 4294967295, prevPhysReg: 4294967295).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 58 (archReg: 0, newPhysReg: 4294967295, prevPhysReg: 4294967295).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 58 (archReg: 1, newPhysReg: 52, prevPhysReg: 50).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 58 (archReg: 0, newPhysReg: 51, prevPhysReg: 49).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 58 (archReg: 17, newPhysReg: 92, prevPhysReg: 91).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 57 (archReg: 17, newPhysReg: 91, prevPhysReg: 90).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 55 (archReg: 0, newPhysReg: 4294967295, prevPhysReg: 4294967295).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 55 (archReg: 0, newPhysReg: 4294967295, prevPhysReg: 4294967295).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 55 (archReg: 0, newPhysReg: 4294967295, prevPhysReg: 4294967295).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 55 (archReg: 1, newPhysReg: 50, prevPhysReg: 48).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 55 (archReg: 0, newPhysReg: 49, prevPhysReg: 47).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 55 (archReg: 17, newPhysReg: 90, prevPhysReg: 89).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 54 (archReg: 17, newPhysReg: 89, prevPhysReg: 88).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 52 (archReg: 0, newPhysReg: 4294967295, prevPhysReg: 4294967295).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 52 (archReg: 0, newPhysReg: 4294967295, prevPhysReg: 4294967295).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 52 (archReg: 0, newPhysReg: 4294967295, prevPhysReg: 4294967295).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 52 (archReg: 1, newPhysReg: 48, prevPhysReg: 46).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 52 (archReg: 0, newPhysReg: 47, prevPhysReg: 45).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 52 (archReg: 17, newPhysReg: 88, prevPhysReg: 87).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 51 (archReg: 17, newPhysReg: 87, prevPhysReg: 83).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 49 (archReg: 0, newPhysReg: 4294967295, prevPhysReg: 4294967295).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 49 (archReg: 0, newPhysReg: 4294967295, prevPhysReg: 4294967295).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 49 (archReg: 0, newPhysReg: 4294967295, prevPhysReg: 4294967295).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 49 (archReg: 1, newPhysReg: 46, prevPhysReg: 44).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 49 (archReg: 0, newPhysReg: 45, prevPhysReg: 43).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 49 (archReg: 7, newPhysReg: 86, prevPhysReg: 7).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 48 (archReg: 0, newPhysReg: 85, prevPhysReg: 41).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 47 (archReg: 0, newPhysReg: 4294967295, prevPhysReg: 4294967295).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 47 (archReg: 0, newPhysReg: 4294967295, prevPhysReg: 4294967295).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 47 (archReg: 0, newPhysReg: 4294967295, prevPhysReg: 4294967295).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 47 (archReg: 1, newPhysReg: 44, prevPhysReg: 42).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 47 (archReg: 0, newPhysReg: 43, prevPhysReg: 37).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 47 (archReg: 4, newPhysReg: 84, prevPhysReg: 40).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 46 (archReg: 17, newPhysReg: 83, prevPhysReg: 68).
+ 198000: system.cpu.rename: [tid:0] Removing history entry with sequence number 45 (archReg: 3, newPhysReg: 41, prevPhysReg: 3).
+ 198000: system.cpu.iew: Issue: Processing [tid:0]
+ 198000: system.cpu.iew: [tid:0] Squashing all instructions.
+ 198000: system.cpu.iq: [tid:0] Starting to squash instructions in the IQ.
+ 198000: system.cpu.iq: [tid:0] Squashing until sequence number 44!
+ 198000: system.cpu.iq: [tid:0] Instruction [sn:74] PC (0x40107d=>0x40107f).(2=>3) squashed.
+ 198000: system.cpu.iq: [tid:0] Instruction [sn:73] PC (0x40107d=>0x40107f).(1=>2) squashed.
+ 198000: system.cpu.iq: [tid:0] Instruction [sn:72] PC (0x40107d=>0x40107f).(0=>1) squashed.
+ 198000: system.cpu.iq: [tid:0] Instruction [sn:71] PC (0x40107b=>0x40107d).(2=>3) squashed.
+ 198000: system.cpu.iq: [tid:0] Instruction [sn:70] PC (0x40107b=>0x40107d).(1=>2) squashed.
+ 198000: system.cpu.iq: [tid:0] Instruction [sn:69] PC (0x40107b=>0x40107d).(0=>1) squashed.
+ 198000: system.cpu.iq: [tid:0] Instruction [sn:68] PC (0x401079=>0x40107b).(2=>3) squashed.
+ 198000: system.cpu.iq: [tid:0] Instruction [sn:67] PC (0x401079=>0x40107b).(1=>2) squashed.
+ 198000: system.cpu.iq: [tid:0] Instruction [sn:66] PC (0x401079=>0x40107b).(0=>1) squashed.
+ 198000: system.cpu.iq: [tid:0] Instruction [sn:65] PC (0x401077=>0x401079).(2=>3) squashed.
+ 198000: system.cpu.iq: [tid:0] Instruction [sn:64] PC (0x401077=>0x401079).(1=>2) squashed.
+ 198000: system.cpu.iq: [tid:0] Instruction [sn:63] PC (0x401077=>0x401079).(0=>1) squashed.
+ 198000: system.cpu.iq: [tid:0] Instruction [sn:62] PC (0x401075=>0x401077).(2=>3) squashed.
+ 198000: system.cpu.iq: [tid:0] Instruction [sn:61] PC (0x401075=>0x401077).(1=>2) squashed.
+ 198000: system.cpu.iq: [tid:0] Instruction [sn:60] PC (0x401075=>0x401077).(0=>1) squashed.
+ 198000: system.cpu.iq: [tid:0] Instruction [sn:59] PC (0x401073=>0x401075).(2=>3) squashed.
+ 198000: system.cpu.iq: [tid:0] Instruction [sn:58] PC (0x401073=>0x401075).(1=>2) squashed.
+ 198000: system.cpu.iq: [tid:0] Instruction [sn:57] PC (0x401073=>0x401075).(0=>1) squashed.
+ 198000: system.cpu.iq: [tid:0] Instruction [sn:56] PC (0x401071=>0x401073).(2=>3) squashed.
+ 198000: system.cpu.iq: [tid:0] Instruction [sn:55] PC (0x401071=>0x401073).(1=>2) squashed.
+ 198000: system.cpu.iq: [tid:0] Instruction [sn:54] PC (0x401071=>0x401073).(0=>1) squashed.
+ 198000: system.cpu.iq: [tid:0] Instruction [sn:53] PC (0x40106f=>0x401071).(2=>3) squashed.
+ 198000: system.cpu.iq: [tid:0] Instruction [sn:52] PC (0x40106f=>0x401071).(1=>2) squashed.
+ 198000: system.cpu.iq: [tid:0] Instruction [sn:51] PC (0x40106f=>0x401071).(0=>1) squashed.
+ 198000: system.cpu.memDep0: Squashing inst [sn:74]
+ 198000: system.cpu.memDep0: Squashing inst [sn:72]
+ 198000: system.cpu.memDep0: Squashing inst [sn:71]
+ 198000: system.cpu.memDep0: Squashing inst [sn:69]
+ 198000: system.cpu.memDep0: Squashing inst [sn:68]
+ 198000: system.cpu.memDep0: Squashing inst [sn:66]
+ 198000: system.cpu.memDep0: Squashing inst [sn:65]
+ 198000: system.cpu.memDep0: Squashing inst [sn:63]
+ 198000: system.cpu.memDep0: Squashing inst [sn:62]
+ 198000: system.cpu.memDep0: Squashing inst [sn:60]
+ 198000: system.cpu.memDep0: Squashing inst [sn:59]
+ 198000: system.cpu.memDep0: Squashing inst [sn:57]
+ 198000: system.cpu.memDep0: Squashing inst [sn:56]
+ 198000: system.cpu.memDep0: Squashing inst [sn:54]
+ 198000: system.cpu.memDep0: Squashing inst [sn:53]
+ 198000: system.cpu.memDep0: Squashing inst [sn:51]
+ 198000: system.cpu.iew.lsq.thread0: Squashing until [sn:44]!(Loads:9 Stores:8)
+ 198000: system.cpu.iew.lsq.thread0: Load Instruction PC (0x40107d=>0x40107f).(0=>1) squashed, [sn:72]
+ 198000: system.cpu.iew.lsq.thread0: Load Instruction PC (0x40107b=>0x40107d).(0=>1) squashed, [sn:69]
+ 198000: system.cpu.iew.lsq.thread0: Load Instruction PC (0x401079=>0x40107b).(0=>1) squashed, [sn:66]
+ 198000: system.cpu.iew.lsq.thread0: Load Instruction PC (0x401077=>0x401079).(0=>1) squashed, [sn:63]
+ 198000: system.cpu.iew.lsq.thread0: Load Instruction PC (0x401075=>0x401077).(0=>1) squashed, [sn:60]
+ 198000: system.cpu.iew.lsq.thread0: Load Instruction PC (0x401073=>0x401075).(0=>1) squashed, [sn:57]
+ 198000: system.cpu.iew.lsq.thread0: Load Instruction PC (0x401071=>0x401073).(0=>1) squashed, [sn:54]
+ 198000: system.cpu.iew.lsq.thread0: Load Instruction PC (0x40106f=>0x401071).(0=>1) squashed, [sn:51]
+ 198000: system.cpu.iew.lsq.thread0: Load Instruction PC (0x40105b=>0x40105f).(0=>1) squashed, [sn:45]
+ 198000: system.cpu.iew.lsq.thread0: Store Instruction PC (0x40107d=>0x40107f).(2=>3) squashed, idx:9 [sn:74]
+ 198000: system.cpu.iew.lsq.thread0: Store Instruction PC (0x40107b=>0x40107d).(2=>3) squashed, idx:8 [sn:71]
+ 198000: system.cpu.iew.lsq.thread0: Store Instruction PC (0x401079=>0x40107b).(2=>3) squashed, idx:7 [sn:68]
+ 198000: system.cpu.iew.lsq.thread0: Store Instruction PC (0x401077=>0x401079).(2=>3) squashed, idx:6 [sn:65]
+ 198000: system.cpu.iew.lsq.thread0: Store Instruction PC (0x401075=>0x401077).(2=>3) squashed, idx:5 [sn:62]
+ 198000: system.cpu.iew.lsq.thread0: Store Instruction PC (0x401073=>0x401075).(2=>3) squashed, idx:4 [sn:59]
+ 198000: system.cpu.iew.lsq.thread0: Store Instruction PC (0x401071=>0x401073).(2=>3) squashed, idx:3 [sn:56]
+ 198000: system.cpu.iew.lsq.thread0: Store Instruction PC (0x40106f=>0x401071).(2=>3) squashed, idx:2 [sn:53]
+ 198000: system.cpu.iew: Removing skidbuffer instructions until [sn:44] [tid:0]
+ 198000: system.cpu.iew: [tid:0] Removing incoming rename instructions
+ 198000: system.cpu.iq: Attempting to schedule ready instructions from the IQ.
+ 198000: system.cpu.iq: Not able to schedule any instructions.
+ 198000: system.cpu.iew: Processing [tid:0]
+ 198000: system.cpu.iew.lsq.thread0: LQ size: 132, #loads occupied: 0
+ 198000: system.cpu.iew.lsq.thread0: SQ size: 72, #stores occupied: 0
+ 198000: system.cpu.iew: [tid:0], Dispatch dispatched 0 instructions.
+ 198000: system.cpu.iew.lsq.thread0: SQ size: 72, #stores occupied: 0
+ 198000: system.cpu.iew.lsq.thread0: LQ size: 132, #loads occupied: 0
+ 198000: system.cpu.iew: IQ has 559 free entries (Can schedule: 0).  LQ has 132 free entries. SQ has 72 free entries.
+ 198000: system.cpu.iew: Activity this cycle.
+ 198000: system.cpu: Activity: 13
+ 198000: system.cpu.commit: [tid:0] Still Squashing, cannot commit any insts this cycle.
+ 198000: system.cpu.rob: [tid:0] Squashing instructions until [sn:44].
+ 198000: system.cpu.rob: [tid:0] Squashing instruction PC (0x401077=>0x401079).(1=>2), seq num 64.
+ 198000: system.cpu.rob: [tid:0] Squashing instruction PC (0x401077=>0x401079).(0=>1), seq num 63.
+ 198000: system.cpu.rob: [tid:0] Squashing instruction PC (0x401075=>0x401077).(2=>3), seq num 62.
+ 198000: system.cpu.rob: [tid:0] Squashing instruction PC (0x401075=>0x401077).(1=>2), seq num 61.
+ 198000: system.cpu.rob: [tid:0] Squashing instruction PC (0x401075=>0x401077).(0=>1), seq num 60.
+ 198000: system.cpu.rob: [tid:0] Squashing instruction PC (0x401073=>0x401075).(2=>3), seq num 59.
+ 198000: system.cpu.rob: [tid:0] Squashing instruction PC (0x401073=>0x401075).(1=>2), seq num 58.
+ 198000: system.cpu.rob: [tid:0] Squashing instruction PC (0x401073=>0x401075).(0=>1), seq num 57.
+ 198000: system.cpu.rob: [tid:0] Squashing instruction PC (0x401071=>0x401073).(2=>3), seq num 56.
+ 198000: system.cpu.rob: [tid:0] Squashing instruction PC (0x401071=>0x401073).(1=>2), seq num 55.
+ 198000: system.cpu.commit: [tid:0] Instruction [sn:45] PC (0x40105b=>0x40105f).(0=>1) is head of ROB and ready to commit
+ 198000: system.cpu.commit: [tid:0] ROB has 30 insts & 888 free entries.
+ 198000: system.cpu.commit: Activity This Cycle.
+ 198000: system.cpu: Activity: 12
+ 198000: system.cpu: Scheduling next tick!
+ 199000: system.cpu: 
+
+O3CPU: Ticking main, O3CPU.
+ 199000: system.cpu.fetch: [tid:0] Done squashing, switching to running.
+ 199000: system.cpu.fetch: Running stage.
+ 199000: system.cpu.fetch: Attempting to fetch from [tid:0]
+ 199000: system.cpu.fetch: [tid:0] Attempting to translate and read instruction, starting at PC (0x40105b=>0x40105f).(0=>1).
+ 199000: system.cpu.fetch: [tid:0] Fetching cache line 0x401040 for addr 0x401058
+ 199000: system.cpu: CPU already running.
+ 199000: system.cpu.fetch: Fetch: Doing instruction read.
+ 199000: system.cpu.fetch: [tid:0] Doing Icache access.
+ 199000: system.cpu.fetch: [tid:0] Activity: Waiting on I-cache response.
+ 199000: system.cpu.fetch: Deactivating stage.
+ 199000: system.cpu: Activity: 11
+ 199000: system.cpu.decode: Processing [tid:0]
+ 199000: system.cpu.decode: [tid:0] Done squashing, switching to running.
+ 199000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
+ 199000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
+ 199000: system.cpu.rename: Processing [tid:0]
+ 199000: system.cpu.rename: [tid:0] Free IQ: 559, Free ROB: 888, Free LQ: 132, Free SQ: 72, FreeRM 127(857 870 917 1834 127 8 4565)
+ 199000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
+ 199000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 132, loadsInProgress: 0, loads dispatchedToLQ: 0
+ 199000: system.cpu.rename: [tid:0] Done squashing, switching to running.
+ 199000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
+ 199000: system.cpu.rename: [tid:0] Nothing to do, breaking out early.
+ 199000: system.cpu.iew: Issue: Processing [tid:0]
+ 199000: system.cpu.iew: [tid:0] ROB is still squashing.
+ 199000: system.cpu.iew: [tid:0] Removing incoming rename instructions
+ 199000: system.cpu.iew: [tid:0] Stall from Commit stage detected.
+ 199000: system.cpu.iew: [tid:0] Blocking.
+ 199000: system.cpu.iq: Attempting to schedule ready instructions from the IQ.
+ 199000: system.cpu.iq: Not able to schedule any instructions.
+ 199000: system.cpu.iew: Processing [tid:0]
+ 199000: system.cpu.iew: [tid:0], Dispatch dispatched 0 instructions.
+ 199000: system.cpu.iew.lsq.thread0: SQ size: 72, #stores occupied: 0
+ 199000: system.cpu.iew.lsq.thread0: LQ size: 132, #loads occupied: 0
+ 199000: system.cpu.iew: IQ has 559 free entries (Can schedule: 0).  LQ has 132 free entries. SQ has 72 free entries.
+ 199000: system.cpu.iew: Activity this cycle.
+ 199000: system.cpu: Activity: 12
+ 199000: system.cpu.commit: [tid:0] Still Squashing, cannot commit any insts this cycle.
+ 199000: system.cpu.rob: [tid:0] Squashing instructions until [sn:44].
+ 199000: system.cpu.rob: [tid:0] Squashing instruction PC (0x401071=>0x401073).(0=>1), seq num 54.
+ 199000: system.cpu.rob: [tid:0] Squashing instruction PC (0x40106f=>0x401071).(2=>3), seq num 53.
+ 199000: system.cpu.rob: [tid:0] Squashing instruction PC (0x40106f=>0x401071).(1=>2), seq num 52.
+ 199000: system.cpu.rob: [tid:0] Squashing instruction PC (0x40106f=>0x401071).(0=>1), seq num 51.
+ 199000: system.cpu.rob: [tid:0] Squashing instruction PC (0x40106d=>0x40106f).(0=>1), seq num 50.
+ 199000: system.cpu.rob: [tid:0] Squashing instruction PC (0x40106a=>0x40106d).(0=>1), seq num 49.
+ 199000: system.cpu.rob: [tid:0] Squashing instruction PC (0x401063=>0x40106a).(0=>1), seq num 48.
+ 199000: system.cpu.rob: [tid:0] Squashing instruction PC (0x40105f=>0x401063).(1=>2), seq num 47.
+ 199000: system.cpu.rob: [tid:0] Squashing instruction PC (0x40105f=>0x401063).(0=>1), seq num 46.
+ 199000: system.cpu.rob: [tid:0] Squashing instruction PC (0x40105b=>0x40105f).(0=>1), seq num 45.
+ 199000: system.cpu.rob: Reached head of instruction list while squashing.
+ 199000: system.cpu.commit: [tid:0] Instruction [sn:45] PC (0x40105b=>0x40105f).(0=>1) is head of ROB and ready to commit
+ 199000: system.cpu.commit: [tid:0] ROB has 30 insts & 888 free entries.
+ 199000: system.cpu.commit: Activity This Cycle.
+O3PipeView:fetch:176000:0x00401057:0:42:  IMUL_R_R : mul1s   r10, r9
+O3PipeView:decode:177000
+O3PipeView:rename:178000
+O3PipeView:dispatch:180000
+O3PipeView:issue:191000
+O3PipeView:complete:194000
+O3PipeView:retire:196000:store:0
+ 199000: global: DynInst: [sn:42] Instruction destroyed. Instcount for system.cpu = 32
+ 199000: system.cpu: Activity: 11
+ 199000: system.cpu: Scheduling next tick!
+ 200000: system.cpu: 
+
+O3CPU: Ticking main, O3CPU.
+ 200000: system.cpu.fetch: Running stage.
+ 200000: system.cpu.fetch: There are no more threads available to fetch from.
+ 200000: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 200000: system.cpu.decode: Processing [tid:0]
+ 200000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
+ 200000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
+ 200000: system.cpu.rename: Processing [tid:0]
+ 200000: system.cpu.rename: [tid:0] Free IQ: 559, Free ROB: 888, Free LQ: 132, Free SQ: 72, FreeRM 127(857 870 917 1834 127 8 4565)
+ 200000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
+ 200000: system.cpu.rename: [tid:0] Stall from IEW stage detected.
+ 200000: system.cpu.rename: [tid:0] Blocking.
+ 200000: system.cpu.rename: Activity this cycle.
+ 200000: system.cpu: Activity: 12
+ 200000: system.cpu.iew: Issue: Processing [tid:0]
+ 200000: system.cpu.iew: [tid:0] ROB is still squashing.
+ 200000: system.cpu.iew: [tid:0] Removing incoming rename instructions
+ 200000: system.cpu.iew: [tid:0] Stall from Commit stage detected.
+ 200000: system.cpu.iew: [tid:0] Blocking.
+ 200000: system.cpu.iq: Attempting to schedule ready instructions from the IQ.
+ 200000: system.cpu.iq: Not able to schedule any instructions.
+ 200000: system.cpu.iew: Processing [tid:0]
+ 200000: system.cpu.iew: [tid:0], Dispatch dispatched 0 instructions.
+ 200000: system.cpu.iew.lsq.thread0: SQ size: 72, #stores occupied: 0
+ 200000: system.cpu.iew.lsq.thread0: LQ size: 132, #loads occupied: 0
+ 200000: system.cpu.iew: IQ has 559 free entries (Can schedule: 0).  LQ has 132 free entries. SQ has 72 free entries.
+ 200000: system.cpu.iew: Activity this cycle.
+ 200000: system.cpu.commit: Getting instructions from Rename stage.
+ 200000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 200000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:45]
+ 200000: system.cpu.commit: Retiring squashed instruction from ROB.
+ 200000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x40105b=>0x40105f).(0=>1), [sn:45]
+ 200000: system.cpu: Removing committed instruction [tid:0] PC (0x40105b=>0x40105f).(0=>1) [sn:45]
+ 200000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:46]
+ 200000: system.cpu.commit: Retiring squashed instruction from ROB.
+ 200000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x40105f=>0x401063).(0=>1), [sn:46]
+ 200000: system.cpu: Removing committed instruction [tid:0] PC (0x40105f=>0x401063).(0=>1) [sn:46]
+ 200000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:47]
+ 200000: system.cpu.commit: Retiring squashed instruction from ROB.
+ 200000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x40105f=>0x401063).(1=>2), [sn:47]
+ 200000: system.cpu: Removing committed instruction [tid:0] PC (0x40105f=>0x401063).(1=>2) [sn:47]
+ 200000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:48]
+ 200000: system.cpu.commit: Retiring squashed instruction from ROB.
+ 200000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x401063=>0x40106a).(0=>1), [sn:48]
+ 200000: system.cpu: Removing committed instruction [tid:0] PC (0x401063=>0x40106a).(0=>1) [sn:48]
+ 200000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:49]
+ 200000: system.cpu.commit: Retiring squashed instruction from ROB.
+ 200000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x40106a=>0x40106d).(0=>1), [sn:49]
+ 200000: system.cpu: Removing committed instruction [tid:0] PC (0x40106a=>0x40106d).(0=>1) [sn:49]
+ 200000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:50]
+ 200000: system.cpu.commit: Retiring squashed instruction from ROB.
+ 200000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x40106d=>0x40106f).(0=>1), [sn:50]
+ 200000: system.cpu: Removing committed instruction [tid:0] PC (0x40106d=>0x40106f).(0=>1) [sn:50]
+ 200000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:51]
+ 200000: system.cpu.commit: Retiring squashed instruction from ROB.
+ 200000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x40106f=>0x401071).(0=>1), [sn:51]
+ 200000: system.cpu: Removing committed instruction [tid:0] PC (0x40106f=>0x401071).(0=>1) [sn:51]
+ 200000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:52]
+ 200000: system.cpu.commit: Retiring squashed instruction from ROB.
+ 200000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x40106f=>0x401071).(1=>2), [sn:52]
+ 200000: system.cpu: Removing committed instruction [tid:0] PC (0x40106f=>0x401071).(1=>2) [sn:52]
+ 200000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:53]
+ 200000: system.cpu.commit: Retiring squashed instruction from ROB.
+ 200000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x40106f=>0x401071).(2=>3), [sn:53]
+ 200000: system.cpu: Removing committed instruction [tid:0] PC (0x40106f=>0x401071).(2=>3) [sn:53]
+ 200000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:54]
+ 200000: system.cpu.commit: Retiring squashed instruction from ROB.
+ 200000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x401071=>0x401073).(0=>1), [sn:54]
+ 200000: system.cpu: Removing committed instruction [tid:0] PC (0x401071=>0x401073).(0=>1) [sn:54]
+ 200000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:55]
+ 200000: system.cpu.commit: Retiring squashed instruction from ROB.
+ 200000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x401071=>0x401073).(1=>2), [sn:55]
+ 200000: system.cpu: Removing committed instruction [tid:0] PC (0x401071=>0x401073).(1=>2) [sn:55]
+ 200000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:56]
+ 200000: system.cpu.commit: Retiring squashed instruction from ROB.
+ 200000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x401071=>0x401073).(2=>3), [sn:56]
+ 200000: system.cpu: Removing committed instruction [tid:0] PC (0x401071=>0x401073).(2=>3) [sn:56]
+ 200000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:57]
+ 200000: system.cpu.commit: Retiring squashed instruction from ROB.
+ 200000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x401073=>0x401075).(0=>1), [sn:57]
+ 200000: system.cpu: Removing committed instruction [tid:0] PC (0x401073=>0x401075).(0=>1) [sn:57]
+ 200000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:58]
+ 200000: system.cpu.commit: Retiring squashed instruction from ROB.
+ 200000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x401073=>0x401075).(1=>2), [sn:58]
+ 200000: system.cpu: Removing committed instruction [tid:0] PC (0x401073=>0x401075).(1=>2) [sn:58]
+ 200000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:59]
+ 200000: system.cpu.commit: Retiring squashed instruction from ROB.
+ 200000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x401073=>0x401075).(2=>3), [sn:59]
+ 200000: system.cpu: Removing committed instruction [tid:0] PC (0x401073=>0x401075).(2=>3) [sn:59]
+ 200000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:60]
+ 200000: system.cpu.commit: Retiring squashed instruction from ROB.
+ 200000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x401075=>0x401077).(0=>1), [sn:60]
+ 200000: system.cpu: Removing committed instruction [tid:0] PC (0x401075=>0x401077).(0=>1) [sn:60]
+ 200000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:61]
+ 200000: system.cpu.commit: Retiring squashed instruction from ROB.
+ 200000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x401075=>0x401077).(1=>2), [sn:61]
+ 200000: system.cpu: Removing committed instruction [tid:0] PC (0x401075=>0x401077).(1=>2) [sn:61]
+ 200000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:62]
+ 200000: system.cpu.commit: Retiring squashed instruction from ROB.
+ 200000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x401075=>0x401077).(2=>3), [sn:62]
+ 200000: system.cpu: Removing committed instruction [tid:0] PC (0x401075=>0x401077).(2=>3) [sn:62]
+ 200000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:63]
+ 200000: system.cpu.commit: Retiring squashed instruction from ROB.
+ 200000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x401077=>0x401079).(0=>1), [sn:63]
+ 200000: system.cpu: Removing committed instruction [tid:0] PC (0x401077=>0x401079).(0=>1) [sn:63]
+ 200000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:64]
+ 200000: system.cpu.commit: Retiring squashed instruction from ROB.
+ 200000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x401077=>0x401079).(1=>2), [sn:64]
+ 200000: system.cpu: Removing committed instruction [tid:0] PC (0x401077=>0x401079).(1=>2) [sn:64]
+ 200000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:65]
+ 200000: system.cpu.commit: Retiring squashed instruction from ROB.
+ 200000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x401077=>0x401079).(2=>3), [sn:65]
+ 200000: system.cpu: Removing committed instruction [tid:0] PC (0x401077=>0x401079).(2=>3) [sn:65]
+ 200000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:66]
+ 200000: system.cpu.commit: Retiring squashed instruction from ROB.
+ 200000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x401079=>0x40107b).(0=>1), [sn:66]
+ 200000: system.cpu: Removing committed instruction [tid:0] PC (0x401079=>0x40107b).(0=>1) [sn:66]
+ 200000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:67]
+ 200000: system.cpu.commit: Retiring squashed instruction from ROB.
+ 200000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x401079=>0x40107b).(1=>2), [sn:67]
+ 200000: system.cpu: Removing committed instruction [tid:0] PC (0x401079=>0x40107b).(1=>2) [sn:67]
+ 200000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:68]
+ 200000: system.cpu.commit: Retiring squashed instruction from ROB.
+ 200000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x401079=>0x40107b).(2=>3), [sn:68]
+ 200000: system.cpu: Removing committed instruction [tid:0] PC (0x401079=>0x40107b).(2=>3) [sn:68]
+ 200000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:69]
+ 200000: system.cpu.commit: Retiring squashed instruction from ROB.
+ 200000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x40107b=>0x40107d).(0=>1), [sn:69]
+ 200000: system.cpu: Removing committed instruction [tid:0] PC (0x40107b=>0x40107d).(0=>1) [sn:69]
+ 200000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:70]
+ 200000: system.cpu.commit: Retiring squashed instruction from ROB.
+ 200000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x40107b=>0x40107d).(1=>2), [sn:70]
+ 200000: system.cpu: Removing committed instruction [tid:0] PC (0x40107b=>0x40107d).(1=>2) [sn:70]
+ 200000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:71]
+ 200000: system.cpu.commit: Retiring squashed instruction from ROB.
+ 200000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x40107b=>0x40107d).(2=>3), [sn:71]
+ 200000: system.cpu: Removing committed instruction [tid:0] PC (0x40107b=>0x40107d).(2=>3) [sn:71]
+ 200000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:72]
+ 200000: system.cpu.commit: Retiring squashed instruction from ROB.
+ 200000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x40107d=>0x40107f).(0=>1), [sn:72]
+ 200000: system.cpu: Removing committed instruction [tid:0] PC (0x40107d=>0x40107f).(0=>1) [sn:72]
+ 200000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:73]
+ 200000: system.cpu.commit: Retiring squashed instruction from ROB.
+ 200000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x40107d=>0x40107f).(1=>2), [sn:73]
+ 200000: system.cpu: Removing committed instruction [tid:0] PC (0x40107d=>0x40107f).(1=>2) [sn:73]
+ 200000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:74]
+ 200000: system.cpu.commit: Retiring squashed instruction from ROB.
+ 200000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x40107d=>0x40107f).(2=>3), [sn:74]
+ 200000: system.cpu: Removing committed instruction [tid:0] PC (0x40107d=>0x40107f).(2=>3) [sn:74]
+ 200000: system.cpu.commit: [tid:0] ROB has 0 insts & 918 free entries.
+ 200000: system.cpu.commit: Activity This Cycle.
+ 200000: system.cpu.commit: Deactivating stage.
+ 200000: system.cpu: Activity: 11
+ 200000: system.cpu: Activity: 10
+ 200000: system.cpu: Removing instruction, [tid:0] [sn:45] PC (0x40105b=>0x40105f).(0=>1)
+O3PipeView:fetch:176000:0x0040105b:0:45:  MOV_R_M : ld   rbx, SS:[t0 + rsp]
+O3PipeView:decode:177000
+O3PipeView:rename:178000
+O3PipeView:dispatch:180000
+O3PipeView:issue:180000
+O3PipeView:complete:181000
+O3PipeView:retire:0:store:0
+ 200000: global: DynInst: [sn:45] Instruction destroyed. Instcount for system.cpu = 31
+ 200000: system.cpu: Removing instruction, [tid:0] [sn:46] PC (0x40105f=>0x401063).(0=>1)
+O3PipeView:fetch:176000:0x0040105f:0:46:  ADD_R_I : limm   t1, 0x8
+O3PipeView:decode:177000
+O3PipeView:rename:178000
+O3PipeView:dispatch:180000
+O3PipeView:issue:180000
+O3PipeView:complete:181000
+O3PipeView:retire:0:store:0
+ 200000: global: DynInst: [sn:46] Instruction destroyed. Instcount for system.cpu = 30
+ 200000: system.cpu: Removing instruction, [tid:0] [sn:47] PC (0x40105f=>0x401063).(1=>2)
+O3PipeView:fetch:177000:0x0040105f:1:47:  ADD_R_I : add   rsp, rsp, t1
+O3PipeView:decode:178000
+O3PipeView:rename:179000
+O3PipeView:dispatch:181000
+O3PipeView:issue:181000
+O3PipeView:complete:182000
+O3PipeView:retire:0:store:0
+ 200000: global: DynInst: [sn:47] Instruction destroyed. Instcount for system.cpu = 29
+ 200000: system.cpu: Removing instruction, [tid:0] [sn:48] PC (0x401063=>0x40106a).(0=>1)
+O3PipeView:fetch:177000:0x00401063:0:48:  MOV_R_I : limm   rax, 0x3c
+O3PipeView:decode:178000
+O3PipeView:rename:179000
+O3PipeView:dispatch:181000
+O3PipeView:issue:181000
+O3PipeView:complete:182000
+O3PipeView:retire:0:store:0
+ 200000: global: DynInst: [sn:48] Instruction destroyed. Instcount for system.cpu = 28
+ 200000: system.cpu: Removing instruction, [tid:0] [sn:49] PC (0x40106a=>0x40106d).(0=>1)
+O3PipeView:fetch:177000:0x0040106a:0:49:  XOR_R_R : xor   rdi, rdi, rdi
+O3PipeView:decode:178000
+O3PipeView:rename:179000
+O3PipeView:dispatch:181000
+O3PipeView:issue:181000
+O3PipeView:complete:182000
+O3PipeView:retire:0:store:0
+ 200000: global: DynInst: [sn:49] Instruction destroyed. Instcount for system.cpu = 27
+ 200000: system.cpu: Removing instruction, [tid:0] [sn:50] PC (0x40106d=>0x40106f).(0=>1)
+O3PipeView:fetch:177000:0x0040106d:0:50:  syscall   
+O3PipeView:decode:178000
+O3PipeView:rename:179000
+O3PipeView:dispatch:181000
+O3PipeView:issue:181000
+O3PipeView:complete:182000
+O3PipeView:retire:0:store:0
+ 200000: global: DynInst: [sn:50] Instruction destroyed. Instcount for system.cpu = 26
+ 200000: system.cpu: Removing instruction, [tid:0] [sn:51] PC (0x40106f=>0x401071).(0=>1)
+O3PipeView:fetch:177000:0x0040106f:0:51:  ADD_M_R : ldst   t1b, DS:[rax]
+O3PipeView:decode:178000
+O3PipeView:rename:179000
+O3PipeView:dispatch:181000
+O3PipeView:issue:182000
+O3PipeView:complete:183000
+O3PipeView:retire:0:store:0
+ 200000: global: DynInst: [sn:51] Instruction destroyed. Instcount for system.cpu = 25
+ 200000: system.cpu: Removing instruction, [tid:0] [sn:52] PC (0x40106f=>0x401071).(1=>2)
+O3PipeView:fetch:177000:0x0040106f:1:52:  ADD_M_R : add   t1b, t1b, al
+O3PipeView:decode:178000
+O3PipeView:rename:179000
+O3PipeView:dispatch:181000
+O3PipeView:issue:0
+O3PipeView:complete:0
+O3PipeView:retire:0:store:0
+ 200000: global: DynInst: [sn:52] Instruction destroyed. Instcount for system.cpu = 24
+ 200000: system.cpu: Removing instruction, [tid:0] [sn:53] PC (0x40106f=>0x401071).(2=>3)
+O3PipeView:fetch:177000:0x0040106f:2:53:  ADD_M_R : st   t1b, DS:[rax]
+O3PipeView:decode:178000
+O3PipeView:rename:179000
+O3PipeView:dispatch:181000
+O3PipeView:issue:0
+O3PipeView:complete:0
+O3PipeView:retire:0:store:0
+ 200000: global: DynInst: [sn:53] Instruction destroyed. Instcount for system.cpu = 23
+ 200000: system.cpu: Removing instruction, [tid:0] [sn:54] PC (0x401071=>0x401073).(0=>1)
+O3PipeView:fetch:177000:0x00401071:0:54:  ADD_M_R : ldst   t1b, DS:[rax]
+O3PipeView:decode:178000
+O3PipeView:rename:179000
+O3PipeView:dispatch:181000
+O3PipeView:issue:0
+O3PipeView:complete:0
+O3PipeView:retire:0:store:0
+ 200000: global: DynInst: [sn:54] Instruction destroyed. Instcount for system.cpu = 22
+ 200000: system.cpu: Removing instruction, [tid:0] [sn:55] PC (0x401071=>0x401073).(1=>2)
+O3PipeView:fetch:177000:0x00401071:1:55:  ADD_M_R : add   t1b, t1b, al
+O3PipeView:decode:178000
+O3PipeView:rename:179000
+O3PipeView:dispatch:181000
+O3PipeView:issue:0
+O3PipeView:complete:0
+O3PipeView:retire:0:store:0
+ 200000: global: DynInst: [sn:55] Instruction destroyed. Instcount for system.cpu = 21
+ 200000: system.cpu: Removing instruction, [tid:0] [sn:56] PC (0x401071=>0x401073).(2=>3)
+O3PipeView:fetch:177000:0x00401071:2:56:  ADD_M_R : st   t1b, DS:[rax]
+O3PipeView:decode:178000
+O3PipeView:rename:179000
+O3PipeView:dispatch:181000
+O3PipeView:issue:0
+O3PipeView:complete:0
+O3PipeView:retire:0:store:0
+ 200000: global: DynInst: [sn:56] Instruction destroyed. Instcount for system.cpu = 20
+ 200000: system.cpu: Removing instruction, [tid:0] [sn:57] PC (0x401073=>0x401075).(0=>1)
+O3PipeView:fetch:178000:0x00401073:0:57:  ADD_M_R : ldst   t1b, DS:[rax]
+O3PipeView:decode:179000
+O3PipeView:rename:180000
+O3PipeView:dispatch:182000
+O3PipeView:issue:0
+O3PipeView:complete:0
+O3PipeView:retire:0:store:0
+ 200000: global: DynInst: [sn:57] Instruction destroyed. Instcount for system.cpu = 19
+ 200000: system.cpu: Removing instruction, [tid:0] [sn:58] PC (0x401073=>0x401075).(1=>2)
+O3PipeView:fetch:178000:0x00401073:1:58:  ADD_M_R : add   t1b, t1b, al
+O3PipeView:decode:179000
+O3PipeView:rename:180000
+O3PipeView:dispatch:182000
+O3PipeView:issue:0
+O3PipeView:complete:0
+O3PipeView:retire:0:store:0
+ 200000: global: DynInst: [sn:58] Instruction destroyed. Instcount for system.cpu = 18
+ 200000: system.cpu: Removing instruction, [tid:0] [sn:59] PC (0x401073=>0x401075).(2=>3)
+O3PipeView:fetch:178000:0x00401073:2:59:  ADD_M_R : st   t1b, DS:[rax]
+O3PipeView:decode:179000
+O3PipeView:rename:180000
+O3PipeView:dispatch:182000
+O3PipeView:issue:0
+O3PipeView:complete:0
+O3PipeView:retire:0:store:0
+ 200000: global: DynInst: [sn:59] Instruction destroyed. Instcount for system.cpu = 17
+ 200000: system.cpu: Removing instruction, [tid:0] [sn:60] PC (0x401075=>0x401077).(0=>1)
+O3PipeView:fetch:178000:0x00401075:0:60:  ADD_M_R : ldst   t1b, DS:[rax]
+O3PipeView:decode:179000
+O3PipeView:rename:180000
+O3PipeView:dispatch:182000
+O3PipeView:issue:0
+O3PipeView:complete:0
+O3PipeView:retire:0:store:0
+ 200000: global: DynInst: [sn:60] Instruction destroyed. Instcount for system.cpu = 16
+ 200000: system.cpu: Removing instruction, [tid:0] [sn:61] PC (0x401075=>0x401077).(1=>2)
+O3PipeView:fetch:178000:0x00401075:1:61:  ADD_M_R : add   t1b, t1b, al
+O3PipeView:decode:179000
+O3PipeView:rename:180000
+O3PipeView:dispatch:182000
+O3PipeView:issue:0
+O3PipeView:complete:0
+O3PipeView:retire:0:store:0
+ 200000: global: DynInst: [sn:61] Instruction destroyed. Instcount for system.cpu = 15
+ 200000: system.cpu: Removing instruction, [tid:0] [sn:62] PC (0x401075=>0x401077).(2=>3)
+O3PipeView:fetch:178000:0x00401075:2:62:  ADD_M_R : st   t1b, DS:[rax]
+O3PipeView:decode:179000
+O3PipeView:rename:180000
+O3PipeView:dispatch:182000
+O3PipeView:issue:0
+O3PipeView:complete:0
+O3PipeView:retire:0:store:0
+ 200000: global: DynInst: [sn:62] Instruction destroyed. Instcount for system.cpu = 14
+ 200000: system.cpu: Removing instruction, [tid:0] [sn:63] PC (0x401077=>0x401079).(0=>1)
+O3PipeView:fetch:178000:0x00401077:0:63:  ADD_M_R : ldst   t1b, DS:[rax]
+O3PipeView:decode:179000
+O3PipeView:rename:180000
+O3PipeView:dispatch:182000
+O3PipeView:issue:0
+O3PipeView:complete:0
+O3PipeView:retire:0:store:0
+ 200000: global: DynInst: [sn:63] Instruction destroyed. Instcount for system.cpu = 13
+ 200000: system.cpu: Removing instruction, [tid:0] [sn:64] PC (0x401077=>0x401079).(1=>2)
+O3PipeView:fetch:178000:0x00401077:1:64:  ADD_M_R : add   t1b, t1b, al
+O3PipeView:decode:179000
+O3PipeView:rename:180000
+O3PipeView:dispatch:182000
+O3PipeView:issue:0
+O3PipeView:complete:0
+O3PipeView:retire:0:store:0
+ 200000: global: DynInst: [sn:64] Instruction destroyed. Instcount for system.cpu = 12
+ 200000: system.cpu: Removing instruction, [tid:0] [sn:65] PC (0x401077=>0x401079).(2=>3)
+O3PipeView:fetch:178000:0x00401077:2:65:  ADD_M_R : st   t1b, DS:[rax]
+O3PipeView:decode:179000
+O3PipeView:rename:180000
+O3PipeView:dispatch:182000
+O3PipeView:issue:0
+O3PipeView:complete:0
+O3PipeView:retire:0:store:0
+ 200000: global: DynInst: [sn:65] Instruction destroyed. Instcount for system.cpu = 11
+ 200000: system.cpu: Removing instruction, [tid:0] [sn:66] PC (0x401079=>0x40107b).(0=>1)
+O3PipeView:fetch:178000:0x00401079:0:66:  ADD_M_R : ldst   t1b, DS:[rax]
+O3PipeView:decode:179000
+O3PipeView:rename:180000
+O3PipeView:dispatch:182000
+O3PipeView:issue:0
+O3PipeView:complete:0
+O3PipeView:retire:0:store:0
+ 200000: global: DynInst: [sn:66] Instruction destroyed. Instcount for system.cpu = 10
+ 200000: system.cpu: Removing instruction, [tid:0] [sn:67] PC (0x401079=>0x40107b).(1=>2)
+O3PipeView:fetch:179000:0x00401079:1:67:  ADD_M_R : add   t1b, t1b, al
+O3PipeView:decode:180000
+O3PipeView:rename:181000
+O3PipeView:dispatch:183000
+O3PipeView:issue:0
+O3PipeView:complete:0
+O3PipeView:retire:0:store:0
+ 200000: global: DynInst: [sn:67] Instruction destroyed. Instcount for system.cpu = 9
+ 200000: system.cpu: Removing instruction, [tid:0] [sn:68] PC (0x401079=>0x40107b).(2=>3)
+O3PipeView:fetch:179000:0x00401079:2:68:  ADD_M_R : st   t1b, DS:[rax]
+O3PipeView:decode:180000
+O3PipeView:rename:181000
+O3PipeView:dispatch:183000
+O3PipeView:issue:0
+O3PipeView:complete:0
+O3PipeView:retire:0:store:0
+ 200000: global: DynInst: [sn:68] Instruction destroyed. Instcount for system.cpu = 8
+ 200000: system.cpu: Removing instruction, [tid:0] [sn:69] PC (0x40107b=>0x40107d).(0=>1)
+O3PipeView:fetch:179000:0x0040107b:0:69:  ADD_M_R : ldst   t1b, DS:[rax]
+O3PipeView:decode:180000
+O3PipeView:rename:181000
+O3PipeView:dispatch:183000
+O3PipeView:issue:0
+O3PipeView:complete:0
+O3PipeView:retire:0:store:0
+ 200000: global: DynInst: [sn:69] Instruction destroyed. Instcount for system.cpu = 7
+ 200000: system.cpu: Removing instruction, [tid:0] [sn:70] PC (0x40107b=>0x40107d).(1=>2)
+O3PipeView:fetch:179000:0x0040107b:1:70:  ADD_M_R : add   t1b, t1b, al
+O3PipeView:decode:180000
+O3PipeView:rename:181000
+O3PipeView:dispatch:183000
+O3PipeView:issue:0
+O3PipeView:complete:0
+O3PipeView:retire:0:store:0
+ 200000: global: DynInst: [sn:70] Instruction destroyed. Instcount for system.cpu = 6
+ 200000: system.cpu: Removing instruction, [tid:0] [sn:71] PC (0x40107b=>0x40107d).(2=>3)
+O3PipeView:fetch:179000:0x0040107b:2:71:  ADD_M_R : st   t1b, DS:[rax]
+O3PipeView:decode:180000
+O3PipeView:rename:181000
+O3PipeView:dispatch:183000
+O3PipeView:issue:0
+O3PipeView:complete:0
+O3PipeView:retire:0:store:0
+ 200000: global: DynInst: [sn:71] Instruction destroyed. Instcount for system.cpu = 5
+ 200000: system.cpu: Removing instruction, [tid:0] [sn:72] PC (0x40107d=>0x40107f).(0=>1)
+O3PipeView:fetch:179000:0x0040107d:0:72:  ADD_M_R : ldst   t1b, DS:[rax]
+O3PipeView:decode:180000
+O3PipeView:rename:181000
+O3PipeView:dispatch:183000
+O3PipeView:issue:0
+O3PipeView:complete:0
+O3PipeView:retire:0:store:0
+ 200000: global: DynInst: [sn:72] Instruction destroyed. Instcount for system.cpu = 4
+ 200000: system.cpu: Removing instruction, [tid:0] [sn:73] PC (0x40107d=>0x40107f).(1=>2)
+O3PipeView:fetch:179000:0x0040107d:1:73:  ADD_M_R : add   t1b, t1b, al
+O3PipeView:decode:180000
+O3PipeView:rename:181000
+O3PipeView:dispatch:183000
+O3PipeView:issue:0
+O3PipeView:complete:0
+O3PipeView:retire:0:store:0
+ 200000: global: DynInst: [sn:73] Instruction destroyed. Instcount for system.cpu = 3
+ 200000: system.cpu: Removing instruction, [tid:0] [sn:74] PC (0x40107d=>0x40107f).(2=>3)
+O3PipeView:fetch:179000:0x0040107d:2:74:  ADD_M_R : st   t1b, DS:[rax]
+O3PipeView:decode:180000
+O3PipeView:rename:181000
+O3PipeView:dispatch:183000
+O3PipeView:issue:0
+O3PipeView:complete:0
+O3PipeView:retire:0:store:0
+ 200000: global: DynInst: [sn:74] Instruction destroyed. Instcount for system.cpu = 2
+ 200000: system.cpu: Scheduling next tick!
+ 201000: system.cpu.icache_port: Fetch unit received timing
+ 201000: system.cpu.fetch: [tid:0] Waking up from cache miss.
+ 201000: system.cpu: CPU already running.
+ 201000: system.cpu.fetch: [tid:0] Activating fetch due to cache completion
+ 201000: system.cpu.fetch: Activating stage.
+ 201000: system.cpu: Activity: 11
+ 201000: system.cpu: 
+
+O3CPU: Ticking main, O3CPU.
+ 201000: system.cpu.fetch: Running stage.
+ 201000: system.cpu.fetch: Attempting to fetch from [tid:0]
+ 201000: system.cpu.fetch: [tid:0] Icache miss is complete.
+ 201000: system.cpu.fetch: [tid:0] Adding instructions to queue to decode.
+ 201000: system.cpu.decoder: Decode: Decoded mov instruction: 
+{
+	leg = 0,
+	rex = 0x48,
+	vex/xop = 0,
+	op = {
+		type = one byte,
+		op = 0x8b,
+		},
+	modRM = 0x1c,
+	sib = 0x24,
+	immediate = 0,
+	displacement = 0
+	dispSize = 0}
+
+ 201000: global: DynInst: [sn:75] Instruction created. Instcount for system.cpu = 3
+ 201000: system.cpu.fetch: [tid:0] Instruction PC (0x40105b=>0x40105f).(0=>1) created [sn:75].
+ 201000: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_M : ld   rbx, SS:[t0 + rsp]
+ 201000: system.cpu.fetch: [tid:0] Fetch queue entry created (1/128).
+ 201000: system.cpu.decoder: Decode: Decoded add instruction: 
+{
+	leg = 0,
+	rex = 0x48,
+	vex/xop = 0,
+	op = {
+		type = one byte,
+		op = 0x83,
+		},
+	modRM = 0xc4,
+	sib = 0,
+	immediate = 0x8,
+	displacement = 0
+	dispSize = 0}
+
+ 201000: global: DynInst: [sn:76] Instruction created. Instcount for system.cpu = 4
+ 201000: system.cpu.fetch: [tid:0] Instruction PC (0x40105f=>0x401063).(0=>1) created [sn:76].
+ 201000: system.cpu.fetch: [tid:0] Instruction is:   ADD_R_I : limm   t1, 0x8
+ 201000: system.cpu.fetch: [tid:0] Fetch queue entry created (2/128).
+ 201000: global: DynInst: [sn:77] Instruction created. Instcount for system.cpu = 5
+ 201000: system.cpu.fetch: [tid:0] Instruction PC (0x40105f=>0x401063).(1=>2) created [sn:77].
+ 201000: system.cpu.fetch: [tid:0] Instruction is:   ADD_R_I : add   rsp, rsp, t1
+ 201000: system.cpu.fetch: [tid:0] Fetch queue entry created (3/128).
+ 201000: system.cpu.decoder: Decode: Decoded mov instruction: 
+{
+	leg = 0,
+	rex = 0x48,
+	vex/xop = 0,
+	op = {
+		type = one byte,
+		op = 0xc7,
+		},
+	modRM = 0xc0,
+	sib = 0,
+	immediate = 0x3c,
+	displacement = 0
+	dispSize = 0}
+
+ 201000: global: DynInst: [sn:78] Instruction created. Instcount for system.cpu = 6
+ 201000: system.cpu.fetch: [tid:0] Instruction PC (0x401063=>0x40106a).(0=>1) created [sn:78].
+ 201000: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   rax, 0x3c
+ 201000: system.cpu.fetch: [tid:0] Fetch queue entry created (4/128).
+ 201000: system.cpu.decoder: Decode: Decoded xor instruction: 
+{
+	leg = 0,
+	rex = 0x48,
+	vex/xop = 0,
+	op = {
+		type = one byte,
+		op = 0x31,
+		},
+	modRM = 0xff,
+	sib = 0,
+	immediate = 0,
+	displacement = 0
+	dispSize = 0}
+
+ 201000: global: DynInst: [sn:79] Instruction created. Instcount for system.cpu = 7
+ 201000: system.cpu.fetch: [tid:0] Instruction PC (0x40106a=>0x40106d).(0=>1) created [sn:79].
+ 201000: system.cpu.fetch: [tid:0] Instruction is:   XOR_R_R : xor   rdi, rdi, rdi
+ 201000: system.cpu.fetch: [tid:0] Fetch queue entry created (5/128).
+ 201000: system.cpu.decoder: Decode: Decoded syscall instruction: 
+{
+	leg = 0,
+	rex = 0,
+	vex/xop = 0,
+	op = {
+		type = two byte,
+		op = 0x5,
+		},
+	modRM = 0,
+	sib = 0,
+	immediate = 0,
+	displacement = 0
+	dispSize = 0}
+
+ 201000: global: DynInst: [sn:80] Instruction created. Instcount for system.cpu = 8
+ 201000: system.cpu.fetch: [tid:0] Instruction PC (0x40106d=>0x40106f).(0=>1) created [sn:80].
+ 201000: system.cpu.fetch: [tid:0] Instruction is:   syscall   
+ 201000: system.cpu.fetch: [tid:0] Fetch queue entry created (6/128).
+ 201000: system.cpu.decoder: Decode: Decoded add instruction: 
+{
+	leg = 0,
+	rex = 0,
+	vex/xop = 0,
+	op = {
+		type = one byte,
+		op = 0,
+		},
+	modRM = 0,
+	sib = 0,
+	immediate = 0,
+	displacement = 0
+	dispSize = 0}
+
+ 201000: global: DynInst: [sn:81] Instruction created. Instcount for system.cpu = 9
+ 201000: system.cpu.fetch: [tid:0] Instruction PC (0x40106f=>0x401071).(0=>1) created [sn:81].
+ 201000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
+ 201000: system.cpu.fetch: [tid:0] Fetch queue entry created (7/128).
+ 201000: global: DynInst: [sn:82] Instruction created. Instcount for system.cpu = 10
+ 201000: system.cpu.fetch: [tid:0] Instruction PC (0x40106f=>0x401071).(1=>2) created [sn:82].
+ 201000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : add   t1b, t1b, al
+ 201000: system.cpu.fetch: [tid:0] Fetch queue entry created (8/128).
+ 201000: global: DynInst: [sn:83] Instruction created. Instcount for system.cpu = 11
+ 201000: system.cpu.fetch: [tid:0] Instruction PC (0x40106f=>0x401071).(2=>3) created [sn:83].
+ 201000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : st   t1b, DS:[rax]
+ 201000: system.cpu.fetch: [tid:0] Fetch queue entry created (9/128).
+ 201000: system.cpu.decoder: Decode: Decoded add instruction: 
+{
+	leg = 0,
+	rex = 0,
+	vex/xop = 0,
+	op = {
+		type = one byte,
+		op = 0,
+		},
+	modRM = 0,
+	sib = 0,
+	immediate = 0,
+	displacement = 0
+	dispSize = 0}
+
+ 201000: global: DynInst: [sn:84] Instruction created. Instcount for system.cpu = 12
+ 201000: system.cpu.fetch: [tid:0] Instruction PC (0x401071=>0x401073).(0=>1) created [sn:84].
+ 201000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
+ 201000: system.cpu.fetch: [tid:0] Fetch queue entry created (10/128).
+ 201000: system.cpu.fetch: [tid:0] Done fetching, reached fetch bandwidth for this cycle.
+ 201000: system.cpu.fetch: [tid:0] [sn:75] Sending instruction to decode from fetch queue. Fetch queue size: 10.
+ 201000: system.cpu.fetch: [tid:0] [sn:76] Sending instruction to decode from fetch queue. Fetch queue size: 9.
+ 201000: system.cpu.fetch: [tid:0] [sn:77] Sending instruction to decode from fetch queue. Fetch queue size: 8.
+ 201000: system.cpu.fetch: [tid:0] [sn:78] Sending instruction to decode from fetch queue. Fetch queue size: 7.
+ 201000: system.cpu.fetch: [tid:0] [sn:79] Sending instruction to decode from fetch queue. Fetch queue size: 6.
+ 201000: system.cpu.fetch: [tid:0] [sn:80] Sending instruction to decode from fetch queue. Fetch queue size: 5.
+ 201000: system.cpu.fetch: [tid:0] [sn:81] Sending instruction to decode from fetch queue. Fetch queue size: 4.
+ 201000: system.cpu.fetch: [tid:0] [sn:82] Sending instruction to decode from fetch queue. Fetch queue size: 3.
+ 201000: system.cpu.fetch: [tid:0] [sn:83] Sending instruction to decode from fetch queue. Fetch queue size: 2.
+ 201000: system.cpu.fetch: [tid:0] [sn:84] Sending instruction to decode from fetch queue. Fetch queue size: 1.
+ 201000: system.cpu.fetch: Activity this cycle.
+ 201000: system.cpu: Activity: 12
+ 201000: system.cpu.decode: Processing [tid:0]
+ 201000: system.cpu.decode: [tid:0] Stall fom Rename stage detected.
+ 201000: system.cpu.decode: [tid:0] Blocking.
+ 201000: system.cpu.decode: Activity this cycle.
+ 201000: system.cpu.rename: Processing [tid:0]
+ 201000: system.cpu.rename: [tid:0] Free IQ: 559, Free ROB: 918, Free LQ: 132, Free SQ: 72, FreeRM 127(857 870 917 1834 127 8 4565)
+ 201000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
+ 201000: system.cpu.rename: [tid:0] Freeing phys regs of misspeculated instructions.
+ 201000: system.cpu.rename: [tid:0] Adding phys reg 62 (condition_code) to free list from squashing.
+ 201000: system.cpu.rename: [tid:0] Adding phys reg 61 (condition_code) to free list from squashing.
+ 201000: system.cpu.rename: [tid:0] Adding phys reg 102 (integer) to free list from squashing.
+ 201000: system.cpu.rename: [tid:0] Adding phys reg 101 (integer) to free list from squashing.
+ 201000: system.cpu.rename: [tid:0] Adding phys reg 60 (condition_code) to free list from squashing.
+ 201000: system.cpu.rename: [tid:0] Adding phys reg 59 (condition_code) to free list from squashing.
+ 201000: system.cpu.rename: [tid:0] Adding phys reg 100 (integer) to free list from squashing.
+ 201000: system.cpu.rename: [tid:0] Adding phys reg 99 (integer) to free list from squashing.
+ 201000: system.cpu.rename: [tid:0] Adding phys reg 58 (condition_code) to free list from squashing.
+ 201000: system.cpu.rename: [tid:0] Adding phys reg 57 (condition_code) to free list from squashing.
+ 201000: system.cpu.rename: [tid:0] Adding phys reg 98 (integer) to free list from squashing.
+ 201000: system.cpu.rename: [tid:0] Adding phys reg 97 (integer) to free list from squashing.
+ 201000: system.cpu.rename: [tid:0] Adding phys reg 56 (condition_code) to free list from squashing.
+ 201000: system.cpu.rename: [tid:0] Adding phys reg 55 (condition_code) to free list from squashing.
+ 201000: system.cpu.rename: [tid:0] Adding phys reg 96 (integer) to free list from squashing.
+ 201000: system.cpu.rename: [tid:0] Adding phys reg 95 (integer) to free list from squashing.
+ 201000: system.cpu.rename: [tid:0] Adding phys reg 54 (condition_code) to free list from squashing.
+ 201000: system.cpu.rename: [tid:0] Adding phys reg 53 (condition_code) to free list from squashing.
+ 201000: system.cpu.rename: [tid:0] Adding phys reg 94 (integer) to free list from squashing.
+ 201000: system.cpu.rename: [tid:0] Adding phys reg 93 (integer) to free list from squashing.
+ 201000: system.cpu.rename: [tid:0] Adding phys reg 52 (condition_code) to free list from squashing.
+ 201000: system.cpu.rename: [tid:0] Adding phys reg 51 (condition_code) to free list from squashing.
+ 201000: system.cpu.rename: [tid:0] Adding phys reg 92 (integer) to free list from squashing.
+ 201000: system.cpu.rename: [tid:0] Adding phys reg 91 (integer) to free list from squashing.
+ 201000: system.cpu.rename: [tid:0] Adding phys reg 50 (condition_code) to free list from squashing.
+ 201000: system.cpu.rename: [tid:0] Adding phys reg 49 (condition_code) to free list from squashing.
+ 201000: system.cpu.rename: [tid:0] Adding phys reg 90 (integer) to free list from squashing.
+ 201000: system.cpu.rename: [tid:0] Adding phys reg 89 (integer) to free list from squashing.
+ 201000: system.cpu.rename: [tid:0] Adding phys reg 48 (condition_code) to free list from squashing.
+ 201000: system.cpu.rename: [tid:0] Adding phys reg 47 (condition_code) to free list from squashing.
+ 201000: system.cpu.rename: [tid:0] Adding phys reg 88 (integer) to free list from squashing.
+ 201000: system.cpu.rename: [tid:0] Adding phys reg 87 (integer) to free list from squashing.
+ 201000: system.cpu.rename: [tid:0] Adding phys reg 46 (condition_code) to free list from squashing.
+ 201000: system.cpu.rename: [tid:0] Adding phys reg 45 (condition_code) to free list from squashing.
+ 201000: system.cpu.rename: [tid:0] Adding phys reg 86 (integer) to free list from squashing.
+ 201000: system.cpu.rename: [tid:0] Adding phys reg 85 (integer) to free list from squashing.
+ 201000: system.cpu.rename: [tid:0] Adding phys reg 44 (condition_code) to free list from squashing.
+ 201000: system.cpu.rename: [tid:0] Adding phys reg 43 (condition_code) to free list from squashing.
+ 201000: system.cpu.rename: [tid:0] Adding phys reg 84 (integer) to free list from squashing.
+ 201000: system.cpu.rename: [tid:0] Adding phys reg 83 (integer) to free list from squashing.
+ 201000: system.cpu.rename: [tid:0] Cannot free phys reg 41 (integer) from squashing, logical dependents 1
+ 201000: system.cpu.rename: [tid:0] Stall from IEW stage detected.
+ 201000: system.cpu.rename: [tid:0] Blocking.
+ 201000: system.cpu.iew: Issue: Processing [tid:0]
+ 201000: system.cpu.iew: [tid:0] Done blocking, switching to unblocking.
+ 201000: system.cpu.iew: [tid:0] Reading instructions out of the skid buffer 0.
+ 201000: system.cpu.iew: [tid:0] Done unblocking.
+ 201000: system.cpu.iew: [tid:0] Not blocked, so attempting to run dispatch.
+ 201000: system.cpu.iq: Attempting to schedule ready instructions from the IQ.
+ 201000: system.cpu.iq: Not able to schedule any instructions.
+ 201000: system.cpu.iew: Processing [tid:0]
+ 201000: system.cpu.iew: [tid:0], Dispatch dispatched 0 instructions.
+ 201000: system.cpu.iew.lsq.thread0: SQ size: 72, #stores occupied: 0
+ 201000: system.cpu.iew.lsq.thread0: LQ size: 132, #loads occupied: 0
+ 201000: system.cpu.iew: IQ has 559 free entries (Can schedule: 0).  LQ has 132 free entries. SQ has 72 free entries.
+ 201000: system.cpu.iew: Activity this cycle.
+ 201000: system.cpu.commit: Getting instructions from Rename stage.
+ 201000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 201000: system.cpu.commit: [tid:0] ROB has 0 insts & 918 free entries.
+ 201000: system.cpu: Activity: 11
+ 201000: system.cpu: Scheduling next tick!
+ 202000: system.cpu: 
+
+O3CPU: Ticking main, O3CPU.
+ 202000: system.cpu.fetch: Running stage.
+ 202000: system.cpu.fetch: Attempting to fetch from [tid:0]
+ 202000: system.cpu.fetch: [tid:0] Adding instructions to queue to decode.
+ 202000: global: DynInst: [sn:85] Instruction created. Instcount for system.cpu = 13
+ 202000: system.cpu.fetch: [tid:0] Instruction PC (0x401071=>0x401073).(1=>2) created [sn:85].
+ 202000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : add   t1b, t1b, al
+ 202000: system.cpu.fetch: [tid:0] Fetch queue entry created (1/128).
+ 202000: global: DynInst: [sn:86] Instruction created. Instcount for system.cpu = 14
+ 202000: system.cpu.fetch: [tid:0] Instruction PC (0x401071=>0x401073).(2=>3) created [sn:86].
+ 202000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : st   t1b, DS:[rax]
+ 202000: system.cpu.fetch: [tid:0] Fetch queue entry created (2/128).
+ 202000: system.cpu.decoder: Decode: Decoded add instruction: 
+{
+	leg = 0,
+	rex = 0,
+	vex/xop = 0,
+	op = {
+		type = one byte,
+		op = 0,
+		},
+	modRM = 0,
+	sib = 0,
+	immediate = 0,
+	displacement = 0
+	dispSize = 0}
+
+ 202000: global: DynInst: [sn:87] Instruction created. Instcount for system.cpu = 15
+ 202000: system.cpu.fetch: [tid:0] Instruction PC (0x401073=>0x401075).(0=>1) created [sn:87].
+ 202000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
+ 202000: system.cpu.fetch: [tid:0] Fetch queue entry created (3/128).
+ 202000: global: DynInst: [sn:88] Instruction created. Instcount for system.cpu = 16
+ 202000: system.cpu.fetch: [tid:0] Instruction PC (0x401073=>0x401075).(1=>2) created [sn:88].
+ 202000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : add   t1b, t1b, al
+ 202000: system.cpu.fetch: [tid:0] Fetch queue entry created (4/128).
+ 202000: global: DynInst: [sn:89] Instruction created. Instcount for system.cpu = 17
+ 202000: system.cpu.fetch: [tid:0] Instruction PC (0x401073=>0x401075).(2=>3) created [sn:89].
+ 202000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : st   t1b, DS:[rax]
+ 202000: system.cpu.fetch: [tid:0] Fetch queue entry created (5/128).
+ 202000: system.cpu.decoder: Decode: Decoded add instruction: 
+{
+	leg = 0,
+	rex = 0,
+	vex/xop = 0,
+	op = {
+		type = one byte,
+		op = 0,
+		},
+	modRM = 0,
+	sib = 0,
+	immediate = 0,
+	displacement = 0
+	dispSize = 0}
+
+ 202000: global: DynInst: [sn:90] Instruction created. Instcount for system.cpu = 18
+ 202000: system.cpu.fetch: [tid:0] Instruction PC (0x401075=>0x401077).(0=>1) created [sn:90].
+ 202000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
+ 202000: system.cpu.fetch: [tid:0] Fetch queue entry created (6/128).
+ 202000: global: DynInst: [sn:91] Instruction created. Instcount for system.cpu = 19
+ 202000: system.cpu.fetch: [tid:0] Instruction PC (0x401075=>0x401077).(1=>2) created [sn:91].
+ 202000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : add   t1b, t1b, al
+ 202000: system.cpu.fetch: [tid:0] Fetch queue entry created (7/128).
+ 202000: global: DynInst: [sn:92] Instruction created. Instcount for system.cpu = 20
+ 202000: system.cpu.fetch: [tid:0] Instruction PC (0x401075=>0x401077).(2=>3) created [sn:92].
+ 202000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : st   t1b, DS:[rax]
+ 202000: system.cpu.fetch: [tid:0] Fetch queue entry created (8/128).
+ 202000: system.cpu.decoder: Decode: Decoded add instruction: 
+{
+	leg = 0,
+	rex = 0,
+	vex/xop = 0,
+	op = {
+		type = one byte,
+		op = 0,
+		},
+	modRM = 0,
+	sib = 0,
+	immediate = 0,
+	displacement = 0
+	dispSize = 0}
+
+ 202000: global: DynInst: [sn:93] Instruction created. Instcount for system.cpu = 21
+ 202000: system.cpu.fetch: [tid:0] Instruction PC (0x401077=>0x401079).(0=>1) created [sn:93].
+ 202000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
+ 202000: system.cpu.fetch: [tid:0] Fetch queue entry created (9/128).
+ 202000: global: DynInst: [sn:94] Instruction created. Instcount for system.cpu = 22
+ 202000: system.cpu.fetch: [tid:0] Instruction PC (0x401077=>0x401079).(1=>2) created [sn:94].
+ 202000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : add   t1b, t1b, al
+ 202000: system.cpu.fetch: [tid:0] Fetch queue entry created (10/128).
+ 202000: system.cpu.fetch: [tid:0] Done fetching, reached fetch bandwidth for this cycle.
+ 202000: system.cpu.fetch: Activity this cycle.
+ 202000: system.cpu: Activity: 12
+ 202000: system.cpu.decode: Processing [tid:0]
+ 202000: system.cpu.decode: [tid:0] Stall fom Rename stage detected.
+ 202000: system.cpu.decode: [tid:0] Blocking.
+ 202000: system.cpu.decode: Inserting [tid:0][sn:75] PC: (0x40105b=>0x40105f).(0=>1) into decode skidBuffer 1
+ 202000: system.cpu.decode: Inserting [tid:0][sn:76] PC: (0x40105f=>0x401063).(0=>1) into decode skidBuffer 2
+ 202000: system.cpu.decode: Inserting [tid:0][sn:77] PC: (0x40105f=>0x401063).(1=>2) into decode skidBuffer 3
+ 202000: system.cpu.decode: Inserting [tid:0][sn:78] PC: (0x401063=>0x40106a).(0=>1) into decode skidBuffer 4
+ 202000: system.cpu.decode: Inserting [tid:0][sn:79] PC: (0x40106a=>0x40106d).(0=>1) into decode skidBuffer 5
+ 202000: system.cpu.decode: Inserting [tid:0][sn:80] PC: (0x40106d=>0x40106f).(0=>1) into decode skidBuffer 6
+ 202000: system.cpu.decode: Inserting [tid:0][sn:81] PC: (0x40106f=>0x401071).(0=>1) into decode skidBuffer 7
+ 202000: system.cpu.decode: Inserting [tid:0][sn:82] PC: (0x40106f=>0x401071).(1=>2) into decode skidBuffer 8
+ 202000: system.cpu.decode: Inserting [tid:0][sn:83] PC: (0x40106f=>0x401071).(2=>3) into decode skidBuffer 9
+ 202000: system.cpu.decode: Inserting [tid:0][sn:84] PC: (0x401071=>0x401073).(0=>1) into decode skidBuffer 10
+ 202000: system.cpu.rename: Processing [tid:0]
+ 202000: system.cpu.rename: [tid:0] Free IQ: 559, Free ROB: 918, Free LQ: 132, Free SQ: 72, FreeRM 127(877 870 917 1834 127 8 4585)
+ 202000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
+ 202000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 132, loadsInProgress: 0, loads dispatchedToLQ: 0
+ 202000: system.cpu.rename: [tid:0] Done blocking, switching to unblocking.
+ 202000: system.cpu.rename: [tid:0] Trying to unblock.
+ 202000: system.cpu.rename: [tid:0] Done unblocking.
+ 202000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
+ 202000: system.cpu.rename: [tid:0] Nothing to do, breaking out early.
+ 202000: system.cpu.rename: Activity this cycle.
+ 202000: system.cpu.iew: Issue: Processing [tid:0]
+ 202000: system.cpu.iew: [tid:0] Not blocked, so attempting to run dispatch.
+ 202000: system.cpu.iq: Attempting to schedule ready instructions from the IQ.
+ 202000: system.cpu.iq: Not able to schedule any instructions.
+ 202000: system.cpu.iew: Processing [tid:0]
+ 202000: system.cpu.iew: [tid:0], Dispatch dispatched 0 instructions.
+ 202000: system.cpu.iew.lsq.thread0: SQ size: 72, #stores occupied: 0
+ 202000: system.cpu.iew.lsq.thread0: LQ size: 132, #loads occupied: 0
+ 202000: system.cpu.iew: IQ has 559 free entries (Can schedule: 0).  LQ has 132 free entries. SQ has 72 free entries.
+ 202000: system.cpu.commit: Getting instructions from Rename stage.
+ 202000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 202000: system.cpu.commit: [tid:0] ROB has 0 insts & 918 free entries.
+ 202000: system.cpu: Activity: 11
+ 202000: system.cpu: Scheduling next tick!
+ 203000: system.cpu: 
+
+O3CPU: Ticking main, O3CPU.
+ 203000: system.cpu.fetch: Running stage.
+ 203000: system.cpu.fetch: Attempting to fetch from [tid:0]
+ 203000: system.cpu.fetch: [tid:0] Adding instructions to queue to decode.
+ 203000: global: DynInst: [sn:95] Instruction created. Instcount for system.cpu = 23
+ 203000: system.cpu.fetch: [tid:0] Instruction PC (0x401077=>0x401079).(2=>3) created [sn:95].
+ 203000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : st   t1b, DS:[rax]
+ 203000: system.cpu.fetch: [tid:0] Fetch queue entry created (11/128).
+ 203000: system.cpu.decoder: Decode: Decoded add instruction: 
+{
+	leg = 0,
+	rex = 0,
+	vex/xop = 0,
+	op = {
+		type = one byte,
+		op = 0,
+		},
+	modRM = 0,
+	sib = 0,
+	immediate = 0,
+	displacement = 0
+	dispSize = 0}
+
+ 203000: global: DynInst: [sn:96] Instruction created. Instcount for system.cpu = 24
+ 203000: system.cpu.fetch: [tid:0] Instruction PC (0x401079=>0x40107b).(0=>1) created [sn:96].
+ 203000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
+ 203000: system.cpu.fetch: [tid:0] Fetch queue entry created (12/128).
+ 203000: global: DynInst: [sn:97] Instruction created. Instcount for system.cpu = 25
+ 203000: system.cpu.fetch: [tid:0] Instruction PC (0x401079=>0x40107b).(1=>2) created [sn:97].
+ 203000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : add   t1b, t1b, al
+ 203000: system.cpu.fetch: [tid:0] Fetch queue entry created (13/128).
+ 203000: global: DynInst: [sn:98] Instruction created. Instcount for system.cpu = 26
+ 203000: system.cpu.fetch: [tid:0] Instruction PC (0x401079=>0x40107b).(2=>3) created [sn:98].
+ 203000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : st   t1b, DS:[rax]
+ 203000: system.cpu.fetch: [tid:0] Fetch queue entry created (14/128).
+ 203000: system.cpu.decoder: Decode: Decoded add instruction: 
+{
+	leg = 0,
+	rex = 0,
+	vex/xop = 0,
+	op = {
+		type = one byte,
+		op = 0,
+		},
+	modRM = 0,
+	sib = 0,
+	immediate = 0,
+	displacement = 0
+	dispSize = 0}
+
+ 203000: global: DynInst: [sn:99] Instruction created. Instcount for system.cpu = 27
+ 203000: system.cpu.fetch: [tid:0] Instruction PC (0x40107b=>0x40107d).(0=>1) created [sn:99].
+ 203000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
+ 203000: system.cpu.fetch: [tid:0] Fetch queue entry created (15/128).
+ 203000: global: DynInst: [sn:100] Instruction created. Instcount for system.cpu = 28
+ 203000: system.cpu.fetch: [tid:0] Instruction PC (0x40107b=>0x40107d).(1=>2) created [sn:100].
+ 203000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : add   t1b, t1b, al
+ 203000: system.cpu.fetch: [tid:0] Fetch queue entry created (16/128).
+ 203000: global: DynInst: [sn:101] Instruction created. Instcount for system.cpu = 29
+ 203000: system.cpu.fetch: [tid:0] Instruction PC (0x40107b=>0x40107d).(2=>3) created [sn:101].
+ 203000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : st   t1b, DS:[rax]
+ 203000: system.cpu.fetch: [tid:0] Fetch queue entry created (17/128).
+ 203000: system.cpu.decoder: Decode: Decoded add instruction: 
+{
+	leg = 0,
+	rex = 0,
+	vex/xop = 0,
+	op = {
+		type = one byte,
+		op = 0,
+		},
+	modRM = 0,
+	sib = 0,
+	immediate = 0,
+	displacement = 0
+	dispSize = 0}
+
+ 203000: global: DynInst: [sn:102] Instruction created. Instcount for system.cpu = 30
+ 203000: system.cpu.fetch: [tid:0] Instruction PC (0x40107d=>0x40107f).(0=>1) created [sn:102].
+ 203000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
+ 203000: system.cpu.fetch: [tid:0] Fetch queue entry created (18/128).
+ 203000: global: DynInst: [sn:103] Instruction created. Instcount for system.cpu = 31
+ 203000: system.cpu.fetch: [tid:0] Instruction PC (0x40107d=>0x40107f).(1=>2) created [sn:103].
+ 203000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : add   t1b, t1b, al
+ 203000: system.cpu.fetch: [tid:0] Fetch queue entry created (19/128).
+ 203000: global: DynInst: [sn:104] Instruction created. Instcount for system.cpu = 32
+ 203000: system.cpu.fetch: [tid:0] Instruction PC (0x40107d=>0x40107f).(2=>3) created [sn:104].
+ 203000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : st   t1b, DS:[rax]
+ 203000: system.cpu.fetch: [tid:0] Fetch queue entry created (20/128).
+ 203000: system.cpu.fetch: [tid:0] Done fetching, reached fetch bandwidth for this cycle.
+ 203000: system.cpu.fetch: Activity this cycle.
+ 203000: system.cpu: Activity: 12
+ 203000: system.cpu.decode: Processing [tid:0]
+ 203000: system.cpu.decode: [tid:0] Done blocking, switching to unblocking.
+ 203000: system.cpu.decode: [tid:0] Currently unblocking.
+ 203000: system.cpu.decode: [tid:0] Unblocking, removing insts from skid buffer.
+ 203000: system.cpu.decode: [tid:0] Sending instruction to rename.
+ 203000: system.cpu.decode: [tid:0] Processing instruction [sn:75] with PC (0x40105b=>0x40105f).(0=>1)
+ 203000: system.cpu.decode: [tid:0] Processing instruction [sn:76] with PC (0x40105f=>0x401063).(0=>1)
+ 203000: system.cpu.decode: [tid:0] Processing instruction [sn:77] with PC (0x40105f=>0x401063).(1=>2)
+ 203000: system.cpu.decode: [tid:0] Processing instruction [sn:78] with PC (0x401063=>0x40106a).(0=>1)
+ 203000: system.cpu.decode: [tid:0] Processing instruction [sn:79] with PC (0x40106a=>0x40106d).(0=>1)
+ 203000: system.cpu.decode: [tid:0] Processing instruction [sn:80] with PC (0x40106d=>0x40106f).(0=>1)
+ 203000: system.cpu.decode: [tid:0] Processing instruction [sn:81] with PC (0x40106f=>0x401071).(0=>1)
+ 203000: system.cpu.decode: [tid:0] Processing instruction [sn:82] with PC (0x40106f=>0x401071).(1=>2)
+ 203000: system.cpu.decode: [tid:0] Processing instruction [sn:83] with PC (0x40106f=>0x401071).(2=>3)
+ 203000: system.cpu.decode: [tid:0] Processing instruction [sn:84] with PC (0x401071=>0x401073).(0=>1)
+ 203000: system.cpu.decode: [tid:0] Done unblocking.
+ 203000: system.cpu.decode: Activity this cycle.
+ 203000: system.cpu.rename: Processing [tid:0]
+ 203000: system.cpu.rename: [tid:0] Free IQ: 559, Free ROB: 918, Free LQ: 132, Free SQ: 72, FreeRM 127(877 870 917 1834 127 8 4585)
+ 203000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
+ 203000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 132, loadsInProgress: 0, loads dispatchedToLQ: 0
+ 203000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
+ 203000: system.cpu.rename: [tid:0] Nothing to do, breaking out early.
+ 203000: system.cpu.iew: Issue: Processing [tid:0]
+ 203000: system.cpu.iew: [tid:0] Not blocked, so attempting to run dispatch.
+ 203000: system.cpu.iq: Attempting to schedule ready instructions from the IQ.
+ 203000: system.cpu.iq: Not able to schedule any instructions.
+ 203000: system.cpu.iew: Processing [tid:0]
+ 203000: system.cpu.iew: [tid:0], Dispatch dispatched 0 instructions.
+ 203000: system.cpu.iew.lsq.thread0: SQ size: 72, #stores occupied: 0
+ 203000: system.cpu.iew.lsq.thread0: LQ size: 132, #loads occupied: 0
+ 203000: system.cpu.iew: IQ has 559 free entries (Can schedule: 0).  LQ has 132 free entries. SQ has 72 free entries.
+ 203000: system.cpu.commit: Getting instructions from Rename stage.
+ 203000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 203000: system.cpu.commit: [tid:0] ROB has 0 insts & 918 free entries.
+ 203000: system.cpu: Activity: 11
+ 203000: system.cpu: Scheduling next tick!
+ 204000: system.cpu: 
+
+O3CPU: Ticking main, O3CPU.
+ 204000: system.cpu.fetch: Running stage.
+ 204000: system.cpu.fetch: Attempting to fetch from [tid:0]
+ 204000: system.cpu.fetch: [tid:0] Adding instructions to queue to decode.
+ 204000: system.cpu.fetch: [tid:0] Issuing a pipelined I-cache access, starting at PC (0x40107f=>0x401087).(0=>1).
+ 204000: system.cpu.fetch: [tid:0] Fetching cache line 0x401080 for addr 0x401080
+ 204000: system.cpu: CPU already running.
+ 204000: system.cpu.fetch: Fetch: Doing instruction read.
+ 204000: system.cpu.fetch: [tid:0] Doing Icache access.
+ 204000: system.cpu.fetch: [tid:0] Activity: Waiting on I-cache response.
+ 204000: system.cpu.fetch: Deactivating stage.
+ 204000: system.cpu: Activity: 10
+ 204000: system.cpu.fetch: [tid:0] [sn:85] Sending instruction to decode from fetch queue. Fetch queue size: 20.
+ 204000: system.cpu.fetch: [tid:0] [sn:86] Sending instruction to decode from fetch queue. Fetch queue size: 19.
+ 204000: system.cpu.fetch: [tid:0] [sn:87] Sending instruction to decode from fetch queue. Fetch queue size: 18.
+ 204000: system.cpu.fetch: [tid:0] [sn:88] Sending instruction to decode from fetch queue. Fetch queue size: 17.
+ 204000: system.cpu.fetch: [tid:0] [sn:89] Sending instruction to decode from fetch queue. Fetch queue size: 16.
+ 204000: system.cpu.fetch: [tid:0] [sn:90] Sending instruction to decode from fetch queue. Fetch queue size: 15.
+ 204000: system.cpu.fetch: [tid:0] [sn:91] Sending instruction to decode from fetch queue. Fetch queue size: 14.
+ 204000: system.cpu.fetch: [tid:0] [sn:92] Sending instruction to decode from fetch queue. Fetch queue size: 13.
+ 204000: system.cpu.fetch: [tid:0] [sn:93] Sending instruction to decode from fetch queue. Fetch queue size: 12.
+ 204000: system.cpu.fetch: [tid:0] [sn:94] Sending instruction to decode from fetch queue. Fetch queue size: 11.
+ 204000: system.cpu.fetch: Activity this cycle.
+ 204000: system.cpu: Activity: 11
+ 204000: system.cpu.decode: Processing [tid:0]
+ 204000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
+ 204000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
+ 204000: system.cpu.rename: Processing [tid:0]
+ 204000: system.cpu.rename: [tid:0] Free IQ: 559, Free ROB: 918, Free LQ: 132, Free SQ: 72, FreeRM 127(877 870 917 1834 127 8 4585)
+ 204000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
+ 204000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 132, loadsInProgress: 0, loads dispatchedToLQ: 0
+ 204000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
+ 204000: system.cpu.rename: [tid:0] 10 available instructions to send iew.
+ 204000: system.cpu.rename: [tid:0] 0 insts pipelining from Rename | 0 insts dispatched to IQ last cycle.
+ 204000: system.cpu.rename: [tid:0] Sending instructions to IEW.
+ 204000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 132, loadsInProgress: 0, loads dispatchedToLQ: 0
+ 204000: system.cpu.rename: [tid:0] Processing instruction [sn:75] with PC (0x40105b=>0x40105f).(0=>1).
+ 204000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+ 204000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+ 204000: global: [sn:75] has 1 ready out of 3 sources. RTI 0)
+ 204000: system.cpu.rename: [tid:0] Looking up integer arch reg 4, got phys reg 40 (integer)
+ 204000: system.cpu.rename: [tid:0] Register 40 (flat: 40) (integer) is ready.
+ 204000: global: [sn:75] has 2 ready out of 3 sources. RTI 0)
+ 204000: system.cpu.rename: [tid:0] Looking up miscellaneous arch reg 154, got phys reg 154 (miscellaneous)
+ 204000: system.cpu.rename: [tid:0] Register 154 (flat: 0) (miscellaneous) is ready.
+ 204000: global: [sn:75] has 3 ready out of 3 sources. RTI 0)
+ 204000: global: Renamed reg rbx to physical reg 103 (103) old mapping was 3 (3)
+ 204000: system.cpu.rename: [tid:0] Querying SMB Predictor for load [sn:75] with PC (0x40105b=>0x40105f).(0=>1).
+ 204000: system.cpu.rename: [tid:0] SMB Predictor predicted store with sequence number 4 as source of load [sn:75].
+ 204000: system.cpu.rename: [tid:0] Renaming arch reg 3 (integer) to physical reg 41 (41).
+ 204000: system.cpu.rename: [tid:0] [sn:75] Adding instruction to history buffer (size=3).
+ 204000: system.cpu.rename: [tid:0] Sending instructions to IEW.
+ 204000: system.cpu.rename: [tid:0] Processing instruction [sn:76] with PC (0x40105f=>0x401063).(0=>1).
+ 204000: global: Renamed reg t1 to physical reg 104 (104) old mapping was 68 (68)
+ 204000: system.cpu.rename: [tid:0] Renaming arch reg 17 (integer) to physical reg 104 (104).
+ 204000: system.cpu.rename: [tid:0] [sn:76] Adding instruction to history buffer (size=4).
+ 204000: system.cpu.rename: [tid:0] Sending instructions to IEW.
+ 204000: system.cpu.rename: [tid:0] Processing instruction [sn:77] with PC (0x40105f=>0x401063).(1=>2).
+ 204000: system.cpu.rename: [tid:0] Looking up integer arch reg 4, got phys reg 40 (integer)
+ 204000: system.cpu.rename: [tid:0] Register 40 (flat: 40) (integer) is ready.
+ 204000: global: [sn:77] has 1 ready out of 7 sources. RTI 0)
+ 204000: system.cpu.rename: [tid:0] Looking up integer arch reg 17, got phys reg 104 (integer)
+ 204000: system.cpu.rename: [tid:0] Register 104 (flat: 104) (integer) is not ready.
+ 204000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+ 204000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+ 204000: global: [sn:77] has 2 ready out of 7 sources. RTI 0)
+ 204000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+ 204000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+ 204000: global: [sn:77] has 3 ready out of 7 sources. RTI 0)
+ 204000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+ 204000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+ 204000: global: [sn:77] has 4 ready out of 7 sources. RTI 0)
+ 204000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+ 204000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+ 204000: global: [sn:77] has 5 ready out of 7 sources. RTI 0)
+ 204000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+ 204000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+ 204000: global: [sn:77] has 6 ready out of 7 sources. RTI 0)
+ 204000: global: Renamed reg rsp to physical reg 105 (105) old mapping was 40 (40)
+ 204000: system.cpu.rename: [tid:0] Renaming arch reg 4 (integer) to physical reg 105 (105).
+ 204000: system.cpu.rename: [tid:0] [sn:77] Adding instruction to history buffer (size=5).
+ 204000: global: Renamed reg condition_code[0] to physical reg 4789 (4789) old mapping was 4763 (4763)
+ 204000: system.cpu.rename: [tid:0] Renaming arch reg 0 (condition_code) to physical reg 63 (4789).
+ 204000: system.cpu.rename: [tid:0] [sn:77] Adding instruction to history buffer (size=6).
+ 204000: global: Renamed reg condition_code[1] to physical reg 4790 (4790) old mapping was 4768 (4768)
+ 204000: system.cpu.rename: [tid:0] Renaming arch reg 1 (condition_code) to physical reg 64 (4790).
+ 204000: system.cpu.rename: [tid:0] [sn:77] Adding instruction to history buffer (size=7).
+ 204000: system.cpu.rename: [tid:0] Renaming arch reg 0 (invalid) to physical reg 4294967295 (4294967295).
+ 204000: system.cpu.rename: [tid:0] [sn:77] Adding instruction to history buffer (size=8).
+ 204000: system.cpu.rename: [tid:0] Renaming arch reg 0 (invalid) to physical reg 4294967295 (4294967295).
+ 204000: system.cpu.rename: [tid:0] [sn:77] Adding instruction to history buffer (size=9).
+ 204000: system.cpu.rename: [tid:0] Renaming arch reg 0 (invalid) to physical reg 4294967295 (4294967295).
+ 204000: system.cpu.rename: [tid:0] [sn:77] Adding instruction to history buffer (size=10).
+ 204000: system.cpu.rename: [tid:0] Sending instructions to IEW.
+ 204000: system.cpu.rename: [tid:0] Processing instruction [sn:78] with PC (0x401063=>0x40106a).(0=>1).
+ 204000: global: Renamed reg rax to physical reg 106 (106) old mapping was 41 (41)
+ 204000: system.cpu.rename: [tid:0] Renaming arch reg 0 (integer) to physical reg 106 (106).
+ 204000: system.cpu.rename: [tid:0] [sn:78] Adding instruction to history buffer (size=11).
+ 204000: system.cpu.rename: [tid:0] Sending instructions to IEW.
+ 204000: system.cpu.rename: [tid:0] Processing instruction [sn:79] with PC (0x40106a=>0x40106d).(0=>1).
+ 204000: system.cpu.rename: [tid:0] Looking up integer arch reg 7, got phys reg 7 (integer)
+ 204000: system.cpu.rename: [tid:0] Register 7 (flat: 7) (integer) is ready.
+ 204000: global: [sn:79] has 1 ready out of 7 sources. RTI 0)
+ 204000: system.cpu.rename: [tid:0] Looking up integer arch reg 7, got phys reg 7 (integer)
+ 204000: system.cpu.rename: [tid:0] Register 7 (flat: 7) (integer) is ready.
+ 204000: global: [sn:79] has 2 ready out of 7 sources. RTI 0)
+ 204000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+ 204000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+ 204000: global: [sn:79] has 3 ready out of 7 sources. RTI 0)
+ 204000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+ 204000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+ 204000: global: [sn:79] has 4 ready out of 7 sources. RTI 0)
+ 204000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+ 204000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+ 204000: global: [sn:79] has 5 ready out of 7 sources. RTI 0)
+ 204000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+ 204000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+ 204000: global: [sn:79] has 6 ready out of 7 sources. RTI 0)
+ 204000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+ 204000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+ 204000: global: [sn:79] has 7 ready out of 7 sources. RTI 0)
+ 204000: global: Renamed reg rdi to physical reg 107 (107) old mapping was 7 (7)
+ 204000: system.cpu.rename: [tid:0] Renaming arch reg 7 (integer) to physical reg 107 (107).
+ 204000: system.cpu.rename: [tid:0] [sn:79] Adding instruction to history buffer (size=12).
+ 204000: global: Renamed reg condition_code[0] to physical reg 4791 (4791) old mapping was 4789 (4789)
+ 204000: system.cpu.rename: [tid:0] Renaming arch reg 0 (condition_code) to physical reg 65 (4791).
+ 204000: system.cpu.rename: [tid:0] [sn:79] Adding instruction to history buffer (size=13).
+ 204000: global: Renamed reg condition_code[1] to physical reg 4792 (4792) old mapping was 4790 (4790)
+ 204000: system.cpu.rename: [tid:0] Renaming arch reg 1 (condition_code) to physical reg 66 (4792).
+ 204000: system.cpu.rename: [tid:0] [sn:79] Adding instruction to history buffer (size=14).
+ 204000: system.cpu.rename: [tid:0] Renaming arch reg 0 (invalid) to physical reg 4294967295 (4294967295).
+ 204000: system.cpu.rename: [tid:0] [sn:79] Adding instruction to history buffer (size=15).
+ 204000: system.cpu.rename: [tid:0] Renaming arch reg 0 (invalid) to physical reg 4294967295 (4294967295).
+ 204000: system.cpu.rename: [tid:0] [sn:79] Adding instruction to history buffer (size=16).
+ 204000: system.cpu.rename: [tid:0] Renaming arch reg 0 (invalid) to physical reg 4294967295 (4294967295).
+ 204000: system.cpu.rename: [tid:0] [sn:79] Adding instruction to history buffer (size=17).
+ 204000: system.cpu.rename: [tid:0] Sending instructions to IEW.
+ 204000: system.cpu.rename: [tid:0] Processing instruction [sn:80] with PC (0x40106d=>0x40106f).(0=>1).
+ 204000: system.cpu.rename: [tid:0] Sending instructions to IEW.
+ 204000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 132, loadsInProgress: 1, loads dispatchedToLQ: 0
+ 204000: system.cpu.rename: [tid:0] Processing instruction [sn:81] with PC (0x40106f=>0x401071).(0=>1).
+ 204000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+ 204000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+ 204000: global: [sn:81] has 1 ready out of 4 sources. RTI 0)
+ 204000: system.cpu.rename: [tid:0] Looking up integer arch reg 0, got phys reg 106 (integer)
+ 204000: system.cpu.rename: [tid:0] Register 106 (flat: 106) (integer) is not ready.
+ 204000: system.cpu.rename: [tid:0] Looking up integer arch reg 17, got phys reg 104 (integer)
+ 204000: system.cpu.rename: [tid:0] Register 104 (flat: 104) (integer) is not ready.
+ 204000: system.cpu.rename: [tid:0] Looking up miscellaneous arch reg 155, got phys reg 155 (miscellaneous)
+ 204000: system.cpu.rename: [tid:0] Register 155 (flat: 0) (miscellaneous) is ready.
+ 204000: global: [sn:81] has 2 ready out of 4 sources. RTI 0)
+ 204000: global: Renamed reg t1 to physical reg 108 (108) old mapping was 104 (104)
+ 204000: system.cpu.rename: [tid:0] Querying SMB Predictor for load [sn:81] with PC (0x40106f=>0x401071).(0=>1).
+ 204000: system.cpu.rename: [tid:0] Renaming arch reg 17 (integer) to physical reg 108 (108).
+ 204000: system.cpu.rename: [tid:0] [sn:81] Adding instruction to history buffer (size=18).
+ 204000: system.cpu.rename: [tid:0] Sending instructions to IEW.
+ 204000: system.cpu.rename: [tid:0] Processing instruction [sn:82] with PC (0x40106f=>0x401071).(1=>2).
+ 204000: system.cpu.rename: [tid:0] Looking up integer arch reg 17, got phys reg 108 (integer)
+ 204000: system.cpu.rename: [tid:0] Register 108 (flat: 108) (integer) is not ready.
+ 204000: system.cpu.rename: [tid:0] Looking up integer arch reg 0, got phys reg 106 (integer)
+ 204000: system.cpu.rename: [tid:0] Register 106 (flat: 106) (integer) is not ready.
+ 204000: system.cpu.rename: [tid:0] Looking up integer arch reg 17, got phys reg 108 (integer)
+ 204000: system.cpu.rename: [tid:0] Register 108 (flat: 108) (integer) is not ready.
+ 204000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+ 204000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+ 204000: global: [sn:82] has 1 ready out of 8 sources. RTI 0)
+ 204000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+ 204000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+ 204000: global: [sn:82] has 2 ready out of 8 sources. RTI 0)
+ 204000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+ 204000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+ 204000: global: [sn:82] has 3 ready out of 8 sources. RTI 0)
+ 204000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+ 204000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+ 204000: global: [sn:82] has 4 ready out of 8 sources. RTI 0)
+ 204000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+ 204000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+ 204000: global: [sn:82] has 5 ready out of 8 sources. RTI 0)
+ 204000: global: Renamed reg t1 to physical reg 109 (109) old mapping was 108 (108)
+ 204000: system.cpu.rename: [tid:0] Renaming arch reg 17 (integer) to physical reg 109 (109).
+ 204000: system.cpu.rename: [tid:0] [sn:82] Adding instruction to history buffer (size=19).
+ 204000: global: Renamed reg condition_code[0] to physical reg 4793 (4793) old mapping was 4791 (4791)
+ 204000: system.cpu.rename: [tid:0] Renaming arch reg 0 (condition_code) to physical reg 67 (4793).
+ 204000: system.cpu.rename: [tid:0] [sn:82] Adding instruction to history buffer (size=20).
+ 204000: global: Renamed reg condition_code[1] to physical reg 4794 (4794) old mapping was 4792 (4792)
+ 204000: system.cpu.rename: [tid:0] Renaming arch reg 1 (condition_code) to physical reg 68 (4794).
+ 204000: system.cpu.rename: [tid:0] [sn:82] Adding instruction to history buffer (size=21).
+ 204000: system.cpu.rename: [tid:0] Renaming arch reg 0 (invalid) to physical reg 4294967295 (4294967295).
+ 204000: system.cpu.rename: [tid:0] [sn:82] Adding instruction to history buffer (size=22).
+ 204000: system.cpu.rename: [tid:0] Renaming arch reg 0 (invalid) to physical reg 4294967295 (4294967295).
+ 204000: system.cpu.rename: [tid:0] [sn:82] Adding instruction to history buffer (size=23).
+ 204000: system.cpu.rename: [tid:0] Renaming arch reg 0 (invalid) to physical reg 4294967295 (4294967295).
+ 204000: system.cpu.rename: [tid:0] [sn:82] Adding instruction to history buffer (size=24).
+ 204000: system.cpu.rename: [tid:0] Sending instructions to IEW.
+ 204000: system.cpu.rename: calcFreeSQEntries: free sqEntries: 72, storesInProgress: 0, stores dispatchedToSQ: 0
+ 204000: system.cpu.rename: [tid:0] Processing instruction [sn:83] with PC (0x40106f=>0x401071).(2=>3).
+ 204000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+ 204000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+ 204000: global: [sn:83] has 1 ready out of 4 sources. RTI 0)
+ 204000: system.cpu.rename: [tid:0] Looking up integer arch reg 0, got phys reg 106 (integer)
+ 204000: system.cpu.rename: [tid:0] Register 106 (flat: 106) (integer) is not ready.
+ 204000: system.cpu.rename: [tid:0] Looking up integer arch reg 17, got phys reg 109 (integer)
+ 204000: system.cpu.rename: [tid:0] Register 109 (flat: 109) (integer) is not ready.
+ 204000: system.cpu.rename: [tid:0] Looking up miscellaneous arch reg 155, got phys reg 155 (miscellaneous)
+ 204000: system.cpu.rename: [tid:0] Register 155 (flat: 0) (miscellaneous) is ready.
+ 204000: global: [sn:83] has 2 ready out of 4 sources. RTI 0)
+ 204000: system.cpu.rename: [tid:0] Sending instructions to IEW.
+ 204000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 132, loadsInProgress: 2, loads dispatchedToLQ: 0
+ 204000: system.cpu.rename: [tid:0] Processing instruction [sn:84] with PC (0x401071=>0x401073).(0=>1).
+ 204000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+ 204000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+ 204000: global: [sn:84] has 1 ready out of 4 sources. RTI 0)
+ 204000: system.cpu.rename: [tid:0] Looking up integer arch reg 0, got phys reg 106 (integer)
+ 204000: system.cpu.rename: [tid:0] Register 106 (flat: 106) (integer) is not ready.
+ 204000: system.cpu.rename: [tid:0] Looking up integer arch reg 17, got phys reg 109 (integer)
+ 204000: system.cpu.rename: [tid:0] Register 109 (flat: 109) (integer) is not ready.
+ 204000: system.cpu.rename: [tid:0] Looking up miscellaneous arch reg 155, got phys reg 155 (miscellaneous)
+ 204000: system.cpu.rename: [tid:0] Register 155 (flat: 0) (miscellaneous) is ready.
+ 204000: global: [sn:84] has 2 ready out of 4 sources. RTI 0)
+ 204000: global: Renamed reg t1 to physical reg 110 (110) old mapping was 109 (109)
+ 204000: system.cpu.rename: [tid:0] Querying SMB Predictor for load [sn:84] with PC (0x401071=>0x401073).(0=>1).
+ 204000: system.cpu.rename: [tid:0] Renaming arch reg 17 (integer) to physical reg 110 (110).
+ 204000: system.cpu.rename: [tid:0] [sn:84] Adding instruction to history buffer (size=25).
+ 204000: system.cpu.rename: Activity this cycle.
+ 204000: system.cpu.iew: Issue: Processing [tid:0]
+ 204000: system.cpu.iew: [tid:0] Not blocked, so attempting to run dispatch.
+ 204000: system.cpu.iq: Attempting to schedule ready instructions from the IQ.
+ 204000: system.cpu.iq: Not able to schedule any instructions.
+ 204000: system.cpu.iew: Processing [tid:0]
+ 204000: system.cpu.iew: [tid:0], Dispatch dispatched 0 instructions.
+ 204000: system.cpu.iew.lsq.thread0: SQ size: 72, #stores occupied: 0
+ 204000: system.cpu.iew.lsq.thread0: LQ size: 132, #loads occupied: 0
+ 204000: system.cpu.iew: IQ has 559 free entries (Can schedule: 0).  LQ has 132 free entries. SQ has 72 free entries.
+ 204000: system.cpu.commit: Getting instructions from Rename stage.
+ 204000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 204000: system.cpu.commit: [tid:0] ROB has 0 insts & 918 free entries.
+ 204000: system.cpu: Activity: 10
+ 204000: system.cpu: Scheduling next tick!
+ 205000: system.cpu: 
+
+O3CPU: Ticking main, O3CPU.
+ 205000: system.cpu.fetch: Running stage.
+ 205000: system.cpu.fetch: There are no more threads available to fetch from.
+ 205000: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 205000: system.cpu.fetch: [tid:0] [sn:95] Sending instruction to decode from fetch queue. Fetch queue size: 10.
+ 205000: system.cpu.fetch: [tid:0] [sn:96] Sending instruction to decode from fetch queue. Fetch queue size: 9.
+ 205000: system.cpu.fetch: [tid:0] [sn:97] Sending instruction to decode from fetch queue. Fetch queue size: 8.
+ 205000: system.cpu.fetch: [tid:0] [sn:98] Sending instruction to decode from fetch queue. Fetch queue size: 7.
+ 205000: system.cpu.fetch: [tid:0] [sn:99] Sending instruction to decode from fetch queue. Fetch queue size: 6.
+ 205000: system.cpu.fetch: [tid:0] [sn:100] Sending instruction to decode from fetch queue. Fetch queue size: 5.
+ 205000: system.cpu.fetch: [tid:0] [sn:101] Sending instruction to decode from fetch queue. Fetch queue size: 4.
+ 205000: system.cpu.fetch: [tid:0] [sn:102] Sending instruction to decode from fetch queue. Fetch queue size: 3.
+ 205000: system.cpu.fetch: [tid:0] [sn:103] Sending instruction to decode from fetch queue. Fetch queue size: 2.
+ 205000: system.cpu.fetch: [tid:0] [sn:104] Sending instruction to decode from fetch queue. Fetch queue size: 1.
+ 205000: system.cpu.fetch: Activity this cycle.
+ 205000: system.cpu: Activity: 11
+ 205000: system.cpu.decode: Processing [tid:0]
+ 205000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
+ 205000: system.cpu.decode: [tid:0] Sending instruction to rename.
+ 205000: system.cpu.decode: [tid:0] Processing instruction [sn:85] with PC (0x401071=>0x401073).(1=>2)
+ 205000: system.cpu.decode: [tid:0] Processing instruction [sn:86] with PC (0x401071=>0x401073).(2=>3)
+ 205000: system.cpu.decode: [tid:0] Processing instruction [sn:87] with PC (0x401073=>0x401075).(0=>1)
+ 205000: system.cpu.decode: [tid:0] Processing instruction [sn:88] with PC (0x401073=>0x401075).(1=>2)
+ 205000: system.cpu.decode: [tid:0] Processing instruction [sn:89] with PC (0x401073=>0x401075).(2=>3)
+ 205000: system.cpu.decode: [tid:0] Processing instruction [sn:90] with PC (0x401075=>0x401077).(0=>1)
+ 205000: system.cpu.decode: [tid:0] Processing instruction [sn:91] with PC (0x401075=>0x401077).(1=>2)
+ 205000: system.cpu.decode: [tid:0] Processing instruction [sn:92] with PC (0x401075=>0x401077).(2=>3)
+ 205000: system.cpu.decode: [tid:0] Processing instruction [sn:93] with PC (0x401077=>0x401079).(0=>1)
+ 205000: system.cpu.decode: [tid:0] Processing instruction [sn:94] with PC (0x401077=>0x401079).(1=>2)
+ 205000: system.cpu.decode: Activity this cycle.
+ 205000: system.cpu.rename: Processing [tid:0]
+ 205000: system.cpu.rename: [tid:0] Free IQ: 559, Free ROB: 918, Free LQ: 132, Free SQ: 72, FreeRM 127(869 870 917 1834 127 8 4579)
+ 205000: system.cpu.rename: [tid:0] 10 instructions not yet in ROB
+ 205000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 132, loadsInProgress: 3, loads dispatchedToLQ: 0
+ 205000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
+ 205000: system.cpu.rename: [tid:0] Nothing to do, breaking out early.
+ 205000: system.cpu.iew: Issue: Processing [tid:0]
+ 205000: system.cpu.iew: [tid:0] Not blocked, so attempting to run dispatch.
+ 205000: system.cpu.iq: Attempting to schedule ready instructions from the IQ.
+ 205000: system.cpu.iq: Not able to schedule any instructions.
+ 205000: system.cpu.iew: Processing [tid:0]
+ 205000: system.cpu.iew: [tid:0], Dispatch dispatched 0 instructions.
+ 205000: system.cpu.iew.lsq.thread0: SQ size: 72, #stores occupied: 0
+ 205000: system.cpu.iew.lsq.thread0: LQ size: 132, #loads occupied: 0
+ 205000: system.cpu.iew: IQ has 559 free entries (Can schedule: 0).  LQ has 132 free entries. SQ has 72 free entries.
+ 205000: system.cpu.commit: Getting instructions from Rename stage.
+ 205000: system.cpu.commit: [tid:0] [sn:75] Inserting PC (0x40105b=>0x40105f).(0=>1) into ROB.
+ 205000: system.cpu.rob: Adding inst PC (0x40105b=>0x40105f).(0=>1) to the ROB.
+ 205000: system.cpu.rob: [tid:0] Now has 1 instructions.
+ 205000: system.cpu.commit: [tid:0] [sn:76] Inserting PC (0x40105f=>0x401063).(0=>1) into ROB.
+ 205000: system.cpu.rob: Adding inst PC (0x40105f=>0x401063).(0=>1) to the ROB.
+ 205000: system.cpu.rob: [tid:0] Now has 2 instructions.
+ 205000: system.cpu.commit: [tid:0] [sn:77] Inserting PC (0x40105f=>0x401063).(1=>2) into ROB.
+ 205000: system.cpu.rob: Adding inst PC (0x40105f=>0x401063).(1=>2) to the ROB.
+ 205000: system.cpu.rob: [tid:0] Now has 3 instructions.
+ 205000: system.cpu.commit: [tid:0] [sn:78] Inserting PC (0x401063=>0x40106a).(0=>1) into ROB.
+ 205000: system.cpu.rob: Adding inst PC (0x401063=>0x40106a).(0=>1) to the ROB.
+ 205000: system.cpu.rob: [tid:0] Now has 4 instructions.
+ 205000: system.cpu.commit: [tid:0] [sn:79] Inserting PC (0x40106a=>0x40106d).(0=>1) into ROB.
+ 205000: system.cpu.rob: Adding inst PC (0x40106a=>0x40106d).(0=>1) to the ROB.
+ 205000: system.cpu.rob: [tid:0] Now has 5 instructions.
+ 205000: system.cpu.commit: [tid:0] [sn:80] Inserting PC (0x40106d=>0x40106f).(0=>1) into ROB.
+ 205000: system.cpu.rob: Adding inst PC (0x40106d=>0x40106f).(0=>1) to the ROB.
+ 205000: system.cpu.rob: [tid:0] Now has 6 instructions.
+ 205000: system.cpu.commit: [tid:0] [sn:81] Inserting PC (0x40106f=>0x401071).(0=>1) into ROB.
+ 205000: system.cpu.rob: Adding inst PC (0x40106f=>0x401071).(0=>1) to the ROB.
+ 205000: system.cpu.rob: [tid:0] Now has 7 instructions.
+ 205000: system.cpu.commit: [tid:0] [sn:82] Inserting PC (0x40106f=>0x401071).(1=>2) into ROB.
+ 205000: system.cpu.rob: Adding inst PC (0x40106f=>0x401071).(1=>2) to the ROB.
+ 205000: system.cpu.rob: [tid:0] Now has 8 instructions.
+ 205000: system.cpu.commit: [tid:0] [sn:83] Inserting PC (0x40106f=>0x401071).(2=>3) into ROB.
+ 205000: system.cpu.rob: Adding inst PC (0x40106f=>0x401071).(2=>3) to the ROB.
+ 205000: system.cpu.rob: [tid:0] Now has 9 instructions.
+ 205000: system.cpu.commit: [tid:0] [sn:84] Inserting PC (0x401071=>0x401073).(0=>1) into ROB.
+ 205000: system.cpu.rob: Adding inst PC (0x401071=>0x401073).(0=>1) to the ROB.
+ 205000: system.cpu.rob: [tid:0] Now has 10 instructions.
+ 205000: system.cpu.commit: Trying to commit instructions in the ROB.
+ 205000: system.cpu.commit: [tid:0] Can't commit, Instruction [sn:75] PC (0x40105b=>0x40105f).(0=>1) is head of ROB and not ready
+ 205000: system.cpu.commit: [tid:0] ROB has 10 insts & 908 free entries.
+ 205000: system.cpu.commit: Activity This Cycle.
+ 205000: system.cpu: Activity: 10
+ 205000: system.cpu: Scheduling next tick!
+ 206000: system.cpu: 
+
+O3CPU: Ticking main, O3CPU.
+ 206000: system.cpu.fetch: Running stage.
+ 206000: system.cpu.fetch: There are no more threads available to fetch from.
+ 206000: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 206000: system.cpu.decode: Processing [tid:0]
+ 206000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
+ 206000: system.cpu.decode: [tid:0] Sending instruction to rename.
+ 206000: system.cpu.decode: [tid:0] Processing instruction [sn:95] with PC (0x401077=>0x401079).(2=>3)
+ 206000: system.cpu.decode: [tid:0] Processing instruction [sn:96] with PC (0x401079=>0x40107b).(0=>1)
+ 206000: system.cpu.decode: [tid:0] Processing instruction [sn:97] with PC (0x401079=>0x40107b).(1=>2)
+ 206000: system.cpu.decode: [tid:0] Processing instruction [sn:98] with PC (0x401079=>0x40107b).(2=>3)
+ 206000: system.cpu.decode: [tid:0] Processing instruction [sn:99] with PC (0x40107b=>0x40107d).(0=>1)
+ 206000: system.cpu.decode: [tid:0] Processing instruction [sn:100] with PC (0x40107b=>0x40107d).(1=>2)
+ 206000: system.cpu.decode: [tid:0] Processing instruction [sn:101] with PC (0x40107b=>0x40107d).(2=>3)
+ 206000: system.cpu.decode: [tid:0] Processing instruction [sn:102] with PC (0x40107d=>0x40107f).(0=>1)
+ 206000: system.cpu.decode: [tid:0] Processing instruction [sn:103] with PC (0x40107d=>0x40107f).(1=>2)
+ 206000: system.cpu.decode: [tid:0] Processing instruction [sn:104] with PC (0x40107d=>0x40107f).(2=>3)
+ 206000: system.cpu.decode: Activity this cycle.
+ 206000: system.cpu: Activity: 11
+ 206000: system.cpu.rename: Processing [tid:0]
+ 206000: system.cpu.rename: [tid:0] Free IQ: 559, Free ROB: 908, Free LQ: 132, Free SQ: 72, FreeRM 127(869 870 917 1834 127 8 4579)
+ 206000: system.cpu.rename: [tid:0] 10 instructions not yet in ROB
+ 206000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 132, loadsInProgress: 3, loads dispatchedToLQ: 0
+ 206000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
+ 206000: system.cpu.rename: [tid:0] 10 available instructions to send iew.
+ 206000: system.cpu.rename: [tid:0] 10 insts pipelining from Rename | 0 insts dispatched to IQ last cycle.
+ 206000: system.cpu.rename: [tid:0] Sending instructions to IEW.
+ 206000: system.cpu.rename: [tid:0] Processing instruction [sn:85] with PC (0x401071=>0x401073).(1=>2).
+ 206000: system.cpu.rename: [tid:0] Looking up integer arch reg 17, got phys reg 110 (integer)
+ 206000: system.cpu.rename: [tid:0] Register 110 (flat: 110) (integer) is not ready.
+ 206000: system.cpu.rename: [tid:0] Looking up integer arch reg 0, got phys reg 106 (integer)
+ 206000: system.cpu.rename: [tid:0] Register 106 (flat: 106) (integer) is not ready.
+ 206000: system.cpu.rename: [tid:0] Looking up integer arch reg 17, got phys reg 110 (integer)
+ 206000: system.cpu.rename: [tid:0] Register 110 (flat: 110) (integer) is not ready.
+ 206000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+ 206000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+ 206000: global: [sn:85] has 1 ready out of 8 sources. RTI 0)
+ 206000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+ 206000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+ 206000: global: [sn:85] has 2 ready out of 8 sources. RTI 0)
+ 206000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+ 206000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+ 206000: global: [sn:85] has 3 ready out of 8 sources. RTI 0)
+ 206000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+ 206000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+ 206000: global: [sn:85] has 4 ready out of 8 sources. RTI 0)
+ 206000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+ 206000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+ 206000: global: [sn:85] has 5 ready out of 8 sources. RTI 0)
+ 206000: global: Renamed reg t1 to physical reg 111 (111) old mapping was 110 (110)
+ 206000: system.cpu.rename: [tid:0] Renaming arch reg 17 (integer) to physical reg 111 (111).
+ 206000: system.cpu.rename: [tid:0] [sn:85] Adding instruction to history buffer (size=26).
+ 206000: global: Renamed reg condition_code[0] to physical reg 4795 (4795) old mapping was 4793 (4793)
+ 206000: system.cpu.rename: [tid:0] Renaming arch reg 0 (condition_code) to physical reg 69 (4795).
+ 206000: system.cpu.rename: [tid:0] [sn:85] Adding instruction to history buffer (size=27).
+ 206000: global: Renamed reg condition_code[1] to physical reg 4796 (4796) old mapping was 4794 (4794)
+ 206000: system.cpu.rename: [tid:0] Renaming arch reg 1 (condition_code) to physical reg 70 (4796).
+ 206000: system.cpu.rename: [tid:0] [sn:85] Adding instruction to history buffer (size=28).
+ 206000: system.cpu.rename: [tid:0] Renaming arch reg 0 (invalid) to physical reg 4294967295 (4294967295).
+ 206000: system.cpu.rename: [tid:0] [sn:85] Adding instruction to history buffer (size=29).
+ 206000: system.cpu.rename: [tid:0] Renaming arch reg 0 (invalid) to physical reg 4294967295 (4294967295).
+ 206000: system.cpu.rename: [tid:0] [sn:85] Adding instruction to history buffer (size=30).
+ 206000: system.cpu.rename: [tid:0] Renaming arch reg 0 (invalid) to physical reg 4294967295 (4294967295).
+ 206000: system.cpu.rename: [tid:0] [sn:85] Adding instruction to history buffer (size=31).
+ 206000: system.cpu.rename: [tid:0] Sending instructions to IEW.
+ 206000: system.cpu.rename: calcFreeSQEntries: free sqEntries: 72, storesInProgress: 1, stores dispatchedToSQ: 0
+ 206000: system.cpu.rename: [tid:0] Processing instruction [sn:86] with PC (0x401071=>0x401073).(2=>3).
+ 206000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+ 206000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+ 206000: global: [sn:86] has 1 ready out of 4 sources. RTI 0)
+ 206000: system.cpu.rename: [tid:0] Looking up integer arch reg 0, got phys reg 106 (integer)
+ 206000: system.cpu.rename: [tid:0] Register 106 (flat: 106) (integer) is not ready.
+ 206000: system.cpu.rename: [tid:0] Looking up integer arch reg 17, got phys reg 111 (integer)
+ 206000: system.cpu.rename: [tid:0] Register 111 (flat: 111) (integer) is not ready.
+ 206000: system.cpu.rename: [tid:0] Looking up miscellaneous arch reg 155, got phys reg 155 (miscellaneous)
+ 206000: system.cpu.rename: [tid:0] Register 155 (flat: 0) (miscellaneous) is ready.
+ 206000: global: [sn:86] has 2 ready out of 4 sources. RTI 0)
+ 206000: system.cpu.rename: [tid:0] Sending instructions to IEW.
+ 206000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 132, loadsInProgress: 3, loads dispatchedToLQ: 0
+ 206000: system.cpu.rename: [tid:0] Processing instruction [sn:87] with PC (0x401073=>0x401075).(0=>1).
+ 206000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+ 206000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+ 206000: global: [sn:87] has 1 ready out of 4 sources. RTI 0)
+ 206000: system.cpu.rename: [tid:0] Looking up integer arch reg 0, got phys reg 106 (integer)
+ 206000: system.cpu.rename: [tid:0] Register 106 (flat: 106) (integer) is not ready.
+ 206000: system.cpu.rename: [tid:0] Looking up integer arch reg 17, got phys reg 111 (integer)
+ 206000: system.cpu.rename: [tid:0] Register 111 (flat: 111) (integer) is not ready.
+ 206000: system.cpu.rename: [tid:0] Looking up miscellaneous arch reg 155, got phys reg 155 (miscellaneous)
+ 206000: system.cpu.rename: [tid:0] Register 155 (flat: 0) (miscellaneous) is ready.
+ 206000: global: [sn:87] has 2 ready out of 4 sources. RTI 0)
+ 206000: global: Renamed reg t1 to physical reg 112 (112) old mapping was 111 (111)
+ 206000: system.cpu.rename: [tid:0] Querying SMB Predictor for load [sn:87] with PC (0x401073=>0x401075).(0=>1).
+ 206000: system.cpu.rename: [tid:0] Renaming arch reg 17 (integer) to physical reg 112 (112).
+ 206000: system.cpu.rename: [tid:0] [sn:87] Adding instruction to history buffer (size=32).
+ 206000: system.cpu.rename: [tid:0] Sending instructions to IEW.
+ 206000: system.cpu.rename: [tid:0] Processing instruction [sn:88] with PC (0x401073=>0x401075).(1=>2).
+ 206000: system.cpu.rename: [tid:0] Looking up integer arch reg 17, got phys reg 112 (integer)
+ 206000: system.cpu.rename: [tid:0] Register 112 (flat: 112) (integer) is not ready.
+ 206000: system.cpu.rename: [tid:0] Looking up integer arch reg 0, got phys reg 106 (integer)
+ 206000: system.cpu.rename: [tid:0] Register 106 (flat: 106) (integer) is not ready.
+ 206000: system.cpu.rename: [tid:0] Looking up integer arch reg 17, got phys reg 112 (integer)
+ 206000: system.cpu.rename: [tid:0] Register 112 (flat: 112) (integer) is not ready.
+ 206000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+ 206000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+ 206000: global: [sn:88] has 1 ready out of 8 sources. RTI 0)
+ 206000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+ 206000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+ 206000: global: [sn:88] has 2 ready out of 8 sources. RTI 0)
+ 206000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+ 206000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+ 206000: global: [sn:88] has 3 ready out of 8 sources. RTI 0)
+ 206000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+ 206000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+ 206000: global: [sn:88] has 4 ready out of 8 sources. RTI 0)
+ 206000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+ 206000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+ 206000: global: [sn:88] has 5 ready out of 8 sources. RTI 0)
+ 206000: global: Renamed reg t1 to physical reg 113 (113) old mapping was 112 (112)
+ 206000: system.cpu.rename: [tid:0] Renaming arch reg 17 (integer) to physical reg 113 (113).
+ 206000: system.cpu.rename: [tid:0] [sn:88] Adding instruction to history buffer (size=33).
+ 206000: global: Renamed reg condition_code[0] to physical reg 4797 (4797) old mapping was 4795 (4795)
+ 206000: system.cpu.rename: [tid:0] Renaming arch reg 0 (condition_code) to physical reg 71 (4797).
+ 206000: system.cpu.rename: [tid:0] [sn:88] Adding instruction to history buffer (size=34).
+ 206000: global: Renamed reg condition_code[1] to physical reg 4798 (4798) old mapping was 4796 (4796)
+ 206000: system.cpu.rename: [tid:0] Renaming arch reg 1 (condition_code) to physical reg 72 (4798).
+ 206000: system.cpu.rename: [tid:0] [sn:88] Adding instruction to history buffer (size=35).
+ 206000: system.cpu.rename: [tid:0] Renaming arch reg 0 (invalid) to physical reg 4294967295 (4294967295).
+ 206000: system.cpu.rename: [tid:0] [sn:88] Adding instruction to history buffer (size=36).
+ 206000: system.cpu.rename: [tid:0] Renaming arch reg 0 (invalid) to physical reg 4294967295 (4294967295).
+ 206000: system.cpu.rename: [tid:0] [sn:88] Adding instruction to history buffer (size=37).
+ 206000: system.cpu.rename: [tid:0] Renaming arch reg 0 (invalid) to physical reg 4294967295 (4294967295).
+ 206000: system.cpu.rename: [tid:0] [sn:88] Adding instruction to history buffer (size=38).
+ 206000: system.cpu.rename: [tid:0] Sending instructions to IEW.
+ 206000: system.cpu.rename: calcFreeSQEntries: free sqEntries: 72, storesInProgress: 2, stores dispatchedToSQ: 0
+ 206000: system.cpu.rename: [tid:0] Processing instruction [sn:89] with PC (0x401073=>0x401075).(2=>3).
+ 206000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+ 206000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+ 206000: global: [sn:89] has 1 ready out of 4 sources. RTI 0)
+ 206000: system.cpu.rename: [tid:0] Looking up integer arch reg 0, got phys reg 106 (integer)
+ 206000: system.cpu.rename: [tid:0] Register 106 (flat: 106) (integer) is not ready.
+ 206000: system.cpu.rename: [tid:0] Looking up integer arch reg 17, got phys reg 113 (integer)
+ 206000: system.cpu.rename: [tid:0] Register 113 (flat: 113) (integer) is not ready.
+ 206000: system.cpu.rename: [tid:0] Looking up miscellaneous arch reg 155, got phys reg 155 (miscellaneous)
+ 206000: system.cpu.rename: [tid:0] Register 155 (flat: 0) (miscellaneous) is ready.
+ 206000: global: [sn:89] has 2 ready out of 4 sources. RTI 0)
+ 206000: system.cpu.rename: [tid:0] Sending instructions to IEW.
+ 206000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 132, loadsInProgress: 4, loads dispatchedToLQ: 0
+ 206000: system.cpu.rename: [tid:0] Processing instruction [sn:90] with PC (0x401075=>0x401077).(0=>1).
+ 206000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+ 206000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+ 206000: global: [sn:90] has 1 ready out of 4 sources. RTI 0)
+ 206000: system.cpu.rename: [tid:0] Looking up integer arch reg 0, got phys reg 106 (integer)
+ 206000: system.cpu.rename: [tid:0] Register 106 (flat: 106) (integer) is not ready.
+ 206000: system.cpu.rename: [tid:0] Looking up integer arch reg 17, got phys reg 113 (integer)
+ 206000: system.cpu.rename: [tid:0] Register 113 (flat: 113) (integer) is not ready.
+ 206000: system.cpu.rename: [tid:0] Looking up miscellaneous arch reg 155, got phys reg 155 (miscellaneous)
+ 206000: system.cpu.rename: [tid:0] Register 155 (flat: 0) (miscellaneous) is ready.
+ 206000: global: [sn:90] has 2 ready out of 4 sources. RTI 0)
+ 206000: global: Renamed reg t1 to physical reg 114 (114) old mapping was 113 (113)
+ 206000: system.cpu.rename: [tid:0] Querying SMB Predictor for load [sn:90] with PC (0x401075=>0x401077).(0=>1).
+ 206000: system.cpu.rename: [tid:0] Renaming arch reg 17 (integer) to physical reg 114 (114).
+ 206000: system.cpu.rename: [tid:0] [sn:90] Adding instruction to history buffer (size=39).
+ 206000: system.cpu.rename: [tid:0] Sending instructions to IEW.
+ 206000: system.cpu.rename: [tid:0] Processing instruction [sn:91] with PC (0x401075=>0x401077).(1=>2).
+ 206000: system.cpu.rename: [tid:0] Looking up integer arch reg 17, got phys reg 114 (integer)
+ 206000: system.cpu.rename: [tid:0] Register 114 (flat: 114) (integer) is not ready.
+ 206000: system.cpu.rename: [tid:0] Looking up integer arch reg 0, got phys reg 106 (integer)
+ 206000: system.cpu.rename: [tid:0] Register 106 (flat: 106) (integer) is not ready.
+ 206000: system.cpu.rename: [tid:0] Looking up integer arch reg 17, got phys reg 114 (integer)
+ 206000: system.cpu.rename: [tid:0] Register 114 (flat: 114) (integer) is not ready.
+ 206000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+ 206000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+ 206000: global: [sn:91] has 1 ready out of 8 sources. RTI 0)
+ 206000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+ 206000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+ 206000: global: [sn:91] has 2 ready out of 8 sources. RTI 0)
+ 206000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+ 206000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+ 206000: global: [sn:91] has 3 ready out of 8 sources. RTI 0)
+ 206000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+ 206000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+ 206000: global: [sn:91] has 4 ready out of 8 sources. RTI 0)
+ 206000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+ 206000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+ 206000: global: [sn:91] has 5 ready out of 8 sources. RTI 0)
+ 206000: global: Renamed reg t1 to physical reg 115 (115) old mapping was 114 (114)
+ 206000: system.cpu.rename: [tid:0] Renaming arch reg 17 (integer) to physical reg 115 (115).
+ 206000: system.cpu.rename: [tid:0] [sn:91] Adding instruction to history buffer (size=40).
+ 206000: global: Renamed reg condition_code[0] to physical reg 4799 (4799) old mapping was 4797 (4797)
+ 206000: system.cpu.rename: [tid:0] Renaming arch reg 0 (condition_code) to physical reg 73 (4799).
+ 206000: system.cpu.rename: [tid:0] [sn:91] Adding instruction to history buffer (size=41).
+ 206000: global: Renamed reg condition_code[1] to physical reg 4800 (4800) old mapping was 4798 (4798)
+ 206000: system.cpu.rename: [tid:0] Renaming arch reg 1 (condition_code) to physical reg 74 (4800).
+ 206000: system.cpu.rename: [tid:0] [sn:91] Adding instruction to history buffer (size=42).
+ 206000: system.cpu.rename: [tid:0] Renaming arch reg 0 (invalid) to physical reg 4294967295 (4294967295).
+ 206000: system.cpu.rename: [tid:0] [sn:91] Adding instruction to history buffer (size=43).
+ 206000: system.cpu.rename: [tid:0] Renaming arch reg 0 (invalid) to physical reg 4294967295 (4294967295).
+ 206000: system.cpu.rename: [tid:0] [sn:91] Adding instruction to history buffer (size=44).
+ 206000: system.cpu.rename: [tid:0] Renaming arch reg 0 (invalid) to physical reg 4294967295 (4294967295).
+ 206000: system.cpu.rename: [tid:0] [sn:91] Adding instruction to history buffer (size=45).
+ 206000: system.cpu.rename: [tid:0] Sending instructions to IEW.
+ 206000: system.cpu.rename: calcFreeSQEntries: free sqEntries: 72, storesInProgress: 3, stores dispatchedToSQ: 0
+ 206000: system.cpu.rename: [tid:0] Processing instruction [sn:92] with PC (0x401075=>0x401077).(2=>3).
+ 206000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+ 206000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+ 206000: global: [sn:92] has 1 ready out of 4 sources. RTI 0)
+ 206000: system.cpu.rename: [tid:0] Looking up integer arch reg 0, got phys reg 106 (integer)
+ 206000: system.cpu.rename: [tid:0] Register 106 (flat: 106) (integer) is not ready.
+ 206000: system.cpu.rename: [tid:0] Looking up integer arch reg 17, got phys reg 115 (integer)
+ 206000: system.cpu.rename: [tid:0] Register 115 (flat: 115) (integer) is not ready.
+ 206000: system.cpu.rename: [tid:0] Looking up miscellaneous arch reg 155, got phys reg 155 (miscellaneous)
+ 206000: system.cpu.rename: [tid:0] Register 155 (flat: 0) (miscellaneous) is ready.
+ 206000: global: [sn:92] has 2 ready out of 4 sources. RTI 0)
+ 206000: system.cpu.rename: [tid:0] Sending instructions to IEW.
+ 206000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 132, loadsInProgress: 5, loads dispatchedToLQ: 0
+ 206000: system.cpu.rename: [tid:0] Processing instruction [sn:93] with PC (0x401077=>0x401079).(0=>1).
+ 206000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+ 206000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+ 206000: global: [sn:93] has 1 ready out of 4 sources. RTI 0)
+ 206000: system.cpu.rename: [tid:0] Looking up integer arch reg 0, got phys reg 106 (integer)
+ 206000: system.cpu.rename: [tid:0] Register 106 (flat: 106) (integer) is not ready.
+ 206000: system.cpu.rename: [tid:0] Looking up integer arch reg 17, got phys reg 115 (integer)
+ 206000: system.cpu.rename: [tid:0] Register 115 (flat: 115) (integer) is not ready.
+ 206000: system.cpu.rename: [tid:0] Looking up miscellaneous arch reg 155, got phys reg 155 (miscellaneous)
+ 206000: system.cpu.rename: [tid:0] Register 155 (flat: 0) (miscellaneous) is ready.
+ 206000: global: [sn:93] has 2 ready out of 4 sources. RTI 0)
+ 206000: global: Renamed reg t1 to physical reg 116 (116) old mapping was 115 (115)
+ 206000: system.cpu.rename: [tid:0] Querying SMB Predictor for load [sn:93] with PC (0x401077=>0x401079).(0=>1).
+ 206000: system.cpu.rename: [tid:0] Renaming arch reg 17 (integer) to physical reg 116 (116).
+ 206000: system.cpu.rename: [tid:0] [sn:93] Adding instruction to history buffer (size=46).
+ 206000: system.cpu.rename: [tid:0] Sending instructions to IEW.
+ 206000: system.cpu.rename: [tid:0] Processing instruction [sn:94] with PC (0x401077=>0x401079).(1=>2).
+ 206000: system.cpu.rename: [tid:0] Looking up integer arch reg 17, got phys reg 116 (integer)
+ 206000: system.cpu.rename: [tid:0] Register 116 (flat: 116) (integer) is not ready.
+ 206000: system.cpu.rename: [tid:0] Looking up integer arch reg 0, got phys reg 106 (integer)
+ 206000: system.cpu.rename: [tid:0] Register 106 (flat: 106) (integer) is not ready.
+ 206000: system.cpu.rename: [tid:0] Looking up integer arch reg 17, got phys reg 116 (integer)
+ 206000: system.cpu.rename: [tid:0] Register 116 (flat: 116) (integer) is not ready.
+ 206000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+ 206000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+ 206000: global: [sn:94] has 1 ready out of 8 sources. RTI 0)
+ 206000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+ 206000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+ 206000: global: [sn:94] has 2 ready out of 8 sources. RTI 0)
+ 206000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+ 206000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+ 206000: global: [sn:94] has 3 ready out of 8 sources. RTI 0)
+ 206000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+ 206000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+ 206000: global: [sn:94] has 4 ready out of 8 sources. RTI 0)
+ 206000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
+ 206000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
+ 206000: global: [sn:94] has 5 ready out of 8 sources. RTI 0)
+ 206000: global: Renamed reg t1 to physical reg 117 (117) old mapping was 116 (116)
+ 206000: system.cpu.rename: [tid:0] Renaming arch reg 17 (integer) to physical reg 117 (117).
+ 206000: system.cpu.rename: [tid:0] [sn:94] Adding instruction to history buffer (size=47).
+ 206000: global: Renamed reg condition_code[0] to physical reg 4801 (4801) old mapping was 4799 (4799)
+ 206000: system.cpu.rename: [tid:0] Renaming arch reg 0 (condition_code) to physical reg 75 (4801).
+ 206000: system.cpu.rename: [tid:0] [sn:94] Adding instruction to history buffer (size=48).
+ 206000: global: Renamed reg condition_code[1] to physical reg 4802 (4802) old mapping was 4800 (4800)
+ 206000: system.cpu.rename: [tid:0] Renaming arch reg 1 (condition_code) to physical reg 76 (4802).
+ 206000: system.cpu.rename: [tid:0] [sn:94] Adding instruction to history buffer (size=49).
+ 206000: system.cpu.rename: [tid:0] Renaming arch reg 0 (invalid) to physical reg 4294967295 (4294967295).
+ 206000: system.cpu.rename: [tid:0] [sn:94] Adding instruction to history buffer (size=50).
+ 206000: system.cpu.rename: [tid:0] Renaming arch reg 0 (invalid) to physical reg 4294967295 (4294967295).
+ 206000: system.cpu.rename: [tid:0] [sn:94] Adding instruction to history buffer (size=51).
+ 206000: system.cpu.rename: [tid:0] Renaming arch reg 0 (invalid) to physical reg 4294967295 (4294967295).
+ 206000: system.cpu.rename: [tid:0] [sn:94] Adding instruction to history buffer (size=52).
+ 206000: system.cpu.rename: Activity this cycle.
+ 206000: system.cpu.iew: Issue: Processing [tid:0]
+ 206000: system.cpu.iew: [tid:0] Not blocked, so attempting to run dispatch.
+ 206000: system.cpu.iew: [tid:0] Issue: Adding PC (0x40105b=>0x40105f).(0=>1) [sn:75] [tid:0] to IQ.
+ 206000: system.cpu.iew: [tid:0] Issue: Memory instruction encountered, adding to LSQ.
+ 206000: system.cpu.iew.lsq.thread0: Inserting load PC (0x40105b=>0x40105f).(0=>1), idx:0 [sn:75]

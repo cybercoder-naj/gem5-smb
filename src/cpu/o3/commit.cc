@@ -1321,36 +1321,24 @@ Commit::commitHead(const DynInstPtr &head_inst, unsigned inst_num)
     }
 
     if (head_inst->isBypassedLoad()) {
-        bool addrOrMemOrderViolation = iewStage->ldstQueue.checkSmbViolation(tid, head_inst);
-
         PhysRegIdPtr actualValueReg = head_inst->renamedDestIdx(0);
         PhysRegIdPtr specValueReg = head_inst->smbSrcStorePhysReg;
         assert(specValueReg);
+
         RegVal actualValue = cpu->getReg(actualValueReg, tid);
         RegVal specValue = cpu->getReg(specValueReg, tid);
         bool valueMismatch = actualValue != specValue;
 
-        if (addrOrMemOrderViolation && valueMismatch) {
-            DPRINTF(Commit, "[tid:%i] [sn:%llu] Bypassed load has both address/mem order violation and value mismatch. "
+        if (valueMismatch) {
+            DPRINTF(Commit, "[tid:%i] [sn:%llu] Bypassed load has value mismatch. "
                     "Actual value: %#x, Speculated value: %#x\n",
                     tid, head_inst->seqNum, actualValue, specValue);
 
             commitStatus[tid] = ROBSquashing;
-            ++stats.bypassedLoadViolationEvents;
+            ++stats.bypassedLoadViolationEvents; // todo this also must include mem order violation events. But idk where to place this.
             squashAll(tid);
             return false;
-        } else if (addrOrMemOrderViolation || valueMismatch) {
-            DPRINTF(Commit, "[tid:%i] [sn:%llu] FARTS bypassed load may have an issue. "
-                    "Address/Mem order violation: %s, Value mismatch: %s. ",
-                    tid, head_inst->seqNum,
-                    addrOrMemOrderViolation ? "Yes" : "No",
-                    valueMismatch ? "Yes" : "No");
-
-            commitStatus[tid] = ROBSquashing;
-            ++stats.bypassedLoadViolationEvents;
-            squashAll(tid);
-            return false;
-        }
+        } 
 
         head_inst->setCompleted();
     }

@@ -304,11 +304,6 @@ LSQ::violation()
 
 bool LSQ::violation(ThreadID tid) { return thread.at(tid).violation(); }
 
-bool LSQ::checkSmbViolation(ThreadID tid, DynInstPtr load_inst)
-{
-    return thread.at(tid).checkSmbViolation(load_inst);
-}
-
 DynInstPtr
 LSQ::getMemDepViolator(ThreadID tid)
 {

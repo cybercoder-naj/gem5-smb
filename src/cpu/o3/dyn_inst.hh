@@ -341,9 +341,6 @@ class DynInst : public ExecContext, public RefCounted
     /** The effective physical address. */
     Addr physEffAddr = 0;
 
-    /** The source store sequence number predicted by SMB. */
-    InstSeqNum smbStoreSeqNum = 0;
-
     /** The memory request flags (from translation). */
     unsigned memReqFlags = 0;
 
@@ -360,8 +357,6 @@ class DynInst : public ExecContext, public RefCounted
     /** Store queue index. */
     ssize_t sqIdx = -1;
     typename LSQUnit::SQIterator sqIt;
-    /** Iterator of the SQ pointing to the SMB predicted source store. */
-    typename LSQUnit::SQIterator smbPredStoreIt;
 
     /** Info needed for each load for PHAST */
     struct MemDepInfo {
@@ -383,7 +378,23 @@ class DynInst : public ExecContext, public RefCounted
         bool predicted = false;
     } memDepInfo;
 
+    /////////////////////// SMB Data //////////////////////
+
+    /** The source store sequence number predicted by SMB. */
+    InstSeqNum smbStoreSeqNum = 0;
+    /** Iterator of the SQ pointing to the SMB predicted source store. */
+    typename LSQUnit::SQIterator smbPredStoreIt;
     PhysRegIdPtr smbSrcStorePhysReg = nullptr;
+
+    bool isBypassedLoad() const {
+        return staticInst->isLoad() && instFlags.test(BypassedLoad);
+    }
+    void setBypassedLoad(InstSeqNum seq_num, PhysRegIdPtr phys_reg_id) {
+        assert(staticInst->isLoad());
+        instFlags.set(BypassedLoad);
+        smbSrcStorePhysReg = phys_reg_id;
+        smbStoreSeqNum = seq_num;
+    }
 
     /////////////////////// TLB Miss //////////////////////
     /**
@@ -616,17 +627,6 @@ class DynInst : public ExecContext, public RefCounted
     bool isHtmStop() const { return staticInst->isHtmStop(); }
     bool isHtmCancel() const { return staticInst->isHtmCancel(); }
     bool isHtmCmd() const { return staticInst->isHtmCmd(); }
-
-    bool isBypassedLoad() const {
-        return staticInst->isLoad() && instFlags.test(BypassedLoad);
-    }
-
-    void setBypassedLoad(InstSeqNum seq_num, PhysRegIdPtr phys_reg_id) {
-        assert(staticInst->isLoad());
-        instFlags.set(BypassedLoad);
-        smbSrcStorePhysReg = phys_reg_id;
-        smbStoreSeqNum = seq_num;
-    }
 
     uint64_t
     getHtmTransactionUid() const override

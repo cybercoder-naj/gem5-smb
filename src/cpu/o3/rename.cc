@@ -1107,11 +1107,14 @@ Rename::renameSrcRegs(const DynInstPtr &inst, ThreadID tid)
         }
 
         if (inst->isStore() && src_idx == 2) {
-            storeAddrToSeqNum[inst->pcState().instAddr()] = inst->seqNum;
             storeToPhysReg[inst->seqNum] = renamed_reg;
         }
 
         ++stats.lookups;
+    }
+
+    if (inst->isLoad() || inst->isStore()) {
+        smb.registerMemoryAccess(inst->pcState().instAddr(), inst->seqNum, inst->isStore());
     }
 }
 
@@ -1153,8 +1156,7 @@ Rename::renameDestRegs(const DynInstPtr &inst, ThreadID tid)
                     "Querying SMB Predictor for load [sn:%llu] with PC %s.\n",
                     tid, inst->seqNum, inst->pcState());
 
-            Addr smb_store_pc = smb.predictSourceStore(inst->pcState().instAddr());
-            InstSeqNum smb_store_seqnum = storeAddrToSeqNum[smb_store_pc];
+            InstSeqNum smb_store_seqnum  = smb.predictSourceStore(inst->seqNum);
             if (smb_store_seqnum != 0) {
                 DPRINTF(Rename,
                         "[tid:%i] "
@@ -1179,7 +1181,6 @@ Rename::renameDestRegs(const DynInstPtr &inst, ThreadID tid)
                     // Also since we know that the store has not yet committed,
                     // We guarantee that the physical register has not yet been freed,
                     // AND it does not point to an overwritten value.
-
                     inst->setBypassedLoad(smb_store_seqnum, store_phys_reg);
                     ++stats.bypassedLoads;
 

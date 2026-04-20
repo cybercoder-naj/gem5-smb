@@ -583,6 +583,19 @@ LSQUnit::checkViolations(typename LoadQueue::iterator& loadIt,
                         " between instructions [sn:%lli] and [sn:%lli]\n",
                         inst_eff_addr1, inst->seqNum, ld_inst->seqNum);
             } else {
+                if (ld_inst->isBypassedLoad() && ld_inst->smbStoreSeqNum == inst->seqNum) {
+                    if (ld_inst->effAddr == inst->effAddr) {
+                        // this is good. The load we're looking at has address overlap
+                        // with the executed store. The load is bypassing this store
+                        // and the addresses match. The following code below shouldn't 
+                        // detect this as a violation.
+                        DPRINTF(LSQUnit, "Load [sn:%lli] is bypassing store [sn:%lli] with matching address %#x. No violation.\n",
+                                ld_inst->seqNum, inst->seqNum, ld_inst->effAddr);
+                        ++loadIt;
+                        continue;
+                    }
+                }
+
                 // A load/store incorrectly passed this store.
                 // Check if we already have a violator, or if it's newer
                 // squash and refetch.
@@ -621,7 +634,7 @@ LSQUnit::checkViolations(typename LoadQueue::iterator& loadIt,
 bool
 LSQUnit::checkSmbViolation(DynInstPtr load_inst) {
     auto store_it = load_inst->smbPredStoreIt;
-    assert(store_it->valid());
+    assert(store_it->valid()); // todo this is still a question to ask...
     assert(store_it->instruction()->effAddrValid());
 
     // check for a full address match at the position of the store that the load is bypassing
@@ -711,6 +724,12 @@ LSQUnit::executeLoad(const DynInstPtr &inst)
         iewStage->activityThisCycle();
     } else {
         if (inst->effAddrValid()) {
+            if (inst->isBypassedLoad() && checkSmbViolation(inst)) {
+                return std::make_shared<GenericISA::M5PanicFault>(
+                    "Detected SMB violation with load [sn:%lli] and store [sn:%lli]. Load address: %#x, Store address: %#x\n",
+                    inst->seqNum, inst->smbPredStoreIt->instruction()->seqNum, inst->effAddr, inst->smbPredStoreIt->instruction()->effAddr);
+            }
+
             auto it = inst->lqIt;
             ++it;
 

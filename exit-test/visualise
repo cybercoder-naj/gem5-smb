@@ -3,13 +3,11 @@
 set -e
 
 : "${1:?Missing executable name}"
-: "${1:?Missing debug flags}"
 
 pwd=`dirname $0`
 filename=`basename $1`
-debugflags=$2
 
-scons build/X86/gem5.opt --ignore-style -j20
+$pwd/build opt
 
 echo -en "Compiling $filename.s..."
 gcc -nostdlib -no-pie $pwd/$filename.s -o $pwd/$filename
@@ -20,14 +18,9 @@ objdump -d $pwd/$filename > $pwd/$filename.dump
 echo "Done."
 
 ./build/X86/gem5.opt \
-  --debug-flags=$debugflags \
-  --debug-file=../$pwd/$filename.debug \
+  --debug-flags=O3PipeView,O3CPUAll \
+  --debug-file=../$pwd/$filename-trace.out \
   configs/deprecated/example/se.py \
-  --cmd=$pwd/$filename \
-  -n 1 \
-  --mem-type SimpleMemory \
+  --cpu-type=O3CPU \
   --caches \
-  --l2cache \
-  --cpu-type X86O3CPU \
-  --cpu-clock 1GHz \
-  -I 1000000
+  --cmd=$pwd/$filename

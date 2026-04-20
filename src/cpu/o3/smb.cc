@@ -32,10 +32,17 @@ SMB::SMB(const std::string &_my_name) :
 }
 
 InstSeqNum
-SMB::predictSourceStore(Addr load_pc)
+SMB::predictSourceStore(InstSeqNum load_seq_num)
 {
+  Addr load_pc = loadSeqNumToAddr[load_seq_num];
+  if (load_pc == 0) {
+    return 0;
+  }
+
   if (predictions.count(load_pc)) {
-    return predictions[load_pc];
+    InstSeqNum store_seq_num = storeAddrToSeqNum[predictions[load_pc]];
+    assert(store_seq_num != 0);
+    return store_seq_num;
   }
   
   std::string line;
@@ -46,12 +53,15 @@ SMB::predictSourceStore(Addr load_pc)
     Addr l_pc, s_pc;
     if (!(ss >> l_pc >> s_pc)) continue;
 
-    predictions[l_pc] = s_pc;
-
     if (l_pc == load_pc) {
-      return s_pc;
+      InstSeqNum store_seq_num = storeAddrToSeqNum[s_pc];
+      assert(store_seq_num != 0);
+      return store_seq_num;
     }
+
+    predictions[l_pc] = s_pc;
   }
+
 
   return 0;
 }
