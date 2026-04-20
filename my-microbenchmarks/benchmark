@@ -98,16 +98,17 @@ for filename in $progs; do
       continue
     fi
 
-    export SMB_PREDICTIONS_FILE="$prog_wd/$base.predictions"
+    SMB_PREDICTIONS_FILE="$prog_wd/$base.predictions"
     echo "" > $SMB_PREDICTIONS_FILE
 
     $pwd/memprofile $MEM_TRACE_FILE $SMB_PREDICTIONS_FILE
-    unset MEM_TRACE_FILE
   fi
 
   if [[ "$no_smb" == false ]]; then
+    export SMB_PREDICTIONS_FILE="$prog_wd/$base.predictions"
     echo "" > $prog_wd/$base-trace-smb.out
     echo "" > $prog_wd/$base-stats-smb.txt
+    unset MEM_TRACE_FILE
 
     echo "=== Running $base (with SMB) ==="
     if ! ./build/X86/gem5.opt \
