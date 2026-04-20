@@ -634,13 +634,14 @@ LSQUnit::checkViolations(typename LoadQueue::iterator& loadIt,
 bool
 LSQUnit::checkSmbViolation(DynInstPtr load_inst) {
     auto store_it = load_inst->smbPredStoreIt;
-    assert(store_it->valid()); // todo this is still a question to ask...
+    assert(store_it->valid());
     assert(store_it->instruction()->effAddrValid());
 
     // check for a full address match at the position of the store that the load is bypassing
     if (store_it->instruction()->effAddr != load_inst->effAddr) {
         DPRINTF(LSQUnit, "Detected SMB violation with load [sn:%lli] and store [sn:%lli]. Load address: %#x, Store address: %#x\n",
                 load_inst->seqNum, store_it->instruction()->seqNum, load_inst->effAddr, store_it->instruction()->effAddr);
+        memDepViolator = load_inst;
         return true;
     }
 
@@ -661,6 +662,7 @@ LSQUnit::checkSmbViolation(DynInstPtr load_inst) {
             DPRINTF(LSQUnit, "Detected intervening store SMB violation with load [sn:%lli] and store [sn:%lli]. Load address: %#x, Store address: %#x\n",
                     load_inst->seqNum, store_it->instruction()->seqNum, load_inst->effAddr, store_it->instruction()->effAddr);
 
+            memDepViolator = load_inst;
             return true;
         }
     }
