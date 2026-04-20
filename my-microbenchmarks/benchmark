@@ -6,69 +6,127 @@ pwd=`dirname $0`
 
 progs=$(ls $pwd/*/*.s)
 
+# There's a flag `--progs=...` which is comma delimited list of programs to run. If set, only those programs will be run.
+if [[ "$1" == --progs=* ]]; then
+  IFS=',' read -ra selected_progs <<< "${1#--progs=}"
+  progs=""
+  for prog in "${selected_progs[@]}"; do
+    if [[ -f "$pwd/$prog/prog.s" ]]; then
+      progs="$progs $pwd/$prog/prog.s"
+    else
+      echo "Program at $pwd/$prog/prog.s not found. Skipping."
+    fi
+  done
+fi
+
+if [[ -z "$progs" ]]; then
+  echo "No programs found to run. Exiting."
+  exit 1
+fi
+
+load_overrides() {
+  local prog_wd="$1"
+  local overrides_file="$prog_wd/.overrides"
+  local line
+
+  if [[ -f "$overrides_file" ]]; then
+    # The "|| [[ -n $line ]]" handles the common case where the file does not
+    # end with a trailing newline.
+    while IFS= read -r line || [[ -n "$line" ]]; do
+      # Normalize CRLF and trim surrounding whitespace.
+      line=${line%$'\r'}
+      line=${line#"${line%%[![:space:]]*}"}
+      line=${line%"${line##*[![:space:]]}"}
+
+      [[ -z "$line" ]] && continue
+
+      case "$line" in
+        "no-smb") no_smb=true;;
+        "no-mem-trace") no_mem_trace=true;;
+        "no-update-pred") no_update_pred=true;;
+        *) echo "Unknown override: $line in $overrides_file. Ignoring.";;
+      esac
+    done < "$overrides_file"
+  fi
+}
+
 scons build/X86/gem5.opt --ignore-style -j32
-
-for filename in $progs; do
-  gcc -nostdlib -no-pie $filename -o ${filename%.s}
-  # objdump -d ${filename%.s} > ${filename%.s}.dump
-
-  rm -f ${filename%.s}.memtrace ${filename%.s}.predictions ${filename%.s}.debug ${filename%.s}-*.out ${filename%.s}-stats-*.txt
-done
-
-read -p "Continue? [Y/n] " yn
-case $yn in
-    [Nn]* ) echo "Aborted."; exit 1;;
-    * ) ;;  # anything else (including Enter) continues
-esac
 
 for filename in $progs; do
   base=$(basename $filename .s)
   prog_wd=$(dirname $filename)
 
-  export MEM_TRACE_FILE="$prog_wd/$base.memtrace"
-  echo "" > $MEM_TRACE_FILE
+  gcc -nostdlib -no-pie $filename -o ${filename%.s}
 
-  echo "=== Running $base (no SMB) ==="
-  if ! ./build/X86/gem5.opt \
-    --debug-flags=O3CPUAll,O3PipeView \
-    --debug-file=../$prog_wd/$base-trace-no-smb.out \
-    configs/deprecated/example/se.py \
-    --cmd=$prog_wd/$base \
-    -n 1 \
-    --mem-type SimpleMemory \
-    --caches \
-    --l2cache \
-    --cpu-type X86O3CPU \
-    --cpu-clock 1GHz \
-    -I 1000000; then
-      echo "  [FAILED] $base (no SMB) run failed. skipping."
-      unset MEM_TRACE_FILE
-      continue
+  no_smb=false
+  no_mem_trace=false
+  no_update_pred=false
+  load_overrides "$prog_wd"
+
+  if [[ "$no_mem_trace" == false ]]; then
+    export MEM_TRACE_FILE="$prog_wd/$base.memtrace"
+    echo "" > $MEM_TRACE_FILE
+    echo "" > $prog_wd/$base-trace-no-smb.out
+    echo "" > $prog_wd/$base-stats-no-smb.txt
+
+    echo "=== Running $base (no SMB) ==="
+    if ! ./build/X86/gem5.opt \
+      --debug-flags=O3CPUAll,O3PipeView \
+      --debug-file=../$prog_wd/$base-trace-no-smb.out \
+      configs/deprecated/example/se.py \
+      --cmd=$prog_wd/$base \
+      -n 1 \
+      --mem-type SimpleMemory \
+      --caches \
+      --l2cache \
+      --cpu-type X86O3CPU \
+      --cpu-clock 1GHz \
+      -I 1000000; then
+        echo "  [FAILED] $base (no SMB) run failed. skipping."
+        unset MEM_TRACE_FILE
+        continue
+    fi
+    cp m5out/stats.txt $prog_wd/$base-stats-no-smb.txt
   fi
-  cp m5out/stats.txt $prog_wd/$base-stats-no-smb.txt
 
-  export SMB_PREDICTIONS_FILE="$prog_wd/$base.predictions"
-  echo "" > $SMB_PREDICTIONS_FILE
-  $pwd/memprofile $MEM_TRACE_FILE $SMB_PREDICTIONS_FILE
-  unset MEM_TRACE_FILE
-
-  echo "=== Running $base (with SMB) ==="
-  if ! ./build/X86/gem5.opt \
-    --debug-flags=O3CPUAll,O3PipeView \
-    --debug-file=../$prog_wd/$base-trace-smb.out \
-    configs/deprecated/example/se.py \
-    --cmd=$prog_wd/$base \
-    -n 1 \
-    --mem-type SimpleMemory \
-    --caches \
-    --l2cache \
-    --cpu-type X86O3CPU \
-    --cpu-clock 1GHz \
-    -I 1000000; then
-      echo "  [FAILED] $base (with SMB) run failed. skipping."
-      unset SMB_PREDICTIONS_FILE
+  if [[ "$no_update_pred" == false ]]; then
+    echo "=== Updating predictions for $base... ==="
+    if [[ -f "$MEM_TRACE_FILE" ]]; then
+      echo "=== Generating SMB predictions for $base... ==="
+    else
+      echo "=== No mem trace for $base, skipping SMB ==="
       continue
+    fi
+
+    export SMB_PREDICTIONS_FILE="$prog_wd/$base.predictions"
+    echo "" > $SMB_PREDICTIONS_FILE
+
+    $pwd/memprofile $MEM_TRACE_FILE $SMB_PREDICTIONS_FILE
+    unset MEM_TRACE_FILE
   fi
-  cp m5out/stats.txt $prog_wd/$base-stats-smb.txt
-  unset SMB_PREDICTIONS_FILE
+
+  if [[ "$no_smb" == false ]]; then
+    echo "" > $prog_wd/$base-trace-smb.out
+    echo "" > $prog_wd/$base-stats-smb.txt
+
+    echo "=== Running $base (with SMB) ==="
+    if ! ./build/X86/gem5.opt \
+      --debug-flags=O3CPUAll,O3PipeView \
+      --debug-file=../$prog_wd/$base-trace-smb.out \
+      configs/deprecated/example/se.py \
+      --cmd=$prog_wd/$base \
+      -n 1 \
+      --mem-type SimpleMemory \
+      --caches \
+      --l2cache \
+      --cpu-type X86O3CPU \
+      --cpu-clock 1GHz \
+      -I 1000000; then
+        echo "  [FAILED] $base (with SMB) run failed. skipping."
+        unset SMB_PREDICTIONS_FILE
+        continue
+    fi
+    cp m5out/stats.txt $prog_wd/$base-stats-smb.txt
+    unset SMB_PREDICTIONS_FILE
+  fi
 done
