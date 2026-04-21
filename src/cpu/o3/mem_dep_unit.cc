@@ -270,7 +270,17 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
     PredictionResult prediction;
     prediction.storeQueueDistances = {0,0};
     prediction.seqNums = std::vector<InstSeqNum>();
-    prediction = depPred.checkInst(inst->pcState().instAddr(), inst->seqNum, branchHistory, inst->isLoad());
+
+    if (inst->isLoad() && inst->isBypassedLoad()) {
+        // SMB loads are only dependent on the store they are paired with, so skip the predictor and just add that dependency.
+        MemDepHashIt hash_it = memDepHash.find(inst->smbStoreSeqNum);
+        if (hash_it != memDepHash.end()) {
+            dependencies.push_back((*hash_it).second);
+        }
+    }
+    else {
+        prediction = depPred.checkInst(inst->pcState().instAddr(), inst->seqNum, branchHistory, inst->isLoad());
+    }
 
     if (prediction.storeQueueDistances.first || prediction.storeQueueDistances.second) {
         //make a PHAST prediction, as long as the SQ offset is valid
@@ -392,6 +402,7 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
         panic("Unknown type! (most likely a barrier).");
     }
 }
+
 
 void
 MemDepUnit::insertNonSpec(const DynInstPtr &inst)

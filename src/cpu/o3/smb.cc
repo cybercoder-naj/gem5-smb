@@ -29,6 +29,17 @@ SMB::SMB(const std::string &_my_name) :
   if (!infile.is_open()) {
     DPRINTF(SMB, "Could not open SMB predictions file\n");
   }
+
+  std::string line;
+  while (std::getline(infile, line)) {
+    if (line.empty()) continue;
+
+    std::stringstream ss(line);
+    Addr l_pc, s_pc;
+    if (!(ss >> std::hex >> l_pc >> std::hex >> s_pc)) continue;
+
+    predictions[l_pc] = s_pc;
+  }
 }
 
 InstSeqNum
@@ -45,22 +56,22 @@ SMB::predictSourceStore(InstSeqNum load_seq_num)
     return store_seq_num;
   }
   
-  std::string line;
-  while (std::getline(infile, line)) {
-    if (line.empty()) continue;
+  // std::string line;
+  // while (std::getline(infile, line)) {
+  //   if (line.empty()) continue;
 
-    std::stringstream ss(line);
-    Addr l_pc, s_pc;
-    if (!(ss >> l_pc >> s_pc)) continue;
+  //   std::stringstream ss(line);
+  //   Addr l_pc, s_pc;
+  //   if (!(ss >> std::hex >> l_pc >> std::hex >> s_pc)) continue;
 
-    if (l_pc == load_pc) {
-      InstSeqNum store_seq_num = storeAddrToSeqNum[s_pc];
-      assert(store_seq_num != 0);
-      return store_seq_num;
-    }
+  //   if (l_pc == load_pc) {
+  //     InstSeqNum store_seq_num = storeAddrToSeqNum[s_pc];
+  //     assert(store_seq_num != 0);
+  //     return store_seq_num;
+  //   }
 
-    predictions[l_pc] = s_pc;
-  }
+  //   predictions[l_pc] = s_pc;
+  // }
 
 
   return 0;

@@ -8,8 +8,10 @@ typedef uint64_t InstSeqNum;
 typedef uint64_t Addr;
 
 struct MemAccessInfo {
-    Addr pc;
+    Addr s_pc;
+    Addr l_pc;
     Addr eff_addr;
+    bool print;
 };
 
 int main(int argc, char *argv[]) {
@@ -30,7 +32,7 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    std::unordered_map<Addr, MemAccessInfo> lastWriter;
+    std::unordered_map<Addr, MemAccessInfo> writers;
 
     std::string line;
     while (std::getline(infile, line)) {
@@ -46,13 +48,13 @@ int main(int argc, char *argv[]) {
       if (ss >> seq_num >> std::hex >> inst_addr >> std::hex >> eff_addr >> load_store) {
         switch (load_store) {
           case 'L':
-            if (lastWriter.find(eff_addr) != lastWriter.end()) {
-                MemAccessInfo info = lastWriter[eff_addr];
+            if (writers.find(eff_addr) != writers.end()) {
+                MemAccessInfo info = writers[eff_addr];
                 std::cout << "Load at PC: " << std::hex << inst_addr
-                          << " reads from store at PC: " << std::hex << info.pc
+                          << " reads from store at PC: " << std::hex << info.s_pc
                           << " with effective address: " << std::hex << eff_addr
                           << "\n";
-                outfile << inst_addr << " " << info.pc << " " << "\n";
+                writers[eff_addr].l_pc = inst_addr;
             } else {
                 std::cout << "Load at PC: " << std::hex << inst_addr
                           << " has no prior store for effective address: "
@@ -60,13 +62,22 @@ int main(int argc, char *argv[]) {
             }
             break;
           case 'S':
-            lastWriter[eff_addr] = {inst_addr, eff_addr};
+            if (writers.find(eff_addr) != writers.end() && inst_addr != writers[eff_addr].s_pc)
+                writers[eff_addr].print = false;
+            else
+                writers[eff_addr] = {inst_addr, 0, eff_addr, true};
             break;
         }
       } else {
         std::cerr << "Invalid line format: " << line << std::endl;
         return 1;
       } 
+    }
+
+    for (const auto& entry : writers) {
+        if (entry.second.print) {
+            outfile << std::hex << entry.second.l_pc << " " << std::hex << entry.second.s_pc << "\n";
+        }
     }
 
     infile.close();

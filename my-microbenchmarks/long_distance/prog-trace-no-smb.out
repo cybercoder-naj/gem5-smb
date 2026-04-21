@@ -1,3 +1,4 @@
+      0: system.cpu.smb: SMB_PREDICTIONS_FILE environment variable not set. No predictions loaded.
       0: Creating MemDepUnit 0 object.
       0: Creating MemDepUnit 1 object.
       0: Creating MemDepUnit 2 object.

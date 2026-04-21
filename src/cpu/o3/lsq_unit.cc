@@ -583,19 +583,6 @@ LSQUnit::checkViolations(typename LoadQueue::iterator& loadIt,
                         " between instructions [sn:%lli] and [sn:%lli]\n",
                         inst_eff_addr1, inst->seqNum, ld_inst->seqNum);
             } else {
-                if (ld_inst->isBypassedLoad() && ld_inst->smbStoreSeqNum == inst->seqNum) {
-                    if (ld_inst->effAddr == inst->effAddr) {
-                        // this is good. The load we're looking at has address overlap
-                        // with the executed store. The load is bypassing this store
-                        // and the addresses match. The following code below shouldn't 
-                        // detect this as a violation.
-                        DPRINTF(LSQUnit, "Load [sn:%lli] is bypassing store [sn:%lli] with matching address %#x. No violation.\n",
-                                ld_inst->seqNum, inst->seqNum, ld_inst->effAddr);
-                        ++loadIt;
-                        continue;
-                    }
-                }
-
                 // A load/store incorrectly passed this store.
                 // Check if we already have a violator, or if it's newer
                 // squash and refetch.
@@ -629,45 +616,6 @@ LSQUnit::checkViolations(typename LoadQueue::iterator& loadIt,
         ++loadIt;
     }
     return NoFault;
-}
-
-bool
-LSQUnit::checkSmbViolation(DynInstPtr load_inst) {
-    auto store_it = load_inst->smbPredStoreIt;
-    assert(store_it->valid());
-    assert(store_it->instruction()->effAddrValid());
-
-    // check for a full address match at the position of the store that the load is bypassing
-    if (store_it->instruction()->effAddr != load_inst->effAddr) {
-        DPRINTF(LSQUnit, "Detected SMB violation with load [sn:%lli] and store [sn:%lli]. Load address: %#x, Store address: %#x\n",
-                load_inst->seqNum, store_it->instruction()->seqNum, load_inst->effAddr, store_it->instruction()->effAddr);
-        memDepViolator = load_inst;
-        return true;
-    }
-
-    // check for any intervening stores that could cause a violation.
-    ++store_it;
-    for (; store_it != load_inst->sqIt; ++store_it) {
-        assert(store_it->valid());
-        assert(store_it->instruction()->effAddrValid());
-
-        Addr load_addr_start = load_inst->effAddr >> depCheckShift;
-        Addr load_addr_end = (load_inst->effAddr + load_inst->effSize - 1) >> depCheckShift;
-
-        auto store_inst = store_it->instruction();
-        Addr store_addr_start = store_inst->effAddr >> depCheckShift;
-        Addr store_addr_end = (store_inst->effAddr + store_inst->effSize - 1) >> depCheckShift;
-
-        if (load_addr_end >= store_addr_start && load_addr_start <= store_addr_end) {
-            DPRINTF(LSQUnit, "Detected intervening store SMB violation with load [sn:%lli] and store [sn:%lli]. Load address: %#x, Store address: %#x\n",
-                    load_inst->seqNum, store_it->instruction()->seqNum, load_inst->effAddr, store_it->instruction()->effAddr);
-
-            memDepViolator = load_inst;
-            return true;
-        }
-    }
-
-    return false;
 }
 
 Fault
@@ -726,12 +674,6 @@ LSQUnit::executeLoad(const DynInstPtr &inst)
         iewStage->activityThisCycle();
     } else {
         if (inst->effAddrValid()) {
-            if (inst->isBypassedLoad() && checkSmbViolation(inst)) {
-                return std::make_shared<GenericISA::M5PanicFault>(
-                    "Detected SMB violation with load [sn:%lli] and store [sn:%lli]. Load address: %#x, Store address: %#x\n",
-                    inst->seqNum, inst->smbPredStoreIt->instruction()->seqNum, inst->effAddr, inst->smbPredStoreIt->instruction()->effAddr);
-            }
-
             auto it = inst->lqIt;
             ++it;
 
@@ -1474,9 +1416,13 @@ LSQUnit::read(LSQRequest *request, ssize_t load_idx)
 
     // Check the SQ for any previous stores that might lead to forwarding
     auto store_it = load_inst->sqIt;
-    assert (store_it >= storeWBIt);
+    auto end_it = storeWBIt;
+    // Narrow the window only if the source store hasn't written back yet. If it has the load goes to cache.
+    if (load_inst->isBypassedLoad() && load_inst->smbPredStoreIt > end_it) 
+        end_it = load_inst->smbPredStoreIt;
+    assert (store_it >= end_it);
     // End once we've reached the top of the LSQ
-    while (store_it != storeWBIt && !load_inst->isDataPrefetch()) {
+    while (store_it != end_it && !load_inst->isDataPrefetch()) {
         // Move the index to one younger
         store_it--;
         assert(store_it->valid());
@@ -1539,6 +1485,18 @@ LSQUnit::read(LSQRequest *request, ssize_t load_idx)
             }
 
             if (coverage == AddrRangeCoverage::FullAddrRangeCoverage) {
+
+                if (load_inst->isBypassedLoad() && store_it->instruction()->seqNum != load_inst->smbStoreSeqNum) {
+                    memDepViolator = load_inst;
+                    ++stats.memOrderViolation;
+
+                    auto req_s_dep = store_it->request()->getVaddr();
+                    return std::make_shared<GenericISA::M5PanicFault>(
+                        "Detected fault with "
+                        "inst [sn:%lli] and [sn:%lli] at address %#x\n",
+                        store_it->instruction()->seqNum, load_inst->seqNum, req_s_dep);
+                }
+                
                 // Get shift amount for offset into the store's data.
                 int shift_amt = request->mainReq()->getVaddr() -
                     store_it->instruction()->effAddr;
@@ -1625,6 +1583,16 @@ LSQUnit::read(LSQRequest *request, ssize_t load_idx)
                 if (store_it->completed()) {
                     panic("Should not check one of these");
                     continue;
+                }
+
+                if (load_inst->isBypassedLoad()) {
+                    memDepViolator = load_inst;
+                    ++stats.memOrderViolation;
+                    auto req_s_dep = store_it->request()->getVaddr();
+                    return std::make_shared<GenericISA::M5PanicFault>(
+                        "Detected fault with "
+                        "inst [sn:%lli] and [sn:%lli] at address %#x\n",
+                        store_it->instruction()->seqNum, load_inst->seqNum, req_s_dep);
                 }
 
                 // Must stall load and force it to retry, so long as it's the
