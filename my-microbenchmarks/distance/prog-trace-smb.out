@@ -1262,7 +1262,7 @@ O3CPU: Ticking main, O3CPU.
   90000: global: [sn:15] has 2 ready out of 3 sources. RTI 0)
   90000: global: Renamed reg rbx to physical reg 52 (52) old mapping was 3 (3)
   90000: system.cpu.rename: [tid:0] Querying SMB Predictor for load [sn:15] with PC (0x401023=>0x401027).(0=>1).
-  90000: system.cpu.rename: [tid:0] SMB Predictor predicted store with sequence number 4 as source of load [sn:15].
+  90000: system.cpu.rename: [tid:0] SMB Predictor predicted store with sequence number 4 as source of load [sn:15]. FARTS 0
   90000: system.cpu.rename: [tid:0] Renaming arch reg 3 (integer) to physical reg 41 (41).
   90000: system.cpu.rename: [tid:0] [sn:15] Adding instruction to history buffer (size=44).
   90000: system.cpu.rename: [tid:0] Sending instructions to IEW.

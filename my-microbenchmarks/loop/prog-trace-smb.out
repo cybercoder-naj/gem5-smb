@@ -992,7 +992,7 @@ O3CPU: Ticking main, O3CPU.
   89000: global: [sn:5] has 1 ready out of 3 sources. RTI 0)
   89000: global: Renamed reg rbx to physical reg 42 (42) old mapping was 3 (3)
   89000: system.cpu.rename: [tid:0] Querying SMB Predictor for load [sn:5] with PC (0x40100e=>0x401012).(0=>1).
-  89000: system.cpu.rename: [tid:0] SMB Predictor predicted store with sequence number 4 as source of load [sn:5].
+  89000: system.cpu.rename: [tid:0] SMB Predictor predicted store with sequence number 4 as source of load [sn:5]. FARTS 0
   89000: system.cpu.rename: [tid:0] Renaming arch reg 3 (integer) to physical reg 41 (41).
   89000: system.cpu.rename: [tid:0] [sn:5] Adding instruction to history buffer (size=9).
   89000: system.cpu.rename: [tid:0] Sending instructions to IEW.
@@ -5134,7 +5134,7 @@ O3CPU: Ticking main, O3CPU.
  104000: global: [sn:52] has 3 ready out of 3 sources. RTI 0)
  104000: global: Renamed reg rbx to physical reg 73 (73) old mapping was 41 (41)
  104000: system.cpu.rename: [tid:0] Querying SMB Predictor for load [sn:52] with PC (0x40100e=>0x401012).(0=>1).
- 104000: system.cpu.rename: [tid:0] SMB Predictor predicted store with sequence number 51 as source of load [sn:52].
+ 104000: system.cpu.rename: [tid:0] SMB Predictor predicted store with sequence number 51 as source of load [sn:52]. FARTS 0
  104000: system.cpu.rename: [tid:0] Renaming arch reg 3 (integer) to physical reg 43 (43).
  104000: system.cpu.rename: [tid:0] [sn:52] Adding instruction to history buffer (size=1).
  104000: system.cpu.rename: [tid:0] Sending instructions to IEW.
@@ -8840,7 +8840,7 @@ O3CPU: Ticking main, O3CPU.
  118000: global: [sn:99] has 3 ready out of 3 sources. RTI 0)
  118000: global: Renamed reg rbx to physical reg 104 (104) old mapping was 43 (43)
  118000: system.cpu.rename: [tid:0] Querying SMB Predictor for load [sn:99] with PC (0x40100e=>0x401012).(0=>1).
- 118000: system.cpu.rename: [tid:0] SMB Predictor predicted store with sequence number 98 as source of load [sn:99].
+ 118000: system.cpu.rename: [tid:0] SMB Predictor predicted store with sequence number 98 as source of load [sn:99]. FARTS 0
  118000: system.cpu.rename: [tid:0] Renaming arch reg 3 (integer) to physical reg 74 (74).
  118000: system.cpu.rename: [tid:0] [sn:99] Adding instruction to history buffer (size=1).
  118000: system.cpu.rename: [tid:0] Sending instructions to IEW.
@@ -9335,7 +9335,7 @@ O3CPU: Ticking main, O3CPU.
  120000: global: [sn:107] has 2 ready out of 3 sources. RTI 0)
  120000: global: Renamed reg rbx to physical reg 109 (109) old mapping was 74 (74)
  120000: system.cpu.rename: [tid:0] Querying SMB Predictor for load [sn:107] with PC (0x40100e=>0x401012).(0=>1).
- 120000: system.cpu.rename: [tid:0] SMB Predictor predicted store with sequence number 106 as source of load [sn:107].
+ 120000: system.cpu.rename: [tid:0] SMB Predictor predicted store with sequence number 106 as source of load [sn:107]. FARTS 0
  120000: system.cpu.rename: [tid:0] Renaming arch reg 3 (integer) to physical reg 105 (105).
  120000: system.cpu.rename: [tid:0] [sn:107] Adding instruction to history buffer (size=17).
  120000: system.cpu.rename: [tid:0] Sending instructions to IEW.
@@ -9472,7 +9472,7 @@ O3CPU: Ticking main, O3CPU.
  120000: global: [sn:115] has 2 ready out of 3 sources. RTI 0)
  120000: global: Renamed reg rbx to physical reg 114 (114) old mapping was 105 (105)
  120000: system.cpu.rename: [tid:0] Querying SMB Predictor for load [sn:115] with PC (0x40100e=>0x401012).(0=>1).
- 120000: system.cpu.rename: [tid:0] SMB Predictor predicted store with sequence number 114 as source of load [sn:115].
+ 120000: system.cpu.rename: [tid:0] SMB Predictor predicted store with sequence number 114 as source of load [sn:115]. FARTS 0
  120000: system.cpu.rename: [tid:0] Renaming arch reg 3 (integer) to physical reg 110 (110).
  120000: system.cpu.rename: [tid:0] [sn:115] Adding instruction to history buffer (size=33).
  120000: system.cpu.rename: Activity this cycle.
@@ -9817,7 +9817,7 @@ O3CPU: Ticking main, O3CPU.
  121000: global: [sn:123] has 2 ready out of 3 sources. RTI 0)
  121000: global: Renamed reg rbx to physical reg 119 (119) old mapping was 110 (110)
  121000: system.cpu.rename: [tid:0] Querying SMB Predictor for load [sn:123] with PC (0x40100e=>0x401012).(0=>1).
- 121000: system.cpu.rename: [tid:0] SMB Predictor predicted store with sequence number 122 as source of load [sn:123].
+ 121000: system.cpu.rename: [tid:0] SMB Predictor predicted store with sequence number 122 as source of load [sn:123]. FARTS 0
  121000: system.cpu.rename: [tid:0] Renaming arch reg 3 (integer) to physical reg 115 (115).
  121000: system.cpu.rename: [tid:0] [sn:123] Adding instruction to history buffer (size=49).
  121000: system.cpu.rename: [tid:0] Sending instructions to IEW.
@@ -10246,7 +10246,7 @@ O3CPU: Ticking main, O3CPU.
  122000: global: [sn:131] has 2 ready out of 3 sources. RTI 0)
  122000: global: Renamed reg rbx to physical reg 124 (124) old mapping was 115 (115)
  122000: system.cpu.rename: [tid:0] Querying SMB Predictor for load [sn:131] with PC (0x40100e=>0x401012).(0=>1).
- 122000: system.cpu.rename: [tid:0] SMB Predictor predicted store with sequence number 130 as source of load [sn:131].
+ 122000: system.cpu.rename: [tid:0] SMB Predictor predicted store with sequence number 130 as source of load [sn:131]. FARTS 0
  122000: system.cpu.rename: [tid:0] Renaming arch reg 3 (integer) to physical reg 120 (120).
  122000: system.cpu.rename: [tid:0] [sn:131] Adding instruction to history buffer (size=65).
  122000: system.cpu.rename: [tid:0] Sending instructions to IEW.
@@ -10702,7 +10702,7 @@ O3CPU: Ticking main, O3CPU.
  123000: global: [sn:139] has 2 ready out of 3 sources. RTI 0)
  123000: global: Renamed reg rbx to physical reg 129 (129) old mapping was 120 (120)
  123000: system.cpu.rename: [tid:0] Querying SMB Predictor for load [sn:139] with PC (0x40100e=>0x401012).(0=>1).
- 123000: system.cpu.rename: [tid:0] SMB Predictor predicted store with sequence number 138 as source of load [sn:139].
+ 123000: system.cpu.rename: [tid:0] SMB Predictor predicted store with sequence number 138 as source of load [sn:139]. FARTS 0
  123000: system.cpu.rename: [tid:0] Renaming arch reg 3 (integer) to physical reg 125 (125).
  123000: system.cpu.rename: [tid:0] [sn:139] Adding instruction to history buffer (size=81).
  123000: system.cpu.rename: [tid:0] Sending instructions to IEW.
@@ -11227,7 +11227,7 @@ O3CPU: Ticking main, O3CPU.
  124000: global: [sn:147] has 2 ready out of 3 sources. RTI 0)
  124000: global: Renamed reg rbx to physical reg 134 (134) old mapping was 125 (125)
  124000: system.cpu.rename: [tid:0] Querying SMB Predictor for load [sn:147] with PC (0x40100e=>0x401012).(0=>1).
- 124000: system.cpu.rename: [tid:0] SMB Predictor predicted store with sequence number 146 as source of load [sn:147].
+ 124000: system.cpu.rename: [tid:0] SMB Predictor predicted store with sequence number 146 as source of load [sn:147]. FARTS 98
  124000: system.cpu.rename: [tid:0] Renaming arch reg 3 (integer) to physical reg 130 (130).
  124000: system.cpu.rename: [tid:0] [sn:147] Adding instruction to history buffer (size=97).
  124000: system.cpu.rename: [tid:0] Sending instructions to IEW.
@@ -11364,7 +11364,7 @@ O3CPU: Ticking main, O3CPU.
  124000: global: [sn:155] has 2 ready out of 3 sources. RTI 0)
  124000: global: Renamed reg rbx to physical reg 139 (139) old mapping was 130 (130)
  124000: system.cpu.rename: [tid:0] Querying SMB Predictor for load [sn:155] with PC (0x40100e=>0x401012).(0=>1).
- 124000: system.cpu.rename: [tid:0] SMB Predictor predicted store with sequence number 154 as source of load [sn:155].
+ 124000: system.cpu.rename: [tid:0] SMB Predictor predicted store with sequence number 154 as source of load [sn:155]. FARTS 98
  124000: system.cpu.rename: [tid:0] Renaming arch reg 3 (integer) to physical reg 135 (135).
  124000: system.cpu.rename: [tid:0] [sn:155] Adding instruction to history buffer (size=113).
  124000: system.cpu.rename: Activity this cycle.
@@ -11885,7 +11885,7 @@ O3CPU: Ticking main, O3CPU.
  125000: global: [sn:163] has 2 ready out of 3 sources. RTI 0)
  125000: global: Renamed reg rbx to physical reg 144 (144) old mapping was 135 (135)
  125000: system.cpu.rename: [tid:0] Querying SMB Predictor for load [sn:163] with PC (0x40100e=>0x401012).(0=>1).
- 125000: system.cpu.rename: [tid:0] SMB Predictor predicted store with sequence number 162 as source of load [sn:163].
+ 125000: system.cpu.rename: [tid:0] SMB Predictor predicted store with sequence number 162 as source of load [sn:163]. FARTS 0
  125000: system.cpu.rename: [tid:0] Renaming arch reg 3 (integer) to physical reg 140 (140).
  125000: system.cpu.rename: [tid:0] [sn:163] Adding instruction to history buffer (size=129).
  125000: system.cpu.rename: [tid:0] Sending instructions to IEW.
@@ -12422,7 +12422,7 @@ O3CPU: Ticking main, O3CPU.
  126000: global: [sn:171] has 2 ready out of 3 sources. RTI 0)
  126000: global: Renamed reg rbx to physical reg 149 (149) old mapping was 140 (140)
  126000: system.cpu.rename: [tid:0] Querying SMB Predictor for load [sn:171] with PC (0x40100e=>0x401012).(0=>1).
- 126000: system.cpu.rename: [tid:0] SMB Predictor predicted store with sequence number 170 as source of load [sn:171].
+ 126000: system.cpu.rename: [tid:0] SMB Predictor predicted store with sequence number 170 as source of load [sn:171]. FARTS 99
  126000: system.cpu.rename: [tid:0] Renaming arch reg 3 (integer) to physical reg 145 (145).
  126000: system.cpu.rename: [tid:0] [sn:171] Adding instruction to history buffer (size=145).
  126000: system.cpu.rename: [tid:0] Sending instructions to IEW.
@@ -12977,7 +12977,7 @@ O3CPU: Ticking main, O3CPU.
  127000: global: [sn:179] has 2 ready out of 3 sources. RTI 0)
  127000: global: Renamed reg rbx to physical reg 154 (154) old mapping was 145 (145)
  127000: system.cpu.rename: [tid:0] Querying SMB Predictor for load [sn:179] with PC (0x40100e=>0x401012).(0=>1).
- 127000: system.cpu.rename: [tid:0] SMB Predictor predicted store with sequence number 178 as source of load [sn:179].
+ 127000: system.cpu.rename: [tid:0] SMB Predictor predicted store with sequence number 178 as source of load [sn:179]. FARTS 106
  127000: system.cpu.rename: [tid:0] Renaming arch reg 3 (integer) to physical reg 150 (150).
  127000: system.cpu.rename: [tid:0] [sn:179] Adding instruction to history buffer (size=160).
  127000: system.cpu.rename: [tid:0] Sending instructions to IEW.
@@ -13559,7 +13559,7 @@ O3CPU: Ticking main, O3CPU.
  128000: global: [sn:187] has 2 ready out of 3 sources. RTI 0)
  128000: global: Renamed reg rbx to physical reg 159 (159) old mapping was 150 (150)
  128000: system.cpu.rename: [tid:0] Querying SMB Predictor for load [sn:187] with PC (0x40100e=>0x401012).(0=>1).
- 128000: system.cpu.rename: [tid:0] SMB Predictor predicted store with sequence number 186 as source of load [sn:187].
+ 128000: system.cpu.rename: [tid:0] SMB Predictor predicted store with sequence number 186 as source of load [sn:187]. FARTS 107
  128000: system.cpu.rename: [tid:0] Renaming arch reg 3 (integer) to physical reg 155 (155).
  128000: system.cpu.rename: [tid:0] [sn:187] Adding instruction to history buffer (size=161).
  128000: system.cpu.rename: [tid:0] Sending instructions to IEW.
@@ -13696,7 +13696,7 @@ O3CPU: Ticking main, O3CPU.
  128000: global: [sn:195] has 2 ready out of 3 sources. RTI 0)
  128000: global: Renamed reg rbx to physical reg 164 (164) old mapping was 155 (155)
  128000: system.cpu.rename: [tid:0] Querying SMB Predictor for load [sn:195] with PC (0x40100e=>0x401012).(0=>1).
- 128000: system.cpu.rename: [tid:0] SMB Predictor predicted store with sequence number 194 as source of load [sn:195].
+ 128000: system.cpu.rename: [tid:0] SMB Predictor predicted store with sequence number 194 as source of load [sn:195]. FARTS 107
  128000: system.cpu.rename: [tid:0] Renaming arch reg 3 (integer) to physical reg 160 (160).
  128000: system.cpu.rename: [tid:0] [sn:195] Adding instruction to history buffer (size=177).
  128000: system.cpu.rename: Activity this cycle.
@@ -14259,7 +14259,7 @@ O3CPU: Ticking main, O3CPU.
  129000: global: [sn:203] has 2 ready out of 3 sources. RTI 0)
  129000: global: Renamed reg rbx to physical reg 169 (169) old mapping was 160 (160)
  129000: system.cpu.rename: [tid:0] Querying SMB Predictor for load [sn:203] with PC (0x40100e=>0x401012).(0=>1).
- 129000: system.cpu.rename: [tid:0] SMB Predictor predicted store with sequence number 202 as source of load [sn:203].
+ 129000: system.cpu.rename: [tid:0] SMB Predictor predicted store with sequence number 202 as source of load [sn:203]. FARTS 114
  129000: system.cpu.rename: [tid:0] Renaming arch reg 3 (integer) to physical reg 165 (165).
  129000: system.cpu.rename: [tid:0] [sn:203] Adding instruction to history buffer (size=192).
  129000: system.cpu.rename: [tid:0] Sending instructions to IEW.
@@ -14854,7 +14854,7 @@ O3CPU: Ticking main, O3CPU.
  130000: global: [sn:211] has 2 ready out of 3 sources. RTI 0)
  130000: global: Renamed reg rbx to physical reg 174 (174) old mapping was 165 (165)
  130000: system.cpu.rename: [tid:0] Querying SMB Predictor for load [sn:211] with PC (0x40100e=>0x401012).(0=>1).
- 130000: system.cpu.rename: [tid:0] SMB Predictor predicted store with sequence number 210 as source of load [sn:211].
+ 130000: system.cpu.rename: [tid:0] SMB Predictor predicted store with sequence number 210 as source of load [sn:211]. FARTS 115
  130000: system.cpu.rename: [tid:0] Renaming arch reg 3 (integer) to physical reg 170 (170).
  130000: system.cpu.rename: [tid:0] [sn:211] Adding instruction to history buffer (size=193).
  130000: system.cpu.rename: [tid:0] Sending instructions to IEW.
@@ -15420,7 +15420,7 @@ O3CPU: Ticking main, O3CPU.
  131000: global: [sn:219] has 2 ready out of 3 sources. RTI 0)
  131000: global: Renamed reg rbx to physical reg 179 (179) old mapping was 170 (170)
  131000: system.cpu.rename: [tid:0] Querying SMB Predictor for load [sn:219] with PC (0x40100e=>0x401012).(0=>1).
- 131000: system.cpu.rename: [tid:0] SMB Predictor predicted store with sequence number 218 as source of load [sn:219].
+ 131000: system.cpu.rename: [tid:0] SMB Predictor predicted store with sequence number 218 as source of load [sn:219]. FARTS 122
  131000: system.cpu.rename: [tid:0] Renaming arch reg 3 (integer) to physical reg 175 (175).
  131000: system.cpu.rename: [tid:0] [sn:219] Adding instruction to history buffer (size=208).
  131000: system.cpu.rename: [tid:0] Sending instructions to IEW.
@@ -16006,7 +16006,7 @@ O3CPU: Ticking main, O3CPU.
  132000: global: [sn:227] has 2 ready out of 3 sources. RTI 0)
  132000: global: Renamed reg rbx to physical reg 184 (184) old mapping was 175 (175)
  132000: system.cpu.rename: [tid:0] Querying SMB Predictor for load [sn:227] with PC (0x40100e=>0x401012).(0=>1).
- 132000: system.cpu.rename: [tid:0] SMB Predictor predicted store with sequence number 226 as source of load [sn:227].
+ 132000: system.cpu.rename: [tid:0] SMB Predictor predicted store with sequence number 226 as source of load [sn:227]. FARTS 123
  132000: system.cpu.rename: [tid:0] Renaming arch reg 3 (integer) to physical reg 180 (180).
  132000: system.cpu.rename: [tid:0] [sn:227] Adding instruction to history buffer (size=209).
  132000: system.cpu.rename: [tid:0] Sending instructions to IEW.
@@ -16557,7 +16557,7 @@ O3CPU: Ticking main, O3CPU.
  133000: global: [sn:235] has 2 ready out of 3 sources. RTI 0)
  133000: global: Renamed reg rbx to physical reg 189 (189) old mapping was 180 (180)
  133000: system.cpu.rename: [tid:0] Querying SMB Predictor for load [sn:235] with PC (0x40100e=>0x401012).(0=>1).
- 133000: system.cpu.rename: [tid:0] SMB Predictor predicted store with sequence number 234 as source of load [sn:235].
+ 133000: system.cpu.rename: [tid:0] SMB Predictor predicted store with sequence number 234 as source of load [sn:235]. FARTS 130
  133000: system.cpu.rename: [tid:0] Renaming arch reg 3 (integer) to physical reg 185 (185).
  133000: system.cpu.rename: [tid:0] [sn:235] Adding instruction to history buffer (size=224).
  133000: system.cpu.rename: [tid:0] Sending instructions to IEW.
@@ -17156,7 +17156,7 @@ O3CPU: Ticking main, O3CPU.
  134000: global: [sn:243] has 2 ready out of 3 sources. RTI 0)
  134000: global: Renamed reg rbx to physical reg 194 (194) old mapping was 185 (185)
  134000: system.cpu.rename: [tid:0] Querying SMB Predictor for load [sn:243] with PC (0x40100e=>0x401012).(0=>1).
- 134000: system.cpu.rename: [tid:0] SMB Predictor predicted store with sequence number 242 as source of load [sn:243].
+ 134000: system.cpu.rename: [tid:0] SMB Predictor predicted store with sequence number 242 as source of load [sn:243]. FARTS 131
  134000: system.cpu.rename: [tid:0] Renaming arch reg 3 (integer) to physical reg 190 (190).
  134000: system.cpu.rename: [tid:0] [sn:243] Adding instruction to history buffer (size=225).
  134000: system.cpu.rename: [tid:0] Sending instructions to IEW.

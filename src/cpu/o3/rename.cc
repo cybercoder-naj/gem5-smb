@@ -1161,8 +1161,8 @@ Rename::renameDestRegs(const DynInstPtr &inst, ThreadID tid)
                 DPRINTF(Rename,
                         "[tid:%i] "
                         "SMB Predictor predicted store with sequence number "
-                        "%llu as source of load [sn:%llu].\n",
-                        tid, smb_store_seqnum, inst->seqNum);
+                        "%llu as source of load [sn:%llu]. FARTS %i\n",
+                        tid, smb_store_seqnum, inst->seqNum, fromCommit->commitInfo[tid].doneSeqNum);
 
                 if (fromCommit->commitInfo[tid].doneSeqNum >= smb_store_seqnum) {
                     DPRINTF(Rename,

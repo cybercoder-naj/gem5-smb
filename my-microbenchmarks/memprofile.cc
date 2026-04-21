@@ -62,10 +62,13 @@ int main(int argc, char *argv[]) {
             }
             break;
           case 'S':
-            if (writers.find(eff_addr) != writers.end() && inst_addr != writers[eff_addr].s_pc)
-                writers[eff_addr].print = false;
-            else
+            if (writers.find(eff_addr) != writers.end()) {
+                if (inst_addr != writers[eff_addr].s_pc) {
+                    writers[eff_addr].print = false;
+                }
+            } else {
                 writers[eff_addr] = {inst_addr, 0, eff_addr, true};
+            }
             break;
         }
       } else {
