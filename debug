@@ -2,7 +2,7 @@
 
 set -e
 
-# Usage: ./my-microbenchmarks/debug <prog> [--smb <file>] [--mem-trace <file>] [--debug-flags <flags>]
+# Usage: ./debug <prog> [--smb <file>] [--mem-trace <file>] [--debug-flags <flags>]
 prog=$1
 shift
 

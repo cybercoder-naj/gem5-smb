@@ -101,7 +101,7 @@ for filename in $progs; do
     SMB_PREDICTIONS_FILE="$prog_wd/$base.predictions"
     echo "" > $SMB_PREDICTIONS_FILE
 
-    $pwd/memprofile $MEM_TRACE_FILE $SMB_PREDICTIONS_FILE
+    ./memprofile $MEM_TRACE_FILE $SMB_PREDICTIONS_FILE
   fi
 
   if [[ "$no_smb" == false ]]; then

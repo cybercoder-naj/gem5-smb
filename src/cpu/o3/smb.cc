@@ -52,7 +52,6 @@ SMB::predictSourceStore(InstSeqNum load_seq_num)
 
   if (predictions.count(load_pc)) {
     InstSeqNum store_seq_num = storeAddrToSeqNum[predictions[load_pc]];
-    assert(store_seq_num != 0);
     return store_seq_num;
   }
   

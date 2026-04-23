@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+
+set -e
+
+pwd=$(dirname $0)
+prog=$1
+
+scons build/X86/gem5.opt --ignore-style -j$(nproc)
+
+if [[ ! -f "/home/nj421/coremark-pro/builds/linux64/gcc64/bin/$prog" ]]; then
+  echo "Program /home/nj421/coremark-pro/builds/linux64/gcc64/bin/$prog not found. Exiting."
+  exit 1
+fi
+
+export MEM_TRACE_FILE="$pwd/$prog.memtrace"
+echo "" > $MEM_TRACE_FILE
+./build/X86/gem5.opt \
+  --debug-flags=O3CPUAll,O3PipeView \
+  --debug-file=../$pwd/$prog-trace-no-smb.out \
+  configs/deprecated/example/se.py \
+  --cmd=/home/nj421/coremark-pro/builds/linux64/gcc64/bin/$prog \
+  -n 1 \
+  --mem-type SimpleMemory \
+  --caches \
+  --l2cache \
+  --cpu-type X86O3CPU \
+  --cpu-clock 1GHz \
+  -I 1000000
+
+cp m5out/stats.txt $pwd/$prog-stats-no-smb.txt
+SMB_PREDICTIONS_FILE="$pwd/$prog.predictions"
+echo "" > $SMB_PREDICTIONS_FILE
+./memprofile $MEM_TRACE_FILE $SMB_PREDICTIONS_FILE
+
+unset MEM_TRACE_FILE
+SMB_PREDICTIONS_FILE=$SMB_PREDICTIONS_FILE ./build/X86/gem5.opt \
+  --debug-flags=O3CPUAll,O3PipeView \
+  --debug-file=../$pwd/$prog-trace-smb.out \
+  configs/deprecated/example/se.py \
+  --cmd=/home/nj421/coremark-pro/builds/linux64/gcc64/bin/$prog \
+  -n 1 \
+  --mem-type SimpleMemory \
+  --caches \
+  --l2cache \
+  --cpu-type X86O3CPU \
+  --cpu-clock 1GHz \
+  -I 1000000
+cp m5out/stats.txt $pwd/$prog-stats-smb.txt
