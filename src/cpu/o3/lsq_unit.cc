@@ -352,6 +352,13 @@ LSQUnit::insertLoad(const DynInstPtr &load_inst)
                   load_inst->smbStoreSeqNum, load_inst->seqNum);
         }
 
+        // Assert that smb_store_it is still inflight
+        assert(smb_store_it->valid());
+        assert(smb_store_it.idx() >= getStoreHead());
+        if (smb_store_it->instruction()->isCompleted()) {
+            assert(smb_store_it->instruction()->sqIt <= storeWBIt);
+        }
+
         //' NOTE: this is not really necessary because one could
         //'     walk back the store queue from the load's sqIt and compare until finding the matching store.
         //'     This is probably just a nice sanity check to make sure that smbStoreSeqNum exists in the SQ

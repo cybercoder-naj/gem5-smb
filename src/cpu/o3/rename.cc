@@ -1017,7 +1017,7 @@ Rename::removeFromHistory(InstSeqNum inst_seq_num, ThreadID tid)
         if (hb_it->newPhysReg != hb_it->prevPhysReg) {
             hb_it->prevPhysReg->decrLogicalDependents();
 
-            if (hb_it->prevPhysReg->getLogicalDependents() <= 0) {
+            if (hb_it->prevPhysReg->getLogicalDependents() == 0) {
                 DPRINTF(Rename, "[tid:%i] Adding phys reg %i (%s) to free list.\n",
                         tid, hb_it->prevPhysReg->index(),
                         hb_it->prevPhysReg->className());
@@ -1158,13 +1158,14 @@ Rename::renameDestRegs(const DynInstPtr &inst, ThreadID tid)
 
             InstSeqNum smb_store_seqnum  = smb.predictSourceStore(inst->seqNum);
             if (smb_store_seqnum != 0) {
+                auto doneSeqNum = commit_ptr->getDoneSeqNum(tid);
                 DPRINTF(Rename,
                         "[tid:%i] "
                         "SMB Predictor predicted store with sequence number "
                         "%llu as source of load [sn:%llu]. FARTS %i\n",
-                        tid, smb_store_seqnum, inst->seqNum, fromCommit->commitInfo[tid].doneSeqNum);
+                        tid, smb_store_seqnum, inst->seqNum, doneSeqNum);
 
-                if (fromCommit->commitInfo[tid].doneSeqNum >= smb_store_seqnum) {
+                if (doneSeqNum >= smb_store_seqnum) {
                     DPRINTF(Rename,
                             "[tid:%i] "
                             "Cannot bypass load [sn:%llu]."
@@ -1175,8 +1176,7 @@ Rename::renameDestRegs(const DynInstPtr &inst, ThreadID tid)
                 } else {
                     PhysRegIdPtr store_phys_reg = storeToPhysReg[smb_store_seqnum];
                     assert(store_phys_reg);
-                    // todo fix logical dependences
-                    // assert(store_phys_reg->getLogicalDependents() > 0);
+                    assert(store_phys_reg->getLogicalDependents() > 0);
 
                     // Also since we know that the store has not yet committed,
                     // We guarantee that the physical register has not yet been freed,
@@ -1390,7 +1390,7 @@ Rename::checkSignalsAndUpdate(ThreadID tid)
             PhysRegIdPtr reg = *reg_it;
             reg->decrLogicalDependents();
 
-            if (reg->getLogicalDependents() <= 0) {
+            if (reg->getLogicalDependents() == 0) {
                 DPRINTF(Rename, "[tid:%i] Adding phys reg %i (%s) to free list from squashing.\n",
                         tid, reg->index(), reg->className());
 

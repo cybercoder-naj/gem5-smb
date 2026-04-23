@@ -137,6 +137,9 @@ class Commit
     /** Mark the thread as processing a trap. */
     void processTrapEvent(ThreadID tid);
 
+    /** Monotonically increasing sequence number of the last committed instruction. */
+    InstSeqNum doneSeqNum[MaxThreads];
+
   public:
     /** Construct a Commit with the given parameters. */
     Commit(CPU *_cpu, const BaseO3CPUParams &params);
@@ -227,6 +230,12 @@ class Commit
      * external state update through the TC.
      */
     void generateTCEvent(ThreadID tid);
+
+    InstSeqNum getDoneSeqNum(ThreadID tid) const { return doneSeqNum[tid]; }
+    void setDoneSeqNum(ThreadID tid, InstSeqNum seq_num) { 
+      assert(doneSeqNum[tid] <= seq_num);
+      doneSeqNum[tid] = seq_num; 
+    }
 
   private:
     /** Updates the overall status of commit with the nextStatus, and

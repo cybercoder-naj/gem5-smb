@@ -1041,6 +1041,7 @@ Commit::commitInsts()
 
                 // Set the doneSeqNum to the youngest committed instruction.
                 toIEW->commitInfo[tid].doneSeqNum = head_inst->seqNum;
+                setDoneSeqNum(tid, head_inst->seqNum);
 
                 if (tid == 0)
                     canHandleInterrupts = !head_inst->isDelayedCommit();
@@ -1128,12 +1129,14 @@ Commit::commitInsts()
                     InstSeqNum seq_num = head_inst->seqNum;
                     Addr pc_state = head_inst->pcState().instAddr();
                     Addr eff_addr = head_inst->effAddr;
+                    unsigned int eff_size = head_inst->effSize;
                     bool is_load = head_inst->isLoad();
 
                     outfile << "# " << head_inst->staticInst->disassemble(head_inst->pcState().instAddr()) << "\n"; 
                     outfile << seq_num << " "
                         << std::hex << pc_state << " "
                         << std::hex << eff_addr << " "
+                        << std::dec << eff_size << " "
                         << (is_load ? "L" : "S") << "\n";
                 }
 

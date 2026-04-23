@@ -4432,8 +4432,9 @@ O3CPU: Ticking main, O3CPU.
  178000: global: [sn:45] has 3 ready out of 3 sources. RTI 0)
  178000: global: Renamed reg rbx to physical reg 82 (82) old mapping was 3 (3)
  178000: system.cpu.rename: [tid:0] Querying SMB Predictor for load [sn:45] with PC (0x40105b=>0x40105f).(0=>1).
- 178000: system.cpu.rename: [tid:0] SMB Predictor predicted store with sequence number 4 as source of load [sn:45]. FARTS 0
- 178000: system.cpu.rename: [tid:0] Renaming arch reg 3 (integer) to physical reg 41 (41).
+ 178000: system.cpu.rename: [tid:0] SMB Predictor predicted store with sequence number 4 as source of load [sn:45]. FARTS 26
+ 178000: system.cpu.rename: [tid:0] Cannot bypass load [sn:45].SMB source store has already committed.
+ 178000: system.cpu.rename: [tid:0] Renaming arch reg 3 (integer) to physical reg 82 (82).
  178000: system.cpu.rename: [tid:0] [sn:45] Adding instruction to history buffer (size=46).
  178000: system.cpu.rename: [tid:0] Sending instructions to IEW.
  178000: system.cpu.rename: [tid:0] Processing instruction [sn:46] with PC (0x40105f=>0x401063).(0=>1).
@@ -7101,8 +7102,6 @@ O3CPU: Ticking main, O3CPU.
  197000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x401057=>0x40105b).(2=>3), [sn:44]
  197000: system.cpu: Removing committed instruction [tid:0] PC (0x401057=>0x40105b).(2=>3) [sn:44]
  197000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:45]
- 197000: global: RegFile: Access to int register 82, has data 0xfeed
- 197000: global: RegFile: Access to int register 41, has data 0xfeed
  197000: system.cpu.commit: [tid:0] [sn:45] Committing instruction with PC (0x40105b=>0x40105f).(0=>1)
  197000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x40105b=>0x40105f).(0=>1), [sn:45]
  197000: system.cpu: Removing committed instruction [tid:0] PC (0x40105b=>0x40105f).(0=>1) [sn:45]
@@ -7235,7 +7234,7 @@ O3CPU: Ticking main, O3CPU.
  199000: system.cpu.rename: [tid:0] Freeing up older rename of reg 4294967295 (invalid), [sn:47].
  199000: system.cpu.rename: [tid:0] Freeing up older rename of reg 4294967295 (invalid), [sn:47].
  199000: system.cpu.rename: [tid:0] Freeing up older rename of reg 41 (integer), [sn:48].
- 199000: system.cpu.rename: [tid:0] Cannot free phys reg 41 (integer), logical dependents 1
+ 199000: system.cpu.rename: [tid:0] Adding phys reg 41 (integer) to free list.
  199000: system.cpu.rename: [tid:0] Freeing up older rename of reg 7 (integer), [sn:49].
  199000: system.cpu.rename: [tid:0] Adding phys reg 7 (integer) to free list.
  199000: system.cpu.rename: [tid:0] Freeing up older rename of reg 43 (condition_code), [sn:49].

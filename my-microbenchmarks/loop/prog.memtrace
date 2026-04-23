@@ -1,33 +1,33 @@
 
 #   MOV_M_R : st   rcx, DS:[8*rcx + rsi]
-4 40100a 402000 S
+4 40100a 402000 8 S
 #   MOV_R_M : ld   rbx, DS:[8*rcx + rsi]
-5 40100e 402000 L
+5 40100e 402000 8 L
 #   MOV_M_R : st   rcx, DS:[8*rcx + rsi]
-51 40100a 402008 S
+51 40100a 402008 8 S
 #   MOV_R_M : ld   rbx, DS:[8*rcx + rsi]
-52 40100e 402008 L
+52 40100e 402008 8 L
 #   MOV_M_R : st   rcx, DS:[8*rcx + rsi]
-98 40100a 402010 S
+98 40100a 402010 8 S
 #   MOV_R_M : ld   rbx, DS:[8*rcx + rsi]
-99 40100e 402010 L
+99 40100e 402010 8 L
 #   MOV_M_R : st   rcx, DS:[8*rcx + rsi]
-106 40100a 402018 S
+106 40100a 402018 8 S
 #   MOV_R_M : ld   rbx, DS:[8*rcx + rsi]
-107 40100e 402018 L
+107 40100e 402018 8 L
 #   MOV_M_R : st   rcx, DS:[8*rcx + rsi]
-114 40100a 402020 S
+114 40100a 402020 8 S
 #   MOV_R_M : ld   rbx, DS:[8*rcx + rsi]
-115 40100e 402020 L
+115 40100e 402020 8 L
 #   MOV_M_R : st   rcx, DS:[8*rcx + rsi]
-122 40100a 402028 S
+122 40100a 402028 8 S
 #   MOV_R_M : ld   rbx, DS:[8*rcx + rsi]
-123 40100e 402028 L
+123 40100e 402028 8 L
 #   MOV_M_R : st   rcx, DS:[8*rcx + rsi]
-130 40100a 402030 S
+130 40100a 402030 8 S
 #   MOV_R_M : ld   rbx, DS:[8*rcx + rsi]
-131 40100e 402030 L
+131 40100e 402030 8 L
 #   MOV_M_R : st   rcx, DS:[8*rcx + rsi]
-138 40100a 402038 S
+138 40100a 402038 8 S
 #   MOV_R_M : ld   rbx, DS:[8*rcx + rsi]
-139 40100e 402038 L
+139 40100e 402038 8 L

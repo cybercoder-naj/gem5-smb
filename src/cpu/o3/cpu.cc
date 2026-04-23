@@ -250,6 +250,7 @@ CPU::CPU(const BaseO3CPUParams &params)
                 // Note that we can't use the rename() method because we don't
                 // want special treatment for the zero register at this point
                 PhysRegIdPtr phys_reg = freeList.getReg(type);
+                phys_reg->incrLogicalDependents();
                 renameMap[tid].setEntry(id, phys_reg);
                 commitRenameMap[tid].setEntry(id, phys_reg);
             }

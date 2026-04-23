@@ -498,7 +498,11 @@ class PhysRegId : private RegId
     void incrNumPinnedWrites() { ++numPinnedWrites; }
     bool isPinned() const { return pinned; }
 
-    void decrLogicalDependents() { --logicalDependents; }
+    void decrLogicalDependents() { 
+        if (logicalDependents > 0) {
+            --logicalDependents; 
+        }
+    }
     void incrLogicalDependents() { ++logicalDependents; }
     int getLogicalDependents() const { return logicalDependents; }
 

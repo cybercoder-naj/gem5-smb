@@ -3,16 +3,26 @@
 #include <iostream>
 #include <sstream>
 #include <unordered_map>
+#include <vector>
 
 typedef uint64_t InstSeqNum;
 typedef uint64_t Addr;
 
-struct MemAccessInfo {
-    Addr s_pc;
-    Addr l_pc;
+struct MemKey {
     Addr eff_addr;
-    bool print;
+    unsigned int eff_size;
+
+    bool operator==(const MemKey& other) const {
+        return eff_addr == other.eff_addr && eff_size == other.eff_size;
+    }
 };
+
+struct MemKeyHash {
+    std::size_t operator()(const MemKey& k) const {
+        return std::hash<Addr>()(k.eff_addr) ^ std::hash<unsigned int>()(k.eff_size);
+    }
+};
+
 
 int main(int argc, char *argv[]) {
     if (argc != 3) {
@@ -32,7 +42,10 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    std::unordered_map<Addr, MemAccessInfo> writers;
+    // (addr, size) -> store_pc
+    std::unordered_map<MemKey, Addr, MemKeyHash> writers{};
+    // load_pc -> (store_pc, consistent)
+    std::unordered_map<Addr, std::pair<Addr, bool>> readers{};
 
     std::string line;
     while (std::getline(infile, line)) {
@@ -43,33 +56,28 @@ int main(int argc, char *argv[]) {
       std::stringstream ss(line);
       InstSeqNum seq_num; 
       Addr inst_addr, eff_addr;
+      unsigned int eff_size;
       char load_store;
 
-      if (ss >> seq_num >> std::hex >> inst_addr >> std::hex >> eff_addr >> load_store) {
+      if (ss >> seq_num >> std::hex >> inst_addr >> std::hex >> eff_addr >> std::dec >> eff_size >> load_store) {
+        MemKey key{eff_addr, eff_size};
+
         switch (load_store) {
-          case 'L':
-            if (writers.find(eff_addr) != writers.end()) {
-                MemAccessInfo info = writers[eff_addr];
-                std::cout << "Load at PC: " << std::hex << inst_addr
-                          << " reads from store at PC: " << std::hex << info.s_pc
-                          << " with effective address: " << std::hex << eff_addr
-                          << "\n";
-                writers[eff_addr].l_pc = inst_addr;
-            } else {
-                std::cout << "Load at PC: " << std::hex << inst_addr
-                          << " has no prior store for effective address: "
-                          << std::hex << eff_addr << "\n";
-            }
-            break;
-          case 'S':
-            if (writers.find(eff_addr) != writers.end()) {
-                if (inst_addr != writers[eff_addr].s_pc) {
-                    writers[eff_addr].print = false;
+            case 'S':
+                writers[key] = inst_addr;
+                break;
+
+            case 'L':
+                if (!writers.count(key)) {
+                    break;
+                } 
+                Addr store_pc = writers[key];
+
+                if (!readers.count(inst_addr)) {
+                    readers[inst_addr] = {store_pc, true};
+                } else if (readers[inst_addr].first != store_pc) {
+                    readers[inst_addr].second = false; // Mark as inconsistent
                 }
-            } else {
-                writers[eff_addr] = {inst_addr, 0, eff_addr, true};
-            }
-            break;
         }
       } else {
         std::cerr << "Invalid line format: " << line << std::endl;
@@ -77,9 +85,10 @@ int main(int argc, char *argv[]) {
       } 
     }
 
-    for (const auto& entry : writers) {
-        if (entry.second.print) {
-            outfile << std::hex << entry.second.l_pc << " " << std::hex << entry.second.s_pc << "\n";
+    for (const auto& it : readers) {
+        if (it.second.second) { // if is consistent
+            // print load_pc and store_pc in hex
+            outfile << std::hex << it.first << " " << std::hex << it.second.first << "\n";
         }
     }
 

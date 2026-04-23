@@ -50,7 +50,7 @@ load_overrides() {
   fi
 }
 
-scons build/X86/gem5.opt --ignore-style -j32
+scons build/X86/gem5.opt --ignore-style -j$(nproc)
 
 for filename in $progs; do
   base=$(basename $filename .s)
