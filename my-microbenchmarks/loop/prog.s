@@ -11,14 +11,16 @@ _start:
     lea   array(%rip), %rsi
     xor   %rcx, %rcx
 .loop_stride:
+    xor   %rax, %rax
     movq  %rcx,        (%rsi, %rcx, 8)   # STORE array[i] = i
     movq  (%rsi, %rcx, 8), %rbx          # LOAD  array[i]
     inc   %rcx
+    add   %rbx, %rax
     cmp   $8, %rcx
     jl    .loop_stride
     # ─────────────────────────────────────────
     # exit
     # ─────────────────────────────────────────
+    mov  %rax, %rdi
     mov  $60,  %rax
-    xor  %rdi, %rdi
     syscall
