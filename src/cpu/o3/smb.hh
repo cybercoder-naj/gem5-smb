@@ -47,6 +47,8 @@ class SMB
             loadSeqNumToAddr[seq_num] = addr;
         }
     }
+
+    void squash(InstSeqNum squashed_seq_num); 
 };
 
 } // namespace o3

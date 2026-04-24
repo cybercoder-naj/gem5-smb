@@ -977,6 +977,8 @@ Rename::doSquash(const InstSeqNum &squashed_seq_num, ThreadID tid)
 
         ++stats.undoneMaps;
     }
+    
+    smb.squash(squashed_seq_num);
 }
 
 void
