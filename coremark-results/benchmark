@@ -4,6 +4,7 @@ set -e
 
 pwd=$(dirname $0)
 prog=$1
+maxInst=100000
 
 scons build/X86/gem5.opt --ignore-style -j$(nproc)
 
@@ -12,11 +13,14 @@ if [[ ! -f "/home/nj421/coremark-pro/builds/linux64/gcc64/bin/$prog" ]]; then
   exit 1
 fi
 
-export MEM_TRACE_FILE="$pwd/$prog.memtrace"
+# basename is prog without extension
+basename=${prog%%.*}
+
+export MEM_TRACE_FILE="$pwd/$basename.memtrace"
 echo "" > $MEM_TRACE_FILE
 ./build/X86/gem5.opt \
   --debug-flags=O3CPUAll,O3PipeView \
-  --debug-file=../$pwd/$prog-trace-no-smb.out \
+  --debug-file=../$pwd/$basename-trace-no-smb.out \
   configs/deprecated/example/se.py \
   --cmd=/home/nj421/coremark-pro/builds/linux64/gcc64/bin/$prog \
   -n 1 \
@@ -25,17 +29,18 @@ echo "" > $MEM_TRACE_FILE
   --l2cache \
   --cpu-type X86O3CPU \
   --cpu-clock 1GHz \
-  -I 1000000
+  -o="-i1 -v0" \
+  -I $maxInst
 
-cp m5out/stats.txt $pwd/$prog-stats-no-smb.txt
-SMB_PREDICTIONS_FILE="$pwd/$prog.predictions"
+cp m5out/stats.txt $pwd/$basename-stats-no-smb.txt
+SMB_PREDICTIONS_FILE="$pwd/$basename.predictions"
 echo "" > $SMB_PREDICTIONS_FILE
 ./memprofile $MEM_TRACE_FILE $SMB_PREDICTIONS_FILE
 
 unset MEM_TRACE_FILE
 SMB_PREDICTIONS_FILE=$SMB_PREDICTIONS_FILE ./build/X86/gem5.opt \
   --debug-flags=O3CPUAll,O3PipeView \
-  --debug-file=../$pwd/$prog-trace-smb.out \
+  --debug-file=../$pwd/$basename-trace-smb.out \
   configs/deprecated/example/se.py \
   --cmd=/home/nj421/coremark-pro/builds/linux64/gcc64/bin/$prog \
   -n 1 \
@@ -44,5 +49,6 @@ SMB_PREDICTIONS_FILE=$SMB_PREDICTIONS_FILE ./build/X86/gem5.opt \
   --l2cache \
   --cpu-type X86O3CPU \
   --cpu-clock 1GHz \
-  -I 1000000
-cp m5out/stats.txt $pwd/$prog-stats-smb.txt
+  -o="-i1 -v0" \
+  -I $maxInst
+cp m5out/stats.txt $pwd/$basename-stats-smb.txt

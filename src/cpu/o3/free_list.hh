@@ -81,7 +81,6 @@ class SimpleFreeList
 
     /** Add a physical register to the free list */
     void addReg(PhysRegIdPtr reg) { 
-        assert(reg->getLogicalDependents() == 0);
         freeRegs.push(reg); 
     }
 

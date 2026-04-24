@@ -1015,20 +1015,7 @@ Rename::removeFromHistory(InstSeqNum inst_seq_num, ThreadID tid)
         // can be recognized because the new mapping is the same as
         // the old one.
         if (hb_it->newPhysReg != hb_it->prevPhysReg) {
-            hb_it->prevPhysReg->decrLogicalDependents();
-
-            if (hb_it->prevPhysReg->getLogicalDependents() == 0) {
-                DPRINTF(Rename, "[tid:%i] Adding phys reg %i (%s) to free list.\n",
-                        tid, hb_it->prevPhysReg->index(),
-                        hb_it->prevPhysReg->className());
-
-                freeList->addReg(hb_it->prevPhysReg);
-            } else {
-                DPRINTF(Rename, "[tid:%i] Cannot free phys reg %i (%s), logical dependents %i\n",
-                        tid, hb_it->prevPhysReg->index(),
-                        hb_it->prevPhysReg->className(),
-                        hb_it->prevPhysReg->getLogicalDependents());
-            }
+            freeList->addReg(hb_it->prevPhysReg);
         }
 
         ++stats.committedMaps;
@@ -1176,7 +1163,6 @@ Rename::renameDestRegs(const DynInstPtr &inst, ThreadID tid)
                 } else {
                     PhysRegIdPtr store_phys_reg = storeToPhysReg[smb_store_seqnum];
                     assert(store_phys_reg);
-                    assert(store_phys_reg->getLogicalDependents() > 0);
 
                     // Also since we know that the store has not yet committed,
                     // We guarantee that the physical register has not yet been freed,
@@ -1186,8 +1172,6 @@ Rename::renameDestRegs(const DynInstPtr &inst, ThreadID tid)
 
                     // Rewrite the RAT entry so the load dest_reg -> smb_phys_reg
                     map->setEntry(flat_dest_regid, store_phys_reg);
-
-                    store_phys_reg->incrLogicalDependents();
 
                     // Update the rename result so that the history buffer will record the
                     // correct physical register.
@@ -1388,19 +1372,7 @@ Rename::checkSignalsAndUpdate(ThreadID tid)
         auto reg_it = freeingInProgress[tid].cbegin();
         while ( reg_it != freeingInProgress[tid].cend()){
             PhysRegIdPtr reg = *reg_it;
-            reg->decrLogicalDependents();
-
-            if (reg->getLogicalDependents() == 0) {
-                DPRINTF(Rename, "[tid:%i] Adding phys reg %i (%s) to free list from squashing.\n",
-                        tid, reg->index(), reg->className());
-
-                // Put the renamed physical register back on the free list.
-                freeList->addReg(*reg_it);
-            } else {
-                DPRINTF(Rename, "[tid:%i] Cannot free phys reg %i (%s) from squashing, logical dependents %i\n",
-                        tid, reg->index(), reg->className(),
-                        reg->getLogicalDependents());
-            }
+            freeList->addReg(*reg_it);
 
             ++reg_it;
         }

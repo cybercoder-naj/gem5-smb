@@ -1,97 +1,120 @@
 #include <cstdint>
-#include <fstream>
+#include <iomanip>
 #include <iostream>
+#include <fstream>
 #include <sstream>
+#include <string>
 #include <unordered_map>
-#include <vector>
+#include <unordered_set>
 
-typedef uint64_t InstSeqNum;
-typedef uint64_t Addr;
+using namespace std;
 
-struct MemKey {
-    Addr eff_addr;
-    unsigned int eff_size;
+struct StoreInfo {
+    uint64_t pc;
+    uint64_t seq;
+};
 
-    bool operator==(const MemKey& other) const {
-        return eff_addr == other.eff_addr && eff_size == other.eff_size;
+// Hash for pair<uint64_t, uint64_t>
+struct PairHash {
+    size_t operator()(const pair<uint64_t, uint64_t>& p) const {
+        return hash<uint64_t>()(p.first) ^ (hash<uint64_t>()(p.second) << 1);
     }
 };
 
-struct MemKeyHash {
-    std::size_t operator()(const MemKey& k) const {
-        return std::hash<Addr>()(k.eff_addr) ^ std::hash<unsigned int>()(k.eff_size);
-    }
-};
+// Combine addr + size into a single key
+static inline uint64_t make_key(uint64_t addr, uint32_t size) {
+    return (addr << 8) | size;
+}
 
-
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
     if (argc != 3) {
-        std::cerr << "Usage: " << argv[0] << " <memtrace_file> <output_file>" << std::endl;
+        cerr << "Usage: " << argv[0] << " <memtrace_file> <predictions_file>\n";
         return 1;
     }
 
-    std::ifstream infile(argv[1]);
-    if (!infile.is_open()) {
-        std::cerr << "Could not open file: " << argv[1] << std::endl;
+    ifstream infile(argv[1]);
+    ofstream outfile(argv[2]);
+    if (!infile) {
+        cerr << "Error opening memtrace file\n";
         return 1;
     }
 
-    std::ofstream outfile(argv[2]);
-    if (!outfile.is_open()) {
-        std::cerr << "Could not open file: " << argv[2] << std::endl;
+    if (!outfile) {
+        cerr << "Error opening predictions file\n";
         return 1;
     }
 
-    // (addr, size) -> store_pc
-    std::unordered_map<MemKey, Addr, MemKeyHash> writers{};
-    // load_pc -> (store_pc, consistent)
-    std::unordered_map<Addr, std::pair<Addr, bool>> readers{};
+    unordered_map<uint64_t, StoreInfo> last_store;   // key -> (pc, seq)
+    unordered_map<uint64_t, uint64_t> last_store_by_pc; // pc -> seq
 
-    std::string line;
-    while (std::getline(infile, line)) {
-      if (line.empty() || line[0] == '#') {
-          continue; // Skip empty lines and comments
-      }
+    // Deduplication
+    unordered_set<pair<uint64_t, uint64_t>, PairHash> seen;
 
-      std::stringstream ss(line);
-      InstSeqNum seq_num; 
-      Addr inst_addr, eff_addr;
-      unsigned int eff_size;
-      char load_store;
+    // Load-PC consistency enforcement
+    unordered_map<uint64_t, uint64_t> load_to_store; // load_pc -> store_pc
+    unordered_set<uint64_t> invalid_loads;           // load PCs that violated rule
 
-      if (ss >> seq_num >> std::hex >> inst_addr >> std::hex >> eff_addr >> std::dec >> eff_size >> load_store) {
-        MemKey key{eff_addr, eff_size};
+    string line;
 
-        switch (load_store) {
-            case 'S':
-                writers[key] = inst_addr;
-                break;
+    while (getline(infile, line)) {
+        if (line.empty() || line[0] == '#')
+            continue;
 
-            case 'L':
-                if (!writers.count(key)) {
-                    break;
-                } 
-                Addr store_pc = writers[key];
+        stringstream ss(line);
 
-                if (!readers.count(inst_addr)) {
-                    readers[inst_addr] = {store_pc, true};
-                } else if (readers[inst_addr].first != store_pc) {
-                    readers[inst_addr].second = false; // Mark as inconsistent
-                }
+        uint64_t seq;
+        uint64_t pc, addr;
+        uint32_t size;
+        char op;
+
+        if (!(ss >> seq >> hex >> pc >> hex >> addr >> size >> op)) continue;
+
+        uint64_t key = make_key(addr, size);
+
+        if (op == 'S') {
+            // Update last store for this address
+            last_store[key] = {pc, seq};
+
+            // Update last occurrence of this PC
+            last_store_by_pc[pc] = seq;
         }
-      } else {
-        std::cerr << "Invalid line format: " << line << std::endl;
-        return 1;
-      } 
-    }
+        else if (op == 'L') {
+            auto it = last_store.find(key);
+            if (it == last_store.end())
+                continue;
 
-    for (const auto& it : readers) {
-        if (it.second.second) { // if is consistent
-            // print load_pc and store_pc in hex
-            outfile << std::hex << it.first << " " << std::hex << it.second.first << "\n";
+            uint64_t store_pc  = it->second.pc;
+            uint64_t store_seq = it->second.seq;
+
+            // Validate store is still current for its PC
+            auto pc_it = last_store_by_pc.find(store_pc);
+            if (pc_it == last_store_by_pc.end() ||
+                pc_it->second != store_seq)
+                continue;
+
+            // Enforce one-store-per-load-PC constraint
+            if (invalid_loads.count(pc))
+                continue;
+
+            auto lt = load_to_store.find(pc);
+
+            if (lt == load_to_store.end()) {
+                // First observation
+                load_to_store[pc] = store_pc;
+            } else if (lt->second != store_pc) {
+                // Conflict → invalidate this load PC permanently
+                invalid_loads.insert(pc);
+                load_to_store.erase(pc);
+                continue;
+            }
+
+            // Emit only once per pair
+            pair<uint64_t, uint64_t> dep = {pc, store_pc};
+            if (seen.insert(dep).second) {
+                outfile << hex << pc << " " << store_pc << "\n";
+            }
         }
     }
 
-    infile.close();
     return 0;
 }
