@@ -168,14 +168,15 @@ StoreSetXS::violation(Addr load_pc, InstSeqNum load_seq_num, InstSeqNum store_se
         // Calculate a new SSID here.
         SSID ld_new_set = calcSSID(load_pc);
         SSID sd_new_set = calcSSID(store_pc);
+        SSID update_ssid = ld_new_set < sd_new_set ? ld_new_set : sd_new_set;
 
         validSSIT[load_index] = true;
 
-        SSIT[load_index] = ld_new_set;
+        SSIT[load_index] = update_ssid;
 
         validSSIT[store_index] = true;
 
-        SSIT[store_index] = sd_new_set;
+        SSIT[store_index] = update_ssid;
 
         assert(ld_new_set < LFSTSize);
         assert(sd_new_set < LFSTSize);
@@ -188,7 +189,7 @@ StoreSetXS::violation(Addr load_pc, InstSeqNum load_seq_num, InstSeqNum store_se
 
         validSSIT[store_index] = true;
 
-        SSIT[store_index] = sd_new_set;
+        SSIT[store_index] = calcSSID(load_pc);
 
         assert(sd_new_set < LFSTSize);
 
@@ -201,7 +202,7 @@ StoreSetXS::violation(Addr load_pc, InstSeqNum load_seq_num, InstSeqNum store_se
 
         validSSIT[load_index] = true;
 
-        SSIT[load_index] = ld_new_set;
+        SSIT[load_index] = calcSSID(store_pc);
 
         DPRINTF(StoreSet, "StoreSetXS: Store had a valid store set: %i for "
                 "load %#x, store %#x\n",
