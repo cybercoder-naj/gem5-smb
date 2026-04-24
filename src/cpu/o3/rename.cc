@@ -1038,6 +1038,8 @@ Rename::removeFromHistory(InstSeqNum inst_seq_num, ThreadID tid)
 
         historyBuffer[tid].erase(hb_it--);
     }
+
+    smb.removeUpTo(inst_seq_num);
 }
 
 bool
@@ -1191,13 +1193,13 @@ Rename::renameDestRegs(const DynInstPtr &inst, ThreadID tid)
 
             InstSeqNum smb_store_seqnum  = smb.predictSourceStore(inst->seqNum);
             if (smb_store_seqnum != 0) {
-                auto doneSeqNum = commit_ptr->getDoneSeqNum(tid);
                 DPRINTF(Rename,
                         "[tid:%i] "
                         "SMB Predictor predicted store with sequence number "
-                        "%llu as source of load [sn:%llu]. FARTS %i\n",
-                        tid, smb_store_seqnum, inst->seqNum, doneSeqNum);
+                        "%llu as source of load [sn:%llu].\n",
+                        tid, smb_store_seqnum, inst->seqNum);
 
+                auto doneSeqNum = commit_ptr->getDoneSeqNum(tid);
                 if (doneSeqNum >= smb_store_seqnum) {
                     DPRINTF(Rename,
                             "[tid:%i] "

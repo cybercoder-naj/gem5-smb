@@ -97,5 +97,25 @@ SMB::squash(InstSeqNum squashed_seq_num)
   }
 }
 
+void 
+SMB::removeUpTo(InstSeqNum seq_num)
+{
+  // Remove any predictions that are associated with loads that have sequence numbers less than or equal to the committed sequence number.
+  for (auto it = loadSeqNumToAddr.begin(); it != loadSeqNumToAddr.end(); ) {
+    if (it->first <= seq_num) {
+      it = loadSeqNumToAddr.erase(it);
+    } else {
+      ++it;
+    }
+  }
+
+  for (auto it = storeAddrToSeqNum.begin(); it != storeAddrToSeqNum.end(); ) {
+    if (it->second <= seq_num) {
+      it = storeAddrToSeqNum.erase(it);
+    } else {
+      ++it;
+    }
+  }
+}
 } // namespace o3
 } // namespace gem5

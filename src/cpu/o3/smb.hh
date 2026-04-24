@@ -49,6 +49,8 @@ class SMB
     }
 
     void squash(InstSeqNum squashed_seq_num); 
+
+    void removeUpTo(InstSeqNum seq_num);
 };
 
 } // namespace o3

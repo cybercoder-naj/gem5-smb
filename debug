@@ -9,6 +9,7 @@ shift
 smb_file=""
 mem_trace_file=""
 debugflags="O3CPUAll"
+cmd=$(which $prog)
 
 while [[ $# -gt 0 ]]; do
   case $1 in
@@ -26,5 +27,5 @@ done
 scons --without-tcmalloc build/X86/gem5.debug --ignore-style -j$(nproc)
 
 gdb \
-  -ex "set args --debug-flags=$debugflags configs/deprecated/example/se.py --cmd=$prog -n 1 --mem-type SimpleMemory --caches --l2cache --cpu-type O3CPU --maxinsts=1000000" \
+  -ex "set args --debug-flags=$debugflags configs/deprecated/example/se.py --cmd=$cmd -n 1 --mem-type SimpleMemory --caches --l2cache --cpu-type O3CPU --maxinsts=1000000" \
   ./build/X86/gem5.debug
