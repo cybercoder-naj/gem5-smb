@@ -89,6 +89,7 @@ Rename::Rename(CPU *_cpu, const BaseO3CPUParams &params)
     }
 
     storeToPhysReg.clear();
+    smbPinnedPhysReg.clear();
 }
 
 std::string
@@ -255,6 +256,9 @@ Rename::clearStates(ThreadID tid)
     storesInProgress[tid] = 0;
 
     serializeOnNextInst[tid] = false;
+
+    storeToPhysReg.clear();
+    smbPinnedPhysReg.clear();
 }
 
 void
@@ -960,7 +964,7 @@ Rename::doSquash(const InstSeqNum &squashed_seq_num, ThreadID tid)
             // executing instructions in IEW at this moment. To avoid
             // ownership hazard in SMT CPU, we delay the freelist update
             // until they are indeed squashed in the commit stage.
-            freeingInProgress[tid].push_back(hb_it->newPhysReg);
+            freeingInProgress[tid].push_back(std::make_pair(hb_it->newPhysReg, hb_it->instSeqNum));
         }
 
         // Notify potential listeners that the register mapping needs to be
@@ -1005,7 +1009,7 @@ Rename::removeFromHistory(InstSeqNum inst_seq_num, ThreadID tid)
            hb_it != historyBuffer[tid].end() &&
            hb_it->instSeqNum <= inst_seq_num) {
 
-        DPRINTF(Rename, "[tid:%i] Freeing up older rename of reg %i (%s), "
+        DPRINTF(Rename, "[tid:%i] Attempting to free up older rename of reg %i (%s), "
                 "[sn:%llu].\n",
                 tid, hb_it->prevPhysReg->index(),
                 hb_it->prevPhysReg->className(),
@@ -1015,13 +1019,53 @@ Rename::removeFromHistory(InstSeqNum inst_seq_num, ThreadID tid)
         // can be recognized because the new mapping is the same as
         // the old one.
         if (hb_it->newPhysReg != hb_it->prevPhysReg) {
-            freeList->addReg(hb_it->prevPhysReg);
+            if (maybeFreeReg(hb_it->instSeqNum, hb_it->prevPhysReg)) {
+                DPRINTF(Rename, "[tid:%i] Freed phys reg %i (%s)\n",
+                        tid, hb_it->prevPhysReg->index(),
+                        hb_it->prevPhysReg->className(),
+                        hb_it->instSeqNum);
+            } else {
+                DPRINTF(Rename, "[tid:%i] Cannot free phys reg %i (%s)\n",
+                        tid, hb_it->prevPhysReg->index(),
+                        hb_it->prevPhysReg->className(),
+                        hb_it->instSeqNum);
+            }
         }
 
         ++stats.committedMaps;
 
         historyBuffer[tid].erase(hb_it--);
     }
+}
+
+bool
+Rename::maybeFreeReg(InstSeqNum inst_seq_num, PhysRegIdPtr phys_reg)
+{
+    const auto key = phys_reg->flatIndex();
+    const auto& it = smbPinnedPhysReg.find(key);
+    
+    if (it == smbPinnedPhysReg.end()) {
+        freeList->addReg(phys_reg);
+        return true;
+    }
+
+    auto& pinned_loads = smbPinnedPhysReg[key];
+    const auto pinned_it = pinned_loads.find(inst_seq_num);
+    if (pinned_it == smbPinnedPhysReg[key].end()) {
+        // This is the source store attempting to free the register.
+        // but future loads that renamed to this store are still in flight.
+        return false;
+    }
+
+    pinned_loads.erase(pinned_it);
+    if (pinned_loads.empty()) {
+        // No more future loads depending on this store, we can free the register.
+        smbPinnedPhysReg.erase(key);
+        freeList->addReg(phys_reg);
+        return true;
+    }
+
+    return false;
 }
 
 void
@@ -1172,6 +1216,7 @@ Rename::renameDestRegs(const DynInstPtr &inst, ThreadID tid)
 
                     // Rewrite the RAT entry so the load dest_reg -> smb_phys_reg
                     map->setEntry(flat_dest_regid, store_phys_reg);
+                    smbPinnedPhysReg[store_phys_reg->flatIndex()].insert(inst->seqNum);
 
                     // Update the rename result so that the history buffer will record the
                     // correct physical register.
@@ -1366,13 +1411,23 @@ Rename::checkSignalsAndUpdate(ThreadID tid)
         return true;
     } else if (!fromCommit->commitInfo[tid].robSquashing &&
             !freeingInProgress[tid].empty()) {
-        DPRINTF(Rename, "[tid:%i] Freeing phys regs of misspeculated "
+        DPRINTF(Rename, "[tid:%i] Attempting to free phys regs of misspeculated "
                 "instructions.\n", tid);
 
         auto reg_it = freeingInProgress[tid].cbegin();
         while ( reg_it != freeingInProgress[tid].cend()){
-            PhysRegIdPtr reg = *reg_it;
-            freeList->addReg(*reg_it);
+            PhysRegIdPtr reg = reg_it->first;
+            InstSeqNum seq_num = reg_it->second;
+            if (maybeFreeReg(seq_num, reg)) {
+                DPRINTF(Rename, "[tid:%i] Freed up phys reg %i (%s)\n",
+                        tid, reg->index(),
+                        reg->className());
+            } else {
+                DPRINTF(Rename, "[tid:%i] Cannot free phys reg %i (%s)\n",
+                        tid, reg->index(),
+                        reg->className(),
+                        seq_num);
+            }
 
             ++reg_it;
         }
