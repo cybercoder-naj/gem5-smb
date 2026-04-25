@@ -54,6 +54,8 @@ StoreSet::StoreSet(const BaseO3CPUParams &params, MemDepUnit *_memDep)
 
     SSIT.resize(SSITSize);
 
+    depCheckShift = params.LSQDepCheckShift;
+
     validSSIT.resize(SSITSize);
 
     for (int i = 0; i < SSITSize; ++i)
@@ -98,6 +100,8 @@ StoreSet::init(const BaseO3CPUParams &params, MemDepUnit *_memDep)
     SSIT.resize(SSITSize);
 
     validSSIT.resize(SSITSize);
+
+    depCheckShift = params.LSQDepCheckShift;
 
     for (int i = 0; i < SSITSize; ++i)
         validSSIT[i] = false;
@@ -334,6 +338,23 @@ StoreSet::issued(Addr issued_PC, InstSeqNum issued_seq_num, bool is_store)
         ++(memDep->stats).LFSTWrites;
     }
 }
+
+void StoreSet::commit(Addr load_pc, Addr load_addr, unsigned load_size, std::pair<Addr, Addr> store_addrs, std::pair<unsigned, unsigned> store_sizes, unsigned path_index, uint64_t predictor_hash) {
+
+    bool misprediction;
+    Addr load_eff_addr1 = load_addr >> depCheckShift;
+    Addr load_eff_addr2 = (load_addr + load_size - 1) >> depCheckShift;
+    Addr store_addr = store_addrs.first;
+    Addr store_size = store_sizes.first;
+    Addr store_eff_addr1 = store_addr >> depCheckShift;
+    Addr store_eff_addr2 = (store_addr + store_size - 1) >> depCheckShift;
+    misprediction = !(store_eff_addr2 >= load_eff_addr1 && store_eff_addr1 <= load_eff_addr2);
+
+    if (misprediction) ++(memDep->stats.falseDependencies);
+    else ++(memDep->stats.correctPredictions);
+
+}
+
 
 void
 StoreSet::squash(InstSeqNum squashed_num, ThreadID tid)

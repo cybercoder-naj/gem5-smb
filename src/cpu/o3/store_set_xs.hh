@@ -121,7 +121,7 @@ class StoreSetXS
      */
     PredictionResult checkInst(Addr PC, InstSeqNum load_seq_num, BranchHistory branchHistory, bool isLoad);
 
-    void commit(Addr load_pc, Addr load_addr, unsigned load_size, std::pair<Addr,Addr> store_addrs, std::pair<unsigned, unsigned> store_sizes, unsigned path_index, uint64_t predictor_hash) { return; };
+    void commit(Addr load_pc, Addr load_addr, unsigned load_size, std::pair<Addr,Addr> store_addrs, std::pair<unsigned, unsigned> store_sizes, unsigned path_index, uint64_t predictor_hash);
 
     /** Records this PC/sequence number as issued. */
     void issued(Addr issued_PC, InstSeqNum issued_seq_num, bool is_store);
@@ -188,6 +188,8 @@ class StoreSetXS
 
     /** Number of memory operations predicted since last clear of predictor */
     int memOpsPred;
+
+    unsigned depCheckShift;
 
     MemDepUnit *memDep;
 };
