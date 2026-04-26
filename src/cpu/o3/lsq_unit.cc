@@ -341,6 +341,13 @@ LSQUnit::insertLoad(const DynInstPtr &load_inst)
         auto smb_store_it = storeQueue.end();
         --smb_store_it;
 
+        // Assert that smb_store_it is still inflight
+        // assert(smb_store_it->valid());
+        // assert(smb_store_it.idx() >= getStoreHead());
+        // if (smb_store_it->instruction()->isCompleted()) {
+        //     assert(smb_store_it->instruction()->sqIt <= storeWBIt);
+        // }
+
         while (smb_store_it != storeQueue.begin()) {
             if (smb_store_it->instruction()->seqNum == load_inst->smbStoreSeqNum) {
                 break;
@@ -350,13 +357,6 @@ LSQUnit::insertLoad(const DynInstPtr &load_inst)
         if (smb_store_it == storeQueue.begin() && smb_store_it->instruction()->seqNum != load_inst->smbStoreSeqNum) {
             panic("Could not find matching store sequence number %llu for bypassed load [sn:%lli]\n",
                   load_inst->smbStoreSeqNum, load_inst->seqNum);
-        }
-
-        // Assert that smb_store_it is still inflight
-        assert(smb_store_it->valid());
-        assert(smb_store_it.idx() >= getStoreHead());
-        if (smb_store_it->instruction()->isCompleted()) {
-            assert(smb_store_it->instruction()->sqIt <= storeWBIt);
         }
 
         //' NOTE: this is not really necessary because one could

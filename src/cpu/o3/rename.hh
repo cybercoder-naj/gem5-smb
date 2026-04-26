@@ -291,7 +291,7 @@ class Rename
      */
     void serializeAfter(InstQueue &inst_list, ThreadID tid);
 
-    bool maybeFreeReg(InstSeqNum inst_seq_num, PhysRegIdPtr phys_reg);
+    bool tryFreeReg(InstSeqNum inst_seq_num, PhysRegIdPtr phys_reg);
 
     /** Holds the information for each destination register rename. It holds
      * the instruction's sequence number, the arch register, the old physical

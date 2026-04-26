@@ -256,9 +256,6 @@ Rename::clearStates(ThreadID tid)
     storesInProgress[tid] = 0;
 
     serializeOnNextInst[tid] = false;
-
-    storeToPhysReg.clear();
-    smbPinnedPhysReg.clear();
 }
 
 void
@@ -724,6 +721,10 @@ Rename::renameInsts(ThreadID tid)
             serializeAfter(insts_to_rename, tid);
         }
 
+        if (inst->isLoad() || inst->isStore()) {
+            smb.registerMemoryAccess(inst->pcState().instAddr(), inst->seqNum, inst->isStore());
+        }
+
         renameSrcRegs(inst, inst->threadNumber);
 
         renameDestRegs(inst, inst->threadNumber);
@@ -1011,7 +1012,7 @@ Rename::removeFromHistory(InstSeqNum inst_seq_num, ThreadID tid)
            hb_it != historyBuffer[tid].end() &&
            hb_it->instSeqNum <= inst_seq_num) {
 
-        DPRINTF(Rename, "[tid:%i] Attempting to free up older rename of reg %i (%s), "
+        DPRINTF(Rename, "[tid:%i] Freeing older rename of reg %i (%s), "
                 "[sn:%llu].\n",
                 tid, hb_it->prevPhysReg->index(),
                 hb_it->prevPhysReg->className(),
@@ -1021,17 +1022,7 @@ Rename::removeFromHistory(InstSeqNum inst_seq_num, ThreadID tid)
         // can be recognized because the new mapping is the same as
         // the old one.
         if (hb_it->newPhysReg != hb_it->prevPhysReg) {
-            if (maybeFreeReg(hb_it->instSeqNum, hb_it->prevPhysReg)) {
-                DPRINTF(Rename, "[tid:%i] Freed phys reg %i (%s)\n",
-                        tid, hb_it->prevPhysReg->index(),
-                        hb_it->prevPhysReg->className(),
-                        hb_it->instSeqNum);
-            } else {
-                DPRINTF(Rename, "[tid:%i] Cannot free phys reg %i (%s)\n",
-                        tid, hb_it->prevPhysReg->index(),
-                        hb_it->prevPhysReg->className(),
-                        hb_it->instSeqNum);
-            }
+            freeList->addReg(hb_it->prevPhysReg);
         }
 
         ++stats.committedMaps;
@@ -1043,26 +1034,28 @@ Rename::removeFromHistory(InstSeqNum inst_seq_num, ThreadID tid)
 }
 
 bool
-Rename::maybeFreeReg(InstSeqNum inst_seq_num, PhysRegIdPtr phys_reg)
+Rename::tryFreeReg(InstSeqNum inst_seq_num, PhysRegIdPtr phys_reg)
 {
     const auto key = phys_reg->flatIndex();
     const auto& it = smbPinnedPhysReg.find(key);
     
     if (it == smbPinnedPhysReg.end()) {
+        // Physical register is not pinned by any future loads, so we can free it.
         freeList->addReg(phys_reg);
         return true;
     }
 
-    auto& pinned_loads = smbPinnedPhysReg[key];
-    const auto pinned_it = pinned_loads.find(inst_seq_num);
-    if (pinned_it == smbPinnedPhysReg[key].end()) {
-        // This is the source store attempting to free the register.
-        // but future loads that renamed to this store are still in flight.
+    auto& pinned_seqnums = it->second;
+    const auto pinned_it = pinned_seqnums.find(inst_seq_num);
+    assert(!pinned_seqnums.empty());
+    if (pinned_it == pinned_seqnums.end()) {
+        // We found the instruction that created the source data
+        // no nothing
         return false;
     }
 
-    pinned_loads.erase(pinned_it);
-    if (pinned_loads.empty()) {
+    pinned_seqnums.erase(pinned_it);
+    if (pinned_seqnums.empty()) {
         // No more future loads depending on this store, we can free the register.
         smbPinnedPhysReg.erase(key);
         freeList->addReg(phys_reg);
@@ -1147,10 +1140,6 @@ Rename::renameSrcRegs(const DynInstPtr &inst, ThreadID tid)
 
         ++stats.lookups;
     }
-
-    if (inst->isLoad() || inst->isStore()) {
-        smb.registerMemoryAccess(inst->pcState().instAddr(), inst->seqNum, inst->isStore());
-    }
 }
 
 void
@@ -1184,6 +1173,11 @@ Rename::renameDestRegs(const DynInstPtr &inst, ThreadID tid)
                             rename_result.first,
                             rename_result.second);
 
+        // Record the rename information so that a history can be kept.
+        // For bypassed loads, this will free the actual physical register.
+        RenameHistory hb_entry(inst->seqNum, flat_dest_regid,
+                               rename_result.first,
+                               rename_result.second);
 
         if (inst->isLoad() && dest_idx == 0) {
             DPRINTF(Rename,
@@ -1201,16 +1195,17 @@ Rename::renameDestRegs(const DynInstPtr &inst, ThreadID tid)
 
                 auto doneSeqNum = commit_ptr->getDoneSeqNum(tid);
                 if (doneSeqNum >= smb_store_seqnum) {
-                    DPRINTF(Rename,
-                            "[tid:%i] "
-                            "Cannot bypass load [sn:%llu]."
-                            "SMB source store has already committed.\n",
-                            tid, inst->seqNum);
-            
                     ++stats.smbStoreOutsideInstWindow;
                 } else {
                     PhysRegIdPtr store_phys_reg = storeToPhysReg[smb_store_seqnum];
                     assert(store_phys_reg);
+
+                    DPRINTF(Rename,
+                            "[tid:%i] "
+                            "Bypassing load [sn:%llu] to store [sn:%llu] with "
+                            "physical reg %i (%s).\n",
+                            tid, inst->seqNum, smb_store_seqnum,
+                            store_phys_reg->index(), store_phys_reg->className());
 
                     // Also since we know that the store has not yet committed,
                     // We guarantee that the physical register has not yet been freed,
@@ -1219,12 +1214,11 @@ Rename::renameDestRegs(const DynInstPtr &inst, ThreadID tid)
                     ++stats.bypassedLoads;
 
                     // Rewrite the RAT entry so the load dest_reg -> smb_phys_reg
-                    map->setEntry(flat_dest_regid, store_phys_reg);
-                    smbPinnedPhysReg[store_phys_reg->flatIndex()].insert(inst->seqNum);
-
-                    // Update the rename result so that the history buffer will record the
-                    // correct physical register.
-                    rename_result.first = store_phys_reg;
+                    map->setEntry(flat_dest_regid, store_phys_reg); // But shouldn't be freed.
+                    
+                    // store_phys_reg is now pinned until the store and load commits.
+                    // this is a set, so duplicate entries will not cause problems.
+                    // smbPinnedPhysReg[store_phys_reg->flatIndex()].insert(inst->seqNum);
                 }
             }
         }
@@ -1235,11 +1229,6 @@ Rename::renameDestRegs(const DynInstPtr &inst, ThreadID tid)
                 tid, dest_reg.index(), dest_reg.className(),
                 rename_result.first->index(),
                 rename_result.first->flatIndex());
-
-        // Record the rename information so that a history can be kept.
-        RenameHistory hb_entry(inst->seqNum, flat_dest_regid,
-                               rename_result.first,
-                               rename_result.second);
 
         historyBuffer[tid].push_front(hb_entry);
 
@@ -1422,17 +1411,8 @@ Rename::checkSignalsAndUpdate(ThreadID tid)
         while ( reg_it != freeingInProgress[tid].cend()){
             PhysRegIdPtr reg = reg_it->first;
             InstSeqNum seq_num = reg_it->second;
-            if (maybeFreeReg(seq_num, reg)) {
-                DPRINTF(Rename, "[tid:%i] Freed up phys reg %i (%s)\n",
-                        tid, reg->index(),
-                        reg->className());
-            } else {
-                DPRINTF(Rename, "[tid:%i] Cannot free phys reg %i (%s)\n",
-                        tid, reg->index(),
-                        reg->className(),
-                        seq_num);
-            }
-
+            freeList->addReg(reg);
+             
             ++reg_it;
         }
         freeingInProgress[tid].clear();
