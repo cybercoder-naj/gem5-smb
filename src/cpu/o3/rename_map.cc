@@ -93,6 +93,9 @@ SimpleRenameMap::rename(const RegId& arch_reg)
         renamed_reg->setNumPinnedWrites(arch_reg.getNumPinnedWrites());
         renamed_reg->setNumPinnedWritesToComplete(
             arch_reg.getNumPinnedWrites() + 1);
+
+        decrLogicalDependents(prev_reg);
+        incrLogicalDependents(renamed_reg);
     }
 
     DPRINTF(Rename, "Renamed reg %d to physical reg %d (%d) old mapping was"

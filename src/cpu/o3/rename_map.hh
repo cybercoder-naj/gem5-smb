@@ -74,6 +74,7 @@ class SimpleRenameMap
     using Arch2PhysMap = std::vector<PhysRegIdPtr>;
     /** The acutal arch-to-phys register map */
     Arch2PhysMap map;
+    std::unordered_map<RegIndex, int> logicalDependents;
   public:
     using iterator = Arch2PhysMap::iterator;
     using const_iterator = Arch2PhysMap::const_iterator;
@@ -135,13 +136,33 @@ class SimpleRenameMap
     setEntry(const RegId& arch_reg, PhysRegIdPtr phys_reg)
     {
         assert(arch_reg.index() <= map.size());
+
+        auto prev_reg = map[arch_reg.index()];
+        if (prev_reg) // This is invoked during initialization when there is no previous mapping, so check for that first.
+            decrLogicalDependents(prev_reg);
+
         map[arch_reg.index()] = phys_reg;
+        incrLogicalDependents(phys_reg);
     }
 
     /** Return the number of free entries on the associated free list. */
     unsigned numFreeEntries() const { return freeList->numFreeRegs(); }
 
     size_t numArchRegs() const { return map.size(); }
+
+    void decrLogicalDependents(PhysRegIdPtr phys_reg) {
+        logicalDependents[phys_reg->index()]--;
+        assert(logicalDependents[phys_reg->index()] >= 0);
+    }
+
+    void incrLogicalDependents(PhysRegIdPtr phys_reg) {
+        logicalDependents[phys_reg->index()]++;
+        assert(logicalDependents[phys_reg->index()] > 0);
+    }
+
+    bool noLogicalDependents(PhysRegIdPtr phys_reg) const {
+        return logicalDependents.at(phys_reg->index()) == 0;
+    }
 
     /** Forward begin/cbegin to the map. */
     /** @{ */
@@ -283,6 +304,18 @@ class UnifiedRenameMap
     numFreeEntries(RegClassType type) const
     {
         return renameMaps[type].numFreeEntries();
+    }
+
+    void decrLogicalDependents(PhysRegIdPtr phys_reg) {
+        renameMaps[phys_reg->classValue()].decrLogicalDependents(phys_reg);
+    }
+
+    void incrLogicalDependents(PhysRegIdPtr phys_reg) {
+        renameMaps[phys_reg->classValue()].incrLogicalDependents(phys_reg);
+    }
+
+    bool noLogicalDependents(PhysRegIdPtr phys_reg) const {
+        return renameMaps[phys_reg->classValue()].noLogicalDependents(phys_reg);
     }
 
     /**
