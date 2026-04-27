@@ -967,10 +967,10 @@ Rename::doSquash(const InstSeqNum &squashed_seq_num, ThreadID tid)
             // until they are indeed squashed in the commit stage.
             freeingInProgress[tid].push_back(std::make_pair(hb_it->newPhysReg, hb_it->instSeqNum));
 
-            if (hb_it->smbSourceReg) {
-                renameMap[tid]->decrLogicalDependents(hb_it->smbSourceReg);
-                freeingInProgress[tid].push_back(std::make_pair(hb_it->smbSourceReg, hb_it->instSeqNum));
-            }
+            // if (hb_it->smbSourceReg) {
+            //     renameMap[tid]->decrLogicalDependents(hb_it->smbSourceReg);
+            //     freeingInProgress[tid].push_back(std::make_pair(hb_it->smbSourceReg, hb_it->instSeqNum));
+            // }
         }
 
         // Notify potential listeners that the register mapping needs to be
