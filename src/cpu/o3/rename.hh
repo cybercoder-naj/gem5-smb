@@ -470,7 +470,7 @@ class Rename
     /** Map of store instructions to their physical register mappings containing the value. */
     std::unordered_map<InstSeqNum, PhysRegIdPtr> storePhysRegs;
 
-    std::unordered_map<RegId, PhysRegIdPtr> bypassedArchToPhys;
+    std::unordered_map<RegId, std::map<InstSeqNum, PhysRegIdPtr>> bypassedArchToPhys;
 
     /** The predictor for speculative memory bypassing. */
     SMB smb;

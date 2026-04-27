@@ -17,7 +17,7 @@ echo "Done."
 
 ./build/X86/gem5.opt \
   --debug-flags=$debugflags \
-  --debug-file=../$pwd/$filename.debug \
+  --debug-file=../$pwd/$filename-smb.debug \
   configs/deprecated/example/se.py \
   --cmd=$pwd/$filename \
   -n 1 \
