@@ -151,17 +151,17 @@ class SimpleRenameMap
     size_t numArchRegs() const { return map.size(); }
 
     void decrLogicalDependents(PhysRegIdPtr phys_reg) {
-        logicalDependents[phys_reg->index()]--;
-        assert(logicalDependents[phys_reg->index()] >= 0);
+        logicalDependents[phys_reg->flatIndex()]--;
+        assert(logicalDependents[phys_reg->flatIndex()] >= 0);
     }
 
     void incrLogicalDependents(PhysRegIdPtr phys_reg) {
-        logicalDependents[phys_reg->index()]++;
-        assert(logicalDependents[phys_reg->index()] > 0);
+        logicalDependents[phys_reg->flatIndex()]++;
+        assert(logicalDependents[phys_reg->flatIndex()] > 0);
     }
 
     bool noLogicalDependents(PhysRegIdPtr phys_reg) const {
-        return logicalDependents.at(phys_reg->index()) == 0;
+        return logicalDependents.at(phys_reg->flatIndex()) == 0;
     }
 
     /** Forward begin/cbegin to the map. */
