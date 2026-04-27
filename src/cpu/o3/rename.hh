@@ -468,10 +468,9 @@ class Rename
     unsigned skidBufferMax;
 
     /** Map of store instructions to their physical register mappings containing the value. */
-    std::unordered_map<InstSeqNum, PhysRegIdPtr> storeToPhysReg;
+    std::unordered_map<InstSeqNum, PhysRegIdPtr> storePhysRegs;
 
-    /** Map of bypassed loads to their physical register holding the real data reg. */
-    std::unordered_map<InstSeqNum, PhysRegIdPtr> bypassedLoadsActualReg;
+    std::unordered_map<RegId, PhysRegIdPtr> bypassedArchToPhys;
 
     /** The predictor for speculative memory bypassing. */
     SMB smb;

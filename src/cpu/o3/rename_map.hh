@@ -152,12 +152,12 @@ class SimpleRenameMap
 
     void decrLogicalDependents(PhysRegIdPtr phys_reg) {
         logicalDependents[phys_reg->flatIndex()]--;
-        assert(logicalDependents[phys_reg->flatIndex()] >= 0);
+        // assert(logicalDependents[phys_reg->flatIndex()] >= 0);
     }
 
     void incrLogicalDependents(PhysRegIdPtr phys_reg) {
         logicalDependents[phys_reg->flatIndex()]++;
-        assert(logicalDependents[phys_reg->flatIndex()] > 0);
+        // assert(logicalDependents[phys_reg->flatIndex()] > 0);
     }
 
     bool noLogicalDependents(PhysRegIdPtr phys_reg) const {

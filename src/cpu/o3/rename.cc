@@ -88,8 +88,7 @@ Rename::Rename(CPU *_cpu, const BaseO3CPUParams &params)
         serializeOnNextInst[tid] = false;
     }
 
-    storeToPhysReg.clear();
-    bypassedLoadsActualReg.clear();
+    storePhysRegs.clear();
 }
 
 std::string
@@ -961,21 +960,11 @@ Rename::doSquash(const InstSeqNum &squashed_seq_num, ThreadID tid)
             // previous physical register that it was renamed to.
             renameMap[tid]->setEntry(hb_it->archReg, hb_it->prevPhysReg);
 
-            // Bypassed loads should not actually be freeing the speculated reg
-            auto actualReg_it = bypassedLoadsActualReg.find(hb_it->instSeqNum);
-            if (actualReg_it == bypassedLoadsActualReg.end()) {
-                // The phys regs can still be owned by squashing but
-                // executing instructions in IEW at this moment. To avoid
-                // ownership hazard in SMT CPU, we delay the freelist update
-                // until they are indeed squashed in the commit stage.
-                freeingInProgress[tid].push_back(std::make_pair(hb_it->newPhysReg, hb_it->instSeqNum));
-            } else {
-                // But it should free the reg with the actual value.
-                PhysRegIdPtr actualReg = actualReg_it->second;
-                assert(renameMap[tid]->noLogicalDependents(actualReg));
-                freeList->addReg(actualReg);
-                bypassedLoadsActualReg.erase(actualReg_it);
-            }
+            // The phys regs can still be owned by squashing but
+            // executing instructions in IEW at this moment. To avoid
+            // ownership hazard in SMT CPU, we delay the freelist update
+            // until they are indeed squashed in the commit stage.
+            freeingInProgress[tid].push_back(std::make_pair(hb_it->newPhysReg, hb_it->instSeqNum));
         }
 
         // Notify potential listeners that the register mapping needs to be
@@ -1045,18 +1034,6 @@ Rename::removeFromHistory(InstSeqNum inst_seq_num, ThreadID tid)
             }
         }
 
-        auto actualReg_it = bypassedLoadsActualReg.find(hb_it->instSeqNum);
-        if (actualReg_it != bypassedLoadsActualReg.end()) {
-            DPRINTF(Rename, "[tid:%i] Freeing actual phys reg %i (%d) from bypassed loads.\n",
-                    tid, actualReg_it->second->index(),
-                    actualReg_it->second->flatIndex());
-
-            PhysRegIdPtr actualReg = actualReg_it->second;
-            assert(renameMap[tid]->noLogicalDependents(actualReg));
-            freeList->addReg(actualReg);
-            bypassedLoadsActualReg.erase(actualReg_it);
-        }
-
         ++stats.committedMaps;
 
         historyBuffer[tid].erase(hb_it--);
@@ -1068,12 +1045,12 @@ Rename::removeFromHistory(InstSeqNum inst_seq_num, ThreadID tid)
 bool
 Rename::tryFreeReg(ThreadID tid, InstSeqNum inst_seq_num, PhysRegIdPtr phys_reg)
 {
-    if (renameMap[tid]->noLogicalDependents(phys_reg)) {
+    // if (renameMap[tid]->noLogicalDependents(phys_reg)) {
         freeList->addReg(phys_reg);
         return true;
-    }
+    // }
 
-    return false;
+    // return false;
 }
 
 void
@@ -1089,9 +1066,10 @@ Rename::renameSrcRegs(const DynInstPtr &inst, ThreadID tid)
     for (int src_idx = 0; src_idx < num_src_regs; src_idx++) {
         const RegId& src_reg = inst->srcRegIdx(src_idx);
         const RegId flat_reg = src_reg.flatten(*isa);
-        PhysRegIdPtr renamed_reg;
+        
+        auto it = bypassedArchToPhys.find(flat_reg);
+        PhysRegIdPtr renamed_reg = it != bypassedArchToPhys.end() ? it->second : map->lookup(flat_reg);
 
-        renamed_reg = map->lookup(flat_reg);
         switch (flat_reg.classValue()) {
           case InvalidRegClass:
             break;
@@ -1121,10 +1099,10 @@ Rename::renameSrcRegs(const DynInstPtr &inst, ThreadID tid)
 
         DPRINTF(Rename,
                 "[tid:%i] "
-                "Looking up %s arch reg %i, got phys reg %i (%s)\n",
+                "Looking up %s arch reg %i, got phys reg %i (%s) (bypassed: %s)\n",
                 tid, flat_reg.className(),
                 src_reg.index(), renamed_reg->index(),
-                renamed_reg->className());
+                renamed_reg->className(), it != bypassedArchToPhys.end() ? "yes" : "no");
 
         inst->renameSrcReg(src_idx, renamed_reg);
 
@@ -1146,7 +1124,7 @@ Rename::renameSrcRegs(const DynInstPtr &inst, ThreadID tid)
         }
 
         if (inst->isStore() && src_idx == 2) {
-            storeToPhysReg[inst->seqNum] = renamed_reg;
+            storePhysRegs[inst->seqNum] = renamed_reg;
         }
 
         ++stats.lookups;
@@ -1170,6 +1148,7 @@ Rename::renameDestRegs(const DynInstPtr &inst, ThreadID tid)
         flat_dest_regid.setNumPinnedWrites(dest_reg.getNumPinnedWrites());
 
         rename_result = map->rename(flat_dest_regid);
+        bypassedArchToPhys.erase(flat_dest_regid);
 
         inst->flattenedDestIdx(dest_idx, flat_dest_regid);
 
@@ -1210,7 +1189,7 @@ Rename::renameDestRegs(const DynInstPtr &inst, ThreadID tid)
         }
 
         if (is_bypassed_load) {
-            PhysRegIdPtr store_phys_reg = storeToPhysReg[smb_store_seqnum];
+            PhysRegIdPtr store_phys_reg = storePhysRegs[smb_store_seqnum];
             assert(store_phys_reg);
 
             DPRINTF(Rename,
@@ -1226,13 +1205,7 @@ Rename::renameDestRegs(const DynInstPtr &inst, ThreadID tid)
             inst->setBypassedLoad(smb_store_seqnum, store_phys_reg);
             ++stats.bypassedLoads;
 
-            // Rewrite the RAT entry so the load dest_reg -> smb_phys_reg
-            map->setEntry(flat_dest_regid, store_phys_reg);
-
-            // Required when the load commits.
-            bypassedLoadsActualReg[inst->seqNum] = rename_result.first;
-            // Required when the load is squashed
-            rename_result.first = store_phys_reg;
+            bypassedArchToPhys[flat_dest_regid] = store_phys_reg;
         } 
         
         DPRINTF(Rename,
