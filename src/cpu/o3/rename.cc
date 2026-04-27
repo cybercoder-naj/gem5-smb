@@ -89,7 +89,7 @@ Rename::Rename(CPU *_cpu, const BaseO3CPUParams &params)
     }
 
     storeToPhysReg.clear();
-    smbPinnedPhysReg.clear();
+    bypassedLoadsActualReg.clear();
 }
 
 std::string
@@ -966,6 +966,11 @@ Rename::doSquash(const InstSeqNum &squashed_seq_num, ThreadID tid)
             // ownership hazard in SMT CPU, we delay the freelist update
             // until they are indeed squashed in the commit stage.
             freeingInProgress[tid].push_back(std::make_pair(hb_it->newPhysReg, hb_it->instSeqNum));
+
+            if (hb_it->smbSourceReg) {
+                renameMap[tid]->decrLogicalDependents(hb_it->smbSourceReg);
+                freeingInProgress[tid].push_back(std::make_pair(hb_it->smbSourceReg, hb_it->instSeqNum));
+            }
         }
 
         // Notify potential listeners that the register mapping needs to be
@@ -1022,7 +1027,29 @@ Rename::removeFromHistory(InstSeqNum inst_seq_num, ThreadID tid)
         // can be recognized because the new mapping is the same as
         // the old one.
         if (hb_it->newPhysReg != hb_it->prevPhysReg) {
-            freeList->addReg(hb_it->prevPhysReg);
+            if (tryFreeReg(tid, hb_it->instSeqNum, hb_it->prevPhysReg)) {
+                DPRINTF(Rename, "[tid:%i] Successfully freed phys reg %i "
+                        "(%s) from history buffer.\n",
+                        tid, hb_it->prevPhysReg->index(),
+                        hb_it->prevPhysReg->className());
+            } else {
+                DPRINTF(Rename, "[tid:%i] Could not free phys reg %i "
+                        "(%s) from history buffer because it is still in use.\n",
+                        tid, hb_it->prevPhysReg->index(),
+                        hb_it->prevPhysReg->className());
+            }
+        }
+
+        auto actualReg_it = bypassedLoadsActualReg.find(hb_it->instSeqNum);
+        if (actualReg_it != bypassedLoadsActualReg.end()) {
+            DPRINTF(Rename, "[tid:%i] Freeing actual phys reg %i (%s) from bypassed loads.\n",
+                    tid, actualReg_it->second->index(),
+                    actualReg_it->second->className());
+
+            PhysRegIdPtr actualReg = actualReg_it->second;
+            assert(renameMap[tid]->noLogicalDependents(actualReg));
+            freeList->addReg(actualReg);
+            bypassedLoadsActualReg.erase(actualReg_it);
         }
 
         ++stats.committedMaps;
@@ -1034,30 +1061,9 @@ Rename::removeFromHistory(InstSeqNum inst_seq_num, ThreadID tid)
 }
 
 bool
-Rename::tryFreeReg(InstSeqNum inst_seq_num, PhysRegIdPtr phys_reg)
+Rename::tryFreeReg(ThreadID tid, InstSeqNum inst_seq_num, PhysRegIdPtr phys_reg)
 {
-    const auto key = phys_reg->flatIndex();
-    const auto& it = smbPinnedPhysReg.find(key);
-    
-    if (it == smbPinnedPhysReg.end()) {
-        // Physical register is not pinned by any future loads, so we can free it.
-        freeList->addReg(phys_reg);
-        return true;
-    }
-
-    auto& pinned_seqnums = it->second;
-    const auto pinned_it = pinned_seqnums.find(inst_seq_num);
-    assert(!pinned_seqnums.empty());
-    if (pinned_it == pinned_seqnums.end()) {
-        // We found the instruction that created the source data
-        // no nothing
-        return false;
-    }
-
-    pinned_seqnums.erase(pinned_it);
-    if (pinned_seqnums.empty()) {
-        // No more future loads depending on this store, we can free the register.
-        smbPinnedPhysReg.erase(key);
+    if (renameMap[tid]->noLogicalDependents(phys_reg)) {
         freeList->addReg(phys_reg);
         return true;
     }
@@ -1178,6 +1184,7 @@ Rename::renameDestRegs(const DynInstPtr &inst, ThreadID tid)
         RenameHistory hb_entry(inst->seqNum, flat_dest_regid,
                                rename_result.first,
                                rename_result.second);
+        hb_entry.smbSourceReg = nullptr;
 
         if (inst->isLoad() && dest_idx == 0) {
             DPRINTF(Rename,
@@ -1214,11 +1221,12 @@ Rename::renameDestRegs(const DynInstPtr &inst, ThreadID tid)
                     ++stats.bypassedLoads;
 
                     // Rewrite the RAT entry so the load dest_reg -> smb_phys_reg
-                    map->setEntry(flat_dest_regid, store_phys_reg); // But shouldn't be freed.
-                    
-                    // store_phys_reg is now pinned until the store and load commits.
-                    // this is a set, so duplicate entries will not cause problems.
-                    // smbPinnedPhysReg[store_phys_reg->flatIndex()].insert(inst->seqNum);
+                    map->setEntry(flat_dest_regid, store_phys_reg);
+
+                    // Required when the load commits.
+                    bypassedLoadsActualReg[inst->seqNum] = rename_result.first;
+                    // Required when the load is squashed
+                    hb_entry.smbSourceReg = store_phys_reg;
                 }
             }
         }
@@ -1411,7 +1419,15 @@ Rename::checkSignalsAndUpdate(ThreadID tid)
         while ( reg_it != freeingInProgress[tid].cend()){
             PhysRegIdPtr reg = reg_it->first;
             InstSeqNum seq_num = reg_it->second;
-            freeList->addReg(reg);
+            if (tryFreeReg(tid, seq_num, reg)) {
+                DPRINTF(Rename, "[tid:%i] Successfully freed phys reg %i "
+                        "(%s) from misspeculated instruction with sequence number %i.\n",
+                        tid, reg->index(), reg->className(), seq_num);
+            } else {
+                DPRINTF(Rename, "[tid:%i] Could not free phys reg %i "
+                        "(%s) from misspeculated instruction with sequence number %i because it is still in use.\n",
+                        tid, reg->index(), reg->className(), seq_num);
+            }
              
             ++reg_it;
         }

@@ -291,7 +291,7 @@ class Rename
      */
     void serializeAfter(InstQueue &inst_list, ThreadID tid);
 
-    bool tryFreeReg(InstSeqNum inst_seq_num, PhysRegIdPtr phys_reg);
+    bool tryFreeReg(ThreadID tid, InstSeqNum inst_seq_num, PhysRegIdPtr phys_reg);
 
     /** Holds the information for each destination register rename. It holds
      * the instruction's sequence number, the arch register, the old physical
@@ -316,6 +316,8 @@ class Rename
         /** The old physical register that the arch. register was renamed to.
          */
         PhysRegIdPtr prevPhysReg;
+        /** The source physical register for SMB (Store-Load Bypassing). */
+        PhysRegIdPtr smbSourceReg;
     };
 
     /** A per-thread list of all destination register renames, used to either
@@ -468,8 +470,8 @@ class Rename
     /** Map of store instructions to their physical register mappings containing the value. */
     std::unordered_map<InstSeqNum, PhysRegIdPtr> storeToPhysReg;
 
-    /** Map of store instructions to their physical register mappings containing the value. */
-    std::unordered_map<RegIndex, std::unordered_set<InstSeqNum>> smbPinnedPhysReg;
+    /** Map of bypassed loads to their physical register holding the real data reg. */
+    std::unordered_map<InstSeqNum, PhysRegIdPtr> bypassedLoadsActualReg;
 
     /** The predictor for speculative memory bypassing. */
     SMB smb;
