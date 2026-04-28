@@ -2,9 +2,18 @@
 
 set -e
 
+# Usage: ./coremark-tiny/benchmark <prog> [--debug-flags <flags>]
 pwd=$(dirname $0)
 prog=$1
-maxInst=100000
+shift
+
+debugflags=""
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    --debug-flags)  debugflags="--debug-flags=$2";     shift 2;;
+    *) echo "Unknown argument: $1"; exit 1;;
+  esac
+done
 
 scons build/X86/gem5.opt --ignore-style -j$(nproc)
 
@@ -19,8 +28,7 @@ basename=${prog%%.*}
 export MEM_TRACE_FILE="$pwd/$basename.memtrace"
 echo "" > $MEM_TRACE_FILE
 ./build/X86/gem5.opt \
-  --debug-flags=O3CPUAll,O3PipeView \
-  --debug-file=../$pwd/$basename-trace-no-smb.out \
+  $debugflags \
   configs/deprecated/example/se.py \
   --cmd=/home/nj421/coremark-pro/builds/linux64/gcc64/bin/$prog \
   -n 1 \
@@ -30,7 +38,7 @@ echo "" > $MEM_TRACE_FILE
   --cpu-type X86O3CPU \
   --cpu-clock 1GHz \
   -o="-i1 -v0" \
-  -I $maxInst
+  -I 100000
 
 cp m5out/stats.txt $pwd/$basename-stats-no-smb.txt
 export SMB_PREDICTIONS_FILE="$pwd/$basename.predictions"
@@ -39,8 +47,7 @@ echo "" > $SMB_PREDICTIONS_FILE
 
 unset MEM_TRACE_FILE
 ./build/X86/gem5.opt \
-  --debug-flags=O3CPUAll,O3PipeView \
-  --debug-file=../$pwd/$basename-trace-smb.out \
+  $debugflags \
   configs/deprecated/example/se.py \
   --cmd=/home/nj421/coremark-pro/builds/linux64/gcc64/bin/$prog \
   -n 1 \
@@ -50,5 +57,6 @@ unset MEM_TRACE_FILE
   --cpu-type X86O3CPU \
   --cpu-clock 1GHz \
   -o="-i1 -v0" \
-  -I $maxInst
+  -I 100000
+
 cp m5out/stats.txt $pwd/$basename-stats-smb.txt

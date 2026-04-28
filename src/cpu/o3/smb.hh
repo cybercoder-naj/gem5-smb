@@ -48,7 +48,7 @@ class SMB
         }
     }
 
-    void squash(InstSeqNum squashed_seq_num); 
+    void squash(); 
 
     void removeUpTo(InstSeqNum seq_num);
 };

@@ -964,7 +964,7 @@ Rename::doSquash(const InstSeqNum &squashed_seq_num, ThreadID tid)
             // executing instructions in IEW at this moment. To avoid
             // ownership hazard in SMT CPU, we delay the freelist update
             // until they are indeed squashed in the commit stage.
-            freeingInProgress[tid].push_back(std::make_pair(hb_it->newPhysReg, hb_it->instSeqNum));
+            freeingInProgress[tid].push_back(hb_it->newPhysReg);
         }
 
         // Notify potential listeners that the register mapping needs to be
@@ -978,22 +978,9 @@ Rename::doSquash(const InstSeqNum &squashed_seq_num, ThreadID tid)
         ++stats.undoneMaps;
     }
     
-    smb.squash(squashed_seq_num);
-
-    for (auto it = storePhysRegs.begin(); it != storePhysRegs.end();) {
-        if (it->first > squashed_seq_num) {
-            it = storePhysRegs.erase(it);
-        } else {
-            ++it;
-        }
-    }
-
-    for (auto& [reg, seqMap] : bypassedArchToPhys) {
-        seqMap.erase(
-            seqMap.upper_bound(squashed_seq_num),
-            seqMap.end()
-        );
-    }
+    smb.squash();
+    storePhysRegs.clear();
+    bypassedArchToPhys.clear();
 }
 
 void
@@ -1036,17 +1023,7 @@ Rename::removeFromHistory(InstSeqNum inst_seq_num, ThreadID tid)
         // can be recognized because the new mapping is the same as
         // the old one.
         if (hb_it->newPhysReg != hb_it->prevPhysReg) {
-            if (tryFreeReg(tid, hb_it->instSeqNum, hb_it->prevPhysReg)) {
-                DPRINTF(Rename, "[tid:%i] Successfully freed phys reg %i "
-                        "(%d) from history buffer.\n",
-                        tid, hb_it->prevPhysReg->index(),
-                        hb_it->prevPhysReg->flatIndex());
-            } else {
-                DPRINTF(Rename, "[tid:%i] Could not free phys reg %i "
-                        "(%d) from history buffer because it is still in use.\n",
-                        tid, hb_it->prevPhysReg->index(),
-                        hb_it->prevPhysReg->flatIndex());
-            }
+            freeList->addReg(hb_it->prevPhysReg);
         }
 
         ++stats.committedMaps;
@@ -1055,17 +1032,6 @@ Rename::removeFromHistory(InstSeqNum inst_seq_num, ThreadID tid)
     }
 
     smb.removeUpTo(inst_seq_num);
-}
-
-bool
-Rename::tryFreeReg(ThreadID tid, InstSeqNum inst_seq_num, PhysRegIdPtr phys_reg)
-{
-    // if (renameMap[tid]->noLogicalDependents(phys_reg)) {
-        freeList->addReg(phys_reg);
-        return true;
-    // }
-
-    // return false;
 }
 
 void
@@ -1082,22 +1048,9 @@ Rename::renameSrcRegs(const DynInstPtr &inst, ThreadID tid)
         const RegId& src_reg = inst->srcRegIdx(src_idx);
         const RegId flat_reg = src_reg.flatten(*isa);
         
-        auto outer = bypassedArchToPhys.find(flat_reg);
-        PhysRegIdPtr renamed_reg;
-        bool is_bypassed = false;
-        if (outer != bypassedArchToPhys.end() && !outer->second.empty()) {
-            // Greatest seqnum that doesn't exceed current inst seqnum
-            auto it = outer->second.upper_bound(inst->seqNum);
-            if (it != outer->second.begin()) {
-                --it;
-                renamed_reg = it->second;
-                is_bypassed = true;
-            } else {
-                renamed_reg = map->lookup(flat_reg);
-            }
-        } else {
-            renamed_reg = map->lookup(flat_reg);
-        }
+        auto it = bypassedArchToPhys.find(flat_reg);
+        bool is_bypassed = it != bypassedArchToPhys.end();
+        PhysRegIdPtr renamed_reg = is_bypassed ? it->second : map->lookup(flat_reg);
 
         switch (flat_reg.classValue()) {
           case InvalidRegClass:
@@ -1177,13 +1130,7 @@ Rename::renameDestRegs(const DynInstPtr &inst, ThreadID tid)
         flat_dest_regid.setNumPinnedWrites(dest_reg.getNumPinnedWrites());
 
         rename_result = map->rename(flat_dest_regid);
-        auto outer = bypassedArchToPhys.find(flat_dest_regid);
-        if (outer != bypassedArchToPhys.end()) {
-            outer->second.erase(
-                outer->second.begin(),
-                outer->second.upper_bound(inst->seqNum)
-            );
-        }
+        bypassedArchToPhys.erase(flat_dest_regid);
 
         inst->flattenedDestIdx(dest_idx, flat_dest_regid);
 
@@ -1240,7 +1187,7 @@ Rename::renameDestRegs(const DynInstPtr &inst, ThreadID tid)
             inst->setBypassedLoad(smb_store_seqnum, store_phys_reg);
             ++stats.bypassedLoads;
 
-            bypassedArchToPhys[flat_dest_regid][inst->seqNum] = store_phys_reg;
+            bypassedArchToPhys[flat_dest_regid] = store_phys_reg;
         } 
         
         DPRINTF(Rename,
@@ -1425,23 +1372,12 @@ Rename::checkSignalsAndUpdate(ThreadID tid)
         return true;
     } else if (!fromCommit->commitInfo[tid].robSquashing &&
             !freeingInProgress[tid].empty()) {
-        DPRINTF(Rename, "[tid:%i] Attempting to free phys regs of misspeculated "
+        DPRINTF(Rename, "[tid:%i] Freeing up phys regs of misspeculated "
                 "instructions.\n", tid);
 
         auto reg_it = freeingInProgress[tid].cbegin();
         while ( reg_it != freeingInProgress[tid].cend()){
-            PhysRegIdPtr reg = reg_it->first;
-            InstSeqNum seq_num = reg_it->second;
-            if (tryFreeReg(tid, seq_num, reg)) {
-                DPRINTF(Rename, "[tid:%i] Successfully freed phys reg %i "
-                        "(%d) from misspeculated instruction with sequence number %i.\n",
-                        tid, reg->index(), reg->flatIndex(), seq_num);
-            } else {
-                DPRINTF(Rename, "[tid:%i] Could not free phys reg %i "
-                        "(%d) from misspeculated instruction with sequence number %i because it is still in use.\n",
-                        tid, reg->index(), reg->flatIndex(), seq_num);
-            }
-             
+            freeList->addReg(*reg_it);
             ++reg_it;
         }
         freeingInProgress[tid].clear();

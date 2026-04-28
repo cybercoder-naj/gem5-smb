@@ -291,8 +291,6 @@ class Rename
      */
     void serializeAfter(InstQueue &inst_list, ThreadID tid);
 
-    bool tryFreeReg(ThreadID tid, InstSeqNum inst_seq_num, PhysRegIdPtr phys_reg);
-
     /** Holds the information for each destination register rename. It holds
      * the instruction's sequence number, the arch register, the old physical
      * register for that arch. register, and the new physical register.
@@ -362,8 +360,8 @@ class Rename
     /** Free list interface. */
     UnifiedFreeList *freeList;
 
-    /** Hold phys regs and the inst sequence numbers to be released after squash finish */
-    std::vector<std::pair<PhysRegIdPtr, InstSeqNum>> freeingInProgress[MaxThreads];
+    /** Hold phys regs to be released after squash finish */
+    std::vector<PhysRegIdPtr> freeingInProgress[MaxThreads];
 
     /** Pointer to the list of active threads. */
     std::list<ThreadID> *activeThreads;
@@ -468,7 +466,7 @@ class Rename
     /** Map of store instructions to their physical register mappings containing the value. */
     std::unordered_map<InstSeqNum, PhysRegIdPtr> storePhysRegs;
 
-    std::unordered_map<RegId, std::map<InstSeqNum, PhysRegIdPtr>> bypassedArchToPhys;
+    std::unordered_map<RegId, PhysRegIdPtr> bypassedArchToPhys;
 
     /** The predictor for speculative memory bypassing. */
     SMB smb;
