@@ -1332,11 +1332,10 @@ Commit::commitHead(const DynInstPtr &head_inst, unsigned inst_num)
 
     if (head_inst->isBypassedLoad()) {
         PhysRegIdPtr actualValueReg = head_inst->renamedDestIdx(0);
-        PhysRegIdPtr specValueReg = head_inst->smbSrcStorePhysReg;
-        assert(specValueReg);
+        assert(head_inst->smbSpeculatedLoadData.has_value());
 
         RegVal actualValue = cpu->getReg(actualValueReg, tid);
-        RegVal specValue = cpu->getReg(specValueReg, tid);
+        auto specValue = head_inst->smbSpeculatedLoadData.value();
         bool valueMismatch = actualValue != specValue;
 
         if (valueMismatch) {

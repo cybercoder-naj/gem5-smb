@@ -386,6 +386,8 @@ class DynInst : public ExecContext, public RefCounted
     typename LSQUnit::SQIterator smbPredStoreIt;
     PhysRegIdPtr smbSrcStorePhysReg = nullptr;
 
+    std::optional<RegVal> smbSpeculatedLoadData = std::nullopt;
+
     bool isBypassedLoad() const {
         return staticInst->isLoad() && instFlags.test(BypassedLoad);
     }

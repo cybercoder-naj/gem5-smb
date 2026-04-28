@@ -325,9 +325,14 @@ DynInst::dump(std::string &outstring)
 void
 DynInst::markSrcRegReady()
 {
+    auto num_src_regs = numSrcRegs();
+    if (isBypassedLoad())
+        ++num_src_regs;
+
     DPRINTF(IQ, "[sn:%lli] has %d ready out of %d sources. RTI %d)\n",
-            seqNum, readyRegs+1, numSrcRegs(), readyToIssue());
-    if (++readyRegs == numSrcRegs()) {
+            seqNum, readyRegs+1, num_src_regs, readyToIssue());
+
+    if (++readyRegs == num_src_regs) {
         setCanIssue();
     }
 }

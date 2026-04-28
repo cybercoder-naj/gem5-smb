@@ -1315,6 +1315,12 @@ InstructionQueue::doSquash(ThreadID tid)
             ++freeEntries;
         }
 
+        if (squashed_inst->isBypassedLoad() &&
+            !regScoreboard[squashed_inst->smbSrcStorePhysReg->flatIndex()]) {
+            dependGraph.remove(squashed_inst->smbSrcStorePhysReg->flatIndex(),
+                                squashed_inst);
+        }
+
         // IQ clears out the heads of the dependency graph only when
         // instructions reach writeback stage. If an instruction is squashed
         // before writeback stage, its head of dependency graph would not be
@@ -1387,6 +1393,22 @@ InstructionQueue::addToDependents(const DynInstPtr &new_inst)
                 // Mark a register ready within the instruction.
                 new_inst->markSrcRegReady(src_reg_idx);
             }
+        }
+    }
+
+    if (new_inst->isBypassedLoad()) {
+        assert(new_inst->smbSrcStorePhysReg);
+
+        if (!regScoreboard[new_inst->smbSrcStorePhysReg->flatIndex()]) {
+            DPRINTF(IQ, "Instruction PC %s is a bypassed load, adding "
+                    "dependency on the store valid register.\n", new_inst->pcState());
+
+            dependGraph.insert(new_inst->smbSrcStorePhysReg->flatIndex(), new_inst);
+
+            return_val = true;
+        } else {
+            // Internally, this makes sure that there's one extra register to wait upon.
+            new_inst->markSrcRegReady();
         }
     }
 

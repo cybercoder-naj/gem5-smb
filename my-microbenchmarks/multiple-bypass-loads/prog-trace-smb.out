@@ -1350,24 +1350,28 @@ O3CPU: Ticking main, O3CPU.
   92000: system.cpu.iew.lsq.thread0: Inserting load PC (0x401023=>0x401026).(0=>1), idx:0 [sn:11]
   92000: system.cpu.iq: Adding instruction [sn:11] PC (0x401023=>0x401026).(0=>1) to the IQ.
   92000: system.cpu.iq: Instruction PC (0x401023=>0x401026).(0=>1) has src reg 40 (integer) that is being added to the dependency chain.
+  92000: system.cpu.iq: Instruction PC (0x401023=>0x401026).(0=>1) is a bypassed load, adding dependency on the store valid register.
   92000: system.cpu.memDep0: Adding to dependency list; inst PC (0x401023=>0x401026).(0=>1) [sn:11] is dependent on [sn:4].
   92000: system.cpu.iew: [tid:0] Issue: Adding PC (0x401026=>0x40102a).(0=>1) [sn:12] [tid:0] to IQ.
   92000: system.cpu.iew: [tid:0] Issue: Memory instruction encountered, adding to LSQ.
   92000: system.cpu.iew.lsq.thread0: Inserting load PC (0x401026=>0x40102a).(0=>1), idx:1 [sn:12]
   92000: system.cpu.iq: Adding instruction [sn:12] PC (0x401026=>0x40102a).(0=>1) to the IQ.
   92000: system.cpu.iq: Instruction PC (0x401026=>0x40102a).(0=>1) has src reg 40 (integer) that is being added to the dependency chain.
+  92000: system.cpu.iq: Instruction PC (0x401026=>0x40102a).(0=>1) is a bypassed load, adding dependency on the store valid register.
   92000: system.cpu.memDep0: Adding to dependency list; inst PC (0x401026=>0x40102a).(0=>1) [sn:12] is dependent on [sn:6].
   92000: system.cpu.iew: [tid:0] Issue: Adding PC (0x40102a=>0x40102e).(0=>1) [sn:13] [tid:0] to IQ.
   92000: system.cpu.iew: [tid:0] Issue: Memory instruction encountered, adding to LSQ.
   92000: system.cpu.iew.lsq.thread0: Inserting load PC (0x40102a=>0x40102e).(0=>1), idx:2 [sn:13]
   92000: system.cpu.iq: Adding instruction [sn:13] PC (0x40102a=>0x40102e).(0=>1) to the IQ.
   92000: system.cpu.iq: Instruction PC (0x40102a=>0x40102e).(0=>1) has src reg 40 (integer) that is being added to the dependency chain.
+  92000: system.cpu.iq: Instruction PC (0x40102a=>0x40102e).(0=>1) is a bypassed load, adding dependency on the store valid register.
   92000: system.cpu.memDep0: Adding to dependency list; inst PC (0x40102a=>0x40102e).(0=>1) [sn:13] is dependent on [sn:6].
   92000: system.cpu.iew: [tid:0] Issue: Adding PC (0x40102e=>0x401032).(0=>1) [sn:14] [tid:0] to IQ.
   92000: system.cpu.iew: [tid:0] Issue: Memory instruction encountered, adding to LSQ.
   92000: system.cpu.iew.lsq.thread0: Inserting load PC (0x40102e=>0x401032).(0=>1), idx:3 [sn:14]
   92000: system.cpu.iq: Adding instruction [sn:14] PC (0x40102e=>0x401032).(0=>1) to the IQ.
   92000: system.cpu.iq: Instruction PC (0x40102e=>0x401032).(0=>1) has src reg 40 (integer) that is being added to the dependency chain.
+  92000: system.cpu.iq: Instruction PC (0x40102e=>0x401032).(0=>1) is a bypassed load, adding dependency on the store valid register.
   92000: system.cpu.memDep0: Adding to dependency list; inst PC (0x40102e=>0x401032).(0=>1) [sn:14] is dependent on [sn:10].
   92000: system.cpu.iew: [tid:0] Issue: Adding PC (0x401032=>0x401034).(0=>1) [sn:15] [tid:0] to IQ.
   92000: system.cpu.iq: Adding instruction [sn:15] PC (0x401032=>0x401034).(0=>1) to the IQ.
@@ -1435,6 +1439,8 @@ wbActual:4
   92000: system.cpu.iq: Waking any dependents on register 41 (integer).
   92000: system.cpu.iq: Waking up a dependent instruction, [sn:15] PC (0x401032=>0x401034).(0=>1).
   92000: global: [sn:15] has 6 ready out of 7 sources. RTI 0)
+  92000: system.cpu.iq: Waking up a dependent instruction, [sn:11] PC (0x401023=>0x401026).(0=>1).
+  92000: global: [sn:11] has 3 ready out of 4 sources. RTI 0)
   92000: system.cpu.iq: Waking up a dependent instruction, [sn:4] PC (0x401004=>0x40100b).(1=>2).
   92000: global: [sn:4] has 3 ready out of 4 sources. RTI 0)
   92000: system.cpu.iew: Setting Destination Register 41 (integer)
@@ -1447,6 +1453,10 @@ wbActual:4
   92000: system.cpu.iq: Waking up a dependent instruction, [sn:15] PC (0x401032=>0x401034).(0=>1).
   92000: global: [sn:15] has 7 ready out of 7 sources. RTI 0)
   92000: system.cpu.iq: Instruction is ready to issue, putting it onto the ready list, PC (0x401032=>0x401034).(0=>1) opclass:1 [sn:15].
+  92000: system.cpu.iq: Waking up a dependent instruction, [sn:13] PC (0x40102a=>0x40102e).(0=>1).
+  92000: global: [sn:13] has 3 ready out of 4 sources. RTI 0)
+  92000: system.cpu.iq: Waking up a dependent instruction, [sn:12] PC (0x401026=>0x40102a).(0=>1).
+  92000: global: [sn:12] has 3 ready out of 4 sources. RTI 0)
   92000: system.cpu.iq: Waking up a dependent instruction, [sn:6] PC (0x40100b=>0x401013).(1=>2).
   92000: global: [sn:6] has 3 ready out of 4 sources. RTI 0)
   92000: system.cpu.iew: Setting Destination Register 42 (integer)
@@ -1464,6 +1474,8 @@ wbActual:4
   92000: system.cpu.iq: Waking up a dependent instruction, [sn:16] PC (0x401034=>0x401036).(0=>1).
   92000: global: [sn:16] has 7 ready out of 7 sources. RTI 0)
   92000: system.cpu.iq: Instruction is ready to issue, putting it onto the ready list, PC (0x401034=>0x401036).(0=>1) opclass:1 [sn:16].
+  92000: system.cpu.iq: Waking up a dependent instruction, [sn:14] PC (0x40102e=>0x401032).(0=>1).
+  92000: global: [sn:14] has 3 ready out of 4 sources. RTI 0)
   92000: system.cpu.iq: Waking up a dependent instruction, [sn:10] PC (0x40101b=>0x401023).(1=>2).
   92000: global: [sn:10] has 3 ready out of 4 sources. RTI 0)
   92000: system.cpu.iew: Setting Destination Register 44 (integer)
@@ -1546,22 +1558,22 @@ wbActual:3
   93000: system.cpu.iq: Waking up a dependent instruction, [sn:19] PC (0x401038=>0x40103c).(1=>2).
   93000: global: [sn:19] has 6 ready out of 7 sources. RTI 0)
   93000: system.cpu.iq: Waking up a dependent instruction, [sn:14] PC (0x40102e=>0x401032).(0=>1).
-  93000: global: [sn:14] has 3 ready out of 3 sources. RTI 0)
+  93000: global: [sn:14] has 4 ready out of 4 sources. RTI 0)
   93000: system.cpu.iq: Checking if memory instruction can issue.
   93000: system.cpu.memDep0: Marking registers as ready for instruction PC (0x40102e=>0x401032).(0=>1) [sn:14].
   93000: system.cpu.memDep0: Instruction PC 0x40102e [sn:14] still waiting on memory dependency.
   93000: system.cpu.iq: Waking up a dependent instruction, [sn:13] PC (0x40102a=>0x40102e).(0=>1).
-  93000: global: [sn:13] has 3 ready out of 3 sources. RTI 0)
+  93000: global: [sn:13] has 4 ready out of 4 sources. RTI 0)
   93000: system.cpu.iq: Checking if memory instruction can issue.
   93000: system.cpu.memDep0: Marking registers as ready for instruction PC (0x40102a=>0x40102e).(0=>1) [sn:13].
   93000: system.cpu.memDep0: Instruction PC 0x40102a [sn:13] still waiting on memory dependency.
   93000: system.cpu.iq: Waking up a dependent instruction, [sn:12] PC (0x401026=>0x40102a).(0=>1).
-  93000: global: [sn:12] has 3 ready out of 3 sources. RTI 0)
+  93000: global: [sn:12] has 4 ready out of 4 sources. RTI 0)
   93000: system.cpu.iq: Checking if memory instruction can issue.
   93000: system.cpu.memDep0: Marking registers as ready for instruction PC (0x401026=>0x40102a).(0=>1) [sn:12].
   93000: system.cpu.memDep0: Instruction PC 0x401026 [sn:12] still waiting on memory dependency.
   93000: system.cpu.iq: Waking up a dependent instruction, [sn:11] PC (0x401023=>0x401026).(0=>1).
-  93000: global: [sn:11] has 3 ready out of 3 sources. RTI 0)
+  93000: global: [sn:11] has 4 ready out of 4 sources. RTI 0)
   93000: system.cpu.iq: Checking if memory instruction can issue.
   93000: system.cpu.memDep0: Marking registers as ready for instruction PC (0x401023=>0x401026).(0=>1) [sn:11].
   93000: system.cpu.memDep0: Instruction PC 0x401023 [sn:11] still waiting on memory dependency.
@@ -1892,6 +1904,7 @@ O3CPU: Ticking main, O3CPU.
   95000: system.cpu.iew: Execute: Executing instructions from IQ.
   95000: system.cpu.iew: Execute: Processing PC (0x401023=>0x401026).(0=>1), [tid:0] [sn:11].
   95000: system.cpu.iew: Execute: Calculating address for memory reference.
+  95000: global: RegFile: Access to int register 41, has data 0x5
   95000: system.cpu.iew.lsq.thread0: Executing load PC (0x401023=>0x401026).(0=>1), [sn:11]
   95000: global: RegFile: Access to int register 40, has data 0x7fffffffee10
   95000: system.cpu.iew.lsq.thread0: Read called, load idx: 0, store idx: 5, storeHead: 0 addr: 0x2e10
@@ -1899,6 +1912,7 @@ O3CPU: Ticking main, O3CPU.
   95000: system.cpu.iew: Execute: Executing instructions from IQ.
   95000: system.cpu.iew: Execute: Processing PC (0x401026=>0x40102a).(0=>1), [tid:0] [sn:12].
   95000: system.cpu.iew: Execute: Calculating address for memory reference.
+  95000: global: RegFile: Access to int register 42, has data 0xa
   95000: system.cpu.iew.lsq.thread0: Executing load PC (0x401026=>0x40102a).(0=>1), [sn:12]
   95000: global: RegFile: Access to int register 40, has data 0x7fffffffee10
   95000: system.cpu.iew.lsq.thread0: Read called, load idx: 1, store idx: 5, storeHead: 0 addr: 0x2e14
@@ -1906,6 +1920,7 @@ O3CPU: Ticking main, O3CPU.
   95000: system.cpu.iew: Execute: Executing instructions from IQ.
   95000: system.cpu.iew: Execute: Processing PC (0x40102a=>0x40102e).(0=>1), [tid:0] [sn:13].
   95000: system.cpu.iew: Execute: Calculating address for memory reference.
+  95000: global: RegFile: Access to int register 42, has data 0xa
   95000: system.cpu.iew.lsq.thread0: Executing load PC (0x40102a=>0x40102e).(0=>1), [sn:13]
   95000: global: RegFile: Access to int register 40, has data 0x7fffffffee10
   95000: system.cpu.iew.lsq.thread0: Read called, load idx: 2, store idx: 5, storeHead: 0 addr: 0x2e18
@@ -1920,6 +1935,7 @@ wbActual:0
   95000: system.cpu.iew: Execute: Executing instructions from IQ.
   95000: system.cpu.iew: Execute: Processing PC (0x40102e=>0x401032).(0=>1), [tid:0] [sn:14].
   95000: system.cpu.iew: Execute: Calculating address for memory reference.
+  95000: global: RegFile: Access to int register 44, has data 0x14
   95000: system.cpu.iew.lsq.thread0: Executing load PC (0x40102e=>0x401032).(0=>1), [sn:14]
   95000: global: RegFile: Access to int register 40, has data 0x7fffffffee10
   95000: system.cpu.iew.lsq.thread0: Read called, load idx: 3, store idx: 5, storeHead: 0 addr: 0x2e1c
@@ -2145,11 +2161,38 @@ O3CPU: Ticking main, O3CPU.
   97000: system.cpu.commit: [tid:0] [sn:4] Committing instruction with PC (0x401004=>0x40100b).(1=>2)
   97000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x401004=>0x40100b).(1=>2), [sn:4]
   97000: system.cpu: Removing committed instruction [tid:0] PC (0x401004=>0x40100b).(1=>2) [sn:4]
-  97000: system.cpu.commit: MEM_TRACE_FILE environment variable not set. No predictions loaded.
+  97000: global: MEM_TRACE_FILE environment variable not set. No predictions loaded.
+  97000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:5]
+  97000: system.cpu.commit: [tid:0] [sn:5] Committing instruction with PC (0x40100b=>0x401013).(0=>1)
+  97000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x40100b=>0x401013).(0=>1), [sn:5]
+  97000: system.cpu: Removing committed instruction [tid:0] PC (0x40100b=>0x401013).(0=>1) [sn:5]
+  97000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:6]
+  97000: system.cpu.commit: [tid:0] [sn:6] Committing instruction with PC (0x40100b=>0x401013).(1=>2)
+  97000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x40100b=>0x401013).(1=>2), [sn:6]
+  97000: system.cpu: Removing committed instruction [tid:0] PC (0x40100b=>0x401013).(1=>2) [sn:6]
+  97000: global: MEM_TRACE_FILE environment variable not set. No predictions loaded.
+  97000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:7]
+  97000: system.cpu.commit: [tid:0] [sn:7] Committing instruction with PC (0x401013=>0x40101b).(0=>1)
+  97000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x401013=>0x40101b).(0=>1), [sn:7]
+  97000: system.cpu: Removing committed instruction [tid:0] PC (0x401013=>0x40101b).(0=>1) [sn:7]
+  97000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:8]
+  97000: system.cpu.commit: [tid:0] [sn:8] Committing instruction with PC (0x401013=>0x40101b).(1=>2)
+  97000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x401013=>0x40101b).(1=>2), [sn:8]
+  97000: system.cpu: Removing committed instruction [tid:0] PC (0x401013=>0x40101b).(1=>2) [sn:8]
+  97000: global: MEM_TRACE_FILE environment variable not set. No predictions loaded.
+  97000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:9]
+  97000: system.cpu.commit: [tid:0] [sn:9] Committing instruction with PC (0x40101b=>0x401023).(0=>1)
+  97000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x40101b=>0x401023).(0=>1), [sn:9]
+  97000: system.cpu: Removing committed instruction [tid:0] PC (0x40101b=>0x401023).(0=>1) [sn:9]
+  97000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:10]
+  97000: system.cpu.commit: [tid:0] [sn:10] Committing instruction with PC (0x40101b=>0x401023).(1=>2)
+  97000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x40101b=>0x401023).(1=>2), [sn:10]
+  97000: system.cpu: Removing committed instruction [tid:0] PC (0x40101b=>0x401023).(1=>2) [sn:10]
+  97000: global: MEM_TRACE_FILE environment variable not set. No predictions loaded.
   97000: system.cpu.commit: [tid:0] Marking PC (0x401026=>0x40102a).(0=>1), [sn:12] ready within ROB.
   97000: system.cpu.commit: [tid:0] Marking PC (0x401023=>0x401026).(0=>1), [sn:11] ready within ROB.
-  97000: system.cpu.commit: [tid:0] Instruction [sn:5] PC (0x40100b=>0x401013).(0=>1) is head of ROB and ready to commit
-  97000: system.cpu.commit: [tid:0] ROB has 16 insts & 902 free entries.
+  97000: system.cpu.commit: [tid:0] Instruction [sn:11] PC (0x401023=>0x401026).(0=>1) is head of ROB and ready to commit
+  97000: system.cpu.commit: [tid:0] ROB has 10 insts & 908 free entries.
   97000: system.cpu.commit: Activity This Cycle.
 O3PipeView:fetch:87000:0x00401004:0:3:  MOV_M_I : limm   t1d, 0x5
 O3PipeView:decode:88000
@@ -2169,6 +2212,12 @@ O3PipeView:retire:94000:store:0
   97000: global: DynInst: [sn:1] Instruction destroyed. Instcount for system.cpu = 18
   97000: system.cpu: Activity: 12
   97000: system.cpu: Removing instruction, [tid:0] [sn:4] PC (0x401004=>0x40100b).(1=>2)
+  97000: system.cpu: Removing instruction, [tid:0] [sn:5] PC (0x40100b=>0x401013).(0=>1)
+  97000: system.cpu: Removing instruction, [tid:0] [sn:6] PC (0x40100b=>0x401013).(1=>2)
+  97000: system.cpu: Removing instruction, [tid:0] [sn:7] PC (0x401013=>0x40101b).(0=>1)
+  97000: system.cpu: Removing instruction, [tid:0] [sn:8] PC (0x401013=>0x40101b).(1=>2)
+  97000: system.cpu: Removing instruction, [tid:0] [sn:9] PC (0x40101b=>0x401023).(0=>1)
+  97000: system.cpu: Removing instruction, [tid:0] [sn:10] PC (0x40101b=>0x401023).(1=>2)
   97000: system.cpu: Scheduling next tick!
   98000: system.cpu: 
 
@@ -2189,7 +2238,7 @@ O3CPU: Ticking main, O3CPU.
   98000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
   98000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
   98000: system.cpu.rename: Processing [tid:0]
-  98000: system.cpu.rename: [tid:0] Free IQ: 559, Free ROB: 902, Free LQ: 130, Free SQ: 68, FreeRM 127(866 870 917 1834 127 8 4577)
+  98000: system.cpu.rename: [tid:0] Free IQ: 559, Free ROB: 908, Free LQ: 130, Free SQ: 68, FreeRM 127(866 870 917 1834 127 8 4577)
   98000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
   98000: system.cpu.rename: [tid:0] Attempting to free phys regs of misspeculated instructions.
   98000: system.cpu.rename: [tid:0] Successfully freed phys reg 54 (54) from misspeculated instruction with sequence number 20.
@@ -2212,8 +2261,13 @@ O3CPU: Ticking main, O3CPU.
   98000: system.cpu.rename: [tid:0] Done squashing, switching to running.
   98000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
   98000: system.cpu.rename: [tid:0] Nothing to do, breaking out early.
-  98000: system.cpu.rename: [tid:0] Removing a committed instruction from the history buffer 0 (size=5), until [sn:4].
-  98000: system.cpu.rename: [tid:0] [sn:4] Old sequence number encountered. Ensure that a syscall happened recently.
+  98000: system.cpu.rename: [tid:0] Removing a committed instruction from the history buffer 0 (size=5), until [sn:10].
+  98000: system.cpu.rename: [tid:0] Freeing older rename of reg 41 (41), [sn:5].
+  98000: system.cpu.rename: [tid:0] Successfully freed phys reg 41 (41) from history buffer.
+  98000: system.cpu.rename: [tid:0] Freeing older rename of reg 42 (42), [sn:7].
+  98000: system.cpu.rename: [tid:0] Successfully freed phys reg 42 (42) from history buffer.
+  98000: system.cpu.rename: [tid:0] Freeing older rename of reg 43 (43), [sn:9].
+  98000: system.cpu.rename: [tid:0] Successfully freed phys reg 43 (43) from history buffer.
   98000: system.cpu.iew: Issue: Processing [tid:0]
   98000: system.cpu.iew: [tid:0] Done squashing, switching to running.
   98000: system.cpu.iew: [tid:0] Not blocked, so attempting to run dispatch.
@@ -2221,7 +2275,34 @@ O3CPU: Ticking main, O3CPU.
   98000: system.cpu.iq: Not able to schedule any instructions.
   98000: system.cpu.iew: Processing [tid:0]
   98000: system.cpu.iew.lsq.thread0: Marking store as able to write back, PC (0x401004=>0x40100b).(1=>2) [sn:4]
-  98000: system.cpu.iq: [tid:0] Committing instructions older than [sn:4]
+  98000: system.cpu.iew.lsq.thread0: Marking store as able to write back, PC (0x40100b=>0x401013).(1=>2) [sn:6]
+  98000: system.cpu.iew.lsq.thread0: Marking store as able to write back, PC (0x401013=>0x40101b).(1=>2) [sn:8]
+  98000: system.cpu.iew.lsq.thread0: Marking store as able to write back, PC (0x40101b=>0x401023).(1=>2) [sn:10]
+  98000: system.cpu.iq: [tid:0] Committing instructions older than [sn:10]
+O3PipeView:fetch:87000:0x0040100b:0:5:  MOV_M_I : limm   t1d, 0xa
+O3PipeView:decode:88000
+O3PipeView:rename:89000
+O3PipeView:dispatch:91000
+O3PipeView:issue:91000
+O3PipeView:complete:92000
+O3PipeView:retire:97000:store:0
+  98000: global: DynInst: [sn:5] Instruction destroyed. Instcount for system.cpu = 17
+O3PipeView:fetch:87000:0x00401013:0:7:  MOV_M_I : limm   t1d, 0xf
+O3PipeView:decode:88000
+O3PipeView:rename:89000
+O3PipeView:dispatch:91000
+O3PipeView:issue:91000
+O3PipeView:complete:92000
+O3PipeView:retire:97000:store:0
+  98000: global: DynInst: [sn:7] Instruction destroyed. Instcount for system.cpu = 16
+O3PipeView:fetch:87000:0x0040101b:0:9:  MOV_M_I : limm   t1d, 0x14
+O3PipeView:decode:88000
+O3PipeView:rename:89000
+O3PipeView:dispatch:91000
+O3PipeView:issue:91000
+O3PipeView:complete:92000
+O3PipeView:retire:97000:store:0
+  98000: global: DynInst: [sn:9] Instruction destroyed. Instcount for system.cpu = 15
   98000: system.cpu.iew: [tid:0], Dispatch dispatched 0 instructions.
   98000: system.cpu.iew.lsq.thread0: SQ size: 72, #stores occupied: 4
   98000: system.cpu.iew.lsq.thread0: LQ size: 132, #loads occupied: 2
@@ -2231,19 +2312,55 @@ O3CPU: Ticking main, O3CPU.
   98000: system.cpu: Activity: 12
   98000: system.cpu.commit: Getting instructions from Rename stage.
   98000: system.cpu.commit: Trying to commit instructions in the ROB.
-  98000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:5]
-  98000: system.cpu.commit: [tid:0] [sn:5] Committing instruction with PC (0x40100b=>0x401013).(0=>1)
-  98000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x40100b=>0x401013).(0=>1), [sn:5]
-  98000: system.cpu: Removing committed instruction [tid:0] PC (0x40100b=>0x401013).(0=>1) [sn:5]
-  98000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:6]
-  98000: system.cpu.commit: [tid:0] [sn:6] Committing instruction with PC (0x40100b=>0x401013).(1=>2)
-  98000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x40100b=>0x401013).(1=>2), [sn:6]
-  98000: system.cpu: Removing committed instruction [tid:0] PC (0x40100b=>0x401013).(1=>2) [sn:6]
-  98000: system.cpu.commit: MEM_TRACE_FILE environment variable not set. No predictions loaded.
-  98000: system.cpu.commit: [tid:0] Instruction [sn:7] PC (0x401013=>0x40101b).(0=>1) is head of ROB and ready to commit
-  98000: system.cpu.commit: [tid:0] ROB has 14 insts & 904 free entries.
+  98000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:11]
+  98000: global: RegFile: Access to int register 45, has data 0x5
+  98000: system.cpu.commit: [tid:0] [sn:11] Committing instruction with PC (0x401023=>0x401026).(0=>1)
+  98000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x401023=>0x401026).(0=>1), [sn:11]
+  98000: system.cpu: Removing committed instruction [tid:0] PC (0x401023=>0x401026).(0=>1) [sn:11]
+  98000: global: MEM_TRACE_FILE environment variable not set. No predictions loaded.
+  98000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
+  98000: global: RegFile: Access to int register 46, has data 0xa
+  98000: system.cpu.commit: [tid:0] [sn:12] Committing instruction with PC (0x401026=>0x40102a).(0=>1)
+  98000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x401026=>0x40102a).(0=>1), [sn:12]
+  98000: system.cpu: Removing committed instruction [tid:0] PC (0x401026=>0x40102a).(0=>1) [sn:12]
+  98000: global: MEM_TRACE_FILE environment variable not set. No predictions loaded.
+  98000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:13]
+  98000: system.cpu.commit: Retiring squashed instruction from ROB.
+  98000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x40102a=>0x40102e).(0=>1), [sn:13]
+  98000: system.cpu: Removing committed instruction [tid:0] PC (0x40102a=>0x40102e).(0=>1) [sn:13]
+  98000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:14]
+  98000: system.cpu.commit: Retiring squashed instruction from ROB.
+  98000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x40102e=>0x401032).(0=>1), [sn:14]
+  98000: system.cpu: Removing committed instruction [tid:0] PC (0x40102e=>0x401032).(0=>1) [sn:14]
+  98000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:15]
+  98000: system.cpu.commit: Retiring squashed instruction from ROB.
+  98000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x401032=>0x401034).(0=>1), [sn:15]
+  98000: system.cpu: Removing committed instruction [tid:0] PC (0x401032=>0x401034).(0=>1) [sn:15]
+  98000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:16]
+  98000: system.cpu.commit: Retiring squashed instruction from ROB.
+  98000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x401034=>0x401036).(0=>1), [sn:16]
+  98000: system.cpu: Removing committed instruction [tid:0] PC (0x401034=>0x401036).(0=>1) [sn:16]
+  98000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:17]
+  98000: system.cpu.commit: Retiring squashed instruction from ROB.
+  98000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x401036=>0x401038).(0=>1), [sn:17]
+  98000: system.cpu: Removing committed instruction [tid:0] PC (0x401036=>0x401038).(0=>1) [sn:17]
+  98000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:18]
+  98000: system.cpu.commit: Retiring squashed instruction from ROB.
+  98000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x401038=>0x40103c).(0=>1), [sn:18]
+  98000: system.cpu: Removing committed instruction [tid:0] PC (0x401038=>0x40103c).(0=>1) [sn:18]
+  98000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:19]
+  98000: system.cpu.commit: Retiring squashed instruction from ROB.
+  98000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x401038=>0x40103c).(1=>2), [sn:19]
+  98000: system.cpu: Removing committed instruction [tid:0] PC (0x401038=>0x40103c).(1=>2) [sn:19]
+  98000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:20]
+  98000: system.cpu.commit: Retiring squashed instruction from ROB.
+  98000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x40103c=>0x40103e).(0=>1), [sn:20]
+  98000: system.cpu: Removing committed instruction [tid:0] PC (0x40103c=>0x40103e).(0=>1) [sn:20]
+  98000: system.cpu.commit: [tid:0] ROB has 0 insts & 918 free entries.
   98000: system.cpu.commit: Activity This Cycle.
   98000: system.cpu: Activity: 13
+  98000: system.cpu.commit: Deactivating stage.
+  98000: system.cpu: Activity: 12
 O3PipeView:fetch:87000:0x00401000:1:2:  SUB_R_I : sub   rsp, rsp, t1
 O3PipeView:decode:88000
 O3PipeView:rename:89000
@@ -2251,10 +2368,42 @@ O3PipeView:dispatch:91000
 O3PipeView:issue:92000
 O3PipeView:complete:93000
 O3PipeView:retire:95000:store:0
-  98000: global: DynInst: [sn:2] Instruction destroyed. Instcount for system.cpu = 17
-  98000: system.cpu: Activity: 12
-  98000: system.cpu: Removing instruction, [tid:0] [sn:5] PC (0x40100b=>0x401013).(0=>1)
-  98000: system.cpu: Removing instruction, [tid:0] [sn:6] PC (0x40100b=>0x401013).(1=>2)
+  98000: global: DynInst: [sn:2] Instruction destroyed. Instcount for system.cpu = 14
+  98000: system.cpu: Activity: 11
+  98000: system.cpu: Removing instruction, [tid:0] [sn:11] PC (0x401023=>0x401026).(0=>1)
+  98000: system.cpu: Removing instruction, [tid:0] [sn:12] PC (0x401026=>0x40102a).(0=>1)
+  98000: system.cpu: Removing instruction, [tid:0] [sn:13] PC (0x40102a=>0x40102e).(0=>1)
+  98000: system.cpu: Removing instruction, [tid:0] [sn:14] PC (0x40102e=>0x401032).(0=>1)
+  98000: system.cpu: Removing instruction, [tid:0] [sn:15] PC (0x401032=>0x401034).(0=>1)
+O3PipeView:fetch:88000:0x00401032:0:15:  ADD_R_R : add   esi, esi, eax
+O3PipeView:decode:89000
+O3PipeView:rename:90000
+O3PipeView:dispatch:92000
+O3PipeView:issue:92000
+O3PipeView:complete:93000
+O3PipeView:retire:0:store:0
+  98000: global: DynInst: [sn:15] Instruction destroyed. Instcount for system.cpu = 13
+  98000: system.cpu: Removing instruction, [tid:0] [sn:16] PC (0x401034=>0x401036).(0=>1)
+O3PipeView:fetch:88000:0x00401034:0:16:  ADD_R_R : add   edx, edx, ecx
+O3PipeView:decode:89000
+O3PipeView:rename:90000
+O3PipeView:dispatch:92000
+O3PipeView:issue:92000
+O3PipeView:complete:93000
+O3PipeView:retire:0:store:0
+  98000: global: DynInst: [sn:16] Instruction destroyed. Instcount for system.cpu = 12
+  98000: system.cpu: Removing instruction, [tid:0] [sn:17] PC (0x401036=>0x401038).(0=>1)
+  98000: system.cpu: Removing instruction, [tid:0] [sn:18] PC (0x401038=>0x40103c).(0=>1)
+O3PipeView:fetch:88000:0x00401038:0:18:  ADD_R_I : limm   t1, 0x10
+O3PipeView:decode:89000
+O3PipeView:rename:90000
+O3PipeView:dispatch:92000
+O3PipeView:issue:92000
+O3PipeView:complete:93000
+O3PipeView:retire:0:store:0
+  98000: global: DynInst: [sn:18] Instruction destroyed. Instcount for system.cpu = 11
+  98000: system.cpu: Removing instruction, [tid:0] [sn:19] PC (0x401038=>0x40103c).(1=>2)
+  98000: system.cpu: Removing instruction, [tid:0] [sn:20] PC (0x40103c=>0x40103e).(0=>1)
   98000: system.cpu: Scheduling next tick!
   99000: system.cpu: 
 
@@ -2266,64 +2415,62 @@ O3CPU: Ticking main, O3CPU.
   99000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
   99000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
   99000: system.cpu.rename: Processing [tid:0]
-  99000: system.cpu.rename: [tid:0] Free IQ: 559, Free ROB: 904, Free LQ: 130, Free SQ: 68, FreeRM 127(874 870 917 1834 127 8 4585)
+  99000: system.cpu.rename: [tid:0] Free IQ: 559, Free ROB: 918, Free LQ: 130, Free SQ: 68, FreeRM 127(877 870 917 1834 127 8 4585)
   99000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
   99000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 130, loadsInProgress: 0, loads dispatchedToLQ: 0
   99000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
   99000: system.cpu.rename: [tid:0] Nothing to do, breaking out early.
-  99000: system.cpu.rename: [tid:0] Removing a committed instruction from the history buffer 0 (size=5), until [sn:6].
-  99000: system.cpu.rename: [tid:0] Freeing older rename of reg 41 (41), [sn:5].
-  99000: system.cpu.rename: [tid:0] Successfully freed phys reg 41 (41) from history buffer.
+  99000: system.cpu.rename: [tid:0] Removing a committed instruction from the history buffer 0 (size=2), until [sn:12].
+  99000: system.cpu.rename: [tid:0] Freeing older rename of reg 0 (0), [sn:11].
+  99000: system.cpu.rename: [tid:0] Successfully freed phys reg 0 (0) from history buffer.
+  99000: system.cpu.rename: [tid:0] Freeing older rename of reg 6 (6), [sn:12].
+  99000: system.cpu.rename: [tid:0] Successfully freed phys reg 6 (6) from history buffer.
   99000: system.cpu.iew: Issue: Processing [tid:0]
   99000: system.cpu.iew: [tid:0] Not blocked, so attempting to run dispatch.
   99000: system.cpu.iq: Attempting to schedule ready instructions from the IQ.
   99000: system.cpu.iq: Not able to schedule any instructions.
-  99000: system.cpu.iew.lsq: [tid:0] Writing back stores. 1 stores available for Writeback.
+  99000: system.cpu.iew.lsq: [tid:0] Writing back stores. 4 stores available for Writeback.
   99000: system.cpu.iew.lsq.thread0: D-Cache: Writing back store idx:1 PC:(0x401004=>0x40100b).(1=>2) to Addr:0x2e10, data:0x5 [sn:4]
   99000: system.cpu.iew.lsq.thread0: Memory request (pkt: WriteReq [2e10:2e13]) from inst [sn:4] was sent (cache is blocked: 0, cache_got_blocked: 0)
   99000: system.cpu.iew: Processing [tid:0]
-  99000: system.cpu.iew.lsq.thread0: Marking store as able to write back, PC (0x40100b=>0x401013).(1=>2) [sn:6]
-  99000: system.cpu.iq: [tid:0] Committing instructions older than [sn:6]
-O3PipeView:fetch:87000:0x0040100b:0:5:  MOV_M_I : limm   t1d, 0xa
-O3PipeView:decode:88000
-O3PipeView:rename:89000
-O3PipeView:dispatch:91000
-O3PipeView:issue:91000
-O3PipeView:complete:92000
-O3PipeView:retire:98000:store:0
-  99000: global: DynInst: [sn:5] Instruction destroyed. Instcount for system.cpu = 16
-  99000: system.cpu.iew.lsq.thread0: LQ size: 132, #loads occupied: 2
+  99000: system.cpu.iew.lsq.thread0: Committing head load instruction, PC (0x401023=>0x401026).(0=>1)
+  99000: system.cpu.iew.lsq.thread0: Committing head load instruction, PC (0x401026=>0x40102a).(0=>1)
+  99000: system.cpu.iq: [tid:0] Committing instructions older than [sn:12]
+  99000: system.cpu.iew.lsq.thread0: LQ size: 132, #loads occupied: 0
   99000: system.cpu.iew.lsq.thread0: SQ size: 72, #stores occupied: 4
   99000: system.cpu.iew: [tid:0], Dispatch dispatched 0 instructions.
   99000: system.cpu.iew.lsq.thread0: SQ size: 72, #stores occupied: 4
-  99000: system.cpu.iew.lsq.thread0: LQ size: 132, #loads occupied: 2
-  99000: system.cpu.iew: IQ has 559 free entries (Can schedule: 0).  LQ has 130 free entries. SQ has 68 free entries.
+  99000: system.cpu.iew.lsq.thread0: LQ size: 132, #loads occupied: 0
+  99000: system.cpu.iew: IQ has 559 free entries (Can schedule: 0).  LQ has 132 free entries. SQ has 68 free entries.
   99000: system.cpu.iew: Activity this cycle.
-  99000: system.cpu: Activity: 13
+  99000: system.cpu: Activity: 12
   99000: system.cpu.commit: Getting instructions from Rename stage.
   99000: system.cpu.commit: Trying to commit instructions in the ROB.
-  99000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:7]
-  99000: system.cpu.commit: [tid:0] [sn:7] Committing instruction with PC (0x401013=>0x40101b).(0=>1)
-  99000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x401013=>0x40101b).(0=>1), [sn:7]
-  99000: system.cpu: Removing committed instruction [tid:0] PC (0x401013=>0x40101b).(0=>1) [sn:7]
-  99000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:8]
-  99000: system.cpu.commit: [tid:0] [sn:8] Committing instruction with PC (0x401013=>0x40101b).(1=>2)
-  99000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x401013=>0x40101b).(1=>2), [sn:8]
-  99000: system.cpu: Removing committed instruction [tid:0] PC (0x401013=>0x40101b).(1=>2) [sn:8]
-  99000: system.cpu.commit: MEM_TRACE_FILE environment variable not set. No predictions loaded.
-  99000: system.cpu.commit: [tid:0] Instruction [sn:9] PC (0x40101b=>0x401023).(0=>1) is head of ROB and ready to commit
-  99000: system.cpu.commit: [tid:0] ROB has 12 insts & 906 free entries.
-  99000: system.cpu.commit: Activity This Cycle.
-  99000: system.cpu: Activity: 12
-  99000: system.cpu: Removing instruction, [tid:0] [sn:7] PC (0x401013=>0x40101b).(0=>1)
-  99000: system.cpu: Removing instruction, [tid:0] [sn:8] PC (0x401013=>0x40101b).(1=>2)
+  99000: system.cpu.commit: [tid:0] ROB has 0 insts & 918 free entries.
+O3PipeView:fetch:88000:0x00401038:1:19:  ADD_R_I : add   rsp, rsp, t1
+O3PipeView:decode:89000
+O3PipeView:rename:90000
+O3PipeView:dispatch:92000
+O3PipeView:issue:93000
+O3PipeView:complete:94000
+O3PipeView:retire:0:store:0
+  99000: global: DynInst: [sn:19] Instruction destroyed. Instcount for system.cpu = 10
+O3PipeView:fetch:88000:0x00401036:0:17:  SUB_R_R : sub   edx, edx, esi
+O3PipeView:decode:89000
+O3PipeView:rename:90000
+O3PipeView:dispatch:92000
+O3PipeView:issue:93000
+O3PipeView:complete:94000
+O3PipeView:retire:0:store:0
+  99000: global: DynInst: [sn:17] Instruction destroyed. Instcount for system.cpu = 9
+  99000: system.cpu: Activity: 11
   99000: system.cpu: Scheduling next tick!
  100000: system.cpu.icache_port: Fetch unit received timing
  100000: system.cpu.fetch: [tid:0] Waking up from cache miss.
  100000: system.cpu: CPU already running.
  100000: system.cpu.fetch: [tid:0] Activating fetch due to cache completion
  100000: system.cpu.fetch: Activating stage.
- 100000: system.cpu: Activity: 13
+ 100000: system.cpu: Activity: 12
  100000: system.cpu: 
 
 O3CPU: Ticking main, O3CPU.
@@ -2346,7 +2493,7 @@ O3CPU: Ticking main, O3CPU.
 	displacement = 0x8
 	dispSize = 1}
 
- 100000: global: DynInst: [sn:21] Instruction created. Instcount for system.cpu = 17
+ 100000: global: DynInst: [sn:21] Instruction created. Instcount for system.cpu = 10
  100000: system.cpu.fetch: [tid:0] Instruction PC (0x40102a=>0x40102e).(0=>1) created [sn:21].
  100000: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_M : ld   ecx, SS:[t0 + rsp + 0x8]
  100000: system.cpu.fetch: [tid:0] Fetch queue entry created (1/128).
@@ -2365,7 +2512,7 @@ O3CPU: Ticking main, O3CPU.
 	displacement = 0xc
 	dispSize = 1}
 
- 100000: global: DynInst: [sn:22] Instruction created. Instcount for system.cpu = 18
+ 100000: global: DynInst: [sn:22] Instruction created. Instcount for system.cpu = 11
  100000: system.cpu.fetch: [tid:0] Instruction PC (0x40102e=>0x401032).(0=>1) created [sn:22].
  100000: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_M : ld   edx, SS:[t0 + rsp + 0xc]
  100000: system.cpu.fetch: [tid:0] Fetch queue entry created (2/128).
@@ -2384,7 +2531,7 @@ O3CPU: Ticking main, O3CPU.
 	displacement = 0
 	dispSize = 0}
 
- 100000: global: DynInst: [sn:23] Instruction created. Instcount for system.cpu = 19
+ 100000: global: DynInst: [sn:23] Instruction created. Instcount for system.cpu = 12
  100000: system.cpu.fetch: [tid:0] Instruction PC (0x401032=>0x401034).(0=>1) created [sn:23].
  100000: system.cpu.fetch: [tid:0] Instruction is:   ADD_R_R : add   esi, esi, eax
  100000: system.cpu.fetch: [tid:0] Fetch queue entry created (3/128).
@@ -2403,7 +2550,7 @@ O3CPU: Ticking main, O3CPU.
 	displacement = 0
 	dispSize = 0}
 
- 100000: global: DynInst: [sn:24] Instruction created. Instcount for system.cpu = 20
+ 100000: global: DynInst: [sn:24] Instruction created. Instcount for system.cpu = 13
  100000: system.cpu.fetch: [tid:0] Instruction PC (0x401034=>0x401036).(0=>1) created [sn:24].
  100000: system.cpu.fetch: [tid:0] Instruction is:   ADD_R_R : add   edx, edx, ecx
  100000: system.cpu.fetch: [tid:0] Fetch queue entry created (4/128).
@@ -2422,7 +2569,7 @@ O3CPU: Ticking main, O3CPU.
 	displacement = 0
 	dispSize = 0}
 
- 100000: global: DynInst: [sn:25] Instruction created. Instcount for system.cpu = 21
+ 100000: global: DynInst: [sn:25] Instruction created. Instcount for system.cpu = 14
  100000: system.cpu.fetch: [tid:0] Instruction PC (0x401036=>0x401038).(0=>1) created [sn:25].
  100000: system.cpu.fetch: [tid:0] Instruction is:   SUB_R_R : sub   edx, edx, esi
  100000: system.cpu.fetch: [tid:0] Fetch queue entry created (5/128).
@@ -2441,11 +2588,11 @@ O3CPU: Ticking main, O3CPU.
 	displacement = 0
 	dispSize = 0}
 
- 100000: global: DynInst: [sn:26] Instruction created. Instcount for system.cpu = 22
+ 100000: global: DynInst: [sn:26] Instruction created. Instcount for system.cpu = 15
  100000: system.cpu.fetch: [tid:0] Instruction PC (0x401038=>0x40103c).(0=>1) created [sn:26].
  100000: system.cpu.fetch: [tid:0] Instruction is:   ADD_R_I : limm   t1, 0x10
  100000: system.cpu.fetch: [tid:0] Fetch queue entry created (6/128).
- 100000: global: DynInst: [sn:27] Instruction created. Instcount for system.cpu = 23
+ 100000: global: DynInst: [sn:27] Instruction created. Instcount for system.cpu = 16
  100000: system.cpu.fetch: [tid:0] Instruction PC (0x401038=>0x40103c).(1=>2) created [sn:27].
  100000: system.cpu.fetch: [tid:0] Instruction is:   ADD_R_I : add   rsp, rsp, t1
  100000: system.cpu.fetch: [tid:0] Fetch queue entry created (7/128).
@@ -2464,7 +2611,7 @@ O3CPU: Ticking main, O3CPU.
 	displacement = 0
 	dispSize = 0}
 
- 100000: global: DynInst: [sn:28] Instruction created. Instcount for system.cpu = 24
+ 100000: global: DynInst: [sn:28] Instruction created. Instcount for system.cpu = 17
  100000: system.cpu.fetch: [tid:0] Instruction PC (0x40103c=>0x40103e).(0=>1) created [sn:28].
  100000: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_R : mov   edi, edi, edx
  100000: system.cpu.fetch: [tid:0] Fetch queue entry created (8/128).
@@ -2475,7 +2622,7 @@ O3CPU: Ticking main, O3CPU.
  100000: system.cpu.fetch: [tid:0] Doing Icache access.
  100000: system.cpu.fetch: [tid:0] Activity: Waiting on I-cache response.
  100000: system.cpu.fetch: Deactivating stage.
- 100000: system.cpu: Activity: 12
+ 100000: system.cpu: Activity: 11
  100000: system.cpu.fetch: [tid:0] [sn:21] Sending instruction to decode from fetch queue. Fetch queue size: 8.
  100000: system.cpu.fetch: [tid:0] [sn:22] Sending instruction to decode from fetch queue. Fetch queue size: 7.
  100000: system.cpu.fetch: [tid:0] [sn:23] Sending instruction to decode from fetch queue. Fetch queue size: 6.
@@ -2485,59 +2632,49 @@ O3CPU: Ticking main, O3CPU.
  100000: system.cpu.fetch: [tid:0] [sn:27] Sending instruction to decode from fetch queue. Fetch queue size: 2.
  100000: system.cpu.fetch: [tid:0] [sn:28] Sending instruction to decode from fetch queue. Fetch queue size: 1.
  100000: system.cpu.fetch: Activity this cycle.
- 100000: system.cpu: Activity: 13
+ 100000: system.cpu: Activity: 12
  100000: system.cpu.decode: Processing [tid:0]
  100000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  100000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  100000: system.cpu.rename: Processing [tid:0]
- 100000: system.cpu.rename: [tid:0] Free IQ: 559, Free ROB: 906, Free LQ: 130, Free SQ: 68, FreeRM 127(875 870 917 1834 127 8 4585)
+ 100000: system.cpu.rename: [tid:0] Free IQ: 559, Free ROB: 918, Free LQ: 132, Free SQ: 68, FreeRM 127(879 870 917 1834 127 8 4585)
  100000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
- 100000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 130, loadsInProgress: 0, loads dispatchedToLQ: 0
+ 100000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 132, loadsInProgress: 0, loads dispatchedToLQ: 0
  100000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
  100000: system.cpu.rename: [tid:0] Nothing to do, breaking out early.
- 100000: system.cpu.rename: [tid:0] Removing a committed instruction from the history buffer 0 (size=4), until [sn:8].
- 100000: system.cpu.rename: [tid:0] Freeing older rename of reg 42 (42), [sn:7].
- 100000: system.cpu.rename: [tid:0] Successfully freed phys reg 42 (42) from history buffer.
  100000: system.cpu.iew: Issue: Processing [tid:0]
  100000: system.cpu.iew: [tid:0] Not blocked, so attempting to run dispatch.
  100000: system.cpu.iq: Attempting to schedule ready instructions from the IQ.
  100000: system.cpu.iq: Not able to schedule any instructions.
- 100000: system.cpu.iew.lsq: [tid:0] Writing back stores. 2 stores available for Writeback.
+ 100000: system.cpu.iew.lsq: [tid:0] Writing back stores. 4 stores available for Writeback.
  100000: system.cpu.iew: Processing [tid:0]
- 100000: system.cpu.iew.lsq.thread0: Marking store as able to write back, PC (0x401013=>0x40101b).(1=>2) [sn:8]
- 100000: system.cpu.iq: [tid:0] Committing instructions older than [sn:8]
-O3PipeView:fetch:87000:0x00401013:0:7:  MOV_M_I : limm   t1d, 0xf
-O3PipeView:decode:88000
-O3PipeView:rename:89000
-O3PipeView:dispatch:91000
-O3PipeView:issue:91000
-O3PipeView:complete:92000
-O3PipeView:retire:99000:store:0
- 100000: global: DynInst: [sn:7] Instruction destroyed. Instcount for system.cpu = 23
- 100000: system.cpu.iew.lsq.thread0: LQ size: 132, #loads occupied: 2
+ 100000: system.cpu.iew.lsq.thread0: LQ size: 132, #loads occupied: 0
  100000: system.cpu.iew.lsq.thread0: SQ size: 72, #stores occupied: 4
  100000: system.cpu.iew: [tid:0], Dispatch dispatched 0 instructions.
  100000: system.cpu.iew.lsq.thread0: SQ size: 72, #stores occupied: 4
- 100000: system.cpu.iew.lsq.thread0: LQ size: 132, #loads occupied: 2
- 100000: system.cpu.iew: IQ has 559 free entries (Can schedule: 0).  LQ has 130 free entries. SQ has 68 free entries.
+ 100000: system.cpu.iew.lsq.thread0: LQ size: 132, #loads occupied: 0
+ 100000: system.cpu.iew: IQ has 559 free entries (Can schedule: 0).  LQ has 132 free entries. SQ has 68 free entries.
  100000: system.cpu.iew: Activity this cycle.
  100000: system.cpu.commit: Getting instructions from Rename stage.
  100000: system.cpu.commit: Trying to commit instructions in the ROB.
- 100000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:9]
- 100000: system.cpu.commit: [tid:0] [sn:9] Committing instruction with PC (0x40101b=>0x401023).(0=>1)
- 100000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x40101b=>0x401023).(0=>1), [sn:9]
- 100000: system.cpu: Removing committed instruction [tid:0] PC (0x40101b=>0x401023).(0=>1) [sn:9]
- 100000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:10]
- 100000: system.cpu.commit: [tid:0] [sn:10] Committing instruction with PC (0x40101b=>0x401023).(1=>2)
- 100000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x40101b=>0x401023).(1=>2), [sn:10]
- 100000: system.cpu: Removing committed instruction [tid:0] PC (0x40101b=>0x401023).(1=>2) [sn:10]
- 100000: system.cpu.commit: MEM_TRACE_FILE environment variable not set. No predictions loaded.
- 100000: system.cpu.commit: [tid:0] Instruction [sn:11] PC (0x401023=>0x401026).(0=>1) is head of ROB and ready to commit
- 100000: system.cpu.commit: [tid:0] ROB has 10 insts & 908 free entries.
- 100000: system.cpu.commit: Activity This Cycle.
- 100000: system.cpu: Activity: 12
- 100000: system.cpu: Removing instruction, [tid:0] [sn:9] PC (0x40101b=>0x401023).(0=>1)
- 100000: system.cpu: Removing instruction, [tid:0] [sn:10] PC (0x40101b=>0x401023).(1=>2)
+ 100000: system.cpu.commit: [tid:0] ROB has 0 insts & 918 free entries.
+O3PipeView:fetch:88000:0x0040103c:0:20:  MOV_R_R : mov   edi, edi, edx
+O3PipeView:decode:89000
+O3PipeView:rename:90000
+O3PipeView:dispatch:92000
+O3PipeView:issue:94000
+O3PipeView:complete:95000
+O3PipeView:retire:0:store:0
+ 100000: global: DynInst: [sn:20] Instruction destroyed. Instcount for system.cpu = 16
+O3PipeView:fetch:88000:0x0040102a:0:13:  MOV_R_M : ld   ecx, SS:[t0 + rsp + 0x8]
+O3PipeView:decode:89000
+O3PipeView:rename:90000
+O3PipeView:dispatch:92000
+O3PipeView:issue:94000
+O3PipeView:complete:95000
+O3PipeView:retire:0:store:0
+ 100000: global: DynInst: [sn:13] Instruction destroyed. Instcount for system.cpu = 15
+ 100000: system.cpu: Activity: 11
  100000: system.cpu: Scheduling next tick!
  101000: system.cpu: 
 
@@ -2557,53 +2694,51 @@ O3CPU: Ticking main, O3CPU.
  101000: system.cpu.decode: [tid:0] Processing instruction [sn:27] with PC (0x401038=>0x40103c).(1=>2)
  101000: system.cpu.decode: [tid:0] Processing instruction [sn:28] with PC (0x40103c=>0x40103e).(0=>1)
  101000: system.cpu.decode: Activity this cycle.
- 101000: system.cpu: Activity: 13
+ 101000: system.cpu: Activity: 12
  101000: system.cpu.rename: Processing [tid:0]
- 101000: system.cpu.rename: [tid:0] Free IQ: 559, Free ROB: 908, Free LQ: 130, Free SQ: 68, FreeRM 127(876 870 917 1834 127 8 4585)
+ 101000: system.cpu.rename: [tid:0] Free IQ: 559, Free ROB: 918, Free LQ: 132, Free SQ: 68, FreeRM 127(879 870 917 1834 127 8 4585)
  101000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
- 101000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 130, loadsInProgress: 0, loads dispatchedToLQ: 0
+ 101000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 132, loadsInProgress: 0, loads dispatchedToLQ: 0
  101000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
  101000: system.cpu.rename: [tid:0] Nothing to do, breaking out early.
- 101000: system.cpu.rename: [tid:0] Removing a committed instruction from the history buffer 0 (size=3), until [sn:10].
- 101000: system.cpu.rename: [tid:0] Freeing older rename of reg 43 (43), [sn:9].
- 101000: system.cpu.rename: [tid:0] Successfully freed phys reg 43 (43) from history buffer.
  101000: system.cpu.iew: Issue: Processing [tid:0]
  101000: system.cpu.iew: [tid:0] Not blocked, so attempting to run dispatch.
  101000: system.cpu.iq: Attempting to schedule ready instructions from the IQ.
  101000: system.cpu.iq: Not able to schedule any instructions.
- 101000: system.cpu.iew.lsq: [tid:0] Writing back stores. 3 stores available for Writeback.
+ 101000: system.cpu.iew.lsq: [tid:0] Writing back stores. 4 stores available for Writeback.
  101000: system.cpu.iew: Processing [tid:0]
- 101000: system.cpu.iew.lsq.thread0: Marking store as able to write back, PC (0x40101b=>0x401023).(1=>2) [sn:10]
- 101000: system.cpu.iq: [tid:0] Committing instructions older than [sn:10]
-O3PipeView:fetch:87000:0x0040101b:0:9:  MOV_M_I : limm   t1d, 0x14
-O3PipeView:decode:88000
-O3PipeView:rename:89000
-O3PipeView:dispatch:91000
-O3PipeView:issue:91000
-O3PipeView:complete:92000
-O3PipeView:retire:100000:store:0
- 101000: global: DynInst: [sn:9] Instruction destroyed. Instcount for system.cpu = 22
- 101000: system.cpu.iew.lsq.thread0: LQ size: 132, #loads occupied: 2
- 101000: system.cpu.iew.lsq.thread0: SQ size: 72, #stores occupied: 4
  101000: system.cpu.iew: [tid:0], Dispatch dispatched 0 instructions.
  101000: system.cpu.iew.lsq.thread0: SQ size: 72, #stores occupied: 4
- 101000: system.cpu.iew.lsq.thread0: LQ size: 132, #loads occupied: 2
- 101000: system.cpu.iew: IQ has 559 free entries (Can schedule: 0).  LQ has 130 free entries. SQ has 68 free entries.
- 101000: system.cpu.iew: Activity this cycle.
+ 101000: system.cpu.iew.lsq.thread0: LQ size: 132, #loads occupied: 0
+ 101000: system.cpu.iew: IQ has 559 free entries (Can schedule: 0).  LQ has 132 free entries. SQ has 68 free entries.
  101000: system.cpu.commit: Getting instructions from Rename stage.
  101000: system.cpu.commit: Trying to commit instructions in the ROB.
- 101000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:11]
- 101000: global: RegFile: Access to int register 45, has data 0x5
- 101000: global: RegFile: Access to int register 41, has data 0x5
- 101000: system.cpu.commit: [tid:0] [sn:11] Committing instruction with PC (0x401023=>0x401026).(0=>1)
- 101000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x401023=>0x401026).(0=>1), [sn:11]
- 101000: system.cpu: Removing committed instruction [tid:0] PC (0x401023=>0x401026).(0=>1) [sn:11]
- 101000: system.cpu.commit: MEM_TRACE_FILE environment variable not set. No predictions loaded.
- 101000: system.cpu.commit: [tid:0] Instruction [sn:12] PC (0x401026=>0x40102a).(0=>1) is head of ROB and ready to commit
- 101000: system.cpu.commit: [tid:0] ROB has 9 insts & 909 free entries.
- 101000: system.cpu.commit: Activity This Cycle.
- 101000: system.cpu: Activity: 12
- 101000: system.cpu: Removing instruction, [tid:0] [sn:11] PC (0x401023=>0x401026).(0=>1)
+ 101000: system.cpu.commit: [tid:0] ROB has 0 insts & 918 free entries.
+O3PipeView:fetch:88000:0x00401023:0:11:  MOV_R_M : ld   eax, SS:[t0 + rsp]
+O3PipeView:decode:89000
+O3PipeView:rename:90000
+O3PipeView:dispatch:92000
+O3PipeView:issue:94000
+O3PipeView:complete:95000
+O3PipeView:retire:98000:store:0
+ 101000: global: DynInst: [sn:11] Instruction destroyed. Instcount for system.cpu = 14
+O3PipeView:fetch:88000:0x00401026:0:12:  MOV_R_M : ld   esi, SS:[t0 + rsp + 0x4]
+O3PipeView:decode:89000
+O3PipeView:rename:90000
+O3PipeView:dispatch:92000
+O3PipeView:issue:94000
+O3PipeView:complete:95000
+O3PipeView:retire:98000:store:0
+ 101000: global: DynInst: [sn:12] Instruction destroyed. Instcount for system.cpu = 13
+O3PipeView:fetch:88000:0x0040102e:0:14:  MOV_R_M : ld   edx, SS:[t0 + rsp + 0xc]
+O3PipeView:decode:89000
+O3PipeView:rename:90000
+O3PipeView:dispatch:92000
+O3PipeView:issue:94000
+O3PipeView:complete:95000
+O3PipeView:retire:0:store:0
+ 101000: global: DynInst: [sn:14] Instruction destroyed. Instcount for system.cpu = 12
+ 101000: system.cpu: Activity: 11
  101000: system.cpu: Scheduling next tick!
  102000: system.cpu: 
 
@@ -2615,14 +2750,14 @@ O3CPU: Ticking main, O3CPU.
  102000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  102000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  102000: system.cpu.rename: Processing [tid:0]
- 102000: system.cpu.rename: [tid:0] Free IQ: 559, Free ROB: 909, Free LQ: 130, Free SQ: 68, FreeRM 127(877 870 917 1834 127 8 4585)
+ 102000: system.cpu.rename: [tid:0] Free IQ: 559, Free ROB: 918, Free LQ: 132, Free SQ: 68, FreeRM 127(879 870 917 1834 127 8 4585)
  102000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
- 102000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 130, loadsInProgress: 0, loads dispatchedToLQ: 0
+ 102000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 132, loadsInProgress: 0, loads dispatchedToLQ: 0
  102000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
  102000: system.cpu.rename: [tid:0] 8 available instructions to send iew.
  102000: system.cpu.rename: [tid:0] 0 insts pipelining from Rename | 0 insts dispatched to IQ last cycle.
  102000: system.cpu.rename: [tid:0] Sending instructions to IEW.
- 102000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 130, loadsInProgress: 0, loads dispatchedToLQ: 0
+ 102000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 132, loadsInProgress: 0, loads dispatchedToLQ: 0
  102000: system.cpu.rename: [tid:0] Processing instruction [sn:21] with PC (0x40102a=>0x40102e).(0=>1).
  102000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid) (bypassed: no)
  102000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
@@ -2637,7 +2772,7 @@ O3CPU: Ticking main, O3CPU.
  102000: system.cpu.rename: [tid:0] Querying SMB Predictor for load [sn:21] with PC (0x40102a=>0x40102e).(0=>1).
  102000: system.cpu.rename: [tid:0] Renaming arch reg 1 (integer) to physical reg 55 (55).
  102000: system.cpu.rename: [tid:0] Sending instructions to IEW.
- 102000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 130, loadsInProgress: 1, loads dispatchedToLQ: 0
+ 102000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 132, loadsInProgress: 1, loads dispatchedToLQ: 0
  102000: system.cpu.rename: [tid:0] Processing instruction [sn:22] with PC (0x40102e=>0x401032).(0=>1).
  102000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid) (bypassed: no)
  102000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
@@ -2791,47 +2926,21 @@ O3CPU: Ticking main, O3CPU.
  102000: global: Renamed reg rdi (7) to physical reg 62 (62) old mapping was 7 (7)
  102000: system.cpu.rename: [tid:0] Renaming arch reg 7 (integer) to physical reg 62 (62).
  102000: system.cpu.rename: Activity this cycle.
- 102000: system.cpu: Activity: 13
- 102000: system.cpu.rename: [tid:0] Removing a committed instruction from the history buffer 0 (size=30), until [sn:11].
- 102000: system.cpu.rename: [tid:0] Freeing older rename of reg 0 (0), [sn:11].
- 102000: system.cpu.rename: [tid:0] Successfully freed phys reg 0 (0) from history buffer.
+ 102000: system.cpu: Activity: 12
  102000: system.cpu.iew: Issue: Processing [tid:0]
  102000: system.cpu.iew: [tid:0] Not blocked, so attempting to run dispatch.
  102000: system.cpu.iq: Attempting to schedule ready instructions from the IQ.
  102000: system.cpu.iq: Not able to schedule any instructions.
  102000: system.cpu.iew.lsq: [tid:0] Writing back stores. 4 stores available for Writeback.
  102000: system.cpu.iew: Processing [tid:0]
- 102000: system.cpu.iew.lsq.thread0: Committing head load instruction, PC (0x401023=>0x401026).(0=>1)
- 102000: system.cpu.iq: [tid:0] Committing instructions older than [sn:11]
-O3PipeView:fetch:88000:0x00401023:0:11:  MOV_R_M : ld   eax, SS:[t0 + rsp]
-O3PipeView:decode:89000
-O3PipeView:rename:90000
-O3PipeView:dispatch:92000
-O3PipeView:issue:94000
-O3PipeView:complete:95000
-O3PipeView:retire:101000:store:0
- 102000: global: DynInst: [sn:11] Instruction destroyed. Instcount for system.cpu = 21
- 102000: system.cpu.iew.lsq.thread0: LQ size: 132, #loads occupied: 1
- 102000: system.cpu.iew.lsq.thread0: SQ size: 72, #stores occupied: 4
  102000: system.cpu.iew: [tid:0], Dispatch dispatched 0 instructions.
  102000: system.cpu.iew.lsq.thread0: SQ size: 72, #stores occupied: 4
- 102000: system.cpu.iew.lsq.thread0: LQ size: 132, #loads occupied: 1
- 102000: system.cpu.iew: IQ has 559 free entries (Can schedule: 0).  LQ has 131 free entries. SQ has 68 free entries.
- 102000: system.cpu.iew: Activity this cycle.
+ 102000: system.cpu.iew.lsq.thread0: LQ size: 132, #loads occupied: 0
+ 102000: system.cpu.iew: IQ has 559 free entries (Can schedule: 0).  LQ has 132 free entries. SQ has 68 free entries.
  102000: system.cpu.commit: Getting instructions from Rename stage.
  102000: system.cpu.commit: Trying to commit instructions in the ROB.
- 102000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:12]
- 102000: global: RegFile: Access to int register 46, has data 0xa
- 102000: global: RegFile: Access to int register 42, has data 0xa
- 102000: system.cpu.commit: [tid:0] [sn:12] Committing instruction with PC (0x401026=>0x40102a).(0=>1)
- 102000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x401026=>0x40102a).(0=>1), [sn:12]
- 102000: system.cpu: Removing committed instruction [tid:0] PC (0x401026=>0x40102a).(0=>1) [sn:12]
- 102000: system.cpu.commit: MEM_TRACE_FILE environment variable not set. No predictions loaded.
- 102000: system.cpu.commit: [tid:0] Instruction [sn:13] PC (0x40102a=>0x40102e).(0=>1) is head of ROB and ready to commit
- 102000: system.cpu.commit: [tid:0] ROB has 8 insts & 910 free entries.
- 102000: system.cpu.commit: Activity This Cycle.
- 102000: system.cpu: Activity: 12
- 102000: system.cpu: Removing instruction, [tid:0] [sn:12] PC (0x401026=>0x40102a).(0=>1)
+ 102000: system.cpu.commit: [tid:0] ROB has 0 insts & 918 free entries.
+ 102000: system.cpu: Activity: 11
  102000: system.cpu: Scheduling next tick!
  103000: system.cpu: 
 
@@ -2843,174 +2952,52 @@ O3CPU: Ticking main, O3CPU.
  103000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  103000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  103000: system.cpu.rename: Processing [tid:0]
- 103000: system.cpu.rename: [tid:0] Free IQ: 559, Free ROB: 910, Free LQ: 131, Free SQ: 68, FreeRM 127(870 870 917 1834 127 8 4577)
+ 103000: system.cpu.rename: [tid:0] Free IQ: 559, Free ROB: 918, Free LQ: 132, Free SQ: 68, FreeRM 127(871 870 917 1834 127 8 4577)
  103000: system.cpu.rename: [tid:0] 8 instructions not yet in ROB
- 103000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 131, loadsInProgress: 2, loads dispatchedToLQ: 0
+ 103000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 132, loadsInProgress: 2, loads dispatchedToLQ: 0
  103000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
  103000: system.cpu.rename: [tid:0] Nothing to do, breaking out early.
- 103000: system.cpu.rename: [tid:0] Removing a committed instruction from the history buffer 0 (size=29), until [sn:12].
- 103000: system.cpu.rename: [tid:0] Freeing older rename of reg 6 (6), [sn:12].
- 103000: system.cpu.rename: [tid:0] Successfully freed phys reg 6 (6) from history buffer.
  103000: system.cpu.iew: Issue: Processing [tid:0]
  103000: system.cpu.iew: [tid:0] Not blocked, so attempting to run dispatch.
  103000: system.cpu.iq: Attempting to schedule ready instructions from the IQ.
  103000: system.cpu.iq: Not able to schedule any instructions.
  103000: system.cpu.iew.lsq: [tid:0] Writing back stores. 4 stores available for Writeback.
  103000: system.cpu.iew: Processing [tid:0]
- 103000: system.cpu.iew.lsq.thread0: Committing head load instruction, PC (0x401026=>0x40102a).(0=>1)
- 103000: system.cpu.iq: [tid:0] Committing instructions older than [sn:12]
-O3PipeView:fetch:88000:0x00401026:0:12:  MOV_R_M : ld   esi, SS:[t0 + rsp + 0x4]
-O3PipeView:decode:89000
-O3PipeView:rename:90000
-O3PipeView:dispatch:92000
-O3PipeView:issue:94000
-O3PipeView:complete:95000
-O3PipeView:retire:102000:store:0
- 103000: global: DynInst: [sn:12] Instruction destroyed. Instcount for system.cpu = 20
- 103000: system.cpu.iew.lsq.thread0: LQ size: 132, #loads occupied: 0
- 103000: system.cpu.iew.lsq.thread0: SQ size: 72, #stores occupied: 4
  103000: system.cpu.iew: [tid:0], Dispatch dispatched 0 instructions.
  103000: system.cpu.iew.lsq.thread0: SQ size: 72, #stores occupied: 4
  103000: system.cpu.iew.lsq.thread0: LQ size: 132, #loads occupied: 0
  103000: system.cpu.iew: IQ has 559 free entries (Can schedule: 0).  LQ has 132 free entries. SQ has 68 free entries.
- 103000: system.cpu.iew: Activity this cycle.
- 103000: system.cpu: Activity: 13
  103000: system.cpu.commit: Getting instructions from Rename stage.
  103000: system.cpu.commit: [tid:0] [sn:21] Inserting PC (0x40102a=>0x40102e).(0=>1) into ROB.
  103000: system.cpu.rob: Adding inst PC (0x40102a=>0x40102e).(0=>1) to the ROB.
- 103000: system.cpu.rob: [tid:0] Now has 9 instructions.
+ 103000: system.cpu.rob: [tid:0] Now has 1 instructions.
  103000: system.cpu.commit: [tid:0] [sn:22] Inserting PC (0x40102e=>0x401032).(0=>1) into ROB.
  103000: system.cpu.rob: Adding inst PC (0x40102e=>0x401032).(0=>1) to the ROB.
- 103000: system.cpu.rob: [tid:0] Now has 10 instructions.
+ 103000: system.cpu.rob: [tid:0] Now has 2 instructions.
  103000: system.cpu.commit: [tid:0] [sn:23] Inserting PC (0x401032=>0x401034).(0=>1) into ROB.
  103000: system.cpu.rob: Adding inst PC (0x401032=>0x401034).(0=>1) to the ROB.
- 103000: system.cpu.rob: [tid:0] Now has 11 instructions.
+ 103000: system.cpu.rob: [tid:0] Now has 3 instructions.
  103000: system.cpu.commit: [tid:0] [sn:24] Inserting PC (0x401034=>0x401036).(0=>1) into ROB.
  103000: system.cpu.rob: Adding inst PC (0x401034=>0x401036).(0=>1) to the ROB.
- 103000: system.cpu.rob: [tid:0] Now has 12 instructions.
+ 103000: system.cpu.rob: [tid:0] Now has 4 instructions.
  103000: system.cpu.commit: [tid:0] [sn:25] Inserting PC (0x401036=>0x401038).(0=>1) into ROB.
  103000: system.cpu.rob: Adding inst PC (0x401036=>0x401038).(0=>1) to the ROB.
- 103000: system.cpu.rob: [tid:0] Now has 13 instructions.
+ 103000: system.cpu.rob: [tid:0] Now has 5 instructions.
  103000: system.cpu.commit: [tid:0] [sn:26] Inserting PC (0x401038=>0x40103c).(0=>1) into ROB.
  103000: system.cpu.rob: Adding inst PC (0x401038=>0x40103c).(0=>1) to the ROB.
- 103000: system.cpu.rob: [tid:0] Now has 14 instructions.
+ 103000: system.cpu.rob: [tid:0] Now has 6 instructions.
  103000: system.cpu.commit: [tid:0] [sn:27] Inserting PC (0x401038=>0x40103c).(1=>2) into ROB.
  103000: system.cpu.rob: Adding inst PC (0x401038=>0x40103c).(1=>2) to the ROB.
- 103000: system.cpu.rob: [tid:0] Now has 15 instructions.
+ 103000: system.cpu.rob: [tid:0] Now has 7 instructions.
  103000: system.cpu.commit: [tid:0] [sn:28] Inserting PC (0x40103c=>0x40103e).(0=>1) into ROB.
  103000: system.cpu.rob: Adding inst PC (0x40103c=>0x40103e).(0=>1) to the ROB.
- 103000: system.cpu.rob: [tid:0] Now has 16 instructions.
+ 103000: system.cpu.rob: [tid:0] Now has 8 instructions.
  103000: system.cpu.commit: Trying to commit instructions in the ROB.
- 103000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:13]
- 103000: system.cpu.commit: Retiring squashed instruction from ROB.
- 103000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x40102a=>0x40102e).(0=>1), [sn:13]
- 103000: system.cpu: Removing committed instruction [tid:0] PC (0x40102a=>0x40102e).(0=>1) [sn:13]
- 103000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:14]
- 103000: system.cpu.commit: Retiring squashed instruction from ROB.
- 103000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x40102e=>0x401032).(0=>1), [sn:14]
- 103000: system.cpu: Removing committed instruction [tid:0] PC (0x40102e=>0x401032).(0=>1) [sn:14]
- 103000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:15]
- 103000: system.cpu.commit: Retiring squashed instruction from ROB.
- 103000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x401032=>0x401034).(0=>1), [sn:15]
- 103000: system.cpu: Removing committed instruction [tid:0] PC (0x401032=>0x401034).(0=>1) [sn:15]
- 103000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:16]
- 103000: system.cpu.commit: Retiring squashed instruction from ROB.
- 103000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x401034=>0x401036).(0=>1), [sn:16]
- 103000: system.cpu: Removing committed instruction [tid:0] PC (0x401034=>0x401036).(0=>1) [sn:16]
- 103000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:17]
- 103000: system.cpu.commit: Retiring squashed instruction from ROB.
- 103000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x401036=>0x401038).(0=>1), [sn:17]
- 103000: system.cpu: Removing committed instruction [tid:0] PC (0x401036=>0x401038).(0=>1) [sn:17]
- 103000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:18]
- 103000: system.cpu.commit: Retiring squashed instruction from ROB.
- 103000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x401038=>0x40103c).(0=>1), [sn:18]
- 103000: system.cpu: Removing committed instruction [tid:0] PC (0x401038=>0x40103c).(0=>1) [sn:18]
- 103000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:19]
- 103000: system.cpu.commit: Retiring squashed instruction from ROB.
- 103000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x401038=>0x40103c).(1=>2), [sn:19]
- 103000: system.cpu: Removing committed instruction [tid:0] PC (0x401038=>0x40103c).(1=>2) [sn:19]
- 103000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:20]
- 103000: system.cpu.commit: Retiring squashed instruction from ROB.
- 103000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x40103c=>0x40103e).(0=>1), [sn:20]
- 103000: system.cpu: Removing committed instruction [tid:0] PC (0x40103c=>0x40103e).(0=>1) [sn:20]
  103000: system.cpu.commit: [tid:0] Can't commit, Instruction [sn:21] PC (0x40102a=>0x40102e).(0=>1) is head of ROB and not ready
  103000: system.cpu.commit: [tid:0] ROB has 8 insts & 910 free entries.
  103000: system.cpu.commit: Activity This Cycle.
- 103000: system.cpu.commit: Deactivating stage.
  103000: system.cpu: Activity: 12
  103000: system.cpu: Activity: 11
- 103000: system.cpu: Removing instruction, [tid:0] [sn:13] PC (0x40102a=>0x40102e).(0=>1)
-O3PipeView:fetch:88000:0x0040102a:0:13:  MOV_R_M : ld   ecx, SS:[t0 + rsp + 0x8]
-O3PipeView:decode:89000
-O3PipeView:rename:90000
-O3PipeView:dispatch:92000
-O3PipeView:issue:94000
-O3PipeView:complete:95000
-O3PipeView:retire:0:store:0
- 103000: global: DynInst: [sn:13] Instruction destroyed. Instcount for system.cpu = 19
- 103000: system.cpu: Removing instruction, [tid:0] [sn:14] PC (0x40102e=>0x401032).(0=>1)
-O3PipeView:fetch:88000:0x0040102e:0:14:  MOV_R_M : ld   edx, SS:[t0 + rsp + 0xc]
-O3PipeView:decode:89000
-O3PipeView:rename:90000
-O3PipeView:dispatch:92000
-O3PipeView:issue:94000
-O3PipeView:complete:95000
-O3PipeView:retire:0:store:0
- 103000: global: DynInst: [sn:14] Instruction destroyed. Instcount for system.cpu = 18
- 103000: system.cpu: Removing instruction, [tid:0] [sn:15] PC (0x401032=>0x401034).(0=>1)
-O3PipeView:fetch:88000:0x00401032:0:15:  ADD_R_R : add   esi, esi, eax
-O3PipeView:decode:89000
-O3PipeView:rename:90000
-O3PipeView:dispatch:92000
-O3PipeView:issue:92000
-O3PipeView:complete:93000
-O3PipeView:retire:0:store:0
- 103000: global: DynInst: [sn:15] Instruction destroyed. Instcount for system.cpu = 17
- 103000: system.cpu: Removing instruction, [tid:0] [sn:16] PC (0x401034=>0x401036).(0=>1)
-O3PipeView:fetch:88000:0x00401034:0:16:  ADD_R_R : add   edx, edx, ecx
-O3PipeView:decode:89000
-O3PipeView:rename:90000
-O3PipeView:dispatch:92000
-O3PipeView:issue:92000
-O3PipeView:complete:93000
-O3PipeView:retire:0:store:0
- 103000: global: DynInst: [sn:16] Instruction destroyed. Instcount for system.cpu = 16
- 103000: system.cpu: Removing instruction, [tid:0] [sn:17] PC (0x401036=>0x401038).(0=>1)
-O3PipeView:fetch:88000:0x00401036:0:17:  SUB_R_R : sub   edx, edx, esi
-O3PipeView:decode:89000
-O3PipeView:rename:90000
-O3PipeView:dispatch:92000
-O3PipeView:issue:93000
-O3PipeView:complete:94000
-O3PipeView:retire:0:store:0
- 103000: global: DynInst: [sn:17] Instruction destroyed. Instcount for system.cpu = 15
- 103000: system.cpu: Removing instruction, [tid:0] [sn:18] PC (0x401038=>0x40103c).(0=>1)
-O3PipeView:fetch:88000:0x00401038:0:18:  ADD_R_I : limm   t1, 0x10
-O3PipeView:decode:89000
-O3PipeView:rename:90000
-O3PipeView:dispatch:92000
-O3PipeView:issue:92000
-O3PipeView:complete:93000
-O3PipeView:retire:0:store:0
- 103000: global: DynInst: [sn:18] Instruction destroyed. Instcount for system.cpu = 14
- 103000: system.cpu: Removing instruction, [tid:0] [sn:19] PC (0x401038=>0x40103c).(1=>2)
-O3PipeView:fetch:88000:0x00401038:1:19:  ADD_R_I : add   rsp, rsp, t1
-O3PipeView:decode:89000
-O3PipeView:rename:90000
-O3PipeView:dispatch:92000
-O3PipeView:issue:93000
-O3PipeView:complete:94000
-O3PipeView:retire:0:store:0
- 103000: global: DynInst: [sn:19] Instruction destroyed. Instcount for system.cpu = 13
- 103000: system.cpu: Removing instruction, [tid:0] [sn:20] PC (0x40103c=>0x40103e).(0=>1)
-O3PipeView:fetch:88000:0x0040103c:0:20:  MOV_R_R : mov   edi, edi, edx
-O3PipeView:decode:89000
-O3PipeView:rename:90000
-O3PipeView:dispatch:92000
-O3PipeView:issue:94000
-O3PipeView:complete:95000
-O3PipeView:retire:0:store:0
- 103000: global: DynInst: [sn:20] Instruction destroyed. Instcount for system.cpu = 12
  103000: system.cpu: Scheduling next tick!
  104000: system.cpu: 
 
@@ -3075,13 +3062,10 @@ O3CPU: Ticking main, O3CPU.
  104000: system.cpu: Activity: 12
  104000: system.cpu.iew.lsq: [tid:0] Writing back stores. 4 stores available for Writeback.
  104000: system.cpu.iew: Processing [tid:0]
- 104000: system.cpu.iew.lsq.thread0: LQ size: 132, #loads occupied: 2
- 104000: system.cpu.iew.lsq.thread0: SQ size: 72, #stores occupied: 4
  104000: system.cpu.iew: [tid:0], Dispatch dispatched 8 instructions.
  104000: system.cpu.iew.lsq.thread0: SQ size: 72, #stores occupied: 4
  104000: system.cpu.iew.lsq.thread0: LQ size: 132, #loads occupied: 2
  104000: system.cpu.iew: IQ has 553 free entries (Can schedule: 0).  LQ has 130 free entries. SQ has 68 free entries.
- 104000: system.cpu.iew: Activity this cycle.
  104000: system.cpu.commit: Getting instructions from Rename stage.
  104000: system.cpu.commit: Trying to commit instructions in the ROB.
  104000: system.cpu.commit: [tid:0] Can't commit, Instruction [sn:21] PC (0x40102a=>0x40102e).(0=>1) is head of ROB and not ready
@@ -3098,9 +3082,9 @@ O3CPU: Ticking main, O3CPU.
  105000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  105000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  105000: system.cpu.rename: Processing [tid:0]
- 105000: system.cpu.rename: [tid:0] Free IQ: 553, Free ROB: 910, Free LQ: 130, Free SQ: 68, FreeRM 127(871 870 917 1834 127 8 4577)
+ 105000: system.cpu.rename: [tid:0] Free IQ: 559, Free ROB: 910, Free LQ: 132, Free SQ: 68, FreeRM 127(871 870 917 1834 127 8 4577)
  105000: system.cpu.rename: [tid:0] 8 instructions not yet in ROB
- 105000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 130, loadsInProgress: 2, loads dispatchedToLQ: 2
+ 105000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 132, loadsInProgress: 2, loads dispatchedToLQ: 2
  105000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
  105000: system.cpu.rename: [tid:0] Nothing to do, breaking out early.
  105000: system.cpu.iew: Issue: Processing [tid:0]
@@ -3410,13 +3394,24 @@ wbActual:0
  108000: system.cpu.commit: [tid:0] [sn:21] Committing instruction with PC (0x40102a=>0x40102e).(0=>1)
  108000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x40102a=>0x40102e).(0=>1), [sn:21]
  108000: system.cpu: Removing committed instruction [tid:0] PC (0x40102a=>0x40102e).(0=>1) [sn:21]
- 108000: system.cpu.commit: MEM_TRACE_FILE environment variable not set. No predictions loaded.
+ 108000: global: MEM_TRACE_FILE environment variable not set. No predictions loaded.
+ 108000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:22]
+ 108000: system.cpu.commit: [tid:0] [sn:22] Committing instruction with PC (0x40102e=>0x401032).(0=>1)
+ 108000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x40102e=>0x401032).(0=>1), [sn:22]
+ 108000: system.cpu: Removing committed instruction [tid:0] PC (0x40102e=>0x401032).(0=>1) [sn:22]
+ 108000: global: MEM_TRACE_FILE environment variable not set. No predictions loaded.
+ 108000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:23]
+ 108000: system.cpu.commit: [tid:0] [sn:23] Committing instruction with PC (0x401032=>0x401034).(0=>1)
+ 108000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x401032=>0x401034).(0=>1), [sn:23]
+ 108000: system.cpu: Removing committed instruction [tid:0] PC (0x401032=>0x401034).(0=>1) [sn:23]
  108000: system.cpu.commit: [tid:0] Marking PC (0x401034=>0x401036).(0=>1), [sn:24] ready within ROB.
- 108000: system.cpu.commit: [tid:0] Instruction [sn:22] PC (0x40102e=>0x401032).(0=>1) is head of ROB and ready to commit
- 108000: system.cpu.commit: [tid:0] ROB has 7 insts & 911 free entries.
+ 108000: system.cpu.commit: [tid:0] Instruction [sn:24] PC (0x401034=>0x401036).(0=>1) is head of ROB and ready to commit
+ 108000: system.cpu.commit: [tid:0] ROB has 5 insts & 913 free entries.
  108000: system.cpu.commit: Activity This Cycle.
  108000: system.cpu: Activity: 12
  108000: system.cpu: Removing instruction, [tid:0] [sn:21] PC (0x40102a=>0x40102e).(0=>1)
+ 108000: system.cpu: Removing instruction, [tid:0] [sn:22] PC (0x40102e=>0x401032).(0=>1)
+ 108000: system.cpu: Removing instruction, [tid:0] [sn:23] PC (0x401032=>0x401034).(0=>1)
  108000: system.cpu: Scheduling next tick!
  109000: system.cpu: 
 
@@ -3428,14 +3423,25 @@ O3CPU: Ticking main, O3CPU.
  109000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  109000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  109000: system.cpu.rename: Processing [tid:0]
- 109000: system.cpu.rename: [tid:0] Free IQ: 559, Free ROB: 911, Free LQ: 130, Free SQ: 68, FreeRM 127(871 870 917 1834 127 8 4577)
+ 109000: system.cpu.rename: [tid:0] Free IQ: 559, Free ROB: 913, Free LQ: 130, Free SQ: 68, FreeRM 127(871 870 917 1834 127 8 4577)
  109000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  109000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 130, loadsInProgress: 0, loads dispatchedToLQ: 0
  109000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
  109000: system.cpu.rename: [tid:0] Nothing to do, breaking out early.
- 109000: system.cpu.rename: [tid:0] Removing a committed instruction from the history buffer 0 (size=28), until [sn:21].
+ 109000: system.cpu.rename: [tid:0] Removing a committed instruction from the history buffer 0 (size=28), until [sn:23].
  109000: system.cpu.rename: [tid:0] Freeing older rename of reg 1 (1), [sn:21].
  109000: system.cpu.rename: [tid:0] Successfully freed phys reg 1 (1) from history buffer.
+ 109000: system.cpu.rename: [tid:0] Freeing older rename of reg 2 (2), [sn:22].
+ 109000: system.cpu.rename: [tid:0] Successfully freed phys reg 2 (2) from history buffer.
+ 109000: system.cpu.rename: [tid:0] Freeing older rename of reg 46 (46), [sn:23].
+ 109000: system.cpu.rename: [tid:0] Successfully freed phys reg 46 (46) from history buffer.
+ 109000: system.cpu.rename: [tid:0] Freeing older rename of reg 5 (4731), [sn:23].
+ 109000: system.cpu.rename: [tid:0] Successfully freed phys reg 5 (4731) from history buffer.
+ 109000: system.cpu.rename: [tid:0] Freeing older rename of reg 6 (4732), [sn:23].
+ 109000: system.cpu.rename: [tid:0] Successfully freed phys reg 6 (4732) from history buffer.
+ 109000: system.cpu.rename: [tid:0] Freeing older rename of reg 4294967295 (4294967295), [sn:23].
+ 109000: system.cpu.rename: [tid:0] Freeing older rename of reg 4294967295 (4294967295), [sn:23].
+ 109000: system.cpu.rename: [tid:0] Freeing older rename of reg 4294967295 (4294967295), [sn:23].
  109000: system.cpu.iew: Issue: Processing [tid:0]
  109000: system.cpu.iew: [tid:0] Not blocked, so attempting to run dispatch.
  109000: system.cpu.iew: Execute: Executing instructions from IQ.
@@ -3456,27 +3462,27 @@ wbActual:0
  109000: system.cpu.iew.lsq: [tid:0] Writing back stores. 4 stores available for Writeback.
  109000: system.cpu.iew: Processing [tid:0]
  109000: system.cpu.iew.lsq.thread0: Committing head load instruction, PC (0x40102a=>0x40102e).(0=>1)
- 109000: system.cpu.iq: [tid:0] Committing instructions older than [sn:21]
- 109000: system.cpu.iew.lsq.thread0: LQ size: 132, #loads occupied: 1
+ 109000: system.cpu.iew.lsq.thread0: Committing head load instruction, PC (0x40102e=>0x401032).(0=>1)
+ 109000: system.cpu.iq: [tid:0] Committing instructions older than [sn:23]
+ 109000: system.cpu.iew.lsq.thread0: LQ size: 132, #loads occupied: 0
  109000: system.cpu.iew.lsq.thread0: SQ size: 72, #stores occupied: 4
  109000: system.cpu.iew: [tid:0], Dispatch dispatched 0 instructions.
  109000: system.cpu.iew.lsq.thread0: SQ size: 72, #stores occupied: 4
- 109000: system.cpu.iew.lsq.thread0: LQ size: 132, #loads occupied: 1
- 109000: system.cpu.iew: IQ has 559 free entries (Can schedule: 0).  LQ has 131 free entries. SQ has 68 free entries.
+ 109000: system.cpu.iew.lsq.thread0: LQ size: 132, #loads occupied: 0
+ 109000: system.cpu.iew: IQ has 559 free entries (Can schedule: 0).  LQ has 132 free entries. SQ has 68 free entries.
  109000: system.cpu.iew: Activity this cycle.
  109000: system.cpu.commit: Getting instructions from Rename stage.
  109000: system.cpu.commit: Trying to commit instructions in the ROB.
- 109000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:22]
- 109000: system.cpu.commit: [tid:0] [sn:22] Committing instruction with PC (0x40102e=>0x401032).(0=>1)
- 109000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x40102e=>0x401032).(0=>1), [sn:22]
- 109000: system.cpu: Removing committed instruction [tid:0] PC (0x40102e=>0x401032).(0=>1) [sn:22]
- 109000: system.cpu.commit: MEM_TRACE_FILE environment variable not set. No predictions loaded.
+ 109000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:24]
+ 109000: system.cpu.commit: [tid:0] [sn:24] Committing instruction with PC (0x401034=>0x401036).(0=>1)
+ 109000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x401034=>0x401036).(0=>1), [sn:24]
+ 109000: system.cpu: Removing committed instruction [tid:0] PC (0x401034=>0x401036).(0=>1) [sn:24]
  109000: system.cpu.commit: [tid:0] Marking PC (0x401036=>0x401038).(0=>1), [sn:25] ready within ROB.
- 109000: system.cpu.commit: [tid:0] Instruction [sn:23] PC (0x401032=>0x401034).(0=>1) is head of ROB and ready to commit
- 109000: system.cpu.commit: [tid:0] ROB has 6 insts & 912 free entries.
+ 109000: system.cpu.commit: [tid:0] Instruction [sn:25] PC (0x401036=>0x401038).(0=>1) is head of ROB and ready to commit
+ 109000: system.cpu.commit: [tid:0] ROB has 4 insts & 914 free entries.
  109000: system.cpu.commit: Activity This Cycle.
  109000: system.cpu: Activity: 12
- 109000: system.cpu: Removing instruction, [tid:0] [sn:22] PC (0x40102e=>0x401032).(0=>1)
+ 109000: system.cpu: Removing instruction, [tid:0] [sn:24] PC (0x401034=>0x401036).(0=>1)
  109000: system.cpu: Scheduling next tick!
  110000: system.cpu: 
 
@@ -3488,22 +3494,28 @@ O3CPU: Ticking main, O3CPU.
  110000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  110000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  110000: system.cpu.rename: Processing [tid:0]
- 110000: system.cpu.rename: [tid:0] Free IQ: 559, Free ROB: 912, Free LQ: 131, Free SQ: 68, FreeRM 127(872 870 917 1834 127 8 4577)
+ 110000: system.cpu.rename: [tid:0] Free IQ: 559, Free ROB: 914, Free LQ: 132, Free SQ: 68, FreeRM 127(874 870 917 1834 127 8 4579)
  110000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
- 110000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 131, loadsInProgress: 0, loads dispatchedToLQ: 0
+ 110000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 132, loadsInProgress: 0, loads dispatchedToLQ: 0
  110000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
  110000: system.cpu.rename: [tid:0] Nothing to do, breaking out early.
- 110000: system.cpu.rename: [tid:0] Removing a committed instruction from the history buffer 0 (size=27), until [sn:22].
- 110000: system.cpu.rename: [tid:0] Freeing older rename of reg 2 (2), [sn:22].
- 110000: system.cpu.rename: [tid:0] Successfully freed phys reg 2 (2) from history buffer.
+ 110000: system.cpu.rename: [tid:0] Removing a committed instruction from the history buffer 0 (size=20), until [sn:24].
+ 110000: system.cpu.rename: [tid:0] Freeing older rename of reg 56 (56), [sn:24].
+ 110000: system.cpu.rename: [tid:0] Successfully freed phys reg 56 (56) from history buffer.
+ 110000: system.cpu.rename: [tid:0] Freeing older rename of reg 15 (4741), [sn:24].
+ 110000: system.cpu.rename: [tid:0] Successfully freed phys reg 15 (4741) from history buffer.
+ 110000: system.cpu.rename: [tid:0] Freeing older rename of reg 16 (4742), [sn:24].
+ 110000: system.cpu.rename: [tid:0] Successfully freed phys reg 16 (4742) from history buffer.
+ 110000: system.cpu.rename: [tid:0] Freeing older rename of reg 4294967295 (4294967295), [sn:24].
+ 110000: system.cpu.rename: [tid:0] Freeing older rename of reg 4294967295 (4294967295), [sn:24].
+ 110000: system.cpu.rename: [tid:0] Freeing older rename of reg 4294967295 (4294967295), [sn:24].
  110000: system.cpu.iew: Issue: Processing [tid:0]
  110000: system.cpu.iew: [tid:0] Not blocked, so attempting to run dispatch.
  110000: system.cpu.iq: Attempting to schedule ready instructions from the IQ.
  110000: system.cpu.iq: Not able to schedule any instructions.
  110000: system.cpu.iew.lsq: [tid:0] Writing back stores. 4 stores available for Writeback.
  110000: system.cpu.iew: Processing [tid:0]
- 110000: system.cpu.iew.lsq.thread0: Committing head load instruction, PC (0x40102e=>0x401032).(0=>1)
- 110000: system.cpu.iq: [tid:0] Committing instructions older than [sn:22]
+ 110000: system.cpu.iq: [tid:0] Committing instructions older than [sn:24]
  110000: system.cpu.iew.lsq.thread0: LQ size: 132, #loads occupied: 0
  110000: system.cpu.iew.lsq.thread0: SQ size: 72, #stores occupied: 4
  110000: system.cpu.iew: [tid:0], Dispatch dispatched 0 instructions.
@@ -3514,14 +3526,6 @@ O3CPU: Ticking main, O3CPU.
  110000: system.cpu: Activity: 13
  110000: system.cpu.commit: Getting instructions from Rename stage.
  110000: system.cpu.commit: Trying to commit instructions in the ROB.
- 110000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:23]
- 110000: system.cpu.commit: [tid:0] [sn:23] Committing instruction with PC (0x401032=>0x401034).(0=>1)
- 110000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x401032=>0x401034).(0=>1), [sn:23]
- 110000: system.cpu: Removing committed instruction [tid:0] PC (0x401032=>0x401034).(0=>1) [sn:23]
- 110000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:24]
- 110000: system.cpu.commit: [tid:0] [sn:24] Committing instruction with PC (0x401034=>0x401036).(0=>1)
- 110000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x401034=>0x401036).(0=>1), [sn:24]
- 110000: system.cpu: Removing committed instruction [tid:0] PC (0x401034=>0x401036).(0=>1) [sn:24]
  110000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:25]
  110000: system.cpu.commit: [tid:0] [sn:25] Committing instruction with PC (0x401036=>0x401038).(0=>1)
  110000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x401036=>0x401038).(0=>1), [sn:25]
@@ -3538,9 +3542,15 @@ O3CPU: Ticking main, O3CPU.
  110000: system.cpu.commit: [tid:0] Instruction [sn:28] PC (0x40103c=>0x40103e).(0=>1) is head of ROB and ready to commit
  110000: system.cpu.commit: [tid:0] ROB has 1 insts & 917 free entries.
  110000: system.cpu.commit: Activity This Cycle.
+O3PipeView:fetch:100000:0x00401032:0:23:  ADD_R_R : add   esi, esi, eax
+O3PipeView:decode:101000
+O3PipeView:rename:102000
+O3PipeView:dispatch:104000
+O3PipeView:issue:104000
+O3PipeView:complete:105000
+O3PipeView:retire:108000:store:0
+ 110000: global: DynInst: [sn:23] Instruction destroyed. Instcount for system.cpu = 11
  110000: system.cpu: Activity: 12
- 110000: system.cpu: Removing instruction, [tid:0] [sn:23] PC (0x401032=>0x401034).(0=>1)
- 110000: system.cpu: Removing instruction, [tid:0] [sn:24] PC (0x401034=>0x401036).(0=>1)
  110000: system.cpu: Removing instruction, [tid:0] [sn:25] PC (0x401036=>0x401038).(0=>1)
  110000: system.cpu: Removing instruction, [tid:0] [sn:26] PC (0x401038=>0x40103c).(0=>1)
  110000: system.cpu: Removing instruction, [tid:0] [sn:27] PC (0x401038=>0x40103c).(1=>2)
@@ -3555,30 +3565,12 @@ O3CPU: Ticking main, O3CPU.
  111000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
  111000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
  111000: system.cpu.rename: Processing [tid:0]
- 111000: system.cpu.rename: [tid:0] Free IQ: 559, Free ROB: 917, Free LQ: 132, Free SQ: 68, FreeRM 127(873 870 917 1834 127 8 4577)
+ 111000: system.cpu.rename: [tid:0] Free IQ: 559, Free ROB: 917, Free LQ: 132, Free SQ: 68, FreeRM 127(875 870 917 1834 127 8 4581)
  111000: system.cpu.rename: [tid:0] 0 instructions not yet in ROB
  111000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 132, loadsInProgress: 0, loads dispatchedToLQ: 0
  111000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
  111000: system.cpu.rename: [tid:0] Nothing to do, breaking out early.
- 111000: system.cpu.rename: [tid:0] Removing a committed instruction from the history buffer 0 (size=26), until [sn:27].
- 111000: system.cpu.rename: [tid:0] Freeing older rename of reg 46 (46), [sn:23].
- 111000: system.cpu.rename: [tid:0] Successfully freed phys reg 46 (46) from history buffer.
- 111000: system.cpu.rename: [tid:0] Freeing older rename of reg 5 (4731), [sn:23].
- 111000: system.cpu.rename: [tid:0] Successfully freed phys reg 5 (4731) from history buffer.
- 111000: system.cpu.rename: [tid:0] Freeing older rename of reg 6 (4732), [sn:23].
- 111000: system.cpu.rename: [tid:0] Successfully freed phys reg 6 (4732) from history buffer.
- 111000: system.cpu.rename: [tid:0] Freeing older rename of reg 4294967295 (4294967295), [sn:23].
- 111000: system.cpu.rename: [tid:0] Freeing older rename of reg 4294967295 (4294967295), [sn:23].
- 111000: system.cpu.rename: [tid:0] Freeing older rename of reg 4294967295 (4294967295), [sn:23].
- 111000: system.cpu.rename: [tid:0] Freeing older rename of reg 56 (56), [sn:24].
- 111000: system.cpu.rename: [tid:0] Successfully freed phys reg 56 (56) from history buffer.
- 111000: system.cpu.rename: [tid:0] Freeing older rename of reg 15 (4741), [sn:24].
- 111000: system.cpu.rename: [tid:0] Successfully freed phys reg 15 (4741) from history buffer.
- 111000: system.cpu.rename: [tid:0] Freeing older rename of reg 16 (4742), [sn:24].
- 111000: system.cpu.rename: [tid:0] Successfully freed phys reg 16 (4742) from history buffer.
- 111000: system.cpu.rename: [tid:0] Freeing older rename of reg 4294967295 (4294967295), [sn:24].
- 111000: system.cpu.rename: [tid:0] Freeing older rename of reg 4294967295 (4294967295), [sn:24].
- 111000: system.cpu.rename: [tid:0] Freeing older rename of reg 4294967295 (4294967295), [sn:24].
+ 111000: system.cpu.rename: [tid:0] Removing a committed instruction from the history buffer 0 (size=14), until [sn:27].
  111000: system.cpu.rename: [tid:0] Freeing older rename of reg 58 (58), [sn:25].
  111000: system.cpu.rename: [tid:0] Successfully freed phys reg 58 (58) from history buffer.
  111000: system.cpu.rename: [tid:0] Freeing older rename of reg 17 (4743), [sn:25].
@@ -3606,14 +3598,6 @@ O3CPU: Ticking main, O3CPU.
  111000: system.cpu.iew.lsq: [tid:0] Writing back stores. 4 stores available for Writeback.
  111000: system.cpu.iew: Processing [tid:0]
  111000: system.cpu.iq: [tid:0] Committing instructions older than [sn:27]
-O3PipeView:fetch:100000:0x00401032:0:23:  ADD_R_R : add   esi, esi, eax
-O3PipeView:decode:101000
-O3PipeView:rename:102000
-O3PipeView:dispatch:104000
-O3PipeView:issue:104000
-O3PipeView:complete:105000
-O3PipeView:retire:110000:store:0
- 111000: global: DynInst: [sn:23] Instruction destroyed. Instcount for system.cpu = 11
 O3PipeView:fetch:100000:0x00401038:0:26:  ADD_R_I : limm   t1, 0x10
 O3PipeView:decode:101000
 O3PipeView:rename:102000
@@ -3662,7 +3646,7 @@ O3PipeView:rename:102000
 O3PipeView:dispatch:104000
 O3PipeView:issue:104000
 O3PipeView:complete:105000
-O3PipeView:retire:109000:store:0
+O3PipeView:retire:108000:store:0
  111000: global: DynInst: [sn:22] Instruction destroyed. Instcount for system.cpu = 7
  111000: system.cpu: Activity: 11
  111000: system.cpu: Removing instruction, [tid:0] [sn:28] PC (0x40103c=>0x40103e).(0=>1)
@@ -3709,7 +3693,7 @@ O3PipeView:rename:102000
 O3PipeView:dispatch:104000
 O3PipeView:issue:106000
 O3PipeView:complete:107000
-O3PipeView:retire:110000:store:0
+O3PipeView:retire:109000:store:0
  112000: global: DynInst: [sn:24] Instruction destroyed. Instcount for system.cpu = 6
  112000: system.cpu: Activity: 11
  112000: system.cpu: Scheduling next tick!
@@ -9532,7 +9516,7 @@ O3PipeView:rename:89000
 O3PipeView:dispatch:91000
 O3PipeView:issue:93000
 O3PipeView:complete:94000
-O3PipeView:retire:98000:store:187000
+O3PipeView:retire:97000:store:187000
  187000: global: DynInst: [sn:6] Instruction destroyed. Instcount for system.cpu = 87
  187000: system.cpu: 
 
@@ -9729,7 +9713,7 @@ O3PipeView:rename:89000
 O3PipeView:dispatch:91000
 O3PipeView:issue:93000
 O3PipeView:complete:94000
-O3PipeView:retire:99000:store:189000
+O3PipeView:retire:97000:store:189000
  189000: global: DynInst: [sn:8] Instruction destroyed. Instcount for system.cpu = 86
  189000: system.cpu: 
 
@@ -9818,7 +9802,7 @@ O3PipeView:rename:89000
 O3PipeView:dispatch:91000
 O3PipeView:issue:93000
 O3PipeView:complete:94000
-O3PipeView:retire:100000:store:191000
+O3PipeView:retire:97000:store:191000
  191000: global: DynInst: [sn:10] Instruction destroyed. Instcount for system.cpu = 85
  191000: system.cpu: 
 

@@ -3398,7 +3398,7 @@ O3CPU: Ticking main, O3CPU.
   96000: system.cpu.commit: [tid:0] [sn:4] Committing instruction with PC (0x401004=>0x40100b).(1=>2)
   96000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x401004=>0x40100b).(1=>2), [sn:4]
   96000: system.cpu: Removing committed instruction [tid:0] PC (0x401004=>0x40100b).(1=>2) [sn:4]
-  96000: system.cpu.commit: MEM_TRACE_FILE environment variable not set. No predictions loaded.
+  96000: global: MEM_TRACE_FILE environment variable not set. No predictions loaded.
   96000: system.cpu.commit: [tid:0] Can't commit, Instruction [sn:5] PC (0x40100b=>0x40100f).(0=>1) is head of ROB and not ready
   96000: system.cpu.commit: [tid:0] ROB has 54 insts & 864 free entries.
   96000: system.cpu.commit: Activity This Cycle.
@@ -7617,11 +7617,35 @@ O3CPU: Ticking main, O3CPU.
  187000: system.cpu.commit: [tid:0] [sn:5] Committing instruction with PC (0x40100b=>0x40100f).(0=>1)
  187000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x40100b=>0x40100f).(0=>1), [sn:5]
  187000: system.cpu: Removing committed instruction [tid:0] PC (0x40100b=>0x40100f).(0=>1) [sn:5]
- 187000: system.cpu.commit: MEM_TRACE_FILE environment variable not set. No predictions loaded.
- 187000: system.cpu.commit: [tid:0] Instruction [sn:6] PC (0x40100f=>0x401013).(0=>1) is head of ROB and ready to commit
- 187000: system.cpu.commit: [tid:0] ROB has 123 insts & 795 free entries.
+ 187000: global: MEM_TRACE_FILE environment variable not set. No predictions loaded.
+ 187000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:6]
+ 187000: system.cpu.commit: [tid:0] [sn:6] Committing instruction with PC (0x40100f=>0x401013).(0=>1)
+ 187000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x40100f=>0x401013).(0=>1), [sn:6]
+ 187000: system.cpu: Removing committed instruction [tid:0] PC (0x40100f=>0x401013).(0=>1) [sn:6]
+ 187000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:7]
+ 187000: system.cpu.commit: [tid:0] [sn:7] Committing instruction with PC (0x40100f=>0x401013).(1=>2)
+ 187000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x40100f=>0x401013).(1=>2), [sn:7]
+ 187000: system.cpu: Removing committed instruction [tid:0] PC (0x40100f=>0x401013).(1=>2) [sn:7]
+ 187000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:8]
+ 187000: system.cpu.commit: [tid:0] [sn:8] Committing instruction with PC (0x401013=>0x40101a).(0=>1)
+ 187000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x401013=>0x40101a).(0=>1), [sn:8]
+ 187000: system.cpu: Removing committed instruction [tid:0] PC (0x401013=>0x40101a).(0=>1) [sn:8]
+ 187000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:9]
+ 187000: system.cpu.commit: [tid:0] [sn:9] Committing instruction with PC (0x40101a=>0x40101d).(0=>1)
+ 187000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x40101a=>0x40101d).(0=>1), [sn:9]
+ 187000: system.cpu: Removing committed instruction [tid:0] PC (0x40101a=>0x40101d).(0=>1) [sn:9]
+ 187000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:10]
+ 187000: system.cpu.commit: Inst [tid:0] [sn:10] PC (0x40101d=>0x40101f).(0=>1) has a fault
+ 187000: system.cpu.commit: [tid:0] [sn:10] Stores outstanding, fault must wait.
+ 187000: system.cpu.commit: Unable to commit head instruction PC:(0x40101d=>0x40101f).(0=>1) [tid:0] [sn:10].
+ 187000: system.cpu.commit: [tid:0] Instruction [sn:10] PC (0x40101d=>0x40101f).(0=>1) is head of ROB and ready to commit
+ 187000: system.cpu.commit: [tid:0] ROB has 119 insts & 799 free entries.
  187000: system.cpu.commit: Activity This Cycle.
  187000: system.cpu: Removing instruction, [tid:0] [sn:5] PC (0x40100b=>0x40100f).(0=>1)
+ 187000: system.cpu: Removing instruction, [tid:0] [sn:6] PC (0x40100f=>0x401013).(0=>1)
+ 187000: system.cpu: Removing instruction, [tid:0] [sn:7] PC (0x40100f=>0x401013).(1=>2)
+ 187000: system.cpu: Removing instruction, [tid:0] [sn:8] PC (0x401013=>0x40101a).(0=>1)
+ 187000: system.cpu: Removing instruction, [tid:0] [sn:9] PC (0x40101a=>0x40101d).(0=>1)
  187000: system.cpu: Scheduling next tick!
  188000: system.cpu: 
 
@@ -7641,7 +7665,7 @@ O3CPU: Ticking main, O3CPU.
  188000: system.cpu.decode: Activity this cycle.
  188000: system.cpu: Activity: 12
  188000: system.cpu.rename: Processing [tid:0]
- 188000: system.cpu.rename: [tid:0] Free IQ: 480, Free ROB: 795, Free LQ: 105, Free SQ: 46, FreeRM 127(788 870 917 1834 127 8 4495)
+ 188000: system.cpu.rename: [tid:0] Free IQ: 480, Free ROB: 799, Free LQ: 105, Free SQ: 46, FreeRM 127(788 870 917 1834 127 8 4495)
  188000: system.cpu.rename: [tid:0] 30 instructions not yet in ROB
  188000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 105, loadsInProgress: 10, loads dispatchedToLQ: 3
  188000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
@@ -7854,9 +7878,31 @@ O3CPU: Ticking main, O3CPU.
  188000: system.cpu.rename: [tid:0] Register 155 (flat: 0) (miscellaneous) is ready.
  188000: global: [sn:148] has 3 ready out of 4 sources. RTI 0)
  188000: system.cpu.rename: Activity this cycle.
- 188000: system.cpu.rename: [tid:0] Removing a committed instruction from the history buffer 0 (size=337), until [sn:5].
+ 188000: system.cpu.rename: [tid:0] Removing a committed instruction from the history buffer 0 (size=337), until [sn:9].
  188000: system.cpu.rename: [tid:0] Freeing older rename of reg 3 (3), [sn:5].
  188000: system.cpu.rename: [tid:0] Successfully freed phys reg 3 (3) from history buffer.
+ 188000: system.cpu.rename: [tid:0] Freeing older rename of reg 41 (41), [sn:6].
+ 188000: system.cpu.rename: [tid:0] Successfully freed phys reg 41 (41) from history buffer.
+ 188000: system.cpu.rename: [tid:0] Freeing older rename of reg 40 (40), [sn:7].
+ 188000: system.cpu.rename: [tid:0] Successfully freed phys reg 40 (40) from history buffer.
+ 188000: system.cpu.rename: [tid:0] Freeing older rename of reg 5 (4731), [sn:7].
+ 188000: system.cpu.rename: [tid:0] Successfully freed phys reg 5 (4731) from history buffer.
+ 188000: system.cpu.rename: [tid:0] Freeing older rename of reg 6 (4732), [sn:7].
+ 188000: system.cpu.rename: [tid:0] Successfully freed phys reg 6 (4732) from history buffer.
+ 188000: system.cpu.rename: [tid:0] Freeing older rename of reg 4294967295 (4294967295), [sn:7].
+ 188000: system.cpu.rename: [tid:0] Freeing older rename of reg 4294967295 (4294967295), [sn:7].
+ 188000: system.cpu.rename: [tid:0] Freeing older rename of reg 4294967295 (4294967295), [sn:7].
+ 188000: system.cpu.rename: [tid:0] Freeing older rename of reg 0 (0), [sn:8].
+ 188000: system.cpu.rename: [tid:0] Successfully freed phys reg 0 (0) from history buffer.
+ 188000: system.cpu.rename: [tid:0] Freeing older rename of reg 7 (7), [sn:9].
+ 188000: system.cpu.rename: [tid:0] Successfully freed phys reg 7 (7) from history buffer.
+ 188000: system.cpu.rename: [tid:0] Freeing older rename of reg 7 (4733), [sn:9].
+ 188000: system.cpu.rename: [tid:0] Successfully freed phys reg 7 (4733) from history buffer.
+ 188000: system.cpu.rename: [tid:0] Freeing older rename of reg 8 (4734), [sn:9].
+ 188000: system.cpu.rename: [tid:0] Successfully freed phys reg 8 (4734) from history buffer.
+ 188000: system.cpu.rename: [tid:0] Freeing older rename of reg 4294967295 (4294967295), [sn:9].
+ 188000: system.cpu.rename: [tid:0] Freeing older rename of reg 4294967295 (4294967295), [sn:9].
+ 188000: system.cpu.rename: [tid:0] Freeing older rename of reg 4294967295 (4294967295), [sn:9].
  188000: system.cpu.iew: Issue: Processing [tid:0]
  188000: system.cpu.iew: [tid:0] Not blocked, so attempting to run dispatch.
  188000: system.cpu.iew: [tid:0] Issue: Adding PC (0x401067=>0x401069).(0=>1) [sn:119] [tid:0] to IQ.
@@ -7920,7 +7966,39 @@ O3CPU: Ticking main, O3CPU.
  188000: system.cpu.iq: Not able to schedule any instructions.
  188000: system.cpu.iew: Processing [tid:0]
  188000: system.cpu.iew.lsq.thread0: Committing head load instruction, PC (0x40100b=>0x40100f).(0=>1)
- 188000: system.cpu.iq: [tid:0] Committing instructions older than [sn:5]
+ 188000: system.cpu.iq: [tid:0] Committing instructions older than [sn:9]
+O3PipeView:fetch:87000:0x0040100f:0:6:  ADD_R_I : limm   t1, 0x8
+O3PipeView:decode:88000
+O3PipeView:rename:89000
+O3PipeView:dispatch:91000
+O3PipeView:issue:91000
+O3PipeView:complete:92000
+O3PipeView:retire:187000:store:0
+ 188000: global: DynInst: [sn:6] Instruction destroyed. Instcount for system.cpu = 149
+O3PipeView:fetch:87000:0x0040100f:1:7:  ADD_R_I : add   rsp, rsp, t1
+O3PipeView:decode:88000
+O3PipeView:rename:89000
+O3PipeView:dispatch:91000
+O3PipeView:issue:93000
+O3PipeView:complete:94000
+O3PipeView:retire:187000:store:0
+ 188000: global: DynInst: [sn:7] Instruction destroyed. Instcount for system.cpu = 148
+O3PipeView:fetch:87000:0x00401013:0:8:  MOV_R_I : limm   rax, 0x3c
+O3PipeView:decode:88000
+O3PipeView:rename:89000
+O3PipeView:dispatch:91000
+O3PipeView:issue:91000
+O3PipeView:complete:92000
+O3PipeView:retire:187000:store:0
+ 188000: global: DynInst: [sn:8] Instruction destroyed. Instcount for system.cpu = 147
+O3PipeView:fetch:87000:0x0040101a:0:9:  XOR_R_R : xor   rdi, rdi, rdi
+O3PipeView:decode:88000
+O3PipeView:rename:89000
+O3PipeView:dispatch:91000
+O3PipeView:issue:91000
+O3PipeView:complete:92000
+O3PipeView:retire:187000:store:0
+ 188000: global: DynInst: [sn:9] Instruction destroyed. Instcount for system.cpu = 146
  188000: system.cpu.iew: [tid:0], Dispatch dispatched 10 instructions.
  188000: system.cpu.iew.lsq.thread0: SQ size: 72, #stores occupied: 39
  188000: system.cpu.iew.lsq.thread0: LQ size: 132, #loads occupied: 40
@@ -7928,377 +8006,47 @@ O3CPU: Ticking main, O3CPU.
  188000: system.cpu.commit: Getting instructions from Rename stage.
  188000: system.cpu.commit: [tid:0] [sn:129] Inserting PC (0x40106d=>0x40106f).(1=>2) into ROB.
  188000: system.cpu.rob: Adding inst PC (0x40106d=>0x40106f).(1=>2) to the ROB.
- 188000: system.cpu.rob: [tid:0] Now has 124 instructions.
+ 188000: system.cpu.rob: [tid:0] Now has 120 instructions.
  188000: system.cpu.commit: [tid:0] [sn:130] Inserting PC (0x40106d=>0x40106f).(2=>3) into ROB.
  188000: system.cpu.rob: Adding inst PC (0x40106d=>0x40106f).(2=>3) to the ROB.
- 188000: system.cpu.rob: [tid:0] Now has 125 instructions.
+ 188000: system.cpu.rob: [tid:0] Now has 121 instructions.
  188000: system.cpu.commit: [tid:0] [sn:131] Inserting PC (0x40106f=>0x401071).(0=>1) into ROB.
  188000: system.cpu.rob: Adding inst PC (0x40106f=>0x401071).(0=>1) to the ROB.
- 188000: system.cpu.rob: [tid:0] Now has 126 instructions.
+ 188000: system.cpu.rob: [tid:0] Now has 122 instructions.
  188000: system.cpu.commit: [tid:0] [sn:132] Inserting PC (0x40106f=>0x401071).(1=>2) into ROB.
  188000: system.cpu.rob: Adding inst PC (0x40106f=>0x401071).(1=>2) to the ROB.
- 188000: system.cpu.rob: [tid:0] Now has 127 instructions.
+ 188000: system.cpu.rob: [tid:0] Now has 123 instructions.
  188000: system.cpu.commit: [tid:0] [sn:133] Inserting PC (0x40106f=>0x401071).(2=>3) into ROB.
  188000: system.cpu.rob: Adding inst PC (0x40106f=>0x401071).(2=>3) to the ROB.
- 188000: system.cpu.rob: [tid:0] Now has 128 instructions.
+ 188000: system.cpu.rob: [tid:0] Now has 124 instructions.
  188000: system.cpu.commit: [tid:0] [sn:134] Inserting PC (0x401071=>0x401073).(0=>1) into ROB.
  188000: system.cpu.rob: Adding inst PC (0x401071=>0x401073).(0=>1) to the ROB.
- 188000: system.cpu.rob: [tid:0] Now has 129 instructions.
+ 188000: system.cpu.rob: [tid:0] Now has 125 instructions.
  188000: system.cpu.commit: [tid:0] [sn:135] Inserting PC (0x401071=>0x401073).(1=>2) into ROB.
  188000: system.cpu.rob: Adding inst PC (0x401071=>0x401073).(1=>2) to the ROB.
- 188000: system.cpu.rob: [tid:0] Now has 130 instructions.
+ 188000: system.cpu.rob: [tid:0] Now has 126 instructions.
  188000: system.cpu.commit: [tid:0] [sn:136] Inserting PC (0x401071=>0x401073).(2=>3) into ROB.
  188000: system.cpu.rob: Adding inst PC (0x401071=>0x401073).(2=>3) to the ROB.
- 188000: system.cpu.rob: [tid:0] Now has 131 instructions.
+ 188000: system.cpu.rob: [tid:0] Now has 127 instructions.
  188000: system.cpu.commit: [tid:0] [sn:137] Inserting PC (0x401073=>0x401075).(0=>1) into ROB.
  188000: system.cpu.rob: Adding inst PC (0x401073=>0x401075).(0=>1) to the ROB.
- 188000: system.cpu.rob: [tid:0] Now has 132 instructions.
+ 188000: system.cpu.rob: [tid:0] Now has 128 instructions.
  188000: system.cpu.commit: [tid:0] [sn:138] Inserting PC (0x401073=>0x401075).(1=>2) into ROB.
  188000: system.cpu.rob: Adding inst PC (0x401073=>0x401075).(1=>2) to the ROB.
- 188000: system.cpu.rob: [tid:0] Now has 133 instructions.
+ 188000: system.cpu.rob: [tid:0] Now has 129 instructions.
  188000: system.cpu.commit: Trying to commit instructions in the ROB.
- 188000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:6]
- 188000: system.cpu.commit: [tid:0] [sn:6] Committing instruction with PC (0x40100f=>0x401013).(0=>1)
- 188000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x40100f=>0x401013).(0=>1), [sn:6]
- 188000: system.cpu: Removing committed instruction [tid:0] PC (0x40100f=>0x401013).(0=>1) [sn:6]
- 188000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:7]
- 188000: system.cpu.commit: [tid:0] [sn:7] Committing instruction with PC (0x40100f=>0x401013).(1=>2)
- 188000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x40100f=>0x401013).(1=>2), [sn:7]
- 188000: system.cpu: Removing committed instruction [tid:0] PC (0x40100f=>0x401013).(1=>2) [sn:7]
- 188000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:8]
- 188000: system.cpu.commit: [tid:0] [sn:8] Committing instruction with PC (0x401013=>0x40101a).(0=>1)
- 188000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x401013=>0x40101a).(0=>1), [sn:8]
- 188000: system.cpu: Removing committed instruction [tid:0] PC (0x401013=>0x40101a).(0=>1) [sn:8]
- 188000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:9]
- 188000: system.cpu.commit: [tid:0] [sn:9] Committing instruction with PC (0x40101a=>0x40101d).(0=>1)
- 188000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x40101a=>0x40101d).(0=>1), [sn:9]
- 188000: system.cpu: Removing committed instruction [tid:0] PC (0x40101a=>0x40101d).(0=>1) [sn:9]
  188000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:10]
  188000: system.cpu.commit: Inst [tid:0] [sn:10] PC (0x40101d=>0x40101f).(0=>1) has a fault
- 188000: system.cpu.commit: [tid:0] [sn:10] Stores outstanding, fault must wait.
+ 188000: global: RegFile: Access to int register 45, has data 0x3c
+ 188000: global: RegFile: Access to int register 46, has data 0
+ 188000: global: Calling halt on Thread Context 0
+ 188000: system.cpu: Thread 0 is inserted to exitingThreads list
+ 188000: global: RegFile: Setting int register 45 to 0
+ 188000: system.cpu.commit: [tid:0] [sn:10] Committing instruction with fault
+ 188000: system.cpu.commit: Generating trap event for [tid:0]
  188000: system.cpu.commit: Unable to commit head instruction PC:(0x40101d=>0x40101f).(0=>1) [tid:0] [sn:10].
  188000: system.cpu.commit: [tid:0] Instruction [sn:10] PC (0x40101d=>0x40101f).(0=>1) is head of ROB and ready to commit
  188000: system.cpu.commit: [tid:0] ROB has 129 insts & 789 free entries.
  188000: system.cpu.commit: Activity This Cycle.
  188000: system.cpu: Activity: 11
- 188000: system.cpu: Removing instruction, [tid:0] [sn:6] PC (0x40100f=>0x401013).(0=>1)
- 188000: system.cpu: Removing instruction, [tid:0] [sn:7] PC (0x40100f=>0x401013).(1=>2)
- 188000: system.cpu: Removing instruction, [tid:0] [sn:8] PC (0x401013=>0x40101a).(0=>1)
- 188000: system.cpu: Removing instruction, [tid:0] [sn:9] PC (0x40101a=>0x40101d).(0=>1)
  188000: system.cpu: Scheduling next tick!
- 189000: system.cpu: 
-
-O3CPU: Ticking main, O3CPU.
- 189000: system.cpu.fetch: Running stage.
- 189000: system.cpu.fetch: There are no more threads available to fetch from.
- 189000: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
- 189000: system.cpu.decode: Processing [tid:0]
- 189000: system.cpu.decode: [tid:0] Not blocked, so attempting to run stage.
- 189000: system.cpu.decode: [tid:0] Nothing to do, breaking out early.
- 189000: system.cpu.rename: Processing [tid:0]
- 189000: system.cpu.rename: [tid:0] Free IQ: 480, Free ROB: 789, Free LQ: 105, Free SQ: 46, FreeRM 127(783 870 917 1834 127 8 4489)
- 189000: system.cpu.rename: [tid:0] 30 instructions not yet in ROB
- 189000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 105, loadsInProgress: 10, loads dispatchedToLQ: 4
- 189000: system.cpu.rename: [tid:0] Not blocked, so attempting to run stage.
- 189000: system.cpu.rename: [tid:0] 6 available instructions to send iew.
- 189000: system.cpu.rename: [tid:0] 30 insts pipelining from Rename | 10 insts dispatched to IQ last cycle.
- 189000: system.cpu.rename: [tid:0] Sending instructions to IEW.
- 189000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 105, loadsInProgress: 10, loads dispatchedToLQ: 4
- 189000: system.cpu.rename: [tid:0] Processing instruction [sn:149] with PC (0x40107b=>0x40107d).(0=>1).
- 189000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid) (bypassed: no)
- 189000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
- 189000: global: [sn:149] has 1 ready out of 4 sources. RTI 0)
- 189000: system.cpu.rename: [tid:0] Looking up integer arch reg 0, got phys reg 45 (integer) (bypassed: no)
- 189000: system.cpu.rename: [tid:0] Register 45 (flat: 45) (integer) is ready.
- 189000: global: [sn:149] has 2 ready out of 4 sources. RTI 0)
- 189000: system.cpu.rename: [tid:0] Looking up integer arch reg 17, got phys reg 138 (integer) (bypassed: no)
- 189000: system.cpu.rename: [tid:0] Register 138 (flat: 138) (integer) is not ready.
- 189000: system.cpu.rename: [tid:0] Looking up miscellaneous arch reg 155, got phys reg 155 (miscellaneous) (bypassed: no)
- 189000: system.cpu.rename: [tid:0] Register 155 (flat: 0) (miscellaneous) is ready.
- 189000: global: [sn:149] has 3 ready out of 4 sources. RTI 0)
- 189000: global: Renamed reg t1 (17) to physical reg 139 (139) old mapping was 138 (138)
- 189000: system.cpu.rename: [tid:0] Querying SMB Predictor for load [sn:149] with PC (0x40107b=>0x40107d).(0=>1).
- 189000: system.cpu.rename: [tid:0] Renaming arch reg 17 (integer) to physical reg 139 (139).
- 189000: system.cpu.rename: [tid:0] Sending instructions to IEW.
- 189000: system.cpu.rename: [tid:0] Processing instruction [sn:150] with PC (0x40107b=>0x40107d).(1=>2).
- 189000: system.cpu.rename: [tid:0] Looking up integer arch reg 17, got phys reg 139 (integer) (bypassed: no)
- 189000: system.cpu.rename: [tid:0] Register 139 (flat: 139) (integer) is not ready.
- 189000: system.cpu.rename: [tid:0] Looking up integer arch reg 0, got phys reg 45 (integer) (bypassed: no)
- 189000: system.cpu.rename: [tid:0] Register 45 (flat: 45) (integer) is ready.
- 189000: global: [sn:150] has 1 ready out of 8 sources. RTI 0)
- 189000: system.cpu.rename: [tid:0] Looking up integer arch reg 17, got phys reg 139 (integer) (bypassed: no)
- 189000: system.cpu.rename: [tid:0] Register 139 (flat: 139) (integer) is not ready.
- 189000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid) (bypassed: no)
- 189000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
- 189000: global: [sn:150] has 2 ready out of 8 sources. RTI 0)
- 189000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid) (bypassed: no)
- 189000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
- 189000: global: [sn:150] has 3 ready out of 8 sources. RTI 0)
- 189000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid) (bypassed: no)
- 189000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
- 189000: global: [sn:150] has 4 ready out of 8 sources. RTI 0)
- 189000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid) (bypassed: no)
- 189000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
- 189000: global: [sn:150] has 5 ready out of 8 sources. RTI 0)
- 189000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid) (bypassed: no)
- 189000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
- 189000: global: [sn:150] has 6 ready out of 8 sources. RTI 0)
- 189000: global: Renamed reg t1 (17) to physical reg 140 (140) old mapping was 139 (139)
- 189000: system.cpu.rename: [tid:0] Renaming arch reg 17 (integer) to physical reg 140 (140).
- 189000: global: Renamed reg condition_code[0] (0) to physical reg 4829 (4829) old mapping was 4827 (4827)
- 189000: system.cpu.rename: [tid:0] Renaming arch reg 0 (condition_code) to physical reg 103 (4829).
- 189000: global: Renamed reg condition_code[1] (1) to physical reg 4830 (4830) old mapping was 4828 (4828)
- 189000: system.cpu.rename: [tid:0] Renaming arch reg 1 (condition_code) to physical reg 104 (4830).
- 189000: system.cpu.rename: [tid:0] Renaming arch reg 0 (invalid) to physical reg 4294967295 (4294967295).
- 189000: system.cpu.rename: [tid:0] Renaming arch reg 0 (invalid) to physical reg 4294967295 (4294967295).
- 189000: system.cpu.rename: [tid:0] Renaming arch reg 0 (invalid) to physical reg 4294967295 (4294967295).
- 189000: system.cpu.rename: [tid:0] Sending instructions to IEW.
- 189000: system.cpu.rename: calcFreeSQEntries: free sqEntries: 46, storesInProgress: 10, stores dispatchedToSQ: 3
- 189000: system.cpu.rename: [tid:0] Processing instruction [sn:151] with PC (0x40107b=>0x40107d).(2=>3).
- 189000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid) (bypassed: no)
- 189000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
- 189000: global: [sn:151] has 1 ready out of 4 sources. RTI 0)
- 189000: system.cpu.rename: [tid:0] Looking up integer arch reg 0, got phys reg 45 (integer) (bypassed: no)
- 189000: system.cpu.rename: [tid:0] Register 45 (flat: 45) (integer) is ready.
- 189000: global: [sn:151] has 2 ready out of 4 sources. RTI 0)
- 189000: system.cpu.rename: [tid:0] Looking up integer arch reg 17, got phys reg 140 (integer) (bypassed: no)
- 189000: system.cpu.rename: [tid:0] Register 140 (flat: 140) (integer) is not ready.
- 189000: system.cpu.rename: [tid:0] Looking up miscellaneous arch reg 155, got phys reg 155 (miscellaneous) (bypassed: no)
- 189000: system.cpu.rename: [tid:0] Register 155 (flat: 0) (miscellaneous) is ready.
- 189000: global: [sn:151] has 3 ready out of 4 sources. RTI 0)
- 189000: system.cpu.rename: [tid:0] Sending instructions to IEW.
- 189000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 105, loadsInProgress: 11, loads dispatchedToLQ: 4
- 189000: system.cpu.rename: [tid:0] Processing instruction [sn:152] with PC (0x40107d=>0x40107f).(0=>1).
- 189000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid) (bypassed: no)
- 189000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
- 189000: global: [sn:152] has 1 ready out of 4 sources. RTI 0)
- 189000: system.cpu.rename: [tid:0] Looking up integer arch reg 0, got phys reg 45 (integer) (bypassed: no)
- 189000: system.cpu.rename: [tid:0] Register 45 (flat: 45) (integer) is ready.
- 189000: global: [sn:152] has 2 ready out of 4 sources. RTI 0)
- 189000: system.cpu.rename: [tid:0] Looking up integer arch reg 17, got phys reg 140 (integer) (bypassed: no)
- 189000: system.cpu.rename: [tid:0] Register 140 (flat: 140) (integer) is not ready.
- 189000: system.cpu.rename: [tid:0] Looking up miscellaneous arch reg 155, got phys reg 155 (miscellaneous) (bypassed: no)
- 189000: system.cpu.rename: [tid:0] Register 155 (flat: 0) (miscellaneous) is ready.
- 189000: global: [sn:152] has 3 ready out of 4 sources. RTI 0)
- 189000: global: Renamed reg t1 (17) to physical reg 141 (141) old mapping was 140 (140)
- 189000: system.cpu.rename: [tid:0] Querying SMB Predictor for load [sn:152] with PC (0x40107d=>0x40107f).(0=>1).
- 189000: system.cpu.rename: [tid:0] Renaming arch reg 17 (integer) to physical reg 141 (141).
- 189000: system.cpu.rename: [tid:0] Sending instructions to IEW.
- 189000: system.cpu.rename: [tid:0] Processing instruction [sn:153] with PC (0x40107d=>0x40107f).(1=>2).
- 189000: system.cpu.rename: [tid:0] Looking up integer arch reg 17, got phys reg 141 (integer) (bypassed: no)
- 189000: system.cpu.rename: [tid:0] Register 141 (flat: 141) (integer) is not ready.
- 189000: system.cpu.rename: [tid:0] Looking up integer arch reg 0, got phys reg 45 (integer) (bypassed: no)
- 189000: system.cpu.rename: [tid:0] Register 45 (flat: 45) (integer) is ready.
- 189000: global: [sn:153] has 1 ready out of 8 sources. RTI 0)
- 189000: system.cpu.rename: [tid:0] Looking up integer arch reg 17, got phys reg 141 (integer) (bypassed: no)
- 189000: system.cpu.rename: [tid:0] Register 141 (flat: 141) (integer) is not ready.
- 189000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid) (bypassed: no)
- 189000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
- 189000: global: [sn:153] has 2 ready out of 8 sources. RTI 0)
- 189000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid) (bypassed: no)
- 189000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
- 189000: global: [sn:153] has 3 ready out of 8 sources. RTI 0)
- 189000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid) (bypassed: no)
- 189000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
- 189000: global: [sn:153] has 4 ready out of 8 sources. RTI 0)
- 189000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid) (bypassed: no)
- 189000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
- 189000: global: [sn:153] has 5 ready out of 8 sources. RTI 0)
- 189000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid) (bypassed: no)
- 189000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
- 189000: global: [sn:153] has 6 ready out of 8 sources. RTI 0)
- 189000: global: Renamed reg t1 (17) to physical reg 142 (142) old mapping was 141 (141)
- 189000: system.cpu.rename: [tid:0] Renaming arch reg 17 (integer) to physical reg 142 (142).
- 189000: global: Renamed reg condition_code[0] (0) to physical reg 4831 (4831) old mapping was 4829 (4829)
- 189000: system.cpu.rename: [tid:0] Renaming arch reg 0 (condition_code) to physical reg 105 (4831).
- 189000: global: Renamed reg condition_code[1] (1) to physical reg 4832 (4832) old mapping was 4830 (4830)
- 189000: system.cpu.rename: [tid:0] Renaming arch reg 1 (condition_code) to physical reg 106 (4832).
- 189000: system.cpu.rename: [tid:0] Renaming arch reg 0 (invalid) to physical reg 4294967295 (4294967295).
- 189000: system.cpu.rename: [tid:0] Renaming arch reg 0 (invalid) to physical reg 4294967295 (4294967295).
- 189000: system.cpu.rename: [tid:0] Renaming arch reg 0 (invalid) to physical reg 4294967295 (4294967295).
- 189000: system.cpu.rename: [tid:0] Sending instructions to IEW.
- 189000: system.cpu.rename: calcFreeSQEntries: free sqEntries: 46, storesInProgress: 11, stores dispatchedToSQ: 3
- 189000: system.cpu.rename: [tid:0] Processing instruction [sn:154] with PC (0x40107d=>0x40107f).(2=>3).
- 189000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid) (bypassed: no)
- 189000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
- 189000: global: [sn:154] has 1 ready out of 4 sources. RTI 0)
- 189000: system.cpu.rename: [tid:0] Looking up integer arch reg 0, got phys reg 45 (integer) (bypassed: no)
- 189000: system.cpu.rename: [tid:0] Register 45 (flat: 45) (integer) is ready.
- 189000: global: [sn:154] has 2 ready out of 4 sources. RTI 0)
- 189000: system.cpu.rename: [tid:0] Looking up integer arch reg 17, got phys reg 142 (integer) (bypassed: no)
- 189000: system.cpu.rename: [tid:0] Register 142 (flat: 142) (integer) is not ready.
- 189000: system.cpu.rename: [tid:0] Looking up miscellaneous arch reg 155, got phys reg 155 (miscellaneous) (bypassed: no)
- 189000: system.cpu.rename: [tid:0] Register 155 (flat: 0) (miscellaneous) is ready.
- 189000: global: [sn:154] has 3 ready out of 4 sources. RTI 0)
- 189000: system.cpu.rename: Activity this cycle.
- 189000: system.cpu: Activity: 12
- 189000: system.cpu.rename: [tid:0] Removing a committed instruction from the history buffer 0 (size=350), until [sn:9].
- 189000: system.cpu.rename: [tid:0] Freeing older rename of reg 41 (41), [sn:6].
- 189000: system.cpu.rename: [tid:0] Successfully freed phys reg 41 (41) from history buffer.
- 189000: system.cpu.rename: [tid:0] Freeing older rename of reg 40 (40), [sn:7].
- 189000: system.cpu.rename: [tid:0] Successfully freed phys reg 40 (40) from history buffer.
- 189000: system.cpu.rename: [tid:0] Freeing older rename of reg 5 (4731), [sn:7].
- 189000: system.cpu.rename: [tid:0] Successfully freed phys reg 5 (4731) from history buffer.
- 189000: system.cpu.rename: [tid:0] Freeing older rename of reg 6 (4732), [sn:7].
- 189000: system.cpu.rename: [tid:0] Successfully freed phys reg 6 (4732) from history buffer.
- 189000: system.cpu.rename: [tid:0] Freeing older rename of reg 4294967295 (4294967295), [sn:7].
- 189000: system.cpu.rename: [tid:0] Freeing older rename of reg 4294967295 (4294967295), [sn:7].
- 189000: system.cpu.rename: [tid:0] Freeing older rename of reg 4294967295 (4294967295), [sn:7].
- 189000: system.cpu.rename: [tid:0] Freeing older rename of reg 0 (0), [sn:8].
- 189000: system.cpu.rename: [tid:0] Successfully freed phys reg 0 (0) from history buffer.
- 189000: system.cpu.rename: [tid:0] Freeing older rename of reg 7 (7), [sn:9].
- 189000: system.cpu.rename: [tid:0] Successfully freed phys reg 7 (7) from history buffer.
- 189000: system.cpu.rename: [tid:0] Freeing older rename of reg 7 (4733), [sn:9].
- 189000: system.cpu.rename: [tid:0] Successfully freed phys reg 7 (4733) from history buffer.
- 189000: system.cpu.rename: [tid:0] Freeing older rename of reg 8 (4734), [sn:9].
- 189000: system.cpu.rename: [tid:0] Successfully freed phys reg 8 (4734) from history buffer.
- 189000: system.cpu.rename: [tid:0] Freeing older rename of reg 4294967295 (4294967295), [sn:9].
- 189000: system.cpu.rename: [tid:0] Freeing older rename of reg 4294967295 (4294967295), [sn:9].
- 189000: system.cpu.rename: [tid:0] Freeing older rename of reg 4294967295 (4294967295), [sn:9].
- 189000: system.cpu.iew: Issue: Processing [tid:0]
- 189000: system.cpu.iew: [tid:0] Not blocked, so attempting to run dispatch.
- 189000: system.cpu.iew: [tid:0] Issue: Adding PC (0x40106d=>0x40106f).(1=>2) [sn:129] [tid:0] to IQ.
- 189000: system.cpu.iq: Adding instruction [sn:129] PC (0x40106d=>0x40106f).(1=>2) to the IQ.
- 189000: system.cpu.iq: Instruction PC (0x40106d=>0x40106f).(1=>2) has src reg 125 (integer) that is being added to the dependency chain.
- 189000: system.cpu.iq: Instruction PC (0x40106d=>0x40106f).(1=>2) has src reg 125 (integer) that is being added to the dependency chain.
- 189000: system.cpu.iew: [tid:0] Issue: Adding PC (0x40106d=>0x40106f).(2=>3) [sn:130] [tid:0] to IQ.
- 189000: system.cpu.iew: [tid:0] Issue: Memory instruction encountered, adding to LSQ.
- 189000: system.cpu.iew.lsq.thread0: Inserting store PC (0x40106d=>0x40106f).(2=>3), idx:40 [sn:130]
- 189000: system.cpu.iq: Adding instruction [sn:130] PC (0x40106d=>0x40106f).(2=>3) to the IQ.
- 189000: system.cpu.iq: Instruction PC (0x40106d=>0x40106f).(2=>3) has src reg 126 (integer) that is being added to the dependency chain.
- 189000: system.cpu.memDep0: No dependency for inst PC (0x40106d=>0x40106f).(2=>3) [sn:130].
- 189000: system.cpu.memDep0: Inserting store/atomic PC (0x40106d=>0x40106f).(2=>3) [sn:130].
- 189000: system.cpu.iew: [tid:0] Issue: Adding PC (0x40106f=>0x401071).(0=>1) [sn:131] [tid:0] to IQ.
- 189000: system.cpu.iew: [tid:0] Issue: Memory instruction encountered, adding to LSQ.
- 189000: system.cpu.iew.lsq.thread0: Inserting load PC (0x40106f=>0x401071).(0=>1), idx:41 [sn:131]
- 189000: system.cpu.iq: Adding instruction [sn:131] PC (0x40106f=>0x401071).(0=>1) to the IQ.
- 189000: system.cpu.iq: Instruction PC (0x40106f=>0x401071).(0=>1) has src reg 126 (integer) that is being added to the dependency chain.
- 189000: system.cpu.memDep0: No dependency for inst PC (0x40106f=>0x401071).(0=>1) [sn:131].
- 189000: system.cpu.iew: [tid:0] Issue: Adding PC (0x40106f=>0x401071).(1=>2) [sn:132] [tid:0] to IQ.
- 189000: system.cpu.iq: Adding instruction [sn:132] PC (0x40106f=>0x401071).(1=>2) to the IQ.
- 189000: system.cpu.iq: Instruction PC (0x40106f=>0x401071).(1=>2) has src reg 127 (integer) that is being added to the dependency chain.
- 189000: system.cpu.iq: Instruction PC (0x40106f=>0x401071).(1=>2) has src reg 127 (integer) that is being added to the dependency chain.
- 189000: system.cpu.iew: [tid:0] Issue: Adding PC (0x40106f=>0x401071).(2=>3) [sn:133] [tid:0] to IQ.
- 189000: system.cpu.iew: [tid:0] Issue: Memory instruction encountered, adding to LSQ.
- 189000: system.cpu.iew.lsq.thread0: Inserting store PC (0x40106f=>0x401071).(2=>3), idx:41 [sn:133]
- 189000: system.cpu.iq: Adding instruction [sn:133] PC (0x40106f=>0x401071).(2=>3) to the IQ.
- 189000: system.cpu.iq: Instruction PC (0x40106f=>0x401071).(2=>3) has src reg 128 (integer) that is being added to the dependency chain.
- 189000: system.cpu.memDep0: No dependency for inst PC (0x40106f=>0x401071).(2=>3) [sn:133].
- 189000: system.cpu.memDep0: Inserting store/atomic PC (0x40106f=>0x401071).(2=>3) [sn:133].
- 189000: system.cpu.iew: [tid:0] Issue: Adding PC (0x401071=>0x401073).(0=>1) [sn:134] [tid:0] to IQ.
- 189000: system.cpu.iew: [tid:0] Issue: Memory instruction encountered, adding to LSQ.
- 189000: system.cpu.iew.lsq.thread0: Inserting load PC (0x401071=>0x401073).(0=>1), idx:42 [sn:134]
- 189000: system.cpu.iq: Adding instruction [sn:134] PC (0x401071=>0x401073).(0=>1) to the IQ.
- 189000: system.cpu.iq: Instruction PC (0x401071=>0x401073).(0=>1) has src reg 128 (integer) that is being added to the dependency chain.
- 189000: system.cpu.memDep0: No dependency for inst PC (0x401071=>0x401073).(0=>1) [sn:134].
- 189000: system.cpu.iew: [tid:0] Issue: Adding PC (0x401071=>0x401073).(1=>2) [sn:135] [tid:0] to IQ.
- 189000: system.cpu.iq: Adding instruction [sn:135] PC (0x401071=>0x401073).(1=>2) to the IQ.
- 189000: system.cpu.iq: Instruction PC (0x401071=>0x401073).(1=>2) has src reg 129 (integer) that is being added to the dependency chain.
- 189000: system.cpu.iq: Instruction PC (0x401071=>0x401073).(1=>2) has src reg 129 (integer) that is being added to the dependency chain.
- 189000: system.cpu.iew: [tid:0] Issue: Adding PC (0x401071=>0x401073).(2=>3) [sn:136] [tid:0] to IQ.
- 189000: system.cpu.iew: [tid:0] Issue: Memory instruction encountered, adding to LSQ.
- 189000: system.cpu.iew.lsq.thread0: Inserting store PC (0x401071=>0x401073).(2=>3), idx:42 [sn:136]
- 189000: system.cpu.iq: Adding instruction [sn:136] PC (0x401071=>0x401073).(2=>3) to the IQ.
- 189000: system.cpu.iq: Instruction PC (0x401071=>0x401073).(2=>3) has src reg 130 (integer) that is being added to the dependency chain.
- 189000: system.cpu.memDep0: No dependency for inst PC (0x401071=>0x401073).(2=>3) [sn:136].
- 189000: system.cpu.memDep0: Inserting store/atomic PC (0x401071=>0x401073).(2=>3) [sn:136].
- 189000: system.cpu.iew: [tid:0] Issue: Adding PC (0x401073=>0x401075).(0=>1) [sn:137] [tid:0] to IQ.
- 189000: system.cpu.iew: [tid:0] Issue: Memory instruction encountered, adding to LSQ.
- 189000: system.cpu.iew.lsq.thread0: Inserting load PC (0x401073=>0x401075).(0=>1), idx:43 [sn:137]
- 189000: system.cpu.iq: Adding instruction [sn:137] PC (0x401073=>0x401075).(0=>1) to the IQ.
- 189000: system.cpu.iq: Instruction PC (0x401073=>0x401075).(0=>1) has src reg 130 (integer) that is being added to the dependency chain.
- 189000: system.cpu.memDep0: No dependency for inst PC (0x401073=>0x401075).(0=>1) [sn:137].
- 189000: system.cpu.iew: [tid:0] Issue: Adding PC (0x401073=>0x401075).(1=>2) [sn:138] [tid:0] to IQ.
- 189000: system.cpu.iq: Adding instruction [sn:138] PC (0x401073=>0x401075).(1=>2) to the IQ.
- 189000: system.cpu.iq: Instruction PC (0x401073=>0x401075).(1=>2) has src reg 131 (integer) that is being added to the dependency chain.
- 189000: system.cpu.iq: Instruction PC (0x401073=>0x401075).(1=>2) has src reg 131 (integer) that is being added to the dependency chain.
- 189000: system.cpu.iq: Attempting to schedule ready instructions from the IQ.
- 189000: system.cpu.iq: Not able to schedule any instructions.
- 189000: system.cpu.iew: Processing [tid:0]
- 189000: system.cpu.iq: [tid:0] Committing instructions older than [sn:9]
-O3PipeView:fetch:87000:0x0040100f:0:6:  ADD_R_I : limm   t1, 0x8
-O3PipeView:decode:88000
-O3PipeView:rename:89000
-O3PipeView:dispatch:91000
-O3PipeView:issue:91000
-O3PipeView:complete:92000
-O3PipeView:retire:188000:store:0
- 189000: global: DynInst: [sn:6] Instruction destroyed. Instcount for system.cpu = 149
-O3PipeView:fetch:87000:0x0040100f:1:7:  ADD_R_I : add   rsp, rsp, t1
-O3PipeView:decode:88000
-O3PipeView:rename:89000
-O3PipeView:dispatch:91000
-O3PipeView:issue:93000
-O3PipeView:complete:94000
-O3PipeView:retire:188000:store:0
- 189000: global: DynInst: [sn:7] Instruction destroyed. Instcount for system.cpu = 148
-O3PipeView:fetch:87000:0x00401013:0:8:  MOV_R_I : limm   rax, 0x3c
-O3PipeView:decode:88000
-O3PipeView:rename:89000
-O3PipeView:dispatch:91000
-O3PipeView:issue:91000
-O3PipeView:complete:92000
-O3PipeView:retire:188000:store:0
- 189000: global: DynInst: [sn:8] Instruction destroyed. Instcount for system.cpu = 147
-O3PipeView:fetch:87000:0x0040101a:0:9:  XOR_R_R : xor   rdi, rdi, rdi
-O3PipeView:decode:88000
-O3PipeView:rename:89000
-O3PipeView:dispatch:91000
-O3PipeView:issue:91000
-O3PipeView:complete:92000
-O3PipeView:retire:188000:store:0
- 189000: global: DynInst: [sn:9] Instruction destroyed. Instcount for system.cpu = 146
- 189000: system.cpu.iew.lsq.thread0: LQ size: 132, #loads occupied: 43
- 189000: system.cpu.iew.lsq.thread0: SQ size: 72, #stores occupied: 42
- 189000: system.cpu.iew: [tid:0], Dispatch dispatched 10 instructions.
- 189000: system.cpu.iew.lsq.thread0: SQ size: 72, #stores occupied: 42
- 189000: system.cpu.iew.lsq.thread0: LQ size: 132, #loads occupied: 43
- 189000: system.cpu.iew: IQ has 431 free entries (Can schedule: 0).  LQ has 89 free entries. SQ has 30 free entries.
- 189000: system.cpu.iew: Activity this cycle.
- 189000: system.cpu.commit: Getting instructions from Rename stage.
- 189000: system.cpu.commit: [tid:0] [sn:139] Inserting PC (0x401073=>0x401075).(2=>3) into ROB.
- 189000: system.cpu.rob: Adding inst PC (0x401073=>0x401075).(2=>3) to the ROB.
- 189000: system.cpu.rob: [tid:0] Now has 130 instructions.
- 189000: system.cpu.commit: [tid:0] [sn:140] Inserting PC (0x401075=>0x401077).(0=>1) into ROB.
- 189000: system.cpu.rob: Adding inst PC (0x401075=>0x401077).(0=>1) to the ROB.
- 189000: system.cpu.rob: [tid:0] Now has 131 instructions.
- 189000: system.cpu.commit: [tid:0] [sn:141] Inserting PC (0x401075=>0x401077).(1=>2) into ROB.
- 189000: system.cpu.rob: Adding inst PC (0x401075=>0x401077).(1=>2) to the ROB.
- 189000: system.cpu.rob: [tid:0] Now has 132 instructions.
- 189000: system.cpu.commit: [tid:0] [sn:142] Inserting PC (0x401075=>0x401077).(2=>3) into ROB.
- 189000: system.cpu.rob: Adding inst PC (0x401075=>0x401077).(2=>3) to the ROB.
- 189000: system.cpu.rob: [tid:0] Now has 133 instructions.
- 189000: system.cpu.commit: [tid:0] [sn:143] Inserting PC (0x401077=>0x401079).(0=>1) into ROB.
- 189000: system.cpu.rob: Adding inst PC (0x401077=>0x401079).(0=>1) to the ROB.
- 189000: system.cpu.rob: [tid:0] Now has 134 instructions.
- 189000: system.cpu.commit: [tid:0] [sn:144] Inserting PC (0x401077=>0x401079).(1=>2) into ROB.
- 189000: system.cpu.rob: Adding inst PC (0x401077=>0x401079).(1=>2) to the ROB.
- 189000: system.cpu.rob: [tid:0] Now has 135 instructions.
- 189000: system.cpu.commit: [tid:0] [sn:145] Inserting PC (0x401077=>0x401079).(2=>3) into ROB.
- 189000: system.cpu.rob: Adding inst PC (0x401077=>0x401079).(2=>3) to the ROB.
- 189000: system.cpu.rob: [tid:0] Now has 136 instructions.
- 189000: system.cpu.commit: [tid:0] [sn:146] Inserting PC (0x401079=>0x40107b).(0=>1) into ROB.
- 189000: system.cpu.rob: Adding inst PC (0x401079=>0x40107b).(0=>1) to the ROB.
- 189000: system.cpu.rob: [tid:0] Now has 137 instructions.
- 189000: system.cpu.commit: [tid:0] [sn:147] Inserting PC (0x401079=>0x40107b).(1=>2) into ROB.
- 189000: system.cpu.rob: Adding inst PC (0x401079=>0x40107b).(1=>2) to the ROB.
- 189000: system.cpu.rob: [tid:0] Now has 138 instructions.
- 189000: system.cpu.commit: [tid:0] [sn:148] Inserting PC (0x401079=>0x40107b).(2=>3) into ROB.
- 189000: system.cpu.rob: Adding inst PC (0x401079=>0x40107b).(2=>3) to the ROB.
- 189000: system.cpu.rob: [tid:0] Now has 139 instructions.
- 189000: system.cpu.commit: Trying to commit instructions in the ROB.
- 189000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:10]
- 189000: system.cpu.commit: Inst [tid:0] [sn:10] PC (0x40101d=>0x40101f).(0=>1) has a fault
- 189000: global: RegFile: Access to int register 45, has data 0x3c
- 189000: global: RegFile: Access to int register 46, has data 0
- 189000: global: Calling halt on Thread Context 0
- 189000: system.cpu: Thread 0 is inserted to exitingThreads list
- 189000: global: RegFile: Setting int register 45 to 0
- 189000: system.cpu.commit: [tid:0] [sn:10] Committing instruction with fault
- 189000: system.cpu.commit: Generating trap event for [tid:0]
- 189000: system.cpu.commit: Unable to commit head instruction PC:(0x40101d=>0x40101f).(0=>1) [tid:0] [sn:10].
- 189000: system.cpu.commit: [tid:0] Instruction [sn:10] PC (0x40101d=>0x40101f).(0=>1) is head of ROB and ready to commit
- 189000: system.cpu.commit: [tid:0] ROB has 139 insts & 779 free entries.
- 189000: system.cpu.commit: Activity This Cycle.
- 189000: system.cpu: Activity: 11
- 189000: system.cpu: Scheduling next tick!
