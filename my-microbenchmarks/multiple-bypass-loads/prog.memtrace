@@ -1,0 +1,17 @@
+
+#   MOV_M_I : st   t1d, SS:[t0 + rsp]
+4 401004 7fffffffee10 4 S
+#   MOV_M_I : st   t1d, SS:[t0 + rsp + 0x4]
+6 40100b 7fffffffee14 4 S
+#   MOV_M_I : st   t1d, SS:[t0 + rsp + 0x8]
+8 401013 7fffffffee18 4 S
+#   MOV_M_I : st   t1d, SS:[t0 + rsp + 0xc]
+10 40101b 7fffffffee1c 4 S
+#   MOV_R_M : ld   eax, SS:[t0 + rsp]
+11 401023 7fffffffee10 4 L
+#   MOV_R_M : ld   esi, SS:[t0 + rsp + 0x4]
+12 401026 7fffffffee14 4 L
+#   MOV_R_M : ld   ecx, SS:[t0 + rsp + 0x8]
+13 40102a 7fffffffee18 4 L
+#   MOV_R_M : ld   edx, SS:[t0 + rsp + 0xc]
+14 40102e 7fffffffee1c 4 L

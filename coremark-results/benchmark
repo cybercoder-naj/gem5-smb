@@ -33,12 +33,12 @@ echo "" > $MEM_TRACE_FILE
   -I $maxInst
 
 cp m5out/stats.txt $pwd/$basename-stats-no-smb.txt
-SMB_PREDICTIONS_FILE="$pwd/$basename.predictions"
+export SMB_PREDICTIONS_FILE="$pwd/$basename.predictions"
 echo "" > $SMB_PREDICTIONS_FILE
 ./memprofile $MEM_TRACE_FILE $SMB_PREDICTIONS_FILE
 
 unset MEM_TRACE_FILE
-SMB_PREDICTIONS_FILE=$SMB_PREDICTIONS_FILE ./build/X86/gem5.opt \
+./build/X86/gem5.opt \
   --debug-flags=O3CPUAll,O3PipeView \
   --debug-file=../$pwd/$basename-trace-smb.out \
   configs/deprecated/example/se.py \
