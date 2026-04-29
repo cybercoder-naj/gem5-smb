@@ -51,6 +51,8 @@ class SMB
     void squash(); 
 
     void removeUpTo(InstSeqNum seq_num);
+
+    bool deletePrediction(Addr load_addr);
 };
 
 } // namespace o3

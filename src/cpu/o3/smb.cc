@@ -104,5 +104,17 @@ SMB::removeUpTo(InstSeqNum seq_num)
     }
   }
 }
+
+bool
+SMB::deletePrediction(Addr load_addr)
+{
+  auto it = predictions.find(load_addr);
+  if (it != predictions.end()) {
+    predictions.erase(it);
+    return true;
+  }
+  return false;
+}
+
 } // namespace o3
 } // namespace gem5

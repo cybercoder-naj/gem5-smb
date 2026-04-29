@@ -517,7 +517,7 @@ class Commit
         statistics::Scalar memOrderViolationEvents;
 
         /* Number of squashes due to bypass load violations. */
-        statistics::Scalar bypassedLoadViolationEvents;
+        statistics::Scalar bypassedLoadValueCheckViolation;
     } stats;
 };
 

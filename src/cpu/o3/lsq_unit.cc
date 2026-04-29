@@ -262,6 +262,8 @@ LSQUnit::LSQUnitStats::LSQUnitStats(statistics::Group *parent)
                "squashed"),
       ADD_STAT(memOrderViolation, statistics::units::Count::get(),
                "Number of memory ordering violations"),
+      ADD_STAT(bypassedLoadMemOrderViolation, statistics::units::Count::get(),
+               "Number of memory ordering violations for bypassed loads"),
       ADD_STAT(squashedStores, statistics::units::Count::get(),
                "Number of stores squashed"),
       ADD_STAT(rescheduledLoads, statistics::units::Count::get(),
@@ -1494,8 +1496,12 @@ LSQUnit::read(LSQRequest *request, ssize_t load_idx)
             if (coverage == AddrRangeCoverage::FullAddrRangeCoverage) {
 
                 if (load_inst->isBypassedLoad() && store_it->instruction()->seqNum != load_inst->smbStoreSeqNum) {
+                    DPRINTF(LSQUnit, "Memory order violation detected for bypassed load [sn:%lli]."
+                        "Found intervening store [sn:%lli] at address %#x with full coverage.\n",
+                        load_inst->seqNum, store_it->instruction()->seqNum, request->mainReq()->getVaddr());
+
                     memDepViolator = load_inst;
-                    ++stats.memOrderViolation;
+                    ++stats.bypassedLoadMemOrderViolation;
 
                     auto req_s_dep = store_it->request()->getVaddr();
                     return std::make_shared<GenericISA::M5PanicFault>(
@@ -1593,8 +1599,13 @@ LSQUnit::read(LSQRequest *request, ssize_t load_idx)
                 }
 
                 if (load_inst->isBypassedLoad()) {
+                    DPRINTF(LSQUnit, "Memory order violation detected for bypassed load [sn:%lli]."
+                        "Found intervening store [sn:%lli] at address %#x with partial coverage.\n",
+                        load_inst->seqNum, store_it->instruction()->seqNum, request->mainReq()->getVaddr());
+
                     memDepViolator = load_inst;
-                    ++stats.memOrderViolation;
+                    ++stats.bypassedLoadMemOrderViolation;
+
                     auto req_s_dep = store_it->request()->getVaddr();
                     return std::make_shared<GenericISA::M5PanicFault>(
                         "Detected fault with "
