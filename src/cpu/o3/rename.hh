@@ -468,9 +468,6 @@ class Rename
 
     std::unordered_map<RegId, PhysRegIdPtr> bypassedArchToPhys;
 
-    /** The predictor for speculative memory bypassing. */
-    SMB smb;
-
     /** Enum to record the source of a structure full stall.  Can come from
      * either ROB, IQ, LSQ, and it is priortized in that order.
      */

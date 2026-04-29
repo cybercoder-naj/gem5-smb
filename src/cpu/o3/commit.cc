@@ -1340,14 +1340,14 @@ Commit::commitHead(const DynInstPtr &head_inst, unsigned inst_num)
         PhysRegIdPtr actualValueReg = head_inst->renamedDestIdx(0);
         assert(head_inst->smbSpeculatedLoadData.has_value());
 
-        RegVal actualValue = cpu->getReg(actualValueReg, tid);
+        // build the actual value from memdata uint8_t*
+        RegVal actualRegValue = cpu->getReg(actualValueReg, tid);
         auto specValue = head_inst->smbSpeculatedLoadData.value();
-        bool valueMismatch = actualValue != specValue;
 
-        if (valueMismatch) {
-            DPRINTF(Commit, "[tid:%i] [sn:%llu] Bypassed load has value mismatch. "
-                    "Actual value: %#x, Speculated value: %#x\n",
-                    tid, head_inst->seqNum, actualValue, specValue);
+        if (actualRegValue != specValue) {
+            DPRINTF(Commit, "[tid:%i] [sn:%llu] Bypassed load value mismatch. "
+                    "Size %d,speculated value: %#x, actual reg value: %#x\n",
+                    tid, head_inst->seqNum, head_inst->effSize, specValue, actualRegValue);
 
             commitStatus[tid] = ROBSquashing;
             ++stats.bypassedLoadValueCheckViolation;

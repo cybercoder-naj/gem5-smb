@@ -404,7 +404,12 @@ class CPU : public BaseCPU
 
     IEW *getIEW() { return &iew; }
 
+    SMB *getSMB() { return &smb; }
+
   protected:
+    /** The predictor for speculative memory bypassing. */
+    SMB smb;
+
     /** The fetch stage. */
     Fetch fetch;
 

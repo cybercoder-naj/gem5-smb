@@ -65,8 +65,7 @@ Rename::Rename(CPU *_cpu, const BaseO3CPUParams &params)
       commitToRenameDelay(params.commitToRenameDelay),
       renameWidth(params.renameWidth),
       numThreads(params.numThreads),
-      stats(_cpu),
-      smb(_cpu->name() + ".smb")
+      stats(_cpu)
 {
     if (renameWidth > MaxWidth)
         fatal("renameWidth (%d) is larger than compiled limit (%d),\n"
@@ -721,7 +720,7 @@ Rename::renameInsts(ThreadID tid)
         }
 
         if (inst->isLoad() || inst->isStore()) {
-            smb.registerMemoryAccess(inst->pcState().instAddr(), inst->seqNum, inst->isStore());
+            cpu->getSMB()->registerMemoryAccess(inst->pcState().instAddr(), inst->seqNum, inst->isStore());
         }
 
         renameSrcRegs(inst, inst->threadNumber);
@@ -978,7 +977,7 @@ Rename::doSquash(const InstSeqNum &squashed_seq_num, ThreadID tid)
         ++stats.undoneMaps;
     }
     
-    smb.squash();
+    cpu->getSMB()->squash();
     storePhysRegs.clear();
     bypassedArchToPhys.clear();
 }
@@ -1031,7 +1030,7 @@ Rename::removeFromHistory(InstSeqNum inst_seq_num, ThreadID tid)
         historyBuffer[tid].erase(hb_it--);
     }
 
-    smb.removeUpTo(inst_seq_num);
+    cpu->getSMB()->removeUpTo(inst_seq_num);
 }
 
 void
@@ -1153,7 +1152,7 @@ Rename::renameDestRegs(const DynInstPtr &inst, ThreadID tid)
                     "Querying SMB Predictor for load [sn:%llu] with PC %s.\n",
                     tid, inst->seqNum, inst->pcState());
 
-            smb_store_seqnum  = smb.predictSourceStore(inst->seqNum);
+            smb_store_seqnum  = cpu->getSMB()->predictSourceStore(inst->seqNum);
             if (smb_store_seqnum != 0) {
                 DPRINTF(Rename,
                         "[tid:%i] "

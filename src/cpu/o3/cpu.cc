@@ -79,6 +79,7 @@ CPU::CPU(const BaseO3CPUParams &params)
 #ifndef NDEBUG
       instcount(0),
 #endif
+      smb(this->name() + ".smb"),
       removeInstsThisCycle(false),
       fetch(this, params),
       decode(this, params),
