@@ -271,7 +271,7 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
     prediction.storeQueueDistances = {0,0};
     prediction.seqNums = std::vector<InstSeqNum>();
 
-    if (inst->isLoad() && inst->isBypassedLoad()) {
+    if (inst->isBypassedLoad()) {
         // SMB loads are only dependent on the store they are paired with, so skip the predictor and just add that dependency.
         MemDepHashIt hash_it = memDepHash.find(inst->smbStoreSeqNum);
         if (hash_it != memDepHash.end()) {

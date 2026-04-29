@@ -1274,6 +1274,19 @@ InstructionQueue::doSquash(ThreadID tid)
                     ++iqStats.squashedOperandsExamined;
                 }
 
+                if (squashed_inst->isBypassedLoad()) {
+                    PhysRegIdPtr src_reg = squashed_inst->smbSrcStorePhysReg;
+
+                    if (!squashed_inst->readySmbRegister()) {
+                        DPRINTF(IQ, "Also removing dependency on bypassed store "
+                                "valid register for instruction [sn:%llu] PC %s.\n",
+                                squashed_inst->seqNum, squashed_inst->pcState());
+                        dependGraph.remove(squashed_inst->smbSrcStorePhysReg->flatIndex(),
+                                            squashed_inst);
+                    }
+
+                    ++iqStats.squashedOperandsExamined;
+                }
             } else if (!squashed_inst->isStoreConditional() ||
                        !squashed_inst->isCompleted()) {
                 NonSpecMapIt ns_inst_it =
@@ -1313,12 +1326,6 @@ InstructionQueue::doSquash(ThreadID tid)
             count[squashed_inst->threadNumber]--;
 
             ++freeEntries;
-        }
-
-        if (squashed_inst->isBypassedLoad() &&
-            !regScoreboard[squashed_inst->smbSrcStorePhysReg->flatIndex()]) {
-            dependGraph.remove(squashed_inst->smbSrcStorePhysReg->flatIndex(),
-                                squashed_inst);
         }
 
         // IQ clears out the heads of the dependency graph only when
@@ -1390,6 +1397,7 @@ InstructionQueue::addToDependents(const DynInstPtr &new_inst)
                         "became ready before it reached the IQ.\n",
                         new_inst->pcState(), src_reg->index(),
                         src_reg->className());
+
                 // Mark a register ready within the instruction.
                 new_inst->markSrcRegReady(src_reg_idx);
             }
@@ -1399,17 +1407,19 @@ InstructionQueue::addToDependents(const DynInstPtr &new_inst)
     if (new_inst->isBypassedLoad()) {
         assert(new_inst->smbSrcStorePhysReg);
 
-        if (!regScoreboard[new_inst->smbSrcStorePhysReg->flatIndex()]) {
-            DPRINTF(IQ, "Instruction PC %s is a bypassed load, adding "
-                    "dependency on the store valid register.\n", new_inst->pcState());
+        if (!new_inst->readySmbRegister()) {
+            if (!regScoreboard[new_inst->smbSrcStorePhysReg->flatIndex()]) {
+                DPRINTF(IQ, "Instruction PC %s is a bypassed load, adding "
+                        "dependency on the store valid register.\n", new_inst->pcState());
 
-            dependGraph.insert(new_inst->smbSrcStorePhysReg->flatIndex(), new_inst);
+                dependGraph.insert(new_inst->smbSrcStorePhysReg->flatIndex(), new_inst);
 
-            return_val = true;
-        } else {
-            // Internally, this makes sure that there's one extra register to wait upon.
-            new_inst->markSrcRegReady();
-        }
+                return_val = true;
+            } else {
+                // Internally, this makes sure that there's one extra register to wait upon.
+                new_inst->markSmbRegReady();
+            }
+        } 
     }
 
     return return_val;

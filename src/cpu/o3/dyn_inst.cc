@@ -344,6 +344,13 @@ DynInst::markSrcRegReady(RegIndex src_idx)
     markSrcRegReady();
 }
 
+void
+DynInst::markSmbRegReady() {
+    assert(isBypassedLoad());
+    setReadySmbRegister(true);
+    markSrcRegReady();
+}
+
 
 void
 DynInst::setSquashed()

@@ -1188,6 +1188,16 @@ Rename::renameDestRegs(const DynInstPtr &inst, ThreadID tid)
             ++stats.bypassedLoads;
 
             bypassedArchToPhys[flat_dest_regid] = store_phys_reg;
+        
+            if (scoreboard->getReg(store_phys_reg)) {
+                DPRINTF(Rename,
+                        "[tid:%i] "
+                        "SMB source register %d (flat: %d) (%s) is ready.\n",
+                        tid, store_phys_reg->index(), store_phys_reg->flatIndex(),
+                        store_phys_reg->className());
+
+                inst->markSmbRegReady();
+            }
         } 
         
         DPRINTF(Rename,

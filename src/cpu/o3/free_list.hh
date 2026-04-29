@@ -81,12 +81,6 @@ class SimpleFreeList
 
     /** Add a physical register to the free list */
     void addReg(PhysRegIdPtr reg) { 
-        auto tmp = freeRegs;
-        while (!tmp.empty()) {
-            assert(tmp.front() != reg);
-            tmp.pop();
-        }
-
         freeRegs.push(reg); 
     }
 

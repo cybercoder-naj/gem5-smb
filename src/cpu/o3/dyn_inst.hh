@@ -240,6 +240,8 @@ class DynInst : public ExecContext, public RefCounted
     // Whether or not the source register is ready, one bit per register.
     uint8_t *_readySrcIdx;
 
+    bool _readySmbRegister = false;
+
   public:
     size_t numSrcs() const { return _numSrcs; }
     size_t numDests() const { return _numDests; }
@@ -385,7 +387,6 @@ class DynInst : public ExecContext, public RefCounted
     /** Iterator of the SQ pointing to the SMB predicted source store. */
     typename LSQUnit::SQIterator smbPredStoreIt;
     PhysRegIdPtr smbSrcStorePhysReg = nullptr;
-
     std::optional<RegVal> smbSpeculatedLoadData = std::nullopt;
 
     bool isBypassedLoad() const {
@@ -396,7 +397,24 @@ class DynInst : public ExecContext, public RefCounted
         instFlags.set(BypassedLoad);
         smbSrcStorePhysReg = phys_reg_id;
         smbStoreSeqNum = seq_num;
+        _readySmbRegister = false;
     }
+
+    bool
+    readySmbRegister() const
+    {
+        assert(isBypassedLoad());
+        return _readySmbRegister;
+    }
+
+    void
+    setReadySmbRegister(bool ready)
+    {
+        assert(isBypassedLoad());
+        _readySmbRegister = ready;
+    }
+
+    void markSmbRegReady();
 
     /////////////////////// TLB Miss //////////////////////
     /**

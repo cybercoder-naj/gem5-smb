@@ -140,9 +140,13 @@ class Commit
     /** Monotonically increasing sequence number of the last committed instruction. */
     InstSeqNum doneSeqNum[MaxThreads];
 
+    std::ofstream memTraceFile;
+
   public:
     /** Construct a Commit with the given parameters. */
     Commit(CPU *_cpu, const BaseO3CPUParams &params);
+
+    ~Commit();
 
     /** Returns the name of the Commit. */
     std::string name() const;
@@ -242,6 +246,8 @@ class Commit
      * tell the CPU if commit is active/inactive.
      */
     void updateStatus();
+
+    void dumpMemInstruction(const DynInstPtr &head_inst);
 
     /** Returns if any of the threads have the number of ROB entries changed
      * on this cycle. Used to determine if the number of free ROB entries needs

@@ -40,6 +40,7 @@ SMB::SMB(const std::string &_my_name) :
 
     predictions[l_pc] = s_pc;
   }
+  infile.close();
 }
 
 InstSeqNum

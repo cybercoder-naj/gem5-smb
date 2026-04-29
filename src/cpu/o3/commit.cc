@@ -131,8 +131,28 @@ Commit::Commit(CPU *_cpu, const BaseO3CPUParams &params)
         renameMap[tid] = nullptr;
         htmStarts[tid] = 0;
         htmStops[tid] = 0;
+        doneSeqNum[tid] = 0;
     }
     interrupt = NoFault;
+
+    const char* env = std::getenv("MEM_TRACE_FILE");
+    if (!env) {
+        DPRINTF(Commit, "MEM_TRACE_FILE environment variable not set. No predictions loaded.\n");
+        return;
+    }
+
+    memTraceFile.open(env);
+    if (!memTraceFile.is_open()) {
+        DPRINTF(Commit, "Could not open MEM_TRACE_FILE\n");
+        return;
+    }
+}
+
+Commit::~Commit()
+{
+    if (memTraceFile.is_open()) {
+        memTraceFile.close();
+    }
 }
 
 std::string Commit::name() const { return cpu->name() + ".commit"; }
@@ -904,23 +924,10 @@ Commit::commit()
     }
 }
 
-static void
-dumpMemInstruction(const DynInstPtr &head_inst) {
+void
+Commit::dumpMemInstruction(const DynInstPtr &head_inst) {
     assert(head_inst->isLoad() || head_inst->isStore());
     assert(head_inst->effAddrValid());
-
-    const char* env = std::getenv("MEM_TRACE_FILE");
-    if (!env) {
-        DPRINTF(Commit, "MEM_TRACE_FILE environment variable not set. No predictions loaded.\n");
-        return;
-    }
-
-    std::string trace_file = std::string(env);
-    std::ofstream outfile(trace_file, std::ios::app);
-    if (!outfile.is_open()) {
-        DPRINTF(Commit, "Could not open MEM_TRACE_FILE\n");
-        return;
-    }
 
     InstSeqNum seq_num = head_inst->seqNum;
     Addr pc_state = head_inst->pcState().instAddr();
@@ -928,8 +935,7 @@ dumpMemInstruction(const DynInstPtr &head_inst) {
     unsigned int eff_size = head_inst->effSize;
     bool is_load = head_inst->isLoad();
 
-    outfile << "# " << head_inst->staticInst->disassemble(head_inst->pcState().instAddr()) << "\n"; 
-    outfile << seq_num << " "
+    memTraceFile << seq_num << " "
         << std::hex << pc_state << " "
         << std::hex << eff_addr << " "
         << std::dec << eff_size << " "
