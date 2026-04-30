@@ -43,6 +43,7 @@
 
 #include <list>
 
+#include "cpu/o3/bypass_move_inst.hh"
 #include "cpu/o3/cpu.hh"
 #include "cpu/o3/dyn_inst.hh"
 #include "cpu/o3/limits.hh"
@@ -1145,6 +1146,46 @@ Rename::renameDestRegs(const DynInstPtr &inst, ThreadID tid)
 
         ++stats.renamedOperands;
     }
+}
+
+DynInstPtr
+Rename::buildBypassMoveInst(ThreadID tid, RegId store_src, 
+                                    RegId load_src, RegId load_dest, bool trace)
+{
+    // Get a sequence number.
+    InstSeqNum seq = cpu->getAndIncrementInstSeq();
+    StaticInstPtr staticInst = buildBypassMoveStaticInst(store_src, load_src, load_dest);
+
+    DynInst::Arrays arrays;
+    arrays.numSrcs = staticInst->numSrcRegs();
+    arrays.numDests = staticInst->numDestRegs();
+
+    // Create a new DynInst from the instruction fetched.
+    DynInstPtr instruction = new (arrays) DynInst(
+            arrays, staticInst, nullptr, seq, cpu);
+    instruction->setTid(tid);
+
+    instruction->setThreadState(cpu->thread[tid]);
+
+    DPRINTF(Rename, "[tid:%i] Instruction created [sn:%lli].\n", tid, seq);
+
+    // DPRINTF(Rename, "[tid:%i] Instruction is: %s\n", tid,
+    //         instruction->staticInst->disassemble(this_pc.instAddr()));
+
+#if TRACING_ON
+    if (trace) {
+        instruction->traceData =
+            cpu->getTracer()->getInstRecord(curTick(), cpu->tcBase(tid),
+                    instruction->staticInst, this_pc, curMacroop);
+    }
+#else
+    instruction->traceData = NULL;
+#endif
+
+    // Add instruction to the CPU's list of instructions.
+    instruction->setInstListIt(cpu->addInst(instruction));
+
+    return instruction;
 }
 
 int

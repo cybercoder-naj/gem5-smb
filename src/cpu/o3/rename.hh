@@ -254,6 +254,10 @@ class Rename
     /** Renames the destination registers of an instruction. */
     void renameDestRegs(const DynInstPtr &inst, ThreadID tid);
 
+    /** Renames the destination registers of an instruction. */
+    DynInstPtr buildBypassMoveInst(ThreadID tid, RegId store_src, 
+                                    RegId load_src, RegId load_dest, bool trace);
+
     /** Calculates the number of free ROB entries for a specific thread. */
     int calcFreeROBEntries(ThreadID tid);
 
