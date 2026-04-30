@@ -1050,6 +1050,15 @@ InstructionQueue::wakeDependents(const DynInstPtr &completed_inst)
             DPRINTF(IQ, "Waking up a dependent instruction, [sn:%llu] "
                     "PC %s.\n", dep_inst->seqNum, dep_inst->pcState());
 
+
+            if (dep_inst->isLoad()) {
+                PhysRegIdPtr dest_reg = dep_inst->renamedDestIdx(0);
+                auto data = cpu->getReg(dest_reg, dep_inst->threadNumber);
+
+                DPRINTF(IQ, "FARTS [tid:%i] [sn:%llu] Phys reg %i has content %lli\n",
+                    dep_inst->threadNumber, dep_inst->seqNum, dest_reg->index(), data);
+            }
+
             // Might want to give more information to the instruction
             // so that it knows which of its source registers is
             // ready.  However that would mean that the dependency

@@ -1096,8 +1096,23 @@ LSQUnit::writeback(const DynInstPtr &inst, PacketPtr pkt)
         inst->setExecuted();
 
         if (inst->fault == NoFault) {
-            // Complete access to copy data to proper place.
-            inst->completeAcc(pkt);
+            if (inst->isLoad()) { // todo change to bypassed load
+                ThreadID tid = inst->threadNumber;
+                PhysRegIdPtr dest_reg = inst->renamedDestIdx(0);
+                auto before = cpu->getReg(dest_reg, tid);
+
+                DPRINTF(LSQUnit, "FARTS [tid:%i] [sn:%lli] Load writeback calling completeAcc. \n", 
+                    tid, inst->seqNum);
+                inst->completeAcc(pkt);
+                auto after = cpu->getReg(dest_reg, tid);
+
+                DPRINTF(LSQUnit, "FARTS [tid:%i] [sn:%lli] Finished Load writeback. "
+                    "Before: 0x%llx; After: 0x%llx\n",
+                    tid, inst->seqNum, before, after);
+            } else {
+                // Complete access to copy data to proper place.
+                inst->completeAcc(pkt);
+            }
         } else {
             // If the instruction has an outstanding fault, we cannot complete
             // the access as this discards the current fault.

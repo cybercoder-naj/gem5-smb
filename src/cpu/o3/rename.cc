@@ -1105,6 +1105,12 @@ Rename::renameDestRegs(const DynInstPtr &inst, ThreadID tid)
 
         rename_result = map->rename(flat_dest_regid);
 
+        if (inst->isLoad()) {
+            auto data = cpu->getReg(rename_result.second, tid);
+            DPRINTF(Rename, "FARTS [tid:%i] [sn:%llu] prev phys reg %i (%i) has content %lli\n",
+                tid, inst->seqNum, rename_result.second->index(), rename_result.second->flatIndex(), data);
+        }
+
         inst->flattenedDestIdx(dest_idx, flat_dest_regid);
 
         scoreboard->unsetReg(rename_result.first);
