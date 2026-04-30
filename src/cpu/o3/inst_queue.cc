@@ -1467,6 +1467,25 @@ InstructionQueue::addIfReady(const DynInstPtr &inst)
     // available, then add it to the list of ready instructions.
     if (inst->readyToIssue()) {
 
+        for (size_t i = 0; i < inst->numSrcRegs(); ++i) {
+            PhysRegIdPtr src_reg = inst->renamedSrcIdx(i);
+            switch (src_reg->classValue())
+            {
+                case IntRegClass:
+                case FloatRegClass:
+                case VecRegClass:
+                case VecElemClass:
+                case VecPredRegClass:
+                case MatRegClass:
+                case CCRegClass:
+                    RegVal src_val = cpu->getReg(src_reg, inst->threadNumber);
+                
+                    DPRINTF(IQ, "FARTS Source reg %i (%s) value is %d.\n",
+                            src_reg->index(), src_reg->className(), src_val);
+            }
+
+        }
+
         //Add the instruction to the proper ready list.
         if (inst->isMemRef()) {
 

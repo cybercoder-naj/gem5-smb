@@ -1341,8 +1341,8 @@ Commit::commitHead(const DynInstPtr &head_inst, unsigned inst_num)
         assert(head_inst->smbSpeculatedLoadData.has_value());
 
         // build the actual value from memdata uint8_t*
-        RegVal actualRegValue = cpu->getReg(actualValueReg, tid);
-        auto specValue = head_inst->smbSpeculatedLoadData.value();
+        RegVal actualRegValue = cpu->getReg(actualValueReg, tid); // this is the 8-byte value.
+        auto specValue = head_inst->smbSpeculatedLoadData.value(); // this may be smaller than 8 bytes.
 
         if (actualRegValue != specValue) {
             DPRINTF(Commit, "[tid:%i] [sn:%llu] Bypassed load value mismatch. "
