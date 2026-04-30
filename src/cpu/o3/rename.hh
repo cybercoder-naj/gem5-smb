@@ -52,6 +52,7 @@
 #include "cpu/o3/free_list.hh"
 #include "cpu/o3/iew.hh"
 #include "cpu/o3/limits.hh"
+#include "cpu/o3/smb.hh"
 #include "cpu/timebuf.hh"
 #include "sim/probe/probe.hh"
 
@@ -144,6 +145,9 @@ class Rename
 
     /** Sets pointer to IEW stage. Used only for initialization. */
     void setIEWStage(IEW *iew_stage) { iew_ptr = iew_stage; }
+
+    /** Sets pointer to SMB predictor. */
+    void setSMBPredictor(SMB *smb_ptr);
 
     /** Sets pointer to commit stage. Used only for initialization. */
     void
@@ -256,7 +260,7 @@ class Rename
 
     /** Renames the destination registers of an instruction. */
     DynInstPtr buildBypassMoveInst(ThreadID tid, RegId store_src, 
-                                    RegId load_src, RegId load_dest, bool trace);
+                                    RegId load_src, RegId load_dest);
 
     /** Calculates the number of free ROB entries for a specific thread. */
     int calcFreeROBEntries(ThreadID tid);
@@ -350,6 +354,9 @@ class Rename
 
     /** Wire to get decode's output from decode queue. */
     TimeBuffer<DecodeStruct>::wire fromDecode;
+
+    /** The SMB predictor. */
+    SMB *smb;
 
     /** Queue of all instructions coming from decode this cycle. */
     InstQueue insts[MaxThreads];
@@ -465,6 +472,9 @@ class Rename
 
     /** The maximum skid buffer size. */
     unsigned skidBufferMax;
+
+    /** Map of store instructions' associated physical registers. */
+    std::unordered_map<InstSeqNum, std::pair<RegId, PhysRegIdPtr>> storeRegs;
 
     /** Enum to record the source of a structure full stall.  Can come from
      * either ROB, IQ, LSQ, and it is priortized in that order.

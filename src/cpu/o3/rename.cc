@@ -87,6 +87,8 @@ Rename::Rename(CPU *_cpu, const BaseO3CPUParams &params)
         serializeInst[tid] = nullptr;
         serializeOnNextInst[tid] = false;
     }
+
+    storeRegs.clear();
 }
 
 std::string
@@ -210,6 +212,12 @@ Rename::setRenameQueue(TimeBuffer<RenameStruct> *rq_ptr)
 
     // Setup wire to write information to future stages.
     toIEW = renameQueue->getWire(0);
+}
+
+void
+Rename::setSMBPredictor(SMB *smb_ptr)
+{
+    smb = smb_ptr;
 }
 
 void
@@ -711,6 +719,9 @@ Rename::renameInsts(ThreadID tid)
             serializeAfter(insts_to_rename, tid);
         }
 
+        if (inst->isLoad() || inst->isStore())
+            smb->registerMemoryAccess(inst->pcState().instAddr(), inst->seqNum, inst->isStore());
+
         renameSrcRegs(inst, inst->threadNumber);
 
         renameDestRegs(inst, inst->threadNumber);
@@ -964,6 +975,9 @@ Rename::doSquash(const InstSeqNum &squashed_seq_num, ThreadID tid)
 
         ++stats.undoneMaps;
     }
+
+    smb->squash();
+    storeRegs.clear();
 }
 
 void
@@ -1084,6 +1098,10 @@ Rename::renameSrcRegs(const DynInstPtr &inst, ThreadID tid)
                     renamed_reg->className());
         }
 
+        if (inst->isStore() && src_idx == 2) {
+            storeRegs[inst->seqNum] = std::make_pair(flat_reg, renamed_reg); 
+        }
+
         ++stats.lookups;
     }
 }
@@ -1106,10 +1124,23 @@ Rename::renameDestRegs(const DynInstPtr &inst, ThreadID tid)
 
         rename_result = map->rename(flat_dest_regid);
 
-        if (inst->isLoad()) {
-            auto data = cpu->getReg(rename_result.second, tid);
-            DPRINTF(Rename, "FARTS [tid:%i] [sn:%llu] prev phys reg %i (%i) has content %lli\n",
-                tid, inst->seqNum, rename_result.second->index(), rename_result.second->flatIndex(), data);
+        if (inst->isLoad() && dest_idx == 0) {
+            InstSeqNum smb_store_seqnum = smb->predictSourceStore(inst->seqNum);
+            if (smb_store_seqnum != 0) {
+                DPRINTF(Rename,
+                        "[tid:%i] [sn:%llu]"
+                        "SMB Predictor predicted store with sequence number "
+                        "%llu as source of load.\n",
+                        tid, inst->seqNum, smb_store_seqnum);
+
+                auto doneSeqNum = commit_ptr->getDoneSeqNum(tid);
+                if (doneSeqNum >= smb_store_seqnum) {
+                    // todo is this required?
+                    // ++stats.smbStoreOutsideInstWindow;
+                } else {
+
+                }
+            }
         }
 
         inst->flattenedDestIdx(dest_idx, flat_dest_regid);
@@ -1150,7 +1181,7 @@ Rename::renameDestRegs(const DynInstPtr &inst, ThreadID tid)
 
 DynInstPtr
 Rename::buildBypassMoveInst(ThreadID tid, RegId store_src, 
-                                    RegId load_src, RegId load_dest, bool trace)
+                                    RegId load_src, RegId load_dest)
 {
     // Get a sequence number.
     InstSeqNum seq = cpu->getAndIncrementInstSeq();
@@ -1167,20 +1198,9 @@ Rename::buildBypassMoveInst(ThreadID tid, RegId store_src,
 
     instruction->setThreadState(cpu->thread[tid]);
 
-    DPRINTF(Rename, "[tid:%i] Instruction created [sn:%lli].\n", tid, seq);
+    DPRINTF(Rename, "[tid:%i] Bypass Move Instruction created [sn:%lli].\n", tid, seq);
 
-    // DPRINTF(Rename, "[tid:%i] Instruction is: %s\n", tid,
-    //         instruction->staticInst->disassemble(this_pc.instAddr()));
-
-#if TRACING_ON
-    if (trace) {
-        instruction->traceData =
-            cpu->getTracer()->getInstRecord(curTick(), cpu->tcBase(tid),
-                    instruction->staticInst, this_pc, curMacroop);
-    }
-#else
     instruction->traceData = NULL;
-#endif
 
     // Add instruction to the CPU's list of instructions.
     instruction->setInstListIt(cpu->addInst(instruction));
