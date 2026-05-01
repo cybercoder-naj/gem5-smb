@@ -120,6 +120,9 @@ class DynInst : public ExecContext, public RefCounted
     /** Completes the access.  Only valid for memory operations. */
     Fault completeAcc(PacketPtr pkt);
 
+    /** The original sequence number of the instruction assigned at first build. */
+    InstSeqNum originalSeqNum = 0;
+
     /** The sequence number of the instruction. */
     InstSeqNum seqNum = 0;
 

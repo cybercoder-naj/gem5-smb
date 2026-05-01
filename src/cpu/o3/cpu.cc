@@ -1141,6 +1141,30 @@ CPU::addInst(const DynInstPtr &inst)
     return --(instList.end());
 }
 
+// TODO TEST THIS METHOD
+// inserts a new instruction before the given instruction in the instruction list, and
+// updates the sequence numbers of the instructions after the inserted instruction
+CPU::ListIt 
+CPU::insertBefore(const DynInstPtr &before, const DynInstPtr &new_inst) {
+    new_inst->seqNum = before->seqNum;
+
+    auto it = before->getInstListIt();
+    instList.insert(it, new_inst);
+
+    // Increment the sequence numbers of the instructions after the inserted instruction.
+    for (auto iter = it; iter != instList.end(); ++iter) {
+        if (*iter != new_inst) {
+            (*iter)->seqNum++;
+
+            DPRINTF(O3CPU, "Incrementing sequence number of instruction [tid:%i] [sn:%lli] to %lli\n",
+                    (*iter)->threadNumber, (*iter)->seqNum - 1, (*iter)->seqNum);
+        }
+    }
+
+    // return the iterator to the newly inserted instruction
+    return --(before->getInstListIt());
+}
+
 void
 CPU::instDone(ThreadID tid, const DynInstPtr &inst)
 {

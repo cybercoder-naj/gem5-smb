@@ -351,6 +351,12 @@ class CPU : public BaseCPU
      */
     ListIt addInst(const DynInstPtr &inst);
 
+    /** Function to add an instruction before another instruction.
+     *  This also adjusted the seqnum, without changing the seqNum from fetch.
+     *  Used when bypass move instructions need to be inserted
+     */
+    ListIt insertBefore(const DynInstPtr &before, const DynInstPtr &new_inst);
+
     /** Function to tell the CPU that an instruction has completed. */
     void instDone(ThreadID tid, const DynInstPtr &inst);
 
