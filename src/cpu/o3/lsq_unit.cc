@@ -1096,19 +1096,20 @@ LSQUnit::writeback(const DynInstPtr &inst, PacketPtr pkt)
         inst->setExecuted();
 
         if (inst->fault == NoFault) {
-            if (inst->isLoad()) { // todo change to bypassed load
+            if (inst->isBypassedLoad()) {
                 ThreadID tid = inst->threadNumber;
                 PhysRegIdPtr dest_reg = inst->renamedDestIdx(0);
-                auto before = cpu->getReg(dest_reg, tid);
 
-                DPRINTF(LSQUnit, "FARTS [tid:%i] [sn:%lli] Load writeback calling completeAcc. \n", 
-                    tid, inst->seqNum);
+                auto before = cpu->getReg(dest_reg, tid);
                 inst->completeAcc(pkt);
                 auto after = cpu->getReg(dest_reg, tid);
 
-                DPRINTF(LSQUnit, "FARTS [tid:%i] [sn:%lli] Finished Load writeback. "
-                    "Before: 0x%llx; After: 0x%llx\n",
-                    tid, inst->seqNum, before, after);
+                if (before != after) {
+                    DPRINTF(LSQUnit, "Bypassed load [sn:%lli] value check failed! "
+                            "Speculated: %#llx, actual: %#llx\n",
+                            inst->seqNum, before, after);
+                    inst->setSmbViolation();
+                }
             } else {
                 // Complete access to copy data to proper place.
                 inst->completeAcc(pkt);

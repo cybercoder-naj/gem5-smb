@@ -388,6 +388,7 @@ class DynInst : public ExecContext, public RefCounted
     /////////////////////// SMB Data //////////////////////
 
     InstSeqNum smbStoreSeqNum = 0;
+    bool _smbViolation = false;
 
     bool isBypassable() const {
         return staticInst->isLoad() && !staticInst->isRMW() && !staticInst->isRMWA();
@@ -396,9 +397,16 @@ class DynInst : public ExecContext, public RefCounted
         return staticInst->isLoad() && instFlags.test(BypassedLoad);
     }
     void setBypassedLoad(InstSeqNum seq_num) {
-        assert(staticInst->isLoad());
+        assert(isBypassable());
         instFlags.set(BypassedLoad);
         smbStoreSeqNum = seq_num;
+    }
+    void setSmbViolation() {
+        assert(isBypassedLoad());
+        _smbViolation = true;
+    }
+    bool smbViolation() const {
+        return _smbViolation;
     }
 
     bool isBypassMove() { return instFlags.test(BypassMove); }

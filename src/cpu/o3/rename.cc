@@ -148,7 +148,9 @@ Rename::RenameStats::RenameStats(statistics::Group *parent)
       ADD_STAT(tempSerializing, statistics::units::Count::get(),
                "count of temporary serializing insts renamed"),
       ADD_STAT(skidInsts, statistics::units::Count::get(),
-               "count of insts added to the skid buffer")
+               "count of insts added to the skid buffer"),
+      ADD_STAT(bypassedLoads, statistics::units::Count::get(),
+               "count of bypassed loads renamed")
 {
     squashCycles.prereq(squashCycles);
     idleCycles.prereq(idleCycles);
@@ -771,9 +773,7 @@ Rename::renameInsts(ThreadID tid)
                             bypassMove->markSrcRegReady(1);
 
                         inst->setBypassedLoad(smb_store_seqnum);
-
-                        // todo
-                        // ++stats.bypassedLoads
+                        ++stats.bypassedLoads;
 
                         // We don't add to historyBuffer for cleanup when
                         // instruction commits or squashes.

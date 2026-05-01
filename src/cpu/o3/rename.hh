@@ -549,6 +549,8 @@ class Rename
         statistics::Scalar tempSerializing;
         /** Number of instructions inserted into skid buffers. */
         statistics::Scalar skidInsts;
+        /** Number of loads that are bypassed. */
+        statistics::Scalar bypassedLoads;
     } stats;
 };
 

@@ -516,7 +516,7 @@ Commit::squashAll(ThreadID tid)
     // Hopefully this doesn't mess things up.  Basically I want to squash
     // all instructions of this thread.
     InstSeqNum squashed_inst = rob->isEmpty(tid) ?
-        lastCommitedSeqNum[tid] : rob->readHeadInst(tid)->seqNum - 1;
+        lastCommitedSeqNum[tid] : rob->readHeadInst(tid)->seqNum - 10;
 
     // All younger instructions will be squashed. Set the sequence
     // number as the youngest instruction in the ROB (0 in this case.
@@ -1337,7 +1337,12 @@ Commit::commitHead(const DynInstPtr &head_inst, unsigned inst_num)
         return false;
     }
 
-    // TODO - Bypassed load value check
+    if (head_inst->isBypassedLoad() && head_inst->smbViolation()) {
+        commitStatus[tid] = ROBSquashing;
+        ++stats.bypassedLoadValueCheckViolation;
+        squashAll(tid);
+        return false;
+    }
 
     updateComInstStats(head_inst);
 
