@@ -50,7 +50,7 @@ load_overrides() {
   fi
 }
 
-scons build/X86/gem5.opt --ignore-style -j$(nproc)
+scons build/X86/gem5.debug --ignore-style -j$(nproc)
 
 for filename in $progs; do
   base=$(basename $filename .s)
@@ -70,7 +70,7 @@ for filename in $progs; do
     echo "" > $prog_wd/$base-stats-no-smb.txt
 
     echo "=== Running $base (no SMB) ==="
-    if ! ./build/X86/gem5.opt \
+    if ! ./build/X86/gem5.debug \
       --debug-flags=O3CPUAll,O3PipeView \
       --debug-file=../$prog_wd/$base-no-smb-trace.out \
       configs/deprecated/example/se.py \
@@ -111,7 +111,7 @@ for filename in $progs; do
     unset MEM_TRACE_FILE
 
     echo "=== Running $base (with SMB) ==="
-    if ! ./build/X86/gem5.opt \
+    if ! ./build/X86/gem5.debug \
       --debug-flags=O3CPUAll,O3PipeView \
       --debug-file=../$prog_wd/$base-smb-trace.out \
       configs/deprecated/example/se.py \

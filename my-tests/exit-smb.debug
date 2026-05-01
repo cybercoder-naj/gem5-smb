@@ -2505,6 +2505,9 @@ wbActual:0
   92500: system.cpu.iew: Activity this cycle.
   92500: system.cpu.iew: Execute: Executing instructions from IQ.
   92500: system.cpu.iew: Execute: Processing PC (0x40100f=>0x401013).(0=>1), [tid:0] [sn:55].
+  92500: global: RegFile: Access to int register 42, has data 0x3421
+  92500: global: RegFile: Access to int register 41, has data 0x1234
+  92500: global: RegFile: Setting int register 43 to 0x1221
   92500: system.cpu.iew: Current wb cycle: 0, width: 19, numInst: 1
 wbActual:1
   92500: system.cpu.iew: Execute: Executing instructions from IQ.
@@ -2622,12 +2625,10 @@ wbActual:4
   92500: system.cpu: Removing instruction, [tid:0] [sn:10] PC (0x401000=>0x401004).(0=>1)
   92500: system.cpu: Scheduling next tick!
   92500: system.cpu: CPU already running.
-  92500: global: RegFile: Access to int register 43, has data 0
-  92500: system.cpu.iew.lsq.thread0: FARTS [tid:0] [sn:60] Load writeback calling completeAcc. 
+  92500: global: RegFile: Access to int register 43, has data 0x1221
   92500: global: RegFile: Access to int register 41, has data 0x1234
   92500: global: RegFile: Setting int register 43 to 0x1221
   92500: global: RegFile: Access to int register 43, has data 0x1221
-  92500: system.cpu.iew.lsq.thread0: FARTS [tid:0] [sn:60] Finished Load writeback. Before: 0x0; After: 0x1221
   92500: system.cpu.iew: Current wb cycle: 0, width: 19, numInst: 0
 wbActual:0
   92500: system.cpu.iew: Activity this cycle.

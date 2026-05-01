@@ -745,7 +745,7 @@ Rename::renameInsts(ThreadID tid)
                 const InstSeqNum smb_store_seqnum = smb->predictSourceStore(inst->seqNum);
                 if (smb_store_seqnum != 0) {
                     DPRINTF(Rename,
-                            "[tid:%i] [sn:%llu]"
+                            "[tid:%i] [sn:%llu] "
                             "SMB Predictor predicted store with sequence number "
                             "%llu as source of load.\n",
                             tid, inst->seqNum, smb_store_seqnum);
@@ -755,25 +755,10 @@ Rename::renameInsts(ThreadID tid)
                         //? is this required
                         // ++stats.smbStoreOutsideInstWindow;
                     } else {
-                        // NOTE that all this is ULTRA specific to x86.
-                        // ICBA to go through gem5 isa frontend.
-                        auto prev_phys_reg = inst->prevDestIdx(0);
-                        auto new_phys_reg = inst->renamedDestIdx(0);
-                        const auto& [store_arch_reg, store_phys_reg] = storeRegs[smb_store_seqnum];
-
-                        DynInstPtr bypassMove = buildBypassMoveInst(tid, inst, store_arch_reg, inst->pcState());
-                        bypassMove->setBypassMove();
-                        bypassMove->renameSrcReg(0, store_phys_reg); 
-                        bypassMove->renameSrcReg(1, prev_phys_reg); // previous mapping
-                        bypassMove->renameDestReg(0, new_phys_reg, prev_phys_reg); // new mapping
-
-                        if (scoreboard->getReg(store_phys_reg))
-                            bypassMove->markSrcRegReady(0);
-                        if (scoreboard->getReg(prev_phys_reg))
-                            bypassMove->markSrcRegReady(1);
-
                         inst->setBypassedLoad(smb_store_seqnum);
                         ++stats.bypassedLoads;
+
+                        DynInstPtr bypassMove = buildBypassMoveInst(tid, inst);
 
                         // We don't add to historyBuffer for cleanup when
                         // instruction commits or squashes.
@@ -1225,17 +1210,27 @@ Rename::renameDestRegs(const DynInstPtr &inst, ThreadID tid)
 }
 
 DynInstPtr
-Rename::buildBypassMoveInst(ThreadID tid, const DynInstPtr &bypassing_load, RegId store_src, const PCStateBase& pc)
+Rename::buildBypassMoveInst(ThreadID tid, const DynInstPtr &bypassed_load)
 {
-    // Get a sequence number.
-    InstSeqNum seq = bypassing_load->seqNum - 5; // Give it a sequence number slightly before the load, so it maintains the ordering.
-    RegId load_dest = bypassing_load->destRegIdx(0);
+    assert(bypassed_load->isBypassedLoad());
 
-    StaticInstPtr staticInst = buildBypassMoveStaticInst(store_src, load_dest, load_dest, bypassing_load->destRegMask);
+    // NOTE that all this is ULTRA specific to x86.
+    // ICBA to go through gem5 isa frontend.
+    auto prev_phys_reg = bypassed_load->prevDestIdx(0);
+    auto new_phys_reg = bypassed_load->renamedDestIdx(0);
+    const auto& [store_src, store_phys_reg] = storeRegs[bypassed_load->smbStoreSeqNum];
+
+    // Get a sequence number.
+    InstSeqNum seq = bypassed_load->seqNum - 5; // Give it a sequence number slightly before the load, so it maintains the ordering.
+    RegId load_dest = bypassed_load->destRegIdx(0);
+
+    StaticInstPtr staticInst = buildBypassMoveStaticInst(store_src, load_dest, load_dest, bypassed_load->destRegMask);
 
     DynInst::Arrays arrays;
     arrays.numSrcs = staticInst->numSrcRegs();
     arrays.numDests = staticInst->numDestRegs();
+
+    auto& pc = bypassed_load->pcState();
 
     // Create a new DynInst from the instruction fetched.
     DynInstPtr instruction = new (arrays) DynInst(
@@ -1248,10 +1243,27 @@ Rename::buildBypassMoveInst(ThreadID tid, const DynInstPtr &bypassing_load, RegI
     instruction->traceData = NULL;
 
     // Add instruction to the CPU's list of instructions.
-    instruction->setInstListIt(cpu->insertBefore(bypassing_load, instruction));
+    instruction->setInstListIt(cpu->insertBefore(bypassed_load, instruction));
 
     auto *isa = instruction->tcBase()->getIsaPtr();
     instruction->flattenedDestIdx(0, load_dest.flatten(*isa));
+
+    bool partial_write = bypassed_load->destRegMask != UINT64_MAX;
+    instruction->setBypassMove();
+
+    instruction->renameSrcReg(0, store_phys_reg);
+    if (partial_write)
+        instruction->renameSrcReg(1, prev_phys_reg); // previous mapping
+
+    if (scoreboard->getReg(store_phys_reg))
+        instruction->markSrcRegReady(0);
+    if (partial_write && scoreboard->getReg(prev_phys_reg))
+        instruction->markSrcRegReady(1);
+
+    instruction->renameDestReg(0, new_phys_reg, prev_phys_reg); // new mapping
+    scoreboard->unsetReg(new_phys_reg);
+
+    ++stats.renamedOperands;
 
     return instruction;
 }

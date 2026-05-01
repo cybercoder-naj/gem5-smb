@@ -390,6 +390,9 @@ class DynInst : public ExecContext, public RefCounted
     InstSeqNum smbStoreSeqNum = 0;
     bool _smbViolation = false;
 
+    /** Iterator of the SQ pointing to the SMB predicted source store. */
+    typename LSQUnit::SQIterator smbPredStoreIt;
+
     bool isBypassable() const {
         return staticInst->isLoad() && !staticInst->isRMW() && !staticInst->isRMWA();
     }

@@ -835,7 +835,7 @@ Commit::commit()
             InstSeqNum squashed_inst = fromIEW->squashedSeqNum[tid];
 
             if (fromIEW->includeSquashInst[tid]) {
-                squashed_inst--;
+                squashed_inst -= 10;
             }
 
             // All younger instructions will be squashed. Set the sequence
