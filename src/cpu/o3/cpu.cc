@@ -79,6 +79,7 @@ CPU::CPU(const BaseO3CPUParams &params)
 #ifndef NDEBUG
       instcount(0),
 #endif
+      smb(this->name() + ".smb"),
       removeInstsThisCycle(false),
       fetch(this, params),
       decode(this, params),
@@ -168,6 +169,7 @@ CPU::CPU(const BaseO3CPUParams &params)
     decode.setDecodeQueue(&decodeQueue);
     rename.setDecodeQueue(&decodeQueue);
     rename.setRenameQueue(&renameQueue);
+    rename.setSMBPredictor(&smb);
     iew.setRenameQueue(&renameQueue);
     iew.setIEWQueue(&iewQueue);
     commit.setIEWQueue(&iewQueue);

@@ -1274,6 +1274,19 @@ InstructionQueue::doSquash(ThreadID tid)
                     ++iqStats.squashedOperandsExamined;
                 }
 
+                if (squashed_inst->isBypassedLoad()) {
+                    PhysRegIdPtr src_reg = squashed_inst->smbSrcStorePhysReg;
+
+                    if (!squashed_inst->readySmbRegister()) {
+                        DPRINTF(IQ, "Also removing dependency on bypassed store "
+                                "valid register for instruction [sn:%llu] PC %s.\n",
+                                squashed_inst->seqNum, squashed_inst->pcState());
+                        dependGraph.remove(squashed_inst->smbSrcStorePhysReg->flatIndex(),
+                                            squashed_inst);
+                    }
+
+                    ++iqStats.squashedOperandsExamined;
+                }
             } else if (!squashed_inst->isStoreConditional() ||
                        !squashed_inst->isCompleted()) {
                 NonSpecMapIt ns_inst_it =
@@ -1384,10 +1397,29 @@ InstructionQueue::addToDependents(const DynInstPtr &new_inst)
                         "became ready before it reached the IQ.\n",
                         new_inst->pcState(), src_reg->index(),
                         src_reg->className());
+
                 // Mark a register ready within the instruction.
                 new_inst->markSrcRegReady(src_reg_idx);
             }
         }
+    }
+
+    if (new_inst->isBypassedLoad()) {
+        assert(new_inst->smbSrcStorePhysReg);
+
+        if (!new_inst->readySmbRegister()) {
+            if (!regScoreboard[new_inst->smbSrcStorePhysReg->flatIndex()]) {
+                DPRINTF(IQ, "Instruction PC %s is a bypassed load, adding "
+                        "dependency on the store valid register.\n", new_inst->pcState());
+
+                dependGraph.insert(new_inst->smbSrcStorePhysReg->flatIndex(), new_inst);
+
+                return_val = true;
+            } else {
+                // Internally, this makes sure that there's one extra register to wait upon.
+                new_inst->markSmbRegReady();
+            }
+        } 
     }
 
     return return_val;
@@ -1431,9 +1463,27 @@ InstructionQueue::addToProducers(const DynInstPtr &new_inst)
 void
 InstructionQueue::addIfReady(const DynInstPtr &inst)
 {
-    // If the instruction now has all of its source registers
-    // available, then add it to the list of ready instructions.
-    if (inst->readyToIssue()) {
+    if (inst->readyToSmbIssue() && !inst->isIssued()) {
+        OpClass op_class = IntAluOp;
+
+        DPRINTF(IQ, "Instruction is ready to issue under SMB, putting it onto "
+                "the ready list, PC %s opclass:%i [sn:%llu].\n",
+                inst->pcState(), op_class, inst->seqNum);
+
+        readyInsts[op_class].push(inst);
+
+        // Will need to reorder the list if either a queue is not on the list,
+        // or it has an older instruction than last time.
+        if (!queueOnList[op_class]) {
+            addToOrderList(op_class);
+        } else if (readyInsts[op_class].top()->seqNum  <
+                   (*readyIt[op_class]).oldestInst) {
+            listOrder.erase(readyIt[op_class]);
+            addToOrderList(op_class);
+        }
+    } else if (inst->readyToIssue()) {
+        // If the instruction now has all of its source registers
+        // available, then add it to the list of ready instructions.
 
         //Add the instruction to the proper ready list.
         if (inst->isMemRef()) {

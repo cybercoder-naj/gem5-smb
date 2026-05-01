@@ -86,6 +86,8 @@ Rename::Rename(CPU *_cpu, const BaseO3CPUParams &params)
         serializeInst[tid] = nullptr;
         serializeOnNextInst[tid] = false;
     }
+
+    storePhysRegs.clear();
 }
 
 std::string
@@ -145,7 +147,11 @@ Rename::RenameStats::RenameStats(statistics::Group *parent)
       ADD_STAT(tempSerializing, statistics::units::Count::get(),
                "count of temporary serializing insts renamed"),
       ADD_STAT(skidInsts, statistics::units::Count::get(),
-               "count of insts added to the skid buffer")
+               "count of insts added to the skid buffer"),
+      ADD_STAT(bypassedLoads, statistics::units::Count::get(),
+               "count of bypassed loads renamed"),
+      ADD_STAT(smbStoreOutsideInstWindow, statistics::units::Count::get(),
+               "count of stores that are outside the instruction window")
 {
     squashCycles.prereq(squashCycles);
     idleCycles.prereq(idleCycles);
@@ -176,6 +182,9 @@ Rename::RenameStats::RenameStats(statistics::Group *parent)
     serializing.flags(statistics::total);
     tempSerializing.flags(statistics::total);
     skidInsts.flags(statistics::total);
+
+    bypassedLoads.flags(statistics::total);
+    smbStoreOutsideInstWindow.flags(statistics::total);
 }
 
 void
@@ -218,6 +227,11 @@ Rename::setDecodeQueue(TimeBuffer<DecodeStruct> *dq_ptr)
 
     // Setup wire to get information from decode.
     fromDecode = decodeQueue->getWire(-decodeToRenameDelay);
+}
+
+void
+Rename::setSMBPredictor(SMB *smb_ptr) {
+    smb = smb_ptr;
 }
 
 void
@@ -710,6 +724,10 @@ Rename::renameInsts(ThreadID tid)
             serializeAfter(insts_to_rename, tid);
         }
 
+        if (inst->isLoad() || inst->isStore()) {
+            smb->registerMemoryAccess(inst->pcState().instAddr(), inst->seqNum, inst->isStore());
+        }
+
         renameSrcRegs(inst, inst->threadNumber);
 
         renameDestRegs(inst, inst->threadNumber);
@@ -963,6 +981,9 @@ Rename::doSquash(const InstSeqNum &squashed_seq_num, ThreadID tid)
 
         ++stats.undoneMaps;
     }
+    
+    smb->squash();
+    storePhysRegs.clear();
 }
 
 void
@@ -995,10 +1016,10 @@ Rename::removeFromHistory(InstSeqNum inst_seq_num, ThreadID tid)
            hb_it != historyBuffer[tid].end() &&
            hb_it->instSeqNum <= inst_seq_num) {
 
-        DPRINTF(Rename, "[tid:%i] Freeing up older rename of reg %i (%s), "
+        DPRINTF(Rename, "[tid:%i] Freeing older rename of reg %i (%d), "
                 "[sn:%llu].\n",
                 tid, hb_it->prevPhysReg->index(),
-                hb_it->prevPhysReg->className(),
+                hb_it->prevPhysReg->flatIndex(),
                 hb_it->instSeqNum);
 
         // Don't free special phys regs like misc and zero regs, which
@@ -1012,6 +1033,8 @@ Rename::removeFromHistory(InstSeqNum inst_seq_num, ThreadID tid)
 
         historyBuffer[tid].erase(hb_it--);
     }
+
+    smb->removeUpTo(inst_seq_num);
 }
 
 void
@@ -1027,9 +1050,9 @@ Rename::renameSrcRegs(const DynInstPtr &inst, ThreadID tid)
     for (int src_idx = 0; src_idx < num_src_regs; src_idx++) {
         const RegId& src_reg = inst->srcRegIdx(src_idx);
         const RegId flat_reg = src_reg.flatten(*isa);
-        PhysRegIdPtr renamed_reg;
+        
+        PhysRegIdPtr renamed_reg = map->lookup(flat_reg);
 
-        renamed_reg = map->lookup(flat_reg);
         switch (flat_reg.classValue()) {
           case InvalidRegClass:
             break;
@@ -1083,6 +1106,10 @@ Rename::renameSrcRegs(const DynInstPtr &inst, ThreadID tid)
                     renamed_reg->className());
         }
 
+        if (inst->isStore() && src_idx == 2) {
+            storePhysRegs[inst->seqNum] = renamed_reg;
+        }
+
         ++stats.lookups;
     }
 }
@@ -1109,25 +1136,6 @@ Rename::renameDestRegs(const DynInstPtr &inst, ThreadID tid)
 
         scoreboard->unsetReg(rename_result.first);
 
-        DPRINTF(Rename,
-                "[tid:%i] "
-                "Renaming arch reg %i (%s) to physical reg %i (%i).\n",
-                tid, dest_reg.index(), dest_reg.className(),
-                rename_result.first->index(),
-                rename_result.first->flatIndex());
-
-        // Record the rename information so that a history can be kept.
-        RenameHistory hb_entry(inst->seqNum, flat_dest_regid,
-                               rename_result.first,
-                               rename_result.second);
-
-        historyBuffer[tid].push_front(hb_entry);
-
-        DPRINTF(Rename, "[tid:%i] [sn:%llu] "
-                "Adding instruction to history buffer (size=%i).\n",
-                tid,(*historyBuffer[tid].begin()).instSeqNum,
-                historyBuffer[tid].size());
-
         // Tell the instruction to rename the appropriate destination
         // register (dest_idx) to the new physical register
         // (rename_result.first), and record the previous physical
@@ -1136,6 +1144,63 @@ Rename::renameDestRegs(const DynInstPtr &inst, ThreadID tid)
         inst->renameDestReg(dest_idx,
                             rename_result.first,
                             rename_result.second);
+
+        if (inst->isBypassable() && dest_idx == 0) {
+            InstSeqNum smb_store_seqnum  = smb->predictSourceStore(inst->seqNum);
+            if (smb_store_seqnum != 0) {
+                DPRINTF(Rename,
+                        "[tid:%i] "
+                        "SMB Predictor predicted store with sequence number "
+                        "%llu as source of load [sn:%llu].\n",
+                        tid, smb_store_seqnum, inst->seqNum);
+
+                auto doneSeqNum = commit_ptr->getDoneSeqNum(tid);
+                if (doneSeqNum >= smb_store_seqnum) {
+                    ++stats.smbStoreOutsideInstWindow;
+                } else {
+                    PhysRegIdPtr store_phys_reg = storePhysRegs[smb_store_seqnum];
+                    assert(store_phys_reg);
+
+                    DPRINTF(Rename,
+                            "[tid:%i] "
+                            "Bypassing load [sn:%llu] to store [sn:%llu] with "
+                            "physical reg %i (%d).\n",
+                            tid, inst->seqNum, smb_store_seqnum,
+                            store_phys_reg->index(), store_phys_reg->flatIndex());
+
+                    // Also since we know that the store has not yet committed,
+                    // We guarantee that the physical register has not yet been freed,
+                    // AND it does not point to an overwritten value.
+                    inst->setBypassedLoad(smb_store_seqnum, store_phys_reg);
+                    ++stats.bypassedLoads;
+                
+                    if (scoreboard->getReg(store_phys_reg)) {
+                        DPRINTF(Rename,
+                                "[tid:%i] "
+                                "SMB source register %d (flat: %d) (%s) is ready.\n",
+                                tid, store_phys_reg->index(), store_phys_reg->flatIndex(),
+                                store_phys_reg->className());
+
+                        inst->markSmbRegReady();
+                    }
+                }
+            }
+        }
+
+        DPRINTF(Rename,
+                "[tid:%i] "
+                "Renaming arch reg %i (%s) to physical reg %i (%i).\n",
+                tid, dest_reg.index(), dest_reg.className(),
+                rename_result.first->index(),
+                rename_result.first->flatIndex());
+
+
+        // Record the rename information so that a history can be kept.
+        // For bypassed loads, this will free the actual physical register.
+        RenameHistory hb_entry(inst->seqNum, flat_dest_regid,
+                               rename_result.first,
+                               rename_result.second);
+        historyBuffer[tid].push_front(hb_entry);
 
         ++stats.renamedOperands;
     }
@@ -1304,12 +1369,11 @@ Rename::checkSignalsAndUpdate(ThreadID tid)
         return true;
     } else if (!fromCommit->commitInfo[tid].robSquashing &&
             !freeingInProgress[tid].empty()) {
-        DPRINTF(Rename, "[tid:%i] Freeing phys regs of misspeculated "
+        DPRINTF(Rename, "[tid:%i] Freeing up phys regs of misspeculated "
                 "instructions.\n", tid);
 
         auto reg_it = freeingInProgress[tid].cbegin();
         while ( reg_it != freeingInProgress[tid].cend()){
-            // Put the renamed physical register back on the free list.
             freeList->addReg(*reg_it);
             ++reg_it;
         }

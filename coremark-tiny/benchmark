@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+
+set -e
+
+# Usage: ./coremark-tiny/benchmark <prog> [--debug-flags <flags>]
+pwd=$(dirname $0)
+prog=$1
+shift
+
+debugflags=""
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    --debug-flags)  debugflags="--debug-flags=$2";     shift 2;;
+    *) echo "Unknown argument: $1"; exit 1;;
+  esac
+done
+
+scons build/X86/gem5.opt --ignore-style -j$(nproc)
+
+if [[ ! -f "/home/nj421/coremark-pro/builds/linux64/gcc64/bin/$prog" ]]; then
+  echo "Program /home/nj421/coremark-pro/builds/linux64/gcc64/bin/$prog not found. Exiting."
+  exit 1
+fi
+
+# basename is prog without extension
+basename=${prog%%.*}
+
+export MEM_TRACE_FILE="$pwd/$basename.memtrace"
+echo "" > $MEM_TRACE_FILE
+./build/X86/gem5.opt \
+  $debugflags \
+  --debug-file=../$pwd/$basename-no-smb-trace.out \
+  configs/deprecated/example/se.py \
+  --cmd=/home/nj421/coremark-pro/builds/linux64/gcc64/bin/$prog \
+  -n 1 \
+  --mem-type SimpleMemory \
+  --caches \
+  --l2cache \
+  --cpu-type X86O3CPU \
+  --cpu-clock 1GHz \
+  -o="-i1 -v0" \
+  -I 100000
+
+cp m5out/stats.txt $pwd/$basename-stats-no-smb.txt
+export SMB_PREDICTIONS_FILE="$pwd/$basename.predictions"
+echo "" > $SMB_PREDICTIONS_FILE
+./memprofile $MEM_TRACE_FILE $SMB_PREDICTIONS_FILE
+
+unset MEM_TRACE_FILE
+./build/X86/gem5.opt \
+  $debugflags \
+  --debug-file=../$pwd/$basename-smb-trace.out \
+  configs/deprecated/example/se.py \
+  --cmd=/home/nj421/coremark-pro/builds/linux64/gcc64/bin/$prog \
+  -n 1 \
+  --mem-type SimpleMemory \
+  --caches \
+  --l2cache \
+  --cpu-type X86O3CPU \
+  --cpu-clock 1GHz \
+  -o="-i1 -v0" \
+  -I 100000
+
+cp m5out/stats.txt $pwd/$basename-stats-smb.txt

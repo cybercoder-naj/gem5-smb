@@ -52,6 +52,7 @@
 #include "cpu/o3/free_list.hh"
 #include "cpu/o3/iew.hh"
 #include "cpu/o3/limits.hh"
+#include "cpu/o3/smb.hh"
 #include "cpu/timebuf.hh"
 #include "sim/probe/probe.hh"
 
@@ -141,6 +142,9 @@ class Rename
 
     /** Sets pointer to time buffer coming from decode. */
     void setDecodeQueue(TimeBuffer<DecodeStruct> *dq_ptr);
+
+    /** Sets pointer to SMB predictor. */
+    void setSMBPredictor(SMB *smb_ptr);
 
     /** Sets pointer to IEW stage. Used only for initialization. */
     void setIEWStage(IEW *iew_stage) { iew_ptr = iew_stage; }
@@ -347,6 +351,9 @@ class Rename
     /** Wire to get decode's output from decode queue. */
     TimeBuffer<DecodeStruct>::wire fromDecode;
 
+    /** Pointer to SMB predictor. */
+    SMB *smb;
+
     /** Queue of all instructions coming from decode this cycle. */
     InstQueue insts[MaxThreads];
 
@@ -462,6 +469,9 @@ class Rename
     /** The maximum skid buffer size. */
     unsigned skidBufferMax;
 
+    /** Map of store instructions to their physical register mappings containing the value. */
+    std::unordered_map<InstSeqNum, PhysRegIdPtr> storePhysRegs;
+
     /** Enum to record the source of a structure full stall.  Can come from
      * either ROB, IQ, LSQ, and it is priortized in that order.
      */
@@ -536,6 +546,10 @@ class Rename
         statistics::Scalar tempSerializing;
         /** Number of instructions inserted into skid buffers. */
         statistics::Scalar skidInsts;
+        /** Number of loads that are bypassed. */
+        statistics::Scalar bypassedLoads;
+        /** Number of stores that are outside the instruction window. */
+        statistics::Scalar smbStoreOutsideInstWindow;
     } stats;
 };
 

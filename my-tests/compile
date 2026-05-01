@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+
+set -e
+
+# Usage: ./my-tests/compile <executable_name> <debug_flags> [--smb/--memtrace]
+: "${1:?Missing executable name}"
+: "${1:?Missing debug flags}"
+
+pwd=`dirname $0`
+filename=`basename $1`
+debugflags=$2
+mode=$3
+
+if [ "$mode" == "--smb" ]; then
+  export SMB_PREDICTIONS_FILE=$pwd/$filename.predictions
+elif [ "$mode" == "--memtrace" ]; then
+  export MEM_TRACE_FILE=$pwd/$filename.memtrace
+elif [ -n "$mode" ]; then
+  echo "Invalid mode: $mode"
+  echo "Usage: ./my-tests/compile <executable_name> <debug_flags> [--smb/--memtrace]"
+  exit 1
+fi
+
+$pwd/build debug
+
+echo -en "Compiling $filename.s..."
+gcc -nostdlib -no-pie $pwd/$filename.s -o $pwd/$filename
+echo "Done."
+
+config="--cpu-type=DerivO3CPU --caches --l2cache --l1d_size=64KiB --l1i_size=64KiB --l2_size=2MB --l1d-hwp-type=StridePrefetcher --l1i-hwp-type=StridePrefetcher --l2-hwp-type=StridePrefetcher"
+
+./build/X86/gem5.debug \
+  --debug-flags=$debugflags \
+  --debug-file=../$pwd/$filename-smb.debug \
+  configs/deprecated/example/se.py \
+  $config \
+  --cmd=$pwd/$filename \
+  -I 1000000

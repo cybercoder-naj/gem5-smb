@@ -131,8 +131,29 @@ Commit::Commit(CPU *_cpu, const BaseO3CPUParams &params)
         renameMap[tid] = nullptr;
         htmStarts[tid] = 0;
         htmStops[tid] = 0;
+        doneSeqNum[tid] = 0;
     }
     interrupt = NoFault;
+
+    const char* env = std::getenv("MEM_TRACE_FILE");
+    if (!env) {
+        DPRINTF(Commit, "MEM_TRACE_FILE environment variable not set.\n");
+        return;
+    }
+
+    memTraceFile.open(env);
+    if (!memTraceFile.is_open()) {
+        DPRINTF(Commit, "Could not open MEM_TRACE_FILE\n");
+        return;
+    }
+}
+
+Commit::~Commit()
+{
+    if (memTraceFile.is_open()) {
+        memTraceFile.flush();
+        memTraceFile.close();
+    }
 }
 
 std::string Commit::name() const { return cpu->name() + ".commit"; }
@@ -169,6 +190,8 @@ Commit::CommitStats::CommitStats(CPU *cpu, Commit *commit)
                "Class of committed instruction"),
       ADD_STAT(memOrderViolationEvents, statistics::units::Count::get(),
                "Number of memory order violations"),
+      ADD_STAT(bypassedLoadValueCheckViolation, statistics::units::Count::get(),
+               "Number of bypassed load violations"),
       ADD_STAT(commitEligibleSamples, statistics::units::Cycle::get(),
                "number cycles where commit BW limit reached")
 {
@@ -903,6 +926,25 @@ Commit::commit()
 }
 
 void
+Commit::dumpMemInstruction(const DynInstPtr &head_inst) {
+    assert(head_inst->isBypassable() || head_inst->isStore());
+    assert(head_inst->effAddrValid());
+
+    InstSeqNum seq_num = head_inst->seqNum;
+    Addr pc_state = head_inst->pcState().instAddr();
+    Addr eff_addr = head_inst->effAddr;
+    unsigned int eff_size = head_inst->effSize;
+    bool is_load = head_inst->isLoad();
+
+    memTraceFile << seq_num << " "
+        << std::hex << pc_state << " "
+        << std::hex << eff_addr << " "
+        << std::dec << eff_size << " "
+        << (is_load ? "L" : "S") << std::endl;
+}
+
+
+void
 Commit::commitInsts()
 {
     ////////////////////////////////////
@@ -1039,6 +1081,7 @@ Commit::commitInsts()
 
                 // Set the doneSeqNum to the youngest committed instruction.
                 toIEW->commitInfo[tid].doneSeqNum = head_inst->seqNum;
+                setDoneSeqNum(tid, head_inst->seqNum);
 
                 if (tid == 0)
                     canHandleInterrupts = !head_inst->isDelayedCommit();
@@ -1105,6 +1148,10 @@ Commit::commitInsts()
                                 "PC skip function event, stopping commit\n");
                         break;
                     }
+                }
+
+                if (head_inst->isBypassable() || head_inst->isStore()) {
+                    dumpMemInstruction(head_inst);
                 }
 
                 // Check if an instruction just enabled interrupts and we've
@@ -1288,6 +1335,28 @@ Commit::commitHead(const DynInstPtr &head_inst, unsigned inst_num)
         // Generate trap squash event.
         generateTrapEvent(tid, inst_fault);
         return false;
+    }
+
+    if (head_inst->isBypassedLoad()) {
+        PhysRegIdPtr actualValueReg = head_inst->renamedDestIdx(0);
+        assert(head_inst->smbSpeculatedLoadData.has_value());
+
+        // build the actual value from memdata uint8_t*
+        RegVal actualRegValue = cpu->getReg(actualValueReg, tid); // this is the 8-byte value.
+        auto specValue = head_inst->smbSpeculatedLoadData.value(); // this may be smaller than 8 bytes.
+
+        if (actualRegValue != specValue) {
+            DPRINTF(Commit, "[tid:%i] [sn:%llu] Bypassed load value mismatch. "
+                    "Size %d,speculated value: %#x, actual reg value: %#x\n",
+                    tid, head_inst->seqNum, head_inst->effSize, specValue, actualRegValue);
+
+            commitStatus[tid] = ROBSquashing;
+            ++stats.bypassedLoadValueCheckViolation;
+            squashAll(tid);
+            return false;
+        } 
+
+        head_inst->setCompleted();
     }
 
     updateComInstStats(head_inst);

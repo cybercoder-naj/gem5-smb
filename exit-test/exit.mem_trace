@@ -1,0 +1,8 @@
+#   MOV_M_I : st   t1d, SS:[t0 + rsp + 0xfffffffffffffffc]
+4 401004 7fffffffee54 4 S
+#   MOV_R_M : ld   ebx, SS:[t0 + rsp + 0xfffffffffffffffc]
+5 40100c 7fffffffee54 4 L
+#   MOV_M_R : st   ebx, SS:[t0 + rsp]
+6 401010 7fffffffee58 4 S
+#   MOV_R_M : ld   ecx, SS:[t0 + rsp]
+52 401013 7fffffffee58 4 L

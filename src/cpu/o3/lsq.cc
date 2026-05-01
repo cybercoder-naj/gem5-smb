@@ -238,6 +238,12 @@ LSQ::executeLoad(const DynInstPtr &inst)
 {
     ThreadID tid = inst->threadNumber;
 
+    if (inst->isBypassedLoad()) {
+        assert(inst->smbSrcStorePhysReg);
+
+        inst->smbSpeculatedLoadData = cpu->getReg(inst->smbSrcStorePhysReg, tid);
+    }
+
     return thread[tid].executeLoad(inst);
 }
 

@@ -123,6 +123,9 @@ class DynInst : public ExecContext, public RefCounted
     /** The sequence number of the instruction. */
     InstSeqNum seqNum = 0;
 
+    /** The mask of the destination reg of x86 loads. */
+    uint64_t destRegMask = 0; // Only used for X86 load instructions.
+
     /** The StaticInst used by this BaseDynInst. */
     const StaticInstPtr staticInst;
 
@@ -152,6 +155,7 @@ class DynInst : public ExecContext, public RefCounted
         Completed,               /// Instruction has completed
         ResultReady,             /// Instruction has its result
         CanIssue,                /// Instruction can issue and execute
+        CanSMBIssue,             /// Instruction can issue and execute for SMB purposes
         Issued,                  /// Instruction has issued
         Executed,                /// Instruction has executed
         CanCommit,               /// Instruction can commit
@@ -190,6 +194,7 @@ class DynInst : public ExecContext, public RefCounted
         ReqMade,
         MemOpDone,
         HtmFromTransaction,
+        BypassedLoad,
         MaxFlags
     };
 
@@ -238,6 +243,8 @@ class DynInst : public ExecContext, public RefCounted
 
     // Whether or not the source register is ready, one bit per register.
     uint8_t *_readySrcIdx;
+
+    bool _readySmbRegister = false;
 
   public:
     size_t numSrcs() const { return _numSrcs; }
@@ -376,6 +383,45 @@ class DynInst : public ExecContext, public RefCounted
         /** Was this load predicted to be dependent by the depPred? */
         bool predicted = false;
     } memDepInfo;
+
+    /////////////////////// SMB Data //////////////////////
+
+    /** The source store sequence number predicted by SMB. */
+    InstSeqNum smbStoreSeqNum = 0;
+    /** Iterator of the SQ pointing to the SMB predicted source store. */
+    typename LSQUnit::SQIterator smbPredStoreIt;
+    PhysRegIdPtr smbSrcStorePhysReg = nullptr;
+    std::optional<RegVal> smbSpeculatedLoadData = std::nullopt;
+
+    bool isBypassable() const {
+        return staticInst->isLoad() && !staticInst->isRMW() && !staticInst->isRMWA();
+    }
+    bool isBypassedLoad() const {
+        return staticInst->isLoad() && instFlags.test(BypassedLoad);
+    }
+    void setBypassedLoad(InstSeqNum seq_num, PhysRegIdPtr phys_reg_id) {
+        assert(staticInst->isLoad());
+        instFlags.set(BypassedLoad);
+        smbSrcStorePhysReg = phys_reg_id;
+        smbStoreSeqNum = seq_num;
+        _readySmbRegister = false;
+    }
+
+    bool
+    readySmbRegister() const
+    {
+        assert(isBypassedLoad());
+        return _readySmbRegister;
+    }
+
+    void
+    setReadySmbRegister(bool ready)
+    {
+        assert(isBypassedLoad());
+        _readySmbRegister = ready;
+    }
+
+    void markSmbRegReady();
 
     /////////////////////// TLB Miss //////////////////////
     /**
@@ -768,6 +814,12 @@ class DynInst : public ExecContext, public RefCounted
 
     /** Returns whether or not this instruction is ready to issue. */
     bool readyToIssue() const { return status[CanIssue]; }
+
+    /** Sets this instruction as ready to issue. */
+    void setCanSmbIssue() { status.set(CanSMBIssue); }
+
+    /** Returns whether or not this instruction is ready to issue. */
+    bool readyToSmbIssue() const { return status[CanSMBIssue]; }
 
     /** Clears this instruction being able to issue. */
     void clearCanIssue() { status.reset(CanIssue); }

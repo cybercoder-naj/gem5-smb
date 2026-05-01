@@ -1,0 +1,72 @@
+#!/usr/bin/env bash
+
+set -e
+
+# Usage: ./coremark-results/benchmark-all [--debug-flags <flags>] [--ignores=<prog1,prog2,...>]
+pwd=$(dirname $0)
+
+debugflags=""
+ignores=""
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    --debug-flags)  debugflags="--debug-flags=$2";     shift 2;;
+    --ignores)  ignores="$2";     shift 2;;
+    *) echo "Unknown argument: $1"; exit 1;;
+  esac
+done
+
+scons build/X86/gem5.opt --ignore-style -j$(nproc)
+
+config="--cpu-type=DerivO3CPU --caches --l2cache --l1d_size=64KiB --l1i_size=64KiB --l2_size=2MB --l1d-hwp-type=StridePrefetcher --l1i-hwp-type=StridePrefetcher --l2-hwp-type=StridePrefetcher"
+progs=$(ls /home/nj421/coremark-pro/builds/linux64/gcc64/bin/*.exe)
+
+function prettyPrint() {
+  echo "==============================="
+  echo "=== Benchmarking $1 ==="
+  echo "==============================="
+}
+
+for prog in $progs; do
+  # basename is prog filename without path, with extension
+  basename=$(basename $prog)
+  filename="${basename%.*}"
+
+  noSmbStatsFile="$pwd/$filename-stats-no-smb.txt"
+  smbStatsFile="$pwd/$filename-stats-smb.txt"
+
+  prettyPrint $filename
+
+  if [[ -f "$noSmbStatsFile" ]]; then
+    echo "Stats file $noSmbStatsFile already exists please move it first."
+    continue
+  fi
+
+  if [[ -f "$smbStatsFile" ]]; then
+    echo "Stats file $smbStatsFile already exists please move it first."
+    continue
+  fi
+
+  prettyPrint "Running to get memtrace"
+  export MEM_TRACE_FILE="$pwd/$filename.memtrace"
+  echo "" > $MEM_TRACE_FILE
+  systemd-run --user --slice=workloads.slice --scope ./build/X86/gem5.opt \
+    $debugflags \
+    configs/deprecated/example/se.py \
+    $config \
+    --cmd="$prog" > /dev/null
+  cp m5out/stats.txt $pwd/$filename-stats-no-smb.txt
+
+  prettyPrint "Memory profiling to get SMB predictions"
+  export SMB_PREDICTIONS_FILE="$pwd/$filename.predictions"
+  echo "" > $SMB_PREDICTIONS_FILE
+  ./memprofile $MEM_TRACE_FILE $SMB_PREDICTIONS_FILE
+
+  prettyPrint "Running with SMB predictions"
+  unset MEM_TRACE_FILE
+  systemd-run --user --slice=workloads.slice --scope ./build/X86/gem5.opt \
+    $debugflags \
+    configs/deprecated/example/se.py \
+    $config \
+    --cmd="$prog" > /dev/null
+  cp m5out/stats.txt $pwd/$filename-stats-smb.txt
+done
