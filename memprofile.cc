@@ -2,29 +2,13 @@
 #include <iomanip>
 #include <iostream>
 #include <fstream>
+#include <optional>
 #include <sstream>
 #include <string>
 #include <unordered_map>
 #include <unordered_set>
 
 using namespace std;
-
-struct StoreInfo {
-    uint64_t pc;
-    uint64_t seq;
-};
-
-// Hash for pair<uint64_t, uint64_t>
-struct PairHash {
-    size_t operator()(const pair<uint64_t, uint64_t>& p) const {
-        return hash<uint64_t>()(p.first) ^ (hash<uint64_t>()(p.second) << 1);
-    }
-};
-
-// Combine addr + size into a single key
-static inline uint64_t make_key(uint64_t addr, uint32_t size) {
-    return (addr << 8) | size;
-}
 
 int main(int argc, char* argv[]) {
     if (argc != 3) {
@@ -44,15 +28,12 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    unordered_map<uint64_t, StoreInfo> last_store;   // key -> (pc, seq)
-    unordered_map<uint64_t, uint64_t> last_store_by_pc; // pc -> seq
+    // Address to last PC writer
+    unordered_map<uint64_t, uint64_t> memory {};
+    unordered_set<uint64_t> invalid_loads {};
 
-    // Deduplication
-    unordered_set<pair<uint64_t, uint64_t>, PairHash> seen;
-
-    // Load-PC consistency enforcement
-    unordered_map<uint64_t, uint64_t> load_to_store; // load_pc -> store_pc
-    unordered_set<uint64_t> invalid_loads;           // load PCs that violated rule
+    // LoadPC -> StorePC
+    unordered_map<uint64_t, uint64_t> deps {};
 
     string line;
 
@@ -69,51 +50,38 @@ int main(int argc, char* argv[]) {
 
         if (!(ss >> seq >> hex >> pc >> hex >> addr >> size >> op)) continue;
 
-        uint64_t key = make_key(addr, size);
-
         if (op == 'S') {
-            // Update last store for this address
-            last_store[key] = {pc, seq};
+            for (auto addr_byte = addr; addr_byte < addr + size; ++addr_byte)
+                memory[addr_byte] = pc;
+        } else if (op == 'L') {
+            bool valid_dep = true;
+            optional<uint64_t> store_pc = nullopt;
 
-            // Update last occurrence of this PC
-            last_store_by_pc[pc] = seq;
-        }
-        else if (op == 'L') {
-            auto it = last_store.find(key);
-            if (it == last_store.end())
-                continue;
-
-            uint64_t store_pc  = it->second.pc;
-            uint64_t store_seq = it->second.seq;
-
-            // Validate store is still current for its PC
-            auto pc_it = last_store_by_pc.find(store_pc);
-            if (pc_it == last_store_by_pc.end() ||
-                pc_it->second != store_seq)
-                continue;
-
-            // Enforce one-store-per-load-PC constraint
-            if (invalid_loads.count(pc))
-                continue;
-
-            auto lt = load_to_store.find(pc);
-
-            if (lt == load_to_store.end()) {
-                // First observation
-                load_to_store[pc] = store_pc;
-            } else if (lt->second != store_pc) {
-                // Conflict → invalidate this load PC permanently
-                invalid_loads.insert(pc);
-                load_to_store.erase(pc);
-                continue;
+            for (auto addr_byte = addr; addr_byte < addr + size; ++addr_byte) {
+                if (!store_pc.has_value()) {
+                    if (memory.count(addr_byte))
+                        store_pc = memory[addr_byte];
+                } else if (store_pc.value() != memory[addr_byte]) {
+                    valid_dep = false;
+                    break;
+                }
             }
 
-            // Emit only once per pair
-            pair<uint64_t, uint64_t> dep = {pc, store_pc};
-            if (seen.insert(dep).second) {
-                outfile << hex << pc << " " << store_pc << "\n";
+            if (store_pc.has_value() && valid_dep) {
+                if (deps.count(pc) && deps[pc] != store_pc)
+                    invalid_loads.insert(pc);
+                else
+                    deps[pc] = store_pc.value();
             }
+        } else {
+            cerr << "Unrecognised character: " << op << std::endl;
+            exit(1);
         }
+    }
+
+    for (const auto& [load_pc, store_pc] : deps) {
+        if (!invalid_loads.count(load_pc))
+            outfile << hex << load_pc << " " << hex << store_pc << "\n";
     }
 
     outfile.flush();
