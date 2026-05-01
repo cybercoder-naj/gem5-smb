@@ -123,6 +123,9 @@ class DynInst : public ExecContext, public RefCounted
     /** The sequence number of the instruction. */
     InstSeqNum seqNum = 0;
 
+    /** The mask of the destination reg of x86 loads. */
+    uint64_t destRegMask = 0; // Only used for X86 load instructions.
+
     /** The StaticInst used by this BaseDynInst. */
     const StaticInstPtr staticInst;
 
@@ -190,6 +193,8 @@ class DynInst : public ExecContext, public RefCounted
         ReqMade,
         MemOpDone,
         HtmFromTransaction,
+        BypassedLoad,
+        BypassMove,
         MaxFlags
     };
 
@@ -376,6 +381,23 @@ class DynInst : public ExecContext, public RefCounted
         /** Was this load predicted to be dependent by the depPred? */
         bool predicted = false;
     } memDepInfo;
+
+    /////////////////////// SMB Data //////////////////////
+
+    InstSeqNum smbStoreSeqNum = 0;
+
+    bool isBypassedLoad() const {
+        return staticInst->isLoad() && instFlags.test(BypassedLoad);
+    }
+    void setBypassedLoad(InstSeqNum seq_num) {
+        assert(staticInst->isLoad());
+        instFlags.set(BypassedLoad);
+        smbStoreSeqNum = seq_num;
+    }
+
+    bool isBypassMove() { return instFlags.test(BypassMove); }
+    void setBypassMove() { instFlags.set(BypassMove); }
+
 
     /////////////////////// TLB Miss //////////////////////
     /**

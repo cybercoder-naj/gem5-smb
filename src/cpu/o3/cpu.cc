@@ -169,6 +169,7 @@ CPU::CPU(const BaseO3CPUParams &params)
     decode.setDecodeQueue(&decodeQueue);
     rename.setDecodeQueue(&decodeQueue);
     rename.setRenameQueue(&renameQueue);
+    rename.setSMBPredictor(&smb);
     iew.setRenameQueue(&renameQueue);
     iew.setIEWQueue(&iewQueue);
     commit.setIEWQueue(&iewQueue);

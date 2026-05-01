@@ -24,7 +24,6 @@ class SMB
   private:
     /** The object name, for DPRINTF. */
     const std::string _name;
-    std::ifstream infile;
     std::unordered_map<Addr, Addr> predictions;
     std::unordered_map<Addr, InstSeqNum> storeAddrToSeqNum;
     std::unordered_map<InstSeqNum, Addr> loadSeqNumToAddr;

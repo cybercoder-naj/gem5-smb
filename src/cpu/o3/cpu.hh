@@ -412,11 +412,11 @@ class CPU : public BaseCPU
     /** The decode stage. */
     Decode decode;
 
-    /** The dispatch stage. */
-    Rename rename;
-
     /** The SMB predictor. */
     SMB smb;
+
+    /** The dispatch stage. */
+    Rename rename;
 
     /** The issue/execute/writeback stages. */
     IEW iew;

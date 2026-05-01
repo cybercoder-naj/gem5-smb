@@ -17,7 +17,9 @@ namespace o3
 {
 
 SMB::SMB(const std::string &_my_name) :
-    _name(_my_name)
+    _name(_my_name),
+    storeAddrToSeqNum(),
+    loadSeqNumToAddr()
 {
   const char* env = std::getenv("SMB_PREDICTIONS_FILE");
   if (!env) {
@@ -25,6 +27,7 @@ SMB::SMB(const std::string &_my_name) :
     return;
   }
 
+  std::ifstream infile;
   infile.open(env);
   if (!infile.is_open()) {
     DPRINTF(SMB, "Could not open SMB predictions file\n");

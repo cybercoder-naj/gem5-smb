@@ -45,6 +45,7 @@
 #include <cstring>
 #include <list>
 #include <map>
+#include <regex>
 #include <queue>
 
 #include "arch/generic/tlb.hh"
@@ -1016,6 +1017,104 @@ Fetch::checkSignalsAndUpdate(ThreadID tid)
     return false;
 }
 
+static uint64_t
+retrieveDestRegMask(const std::string& disassembly) {
+    std::unordered_map<std::string, uint64_t> regWidths = {
+        {"ah", 1},
+        {"bh", 1},
+        {"ch", 1},
+        {"dh", 1},
+
+        {"al",   1},
+        {"bl",   1},
+        {"cl",   1},
+        {"dl",   1},
+        {"spl",  1},
+        {"bpl",  1},
+        {"sil",  1},
+        {"dil",  1},
+        {"r8b",  1},
+        {"r9b",  1},
+        {"r10b", 1},
+        {"r11b", 1},
+        {"r12b", 1},
+        {"r13b", 1},
+        {"r14b", 1},
+        {"r15b", 1},
+
+        {"ax",   2},
+        {"bx",   2},
+        {"cx",   2},
+        {"dx",   2},
+        {"sp",   2},
+        {"bp",   2},
+        {"si",   2},
+        {"di",   2},
+        {"r8w",  2},
+        {"r9w",  2},
+        {"r10w", 2},
+        {"r11w", 2},
+        {"r12w", 2},
+        {"r13w", 2},
+        {"r14w", 2},
+        {"r15w", 2},
+
+        {"eax",  4},
+        {"ebx",  4},
+        {"ecx",  4},
+        {"edx",  4},
+        {"esp",  4},
+        {"ebp",  4},
+        {"esi",  4},
+        {"edi",  4},
+        {"r8d",  4},
+        {"r9d",  4},
+        {"r10d", 4},
+        {"r11d", 4},
+        {"r12d", 4},
+        {"r13d", 4},
+        {"r14d", 4},
+        {"r15d", 4},
+
+        {"rax", 8},
+        {"rbx", 8},
+        {"rcx", 8},
+        {"rdx", 8},
+        {"rsp", 8},
+        {"rbp", 8},
+        {"rsi", 8},
+        {"rdi", 8},
+        {"r8",  8},
+        {"r9",  8},
+        {"r10", 8},
+        {"r11", 8},
+        {"r12", 8},
+        {"r13", 8},
+        {"r14", 8},
+        {"r15", 8},
+    };    
+
+    std::regex re(R"(ld\s+([a-zA-Z0-9]+),)");
+    std::smatch match;
+    if (!std::regex_search(disassembly, match, re)) {
+        panic("Register not found.");
+    }
+    
+    auto reg = match[1].str();
+    auto regWidth = regWidths[reg];
+
+    if (regWidth == 8)
+        return UINT64_MAX;
+    else {
+        uint64_t mask = (1ULL << (regWidth * 8)) - 1;
+        if (reg == "ah" || reg == "bh" || reg == "ch" || reg == "dh") {
+            // High 8 bits of the lower 16 bits
+            mask <<= 8;
+        }
+        return mask;
+    }
+}
+
 DynInstPtr
 Fetch::buildInst(ThreadID tid, StaticInstPtr staticInst,
         StaticInstPtr curMacroop, const PCStateBase &this_pc,
@@ -1038,8 +1137,13 @@ Fetch::buildInst(ThreadID tid, StaticInstPtr staticInst,
     DPRINTF(Fetch, "[tid:%i] Instruction PC %s created [sn:%lli].\n",
             tid, this_pc, seq);
 
-    DPRINTF(Fetch, "[tid:%i] Instruction is: %s\n", tid,
-            instruction->staticInst->disassemble(this_pc.instAddr()));
+    auto disassembly = instruction->staticInst->disassemble(this_pc.instAddr());
+    DPRINTF(Fetch, "[tid:%i] Instruction is: %s\n", tid, disassembly);
+
+    if (instruction->isLoad() && !(instruction->isRMW() || instruction->isRMWA())) {
+        // I'm desparate.
+        instruction->destRegMask = retrieveDestRegMask(disassembly);
+    }
 
 #if TRACING_ON
     if (trace) {

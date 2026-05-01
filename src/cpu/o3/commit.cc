@@ -151,6 +151,7 @@ Commit::Commit(CPU *_cpu, const BaseO3CPUParams &params)
 Commit::~Commit()
 {
     if (memTraceFile.is_open()) {
+        memTraceFile.flush();
         memTraceFile.close();
     }
 }

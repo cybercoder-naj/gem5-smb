@@ -116,5 +116,8 @@ int main(int argc, char* argv[]) {
         }
     }
 
+    outfile.flush();
+    outfile.close();
+    infile.close();
     return 0;
 }
