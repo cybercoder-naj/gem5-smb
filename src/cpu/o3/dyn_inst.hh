@@ -394,7 +394,10 @@ class DynInst : public ExecContext, public RefCounted
     typename LSQUnit::SQIterator smbPredStoreIt;
 
     bool isBypassable() const {
-        return staticInst->isLoad() && !staticInst->isRMW() && !staticInst->isRMWA();
+        return staticInst->isLoad() && 
+                !staticInst->isRMW() && 
+                !staticInst->isRMWA() &&
+                destRegIdx(0).classValue() == RegClassType::IntRegClass;
     }
     bool isBypassedLoad() const {
         return staticInst->isLoad() && instFlags.test(BypassedLoad);

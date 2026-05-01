@@ -1103,7 +1103,35 @@ retrieveDestRegMask(const std::string& disassembly) {
     auto reg = match[1].str();
     auto regWidth = regWidths[reg];
 
-    if (regWidth == 8)
+    if (regWidth == 0) {
+        if (reg.front() == 't') {
+            switch(reg.back()) {
+                case 'b':
+                    return 0xFF;
+                case 'w':
+                    return 0xFFFF;
+                case 'd':
+                    return 0xFFFFFFFF;
+                case 'q':
+                case '0':
+                case '1':
+                case '2':
+                case '3':
+                case '4':
+                case '5':
+                case '6':
+                case '7':
+                case '8':
+                case '9':
+                    return UINT64_MAX;
+                
+                default:
+                    panic("Invalid register.");
+            }
+        } else {
+            panic("Invalid register.");
+        }
+    } else if (regWidth == 8)
         return UINT64_MAX;
     else {
         uint64_t mask = (1ULL << (regWidth * 8)) - 1;

@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+
+set -e
+
+# Usage: ./coremark-tiny/benchmark <prog> [--debug-flags <flags>]
+pwd=$(dirname $0)
+prog=$1
+shift
+
+debugflags=""
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    --debug-flags)  debugflags="--debug-flags=$2";     shift 2;;
+    *) echo "Unknown argument: $1"; exit 1;;
+  esac
+done
+
+scons build/X86/gem5.opt --ignore-style -j$(nproc)
+
+
+if ! which $prog; then
+  echo "Program $prog not found. Exiting."
+  exit 1
+fi
+
+# basename is prog without extension
+basename=${prog%%.*}
+cmd=$(which $prog)
+config="--cpu-type=DerivO3CPU --caches --l2cache --l1d_size=64KiB --l1i_size=64KiB --l2_size=2MB --l1d-hwp-type=StridePrefetcher --l1i-hwp-type=StridePrefetcher --l2-hwp-type=StridePrefetcher"
+
+export MEM_TRACE_FILE="$pwd/$basename.memtrace"
+echo "" > $MEM_TRACE_FILE
+./build/X86/gem5.opt \
+  $debugflags \
+  --debug-file=../$pwd/$basename-no-smb-trace.out \
+  configs/deprecated/example/se.py \
+  --cmd=$cmd \
+  $config \
+  -o="-i1 -v0" \
+  -I 100000
+
+cp m5out/stats.txt $pwd/$basename-stats-no-smb.txt
+export SMB_PREDICTIONS_FILE="$pwd/$basename.predictions"
+echo "" > $SMB_PREDICTIONS_FILE
+./memprofile $MEM_TRACE_FILE $SMB_PREDICTIONS_FILE
+
+unset MEM_TRACE_FILE
+./build/X86/gem5.opt \
+  $debugflags \
+  --debug-file=../$pwd/$basename-smb-trace.out \
+  configs/deprecated/example/se.py \
+  --cmd=$cmd \
+  $config \
+  -o="-i1 -v0" \
+  -I 100000
+
+cp m5out/stats.txt $pwd/$basename-stats-smb.txt

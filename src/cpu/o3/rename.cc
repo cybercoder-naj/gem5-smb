@@ -1249,6 +1249,7 @@ Rename::buildBypassMoveInst(ThreadID tid, const DynInstPtr &bypassed_load)
     instruction->flattenedDestIdx(0, load_dest.flatten(*isa));
 
     bool partial_write = bypassed_load->destRegMask != UINT64_MAX;
+    DPRINTF(Rename, "[tid:%i] Bypass move [sn:%lli] has dest reg mask 0x%llx.\n", tid, instruction->seqNum, bypassed_load->destRegMask);
     instruction->setBypassMove();
 
     instruction->renameSrcReg(0, store_phys_reg);
