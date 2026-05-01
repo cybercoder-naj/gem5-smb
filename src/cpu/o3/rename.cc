@@ -728,7 +728,7 @@ Rename::renameInsts(ThreadID tid)
             serializeAfter(insts_to_rename, tid);
         }
 
-        if ((inst->isLoad() && !inst->isBypassedLoad()) || inst->isStore())
+        if ((inst->isBypassable() && !inst->isBypassedLoad()) || inst->isStore())
             smb->registerMemoryAccess(inst->pcState().instAddr(), inst->seqNum, inst->isStore());
 
         if (!inst->isBypassedLoad() && !inst->isBypassMove()) {
@@ -739,7 +739,7 @@ Rename::renameInsts(ThreadID tid)
 
             renameDestRegs(inst, inst->threadNumber);
 
-            if (inst->isLoad() && !(inst->isRMW() || inst->isRMWA())) {
+            if (inst->isBypassable()) {
                 const InstSeqNum smb_store_seqnum = smb->predictSourceStore(inst->seqNum);
                 if (smb_store_seqnum != 0) {
                     DPRINTF(Rename,
@@ -755,17 +755,15 @@ Rename::renameInsts(ThreadID tid)
                     } else {
                         // NOTE that all this is ULTRA specific to x86.
                         // ICBA to go through gem5 isa frontend.
-                        auto dest_reg = inst->destRegIdx(0);
                         auto prev_phys_reg = inst->prevDestIdx(0);
                         auto new_phys_reg = inst->renamedDestIdx(0);
                         const auto& [store_arch_reg, store_phys_reg] = storeRegs[smb_store_seqnum];
 
-                        DynInstPtr bypassMove = buildBypassMoveInst(tid, store_arch_reg, dest_reg, dest_reg, inst->pcState());
+                        DynInstPtr bypassMove = buildBypassMoveInst(tid, inst, store_arch_reg, inst->pcState());
                         bypassMove->setBypassMove();
                         bypassMove->renameSrcReg(0, store_phys_reg); 
                         bypassMove->renameSrcReg(1, prev_phys_reg); // previous mapping
                         bypassMove->renameDestReg(0, new_phys_reg, prev_phys_reg); // new mapping
-
 
                         if (scoreboard->getReg(store_phys_reg))
                             bypassMove->markSrcRegReady(0);
@@ -1227,12 +1225,13 @@ Rename::renameDestRegs(const DynInstPtr &inst, ThreadID tid)
 }
 
 DynInstPtr
-Rename::buildBypassMoveInst(ThreadID tid, RegId store_src, 
-                                    RegId load_src, RegId load_dest, const PCStateBase& pc)
+Rename::buildBypassMoveInst(ThreadID tid, const DynInstPtr &bypassing_load, RegId store_src, const PCStateBase& pc)
 {
     // Get a sequence number.
-    InstSeqNum seq = cpu->getAndIncrementInstSeq();
-    StaticInstPtr staticInst = buildBypassMoveStaticInst(store_src, load_src, load_dest);
+    InstSeqNum seq = bypassing_load->seqNum - 5; // Give it a sequence number slightly before the load, so it maintains the ordering.
+    RegId load_dest = bypassing_load->destRegIdx(0);
+
+    StaticInstPtr staticInst = buildBypassMoveStaticInst(store_src, load_dest, load_dest, bypassing_load->destRegMask);
 
     DynInst::Arrays arrays;
     arrays.numSrcs = staticInst->numSrcRegs();
@@ -1249,7 +1248,7 @@ Rename::buildBypassMoveInst(ThreadID tid, RegId store_src,
     instruction->traceData = NULL;
 
     // Add instruction to the CPU's list of instructions.
-    instruction->setInstListIt(cpu->addInst(instruction));
+    instruction->setInstListIt(cpu->insertBefore(bypassing_load, instruction));
 
     auto *isa = instruction->tcBase()->getIsaPtr();
     instruction->flattenedDestIdx(0, load_dest.flatten(*isa));

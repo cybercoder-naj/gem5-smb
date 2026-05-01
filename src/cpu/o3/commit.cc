@@ -151,7 +151,6 @@ Commit::Commit(CPU *_cpu, const BaseO3CPUParams &params)
 Commit::~Commit()
 {
     if (memTraceFile.is_open()) {
-        memTraceFile.flush();
         memTraceFile.close();
     }
 }
@@ -1172,6 +1171,8 @@ Commit::commitInsts()
             }
         }
     }
+
+    memTraceFile.flush();
 
     DPRINTF(CommitRate, "%i\n", num_committed);
     stats.numCommittedDist.sample(num_committed);

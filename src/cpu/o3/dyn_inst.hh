@@ -389,6 +389,9 @@ class DynInst : public ExecContext, public RefCounted
 
     InstSeqNum smbStoreSeqNum = 0;
 
+    bool isBypassable() const {
+        return staticInst->isLoad() && !staticInst->isRMW() && !staticInst->isRMWA();
+    }
     bool isBypassedLoad() const {
         return staticInst->isLoad() && instFlags.test(BypassedLoad);
     }
@@ -575,6 +578,12 @@ class DynInst : public ExecContext, public RefCounted
     bool
     mispredicted()
     {
+        // Bypass moves are not real instructions.
+        // They have the same PC as the load they are bypassing.
+        // Therefore, they should not be considered mispredicted. 
+        if (isBypassMove())
+            return false;
+
         std::unique_ptr<PCStateBase> next_pc(pc->clone());
         staticInst->advancePC(*next_pc);
         return *next_pc != *predPC;

@@ -14,7 +14,7 @@ namespace gem5
 namespace o3
 {
 
-StaticInstPtr buildBypassMoveStaticInst(RegId store_src, RegId load_src, RegId load_dest);
+StaticInstPtr buildBypassMoveStaticInst(RegId store_src, RegId load_src, RegId load_dest, uint64_t destRegMask);
   
 } // namespace o3
 } // namespace gem5

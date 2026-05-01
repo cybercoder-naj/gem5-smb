@@ -1140,7 +1140,7 @@ Fetch::buildInst(ThreadID tid, StaticInstPtr staticInst,
     auto disassembly = instruction->staticInst->disassemble(this_pc.instAddr());
     DPRINTF(Fetch, "[tid:%i] Instruction is: %s\n", tid, disassembly);
 
-    if (instruction->isLoad() && !(instruction->isRMW() || instruction->isRMWA())) {
+    if (instruction->isBypassable()) {
         // I'm desparate.
         instruction->destRegMask = retrieveDestRegMask(disassembly);
     }

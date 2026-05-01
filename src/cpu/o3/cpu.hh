@@ -282,7 +282,11 @@ class CPU : public BaseCPU
     void verifyMemoryMode() const override;
 
     /** Get the current instruction sequence number, and increment it. */
-    InstSeqNum getAndIncrementInstSeq() { return globalSeqNum++; }
+    InstSeqNum getAndIncrementInstSeq() { 
+      auto seq = globalSeqNum;
+      globalSeqNum += 10;
+      return seq;
+    }
 
     /** Traps to handle given fault. */
     void trap(const Fault &fault, ThreadID tid, const StaticInstPtr &inst);
@@ -352,8 +356,9 @@ class CPU : public BaseCPU
     ListIt addInst(const DynInstPtr &inst);
 
     /** Function to add an instruction before another instruction.
-     *  This also adjusted the seqnum, without changing the seqNum from fetch.
-     *  Used when bypass move instructions need to be inserted
+     *  Used when bypass move instructions need to be inserted.
+     * 
+     * [[maybe_unused]]
      */
     ListIt insertBefore(const DynInstPtr &before, const DynInstPtr &new_inst);
 
@@ -532,7 +537,7 @@ class CPU : public BaseCPU
     }
 
     /** The global sequence number counter. */
-    InstSeqNum globalSeqNum;//[MaxThreads];
+    InstSeqNum globalSeqNum;
 
     /** Pointer to the checker, which can dynamically verify
      * instruction results at run time.  This can be set to NULL if it

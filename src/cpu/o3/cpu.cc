@@ -111,7 +111,7 @@ CPU::CPU(const BaseO3CPUParams &params)
                   params.backComSize + params.forwardComSize,
                   params.activity),
 
-      globalSeqNum(1),
+      globalSeqNum(10),
       system(params.system),
       lastRunningCycle(curCycle()),
       cpuStats(this),
@@ -1141,28 +1141,14 @@ CPU::addInst(const DynInstPtr &inst)
     return --(instList.end());
 }
 
-// TODO TEST THIS METHOD
-// inserts a new instruction before the given instruction in the instruction list, and
-// updates the sequence numbers of the instructions after the inserted instruction
+// inserts a new instruction before the given instruction in the instruction list
 CPU::ListIt 
 CPU::insertBefore(const DynInstPtr &before, const DynInstPtr &new_inst) {
-    new_inst->seqNum = before->seqNum;
-
-    auto it = before->getInstListIt();
-    instList.insert(it, new_inst);
-
-    // Increment the sequence numbers of the instructions after the inserted instruction.
-    for (auto iter = it; iter != instList.end(); ++iter) {
-        if (*iter != new_inst) {
-            (*iter)->seqNum++;
-
-            DPRINTF(O3CPU, "Incrementing sequence number of instruction [tid:%i] [sn:%lli] to %lli\n",
-                    (*iter)->threadNumber, (*iter)->seqNum - 1, (*iter)->seqNum);
-        }
-    }
+    auto before_it = before->getInstListIt();
+    auto new_it = instList.insert(before_it, new_inst);
 
     // return the iterator to the newly inserted instruction
-    return --(before->getInstListIt());
+    return new_it;
 }
 
 void
@@ -1293,13 +1279,14 @@ void
 CPU::cleanUpRemovedInsts()
 {
     while (!removeList.empty()) {
+        auto front = removeList.front();
         DPRINTF(O3CPU, "Removing instruction, "
                 "[tid:%i] [sn:%lli] PC %s\n",
-                (*removeList.front())->threadNumber,
-                (*removeList.front())->seqNum,
-                (*removeList.front())->pcState());
+                (*front)->threadNumber,
+                (*front)->seqNum,
+                (*front)->pcState());
 
-        instList.erase(removeList.front());
+        instList.erase(front);
 
         removeList.pop();
     }
