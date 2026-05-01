@@ -984,7 +984,6 @@ Rename::doSquash(const InstSeqNum &squashed_seq_num, ThreadID tid)
     
     smb->squash();
     storePhysRegs.clear();
-    bypassedArchToPhys.clear();
 }
 
 void
@@ -1052,9 +1051,7 @@ Rename::renameSrcRegs(const DynInstPtr &inst, ThreadID tid)
         const RegId& src_reg = inst->srcRegIdx(src_idx);
         const RegId flat_reg = src_reg.flatten(*isa);
         
-        auto it = bypassedArchToPhys.find(flat_reg);
-        bool is_bypassed = it != bypassedArchToPhys.end();
-        PhysRegIdPtr renamed_reg = is_bypassed ? it->second : map->lookup(flat_reg);
+        PhysRegIdPtr renamed_reg = map->lookup(flat_reg);
 
         switch (flat_reg.classValue()) {
           case InvalidRegClass:
@@ -1085,10 +1082,10 @@ Rename::renameSrcRegs(const DynInstPtr &inst, ThreadID tid)
 
         DPRINTF(Rename,
                 "[tid:%i] "
-                "Looking up %s arch reg %i, got phys reg %i (%s) (bypassed: %s)\n",
+                "Looking up %s arch reg %i, got phys reg %i (%s)\n",
                 tid, flat_reg.className(),
                 src_reg.index(), renamed_reg->index(),
-                renamed_reg->className(), is_bypassed ? "yes" : "no");
+                renamed_reg->className());
 
         inst->renameSrcReg(src_idx, renamed_reg);
 
@@ -1134,7 +1131,6 @@ Rename::renameDestRegs(const DynInstPtr &inst, ThreadID tid)
         flat_dest_regid.setNumPinnedWrites(dest_reg.getNumPinnedWrites());
 
         rename_result = map->rename(flat_dest_regid);
-        bypassedArchToPhys.erase(flat_dest_regid);
 
         inst->flattenedDestIdx(dest_idx, flat_dest_regid);
 
@@ -1177,8 +1173,6 @@ Rename::renameDestRegs(const DynInstPtr &inst, ThreadID tid)
                     // AND it does not point to an overwritten value.
                     inst->setBypassedLoad(smb_store_seqnum, store_phys_reg);
                     ++stats.bypassedLoads;
-
-                    bypassedArchToPhys[flat_dest_regid] = store_phys_reg;
                 
                     if (scoreboard->getReg(store_phys_reg)) {
                         DPRINTF(Rename,

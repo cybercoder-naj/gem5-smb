@@ -155,6 +155,7 @@ class DynInst : public ExecContext, public RefCounted
         Completed,               /// Instruction has completed
         ResultReady,             /// Instruction has its result
         CanIssue,                /// Instruction can issue and execute
+        CanSMBIssue,             /// Instruction can issue and execute for SMB purposes
         Issued,                  /// Instruction has issued
         Executed,                /// Instruction has executed
         CanCommit,               /// Instruction can commit
@@ -813,6 +814,12 @@ class DynInst : public ExecContext, public RefCounted
 
     /** Returns whether or not this instruction is ready to issue. */
     bool readyToIssue() const { return status[CanIssue]; }
+
+    /** Sets this instruction as ready to issue. */
+    void setCanSmbIssue() { status.set(CanSMBIssue); }
+
+    /** Returns whether or not this instruction is ready to issue. */
+    bool readyToSmbIssue() const { return status[CanSMBIssue]; }
 
     /** Clears this instruction being able to issue. */
     void clearCanIssue() { status.reset(CanIssue); }

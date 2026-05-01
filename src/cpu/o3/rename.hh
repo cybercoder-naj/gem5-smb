@@ -472,8 +472,6 @@ class Rename
     /** Map of store instructions to their physical register mappings containing the value. */
     std::unordered_map<InstSeqNum, PhysRegIdPtr> storePhysRegs;
 
-    std::unordered_map<RegId, PhysRegIdPtr> bypassedArchToPhys;
-
     /** Enum to record the source of a structure full stall.  Can come from
      * either ROB, IQ, LSQ, and it is priortized in that order.
      */

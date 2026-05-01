@@ -329,12 +329,23 @@ DynInst::markSrcRegReady()
     if (isBypassedLoad())
         ++num_src_regs;
 
-    DPRINTF(IQ, "[sn:%lli] has %d ready out of %d sources. RTI %d)\n",
-            seqNum, readyRegs+1, num_src_regs, readyToIssue());
+    ++readyRegs;
+    if (isBypassedLoad() && readySmbRegister()) {
+        bool is_partial_write = destRegMask != UINT64_MAX;
+        if (is_partial_write) {
+            if (readySrcIdx(2)) // src 2 is the previous mapping for partial register update
+                setCanSmbIssue();
+        } else {
+            setCanSmbIssue();
+        }
+    }
 
-    if (++readyRegs == num_src_regs) {
+    if (readyRegs == num_src_regs) {
         setCanIssue();
     }
+
+    DPRINTF(IQ, "[sn:%lli] has %d ready out of %d sources. RTI %s\n",
+            seqNum, readyRegs, num_src_regs, readyToIssue() ? "true" : "false");
 }
 
 void
