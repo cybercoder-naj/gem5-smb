@@ -123,6 +123,9 @@ class DynInst : public ExecContext, public RefCounted
     /** The sequence number of the instruction. */
     InstSeqNum seqNum = 0;
 
+    /** The mask of the destination reg of x86 loads. */
+    uint64_t destRegMask = 0; // Only used for X86 load instructions.
+
     /** The StaticInst used by this BaseDynInst. */
     const StaticInstPtr staticInst;
 
@@ -389,6 +392,9 @@ class DynInst : public ExecContext, public RefCounted
     PhysRegIdPtr smbSrcStorePhysReg = nullptr;
     std::optional<RegVal> smbSpeculatedLoadData = std::nullopt;
 
+    bool isBypassable() const {
+        return staticInst->isLoad() && !staticInst->isRMW() && !staticInst->isRMWA();
+    }
     bool isBypassedLoad() const {
         return staticInst->isLoad() && instFlags.test(BypassedLoad);
     }

@@ -137,7 +137,7 @@ Commit::Commit(CPU *_cpu, const BaseO3CPUParams &params)
 
     const char* env = std::getenv("MEM_TRACE_FILE");
     if (!env) {
-        DPRINTF(Commit, "MEM_TRACE_FILE environment variable not set. No predictions loaded.\n");
+        DPRINTF(Commit, "MEM_TRACE_FILE environment variable not set.\n");
         return;
     }
 
@@ -151,6 +151,7 @@ Commit::Commit(CPU *_cpu, const BaseO3CPUParams &params)
 Commit::~Commit()
 {
     if (memTraceFile.is_open()) {
+        memTraceFile.flush();
         memTraceFile.close();
     }
 }
@@ -926,7 +927,7 @@ Commit::commit()
 
 void
 Commit::dumpMemInstruction(const DynInstPtr &head_inst) {
-    assert(head_inst->isLoad() || head_inst->isStore());
+    assert(head_inst->isBypassable() || head_inst->isStore());
     assert(head_inst->effAddrValid());
 
     InstSeqNum seq_num = head_inst->seqNum;
@@ -939,7 +940,7 @@ Commit::dumpMemInstruction(const DynInstPtr &head_inst) {
         << std::hex << pc_state << " "
         << std::hex << eff_addr << " "
         << std::dec << eff_size << " "
-        << (is_load ? "L" : "S") << "\n";
+        << (is_load ? "L" : "S") << std::endl;
 }
 
 
@@ -1149,7 +1150,7 @@ Commit::commitInsts()
                     }
                 }
 
-                if (head_inst->isLoad() || head_inst->isStore()) {
+                if (head_inst->isBypassable() || head_inst->isStore()) {
                     dumpMemInstruction(head_inst);
                 }
 

@@ -25,7 +25,7 @@ SMB::SMB(const std::string &_my_name) :
     return;
   }
 
-  infile.open(env);
+  std::ifstream infile(env);
   if (!infile.is_open()) {
     DPRINTF(SMB, "Could not open SMB predictions file\n");
   }
@@ -40,7 +40,6 @@ SMB::SMB(const std::string &_my_name) :
 
     predictions[l_pc] = s_pc;
   }
-  infile.close();
 }
 
 InstSeqNum

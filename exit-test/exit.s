@@ -4,13 +4,14 @@
 _start:
     sub  $8, %rsp
 
-    movl $10, -4(%rsp)
-    movl -4(%rsp), %ebx
-    movl %ebx, (%rsp)
-    movl (%rsp), %ecx
+    movw $0x1234, %bx    
+    movq $0x3421, (%rsp) 
+
+    movb (%rsp), %bl     
+    movq (%rsp), %rcx
 
     mov  $60, %rax      # sys_exit
-    movq %rcx, %rdi     # status = 10
+    movq %rbx, %rdi     # status = 0x1221
 
     add  $4, %rsp
     syscall

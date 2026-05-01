@@ -230,6 +230,11 @@ Rename::setDecodeQueue(TimeBuffer<DecodeStruct> *dq_ptr)
 }
 
 void
+Rename::setSMBPredictor(SMB *smb_ptr) {
+    smb = smb_ptr;
+}
+
+void
 Rename::startupStage()
 {
     resetStage();
@@ -720,7 +725,7 @@ Rename::renameInsts(ThreadID tid)
         }
 
         if (inst->isLoad() || inst->isStore()) {
-            cpu->getSMB()->registerMemoryAccess(inst->pcState().instAddr(), inst->seqNum, inst->isStore());
+            smb->registerMemoryAccess(inst->pcState().instAddr(), inst->seqNum, inst->isStore());
         }
 
         renameSrcRegs(inst, inst->threadNumber);
@@ -977,7 +982,7 @@ Rename::doSquash(const InstSeqNum &squashed_seq_num, ThreadID tid)
         ++stats.undoneMaps;
     }
     
-    cpu->getSMB()->squash();
+    smb->squash();
     storePhysRegs.clear();
     bypassedArchToPhys.clear();
 }
@@ -1030,7 +1035,7 @@ Rename::removeFromHistory(InstSeqNum inst_seq_num, ThreadID tid)
         historyBuffer[tid].erase(hb_it--);
     }
 
-    cpu->getSMB()->removeUpTo(inst_seq_num);
+    smb->removeUpTo(inst_seq_num);
 }
 
 void
@@ -1144,15 +1149,8 @@ Rename::renameDestRegs(const DynInstPtr &inst, ThreadID tid)
                             rename_result.first,
                             rename_result.second);
 
-        InstSeqNum smb_store_seqnum = 0;
-        bool is_bypassed_load = false;
-        if (inst->isLoad() && dest_idx == 0) {
-            DPRINTF(Rename,
-                    "[tid:%i] "
-                    "Querying SMB Predictor for load [sn:%llu] with PC %s.\n",
-                    tid, inst->seqNum, inst->pcState());
-
-            smb_store_seqnum  = cpu->getSMB()->predictSourceStore(inst->seqNum);
+        if (inst->isBypassable() && dest_idx == 0) {
+            InstSeqNum smb_store_seqnum  = smb->predictSourceStore(inst->seqNum);
             if (smb_store_seqnum != 0) {
                 DPRINTF(Rename,
                         "[tid:%i] "
@@ -1164,41 +1162,37 @@ Rename::renameDestRegs(const DynInstPtr &inst, ThreadID tid)
                 if (doneSeqNum >= smb_store_seqnum) {
                     ++stats.smbStoreOutsideInstWindow;
                 } else {
-                    is_bypassed_load = true;
+                    PhysRegIdPtr store_phys_reg = storePhysRegs[smb_store_seqnum];
+                    assert(store_phys_reg);
+
+                    DPRINTF(Rename,
+                            "[tid:%i] "
+                            "Bypassing load [sn:%llu] to store [sn:%llu] with "
+                            "physical reg %i (%d).\n",
+                            tid, inst->seqNum, smb_store_seqnum,
+                            store_phys_reg->index(), store_phys_reg->flatIndex());
+
+                    // Also since we know that the store has not yet committed,
+                    // We guarantee that the physical register has not yet been freed,
+                    // AND it does not point to an overwritten value.
+                    inst->setBypassedLoad(smb_store_seqnum, store_phys_reg);
+                    ++stats.bypassedLoads;
+
+                    bypassedArchToPhys[flat_dest_regid] = store_phys_reg;
+                
+                    if (scoreboard->getReg(store_phys_reg)) {
+                        DPRINTF(Rename,
+                                "[tid:%i] "
+                                "SMB source register %d (flat: %d) (%s) is ready.\n",
+                                tid, store_phys_reg->index(), store_phys_reg->flatIndex(),
+                                store_phys_reg->className());
+
+                        inst->markSmbRegReady();
+                    }
                 }
             }
         }
 
-        if (is_bypassed_load) {
-            PhysRegIdPtr store_phys_reg = storePhysRegs[smb_store_seqnum];
-            assert(store_phys_reg);
-
-            DPRINTF(Rename,
-                    "[tid:%i] "
-                    "Bypassing load [sn:%llu] to store [sn:%llu] with "
-                    "physical reg %i (%d).\n",
-                    tid, inst->seqNum, smb_store_seqnum,
-                    store_phys_reg->index(), store_phys_reg->flatIndex());
-
-            // Also since we know that the store has not yet committed,
-            // We guarantee that the physical register has not yet been freed,
-            // AND it does not point to an overwritten value.
-            inst->setBypassedLoad(smb_store_seqnum, store_phys_reg);
-            ++stats.bypassedLoads;
-
-            bypassedArchToPhys[flat_dest_regid] = store_phys_reg;
-        
-            if (scoreboard->getReg(store_phys_reg)) {
-                DPRINTF(Rename,
-                        "[tid:%i] "
-                        "SMB source register %d (flat: %d) (%s) is ready.\n",
-                        tid, store_phys_reg->index(), store_phys_reg->flatIndex(),
-                        store_phys_reg->className());
-
-                inst->markSmbRegReady();
-            }
-        } 
-        
         DPRINTF(Rename,
                 "[tid:%i] "
                 "Renaming arch reg %i (%s) to physical reg %i (%i).\n",

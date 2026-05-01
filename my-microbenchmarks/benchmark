@@ -66,13 +66,13 @@ for filename in $progs; do
   if [[ "$no_mem_trace" == false ]]; then
     export MEM_TRACE_FILE="$prog_wd/$base.memtrace"
     echo "" > $MEM_TRACE_FILE
-    echo "" > $prog_wd/$base-trace-no-smb.out
+    echo "" > $prog_wd/$base-no-smb-trace.out
     echo "" > $prog_wd/$base-stats-no-smb.txt
 
     echo "=== Running $base (no SMB) ==="
     if ! ./build/X86/gem5.opt \
       --debug-flags=O3CPUAll,O3PipeView \
-      --debug-file=../$prog_wd/$base-trace-no-smb.out \
+      --debug-file=../$prog_wd/$base-no-smb-trace.out \
       configs/deprecated/example/se.py \
       --cmd=$prog_wd/$base \
       -n 1 \
@@ -106,14 +106,14 @@ for filename in $progs; do
 
   if [[ "$no_smb" == false ]]; then
     export SMB_PREDICTIONS_FILE="$prog_wd/$base.predictions"
-    echo "" > $prog_wd/$base-trace-smb.out
+    echo "" > $prog_wd/$base-smb-trace.out
     echo "" > $prog_wd/$base-stats-smb.txt
     unset MEM_TRACE_FILE
 
     echo "=== Running $base (with SMB) ==="
     if ! ./build/X86/gem5.opt \
       --debug-flags=O3CPUAll,O3PipeView \
-      --debug-file=../$prog_wd/$base-trace-smb.out \
+      --debug-file=../$prog_wd/$base-smb-trace.out \
       configs/deprecated/example/se.py \
       --cmd=$prog_wd/$base \
       -n 1 \

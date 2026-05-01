@@ -143,6 +143,9 @@ class Rename
     /** Sets pointer to time buffer coming from decode. */
     void setDecodeQueue(TimeBuffer<DecodeStruct> *dq_ptr);
 
+    /** Sets pointer to SMB predictor. */
+    void setSMBPredictor(SMB *smb_ptr);
+
     /** Sets pointer to IEW stage. Used only for initialization. */
     void setIEWStage(IEW *iew_stage) { iew_ptr = iew_stage; }
 
@@ -347,6 +350,9 @@ class Rename
 
     /** Wire to get decode's output from decode queue. */
     TimeBuffer<DecodeStruct>::wire fromDecode;
+
+    /** Pointer to SMB predictor. */
+    SMB *smb;
 
     /** Queue of all instructions coming from decode this cycle. */
     InstQueue insts[MaxThreads];
