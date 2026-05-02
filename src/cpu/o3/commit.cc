@@ -926,7 +926,7 @@ Commit::commit()
 
 void
 Commit::dumpMemInstruction(const DynInstPtr &head_inst) {
-    assert(head_inst->isLoad() || head_inst->isStore());
+    assert(head_inst->shouldDumpIntoMemtrace());
     assert(head_inst->effAddrValid());
 
     InstSeqNum seq_num = head_inst->seqNum;
@@ -1148,7 +1148,7 @@ Commit::commitInsts()
                     }
                 }
 
-                if (head_inst->isLoad() || head_inst->isStore()) {
+                if (head_inst->shouldDumpIntoMemtrace()) {
                     dumpMemInstruction(head_inst);
                 }
 

@@ -2,18 +2,9 @@
 
 set -e
 
-# Usage: ./coremark-results/benchmark <prog> [--debug-flags <flags>]
+# Usage: ./coremark-results/benchmark <prog>
 pwd=$(dirname $0)
 prog=$1
-shift
-
-debugflags=""
-while [[ $# -gt 0 ]]; do
-  case $1 in
-    --debug-flags)  debugflags="--debug-flags=$2";     shift 2;;
-    *) echo "Unknown argument: $1"; exit 1;;
-  esac
-done
 
 scons build/X86/gem5.fast --ignore-style -j$(nproc)
 
@@ -32,7 +23,6 @@ config="--cpu-type=DerivO3CPU --caches --l2cache --l1d_size=64KiB --l1i_size=64K
 export MEM_TRACE_FILE="$pwd/$filename.memtrace"
 echo "" > $MEM_TRACE_FILE
 systemd-run --user --slice=workloads.slice --scope ./build/X86/gem5.fast \
-  $debugflags \
   configs/deprecated/example/se.py \
   $config \
   --cmd="$cmd"
@@ -44,7 +34,6 @@ echo "" > $SMB_PREDICTIONS_FILE
 
 unset MEM_TRACE_FILE
 systemd-run --user --slice=workloads.slice --scope ./build/X86/gem5.fast \
-  $debugflags \
   configs/deprecated/example/se.py \
   $config \
   --cmd="$cmd"  
