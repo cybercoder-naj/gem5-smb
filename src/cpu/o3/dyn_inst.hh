@@ -120,9 +120,6 @@ class DynInst : public ExecContext, public RefCounted
     /** Completes the access.  Only valid for memory operations. */
     Fault completeAcc(PacketPtr pkt);
 
-    /** The original sequence number of the instruction assigned at first build. */
-    InstSeqNum originalSeqNum = 0;
-
     /** The sequence number of the instruction. */
     InstSeqNum seqNum = 0;
 
@@ -389,6 +386,7 @@ class DynInst : public ExecContext, public RefCounted
 
     InstSeqNum smbStoreSeqNum = 0;
     bool _smbViolation = false;
+    DynInstPtr bypassMoveInst = nullptr;
 
     /** Iterator of the SQ pointing to the SMB predicted source store. */
     typename LSQUnit::SQIterator smbPredStoreIt;
@@ -415,9 +413,11 @@ class DynInst : public ExecContext, public RefCounted
         return _smbViolation;
     }
 
+    bool _skipExecution = false;
     bool isBypassMove() { return instFlags.test(BypassMove); }
     void setBypassMove() { instFlags.set(BypassMove); }
-
+    bool skipExecution() { return _skipExecution; }
+    void setSkipExecution() { _skipExecution = true; }
 
     /////////////////////// TLB Miss //////////////////////
     /**

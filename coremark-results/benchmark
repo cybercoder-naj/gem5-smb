@@ -15,7 +15,7 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-scons build/X86/gem5.opt --ignore-style -j$(nproc)
+scons build/X86/gem5.fast --ignore-style -j$(nproc)
 
 if ! which $prog; then
   echo "Error: $prog not found in PATH"
@@ -31,7 +31,7 @@ config="--cpu-type=DerivO3CPU --caches --l2cache --l1d_size=64KiB --l1i_size=64K
 
 export MEM_TRACE_FILE="$pwd/$filename.memtrace"
 echo "" > $MEM_TRACE_FILE
-systemd-run --user --slice=workloads.slice --scope ./build/X86/gem5.opt \
+systemd-run --user --slice=workloads.slice --scope ./build/X86/gem5.fast \
   $debugflags \
   configs/deprecated/example/se.py \
   $config \
@@ -43,7 +43,7 @@ echo "" > $SMB_PREDICTIONS_FILE
 ./memprofile $MEM_TRACE_FILE $SMB_PREDICTIONS_FILE
 
 unset MEM_TRACE_FILE
-systemd-run --user --slice=workloads.slice --scope ./build/X86/gem5.opt \
+systemd-run --user --slice=workloads.slice --scope ./build/X86/gem5.fast \
   $debugflags \
   configs/deprecated/example/se.py \
   $config \

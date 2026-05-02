@@ -1125,7 +1125,17 @@ LSQUnit::writeback(const DynInstPtr &inst, PacketPtr pkt)
         inst->setExecuted();
 
         if (inst->fault == NoFault) {
+            bool perform_value_check = false;
             if (inst->isBypassedLoad()) {
+                assert(inst->bypassMoveInst);
+
+                if (inst->bypassMoveInst->isExecuted())
+                    perform_value_check = true;
+                else
+                    inst->bypassMoveInst->setSkipExecution();
+            } 
+            
+            if (perform_value_check) {
                 ThreadID tid = inst->threadNumber;
                 PhysRegIdPtr dest_reg = inst->renamedDestIdx(0);
 

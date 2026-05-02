@@ -1144,6 +1144,16 @@ IEW::executeInsts()
         // executing
         ppExecute->notify(inst);
 
+        if (inst->skipExecution()) {
+            DPRINTF(IEW, "Execute: Instruction is marked as skipped. PC: %s, [tid:%i]"
+                         " [sn:%llu]\n", inst->pcState(), inst->threadNumber,
+                         inst->seqNum);
+
+            inst->setExecuted();
+            inst->setCanCommit();
+            continue;
+        }
+
         // Check if the instruction is squashed; if so then skip it
         if (inst->isSquashed()) {
             DPRINTF(IEW, "Execute: Instruction was squashed. PC: %s, [tid:%i]"
