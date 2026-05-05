@@ -58,9 +58,13 @@ int main(int argc, char* argv[]) {
             optional<uint64_t> store_pc = nullopt;
 
             for (auto addr_byte = addr; addr_byte < addr + size; ++addr_byte) {
+                auto mem_it = memory.find(addr_byte);
+                if (mem_it == memory.end()) {
+                    valid_dep = false;
+                    break;
+                }
                 if (!store_pc.has_value()) {
-                    if (memory.count(addr_byte))
-                        store_pc = memory[addr_byte];
+                    store_pc = mem_it->second;
                 } else if (store_pc.value() != memory[addr_byte]) {
                     valid_dep = false;
                     break;

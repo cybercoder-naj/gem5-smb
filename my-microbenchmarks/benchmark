@@ -51,6 +51,7 @@ load_overrides() {
 }
 
 scons build/X86/gem5.debug --ignore-style -j$(nproc)
+g++ -O3 -o memprofile memprofile.cc
 
 for filename in $progs; do
   base=$(basename $filename .s)

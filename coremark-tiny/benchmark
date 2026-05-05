@@ -16,7 +16,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 scons build/X86/gem5.opt --ignore-style -j$(nproc)
-
+g++ -O3 -o memprofile memprofile.cc
 
 if ! which $prog; then
   echo "Program $prog not found. Exiting."
