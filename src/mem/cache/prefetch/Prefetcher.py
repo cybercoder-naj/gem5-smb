@@ -190,7 +190,7 @@ class StridePrefetcher(QueuedPrefetcher):
 
     use_requestor_id = Param.Bool(True, "Use requestor id based history")
 
-    degree = Param.Int(4, "Number of prefetches to generate")
+    degree = Param.Int(8, "Number of prefetches to generate")
     distance = Param.Unsigned(
         0,
         "How far ahead of the demand stream to start prefetching. "
