@@ -768,9 +768,7 @@ Rename::renameInsts(ThreadID tid)
 
                         // Put in reverse order so bypassMove is sent to IEW first. 
                         insts_to_rename.push_front(inst);
-                        insts_to_rename.push_front(bypassMove);
-                        ++insts_available; // we have one extra instruction to process.
-                        continue; // IMPORTANT go back and process these instructions
+                        inst = bypassMove;
                     }
                 }
             }
@@ -827,6 +825,11 @@ Rename::skidInsert(ThreadID tid)
         inst = insts[tid].front();
 
         insts[tid].pop_front();
+
+        if (inst->isBypassMove()) {
+            // Don't add this to the skidBuffer
+            continue;
+        }
 
         assert(tid == inst->threadNumber);
 

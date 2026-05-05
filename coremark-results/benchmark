@@ -2,16 +2,21 @@
 
 set -e
 
-# Usage: ./coremark-results/benchmark <prog> [--smb-only]
+# Usage: ./coremark-results/benchmark <prog> [--smb-only/--baseline-only]
 pwd=$(dirname $0)
 prog=$1
+shift
 
 smb_only=false
+baseline_only=false
 
-if [ "$2" = "--smb-only" ]; then
-  smb_only=true
-fi
-
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    --smb-only) smb_only=true; shift;;
+    --baseline-only) baseline_only=true; shift;;
+    *) echo "Unknown argument: $1"; exit 1;;
+  esac
+done
 
 scons build/X86/gem5.fast --ignore-style -j$(nproc)
 g++ -O3 -o memprofile memprofile.cc
@@ -33,8 +38,13 @@ if [ "$smb_only" = false ]; then
   systemd-run --user --slice=workloads.slice --scope ./build/X86/gem5.fast \
     configs/deprecated/example/se.py \
     --cmd="$cmd" \
-    $config
+    $config \
+    -o="-i1 -v0"
   cp m5out/stats.txt $pwd/$filename-stats-no-smb.txt
+fi
+
+if [ "$baseline_only" = true ]; then
+  exit 0
 fi
 
 export SMB_PREDICTIONS_FILE="$pwd/$filename.predictions"
@@ -42,7 +52,8 @@ export SMB_PREDICTIONS_FILE="$pwd/$filename.predictions"
 unset MEM_TRACE_FILE
 systemd-run --user --slice=workloads.slice --scope ./build/X86/gem5.fast \
   configs/deprecated/example/se.py \
+  --cmd="$cmd" \
   $config \
-  --cmd="$cmd"  
+  -o="-i1 -v0"
 
 cp m5out/stats.txt $pwd/$filename-stats-smb.txt

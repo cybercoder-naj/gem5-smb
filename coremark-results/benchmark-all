@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+SESSION="nj421-coremark"
+DIR="/home/nj421/coremark-pro/builds/linux64/gcc64/bin"
+BIN="./coremark-results/benchmark"
+
+shopt -s nullglob
+FILES=("$DIR"/*.exe)
+
+if [ ${#FILES[@]} -eq 0 ]; then
+  echo "No .exe files found in $DIR"
+  exit 1
+fi
+
+tmux kill-session -t "$SESSION" 2>/dev/null
+tmux new-session -d -s "$SESSION" -n "init"
+
+for f in "${FILES[@]}"; do
+  name="$(basename "$f" .exe)"   # exact base name
+
+  tmux new-window -t "$SESSION" -n "$name"
+  tmux send-keys -t "$SESSION:$name" "$BIN $f" C-m
+done
+
+tmux select-window -t "$SESSION:1"
+tmux attach -t "$SESSION"
