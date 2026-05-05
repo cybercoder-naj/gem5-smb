@@ -457,6 +457,10 @@ class LSQUnit
      */
     unsigned depCheckShift;
 
+    /** Number of cycles a store to load forwarding takes
+    */
+    unsigned forwardingLatency;
+
     /** Should loads be checked for dependency issues */
     bool checkLoads;
 
