@@ -2,9 +2,16 @@
 
 set -e
 
-# Usage: ./coremark-results/benchmark <prog>
+# Usage: ./coremark-results/benchmark <prog> [--smb-only]
 pwd=$(dirname $0)
 prog=$1
+
+smb_only=false
+
+if [ "$2" = "--smb-only" ]; then
+  smb_only=true
+fi
+
 
 scons build/X86/gem5.fast --ignore-style -j$(nproc)
 g++ -O3 -o memprofile memprofile.cc
@@ -22,17 +29,16 @@ filename="${basename%.*}"
 config="--cpu-type=DerivO3CPU --caches --l2cache --l1d_size=64KiB --l1i_size=64KiB --l2_size=2MB --l1d-hwp-type=StridePrefetcher --l1i-hwp-type=StridePrefetcher --l2-hwp-type=StridePrefetcher"
 
 export MEM_TRACE_FILE="$pwd/$filename.memtrace"
-echo "" > $MEM_TRACE_FILE
-systemd-run --user --slice=workloads.slice --scope ./build/X86/gem5.fast \
-  configs/deprecated/example/se.py \
-  $config \
-  --cmd="$cmd"
+if [ "$smb_only" = false ]; then
+  systemd-run --user --slice=workloads.slice --scope ./build/X86/gem5.fast \
+    configs/deprecated/example/se.py \
+    --cmd="$cmd" \
+    $config
+  cp m5out/stats.txt $pwd/$filename-stats-no-smb.txt
+fi
 
-cp m5out/stats.txt $pwd/$filename-stats-no-smb.txt
 export SMB_PREDICTIONS_FILE="$pwd/$filename.predictions"
-echo "" > $SMB_PREDICTIONS_FILE
 ./memprofile $MEM_TRACE_FILE $SMB_PREDICTIONS_FILE
-
 unset MEM_TRACE_FILE
 systemd-run --user --slice=workloads.slice --scope ./build/X86/gem5.fast \
   configs/deprecated/example/se.py \
