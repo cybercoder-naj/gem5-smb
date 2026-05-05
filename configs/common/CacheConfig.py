@@ -68,6 +68,10 @@ def _get_cache_opts(level, options):
     if hasattr(options, assoc_attr):
         opts["assoc"] = getattr(options, assoc_attr)
 
+    mshrs_attr = f"{level}_mshrs"
+    if hasattr(options, mshrs_attr):
+        opts["mshrs"] = getattr(options, mshrs_attr)
+
     prefetcher_attr = f"{level}_hwp_type"
     if hasattr(options, prefetcher_attr):
         opts["prefetcher"] = _get_hwp(getattr(options, prefetcher_attr))
@@ -119,6 +123,17 @@ def config_cache(options, system):
 
     # Set the cache line size of the system
     system.cache_line_size = options.cacheline_size
+
+    if options.last_level_cache:
+        l3_cache_class = L3Cache
+    
+    if options.last_level_cache:
+        system.l3 = l3_cache_class(
+            clk_domian=system.cpu_clk_domain, **_get_cache_opts("l3", options)
+        )
+        system.tol3bus = L2XBar(clk_domain=system.cpu_clk_domain)
+        system.l3.cpu_side = system.tol3bus.mem_side_ports
+        system.l3.mem_side = system.membus.cpu_side_ports        
 
     # If elastic trace generation is enabled, make sure the memory system is
     # minimal so that compute delays do not include memory access latencies.
@@ -207,11 +222,54 @@ def config_cache(options, system):
                     ExternalCache("cpu%d.icache" % i),
                     ExternalCache("cpu%d.dcache" % i),
                 )
+        elif options.last_level_cache:
+            icache = icache_class(**_get_cache_opts("l1i", options))
+            dcache = dcache_class(**_get_cache_opts("l1d", options))
+            l2_cache = l2_cache_class(**_get_cache_opts("l2", options))
+
+            # If we have a walker cache specified, instantiate two
+            # instances here
+            if walk_cache_class:
+                iwalkcache = walk_cache_class()
+                dwalkcache = walk_cache_class()
+            else:
+                iwalkcache = None
+                dwalkcache = None
+            if options.memchecker:
+                dcache_mon = MemCheckerMonitor(warn_only=True)
+                dcache_real = dcache
+
+                # Do not pass the memchecker into the constructor of
+                # MemCheckerMonitor, as it would create a copy; we require
+                # exactly one MemChecker instance.
+                dcache_mon.memchecker = system.memchecker
+
+                # Connect monitor
+                dcache_mon.mem_side = dcache.cpu_side
+
+                # Let CPU connect to monitors
+                dcache = dcache_mon
+
+            system.cpu[i].addTwoLevelCacheHierarchy(
+                icache, dcache, l2_cache, iwalkcache, dwalkcache
+            )
+
+            if options.memchecker:
+                # The mem_side ports of the caches haven't been connected yet.
+                # Make sure connectAllPorts connects the right objects.
+                system.cpu[i].dcache = dcache_real
+                system.cpu[i].dcache_mon = dcache_mon
 
         system.cpu[i].createInterruptController()
         if options.l2cache:
             system.cpu[i].connectAllPorts(
                 system.tol2bus.cpu_side_ports,
+                system.membus.cpu_side_ports,
+                system.membus.mem_side_ports,
+            )
+        elif options.last_level_cache:
+            system.cpu[i].connectAllPorts(
+                system.tol3bus.cpu_side_ports,
                 system.membus.cpu_side_ports,
                 system.membus.mem_side_ports,
             )

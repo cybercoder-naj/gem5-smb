@@ -72,7 +72,7 @@ def setCPUClass(options):
 
     TmpClass, test_mem_mode = getCPUClass(options.cpu_type)
     CPUClass = None
-    if TmpClass.require_caches() and not options.caches and not options.ruby:
+    if TmpClass.require_caches() and not options.caches and not options.ruby and not options.last_level_cache:
         fatal(f"{options.cpu_type} must be used with caches")
 
     if options.checkpoint_restore != None:
@@ -482,7 +482,7 @@ def run(options, root, testsys, cpu_class):
     if options.fast_forward and options.checkpoint_restore != None:
         fatal("Can't specify both --fast-forward and --checkpoint-restore")
 
-    if options.standard_switch and not options.caches:
+    if options.standard_switch and not (options.caches or options.last_level_cache):
         fatal("Must specify --caches when using --standard-switch")
 
     if options.standard_switch and options.repeat_switch:

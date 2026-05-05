@@ -62,21 +62,32 @@ class L1_ICache(L1Cache):
     is_read_only = True
     # Writeback clean lines as well
     writeback_clean = True
+    assoc = 8
+    tag_latency = 1
+    data_latency = 1
+    response_latency = 0
 
 
 class L1_DCache(L1Cache):
-    pass
-
+    assoc = 12
 
 class L2Cache(Cache):
-    assoc = 8
-    tag_latency = 20
-    data_latency = 20
-    response_latency = 20
+    assoc = 10
+    tag_latency = 7
+    data_latency = 7
+    response_latency = 7
     mshrs = 20
     tgts_per_mshr = 12
     write_buffers = 8
 
+class L3Cache(Cache):
+    assoc = 12
+    tag_latency = 18
+    data_latency = 18
+    response_latency = 18
+    mshrs = 64
+    tgts_per_mshr = 12
+    write_buffers = 8
 
 class IOCache(Cache):
     assoc = 8
