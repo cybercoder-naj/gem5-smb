@@ -77,8 +77,8 @@ if __name__ == "__main__":
         
         table_data.append([
             benchmark,
-            f"{bypassed_percentage:.2f}%",
-            f"{value_check_failed_percentage:.2f}%",
+            f"{bypassed_percentage:.4f}%",
+            f"{value_check_failed_percentage:.4f}%",
             f"{ipc_percentage:.4f}"
         ])
     
