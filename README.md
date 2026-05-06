@@ -1,18 +1,27 @@
 # The PHAST Memory Dependence predictor
-This Gem5 fork implements the PHAST MDP (https://ieeexplore.ieee.org/document/10476400), a new MDP algorithm which can achieve very high accuracy at low hardware budgets. 
-PHAST is much more complex than Store Sets, which Gem5 implements by default, and so required several changes outside of just the MDP unit to work properly. These include:
-- Moving memory order violation training from IEW to commit, to avoid training on misspeculated paths.
-- Keeping a record of recently executed branches from both decode and commit to index and train the predictor with respectively.
-- Changing the MDP and depPred interfaces to include additional methods and arguments needed by PHAST, while also keeping it generic to allow continued use of Store Sets if desired.
-- Adding a memDepInfo struct to DynInst objects to track necessary information as loads are executed. 
-- Adding an additional commit/ROB status to specify if squashing due to memory order violation.
-- Preventing stores from triggering a memory order violation with loads that have either already forwarded from a younger store, or already violated with a younger store.
+This Gem5 fork implements the PHAST MDP (https://ieeexplore.ieee.org/document/10476400), a new MDP algorithm which can achieve very high accuracy at low hardware budgets. This Gem5 was originally based on an optimised fork from the University of Murcia (https://github.com/CAPS-UMU/gem5), and has since been extended to include further optimisations over upstream too. 
 
-Furthermore, this Gem5 was originally based on a modified fork from the University of Murcia (https://github.com/CAPS-UMU/gem5). These changes include:
+## MDP Changes:
+PHAST is much more complex than Store Sets and so required several changes and optimisations outside of just the MDP unit to work properly:
+- Moved memory order violation training from IEW to commit, to avoid training on misspeculated paths.
+- Prevent stores from triggering a memory order violation with loads that have either already forwarded from a younger store, or already violated with a younger store.
+- Keep a record of recently executed branches from both decode and commit to index and train the predictor with respectively.
+- Changed the MDP and depPred interfaces to include additional methods and arguments needed by PHAST, while also keeping it generic to allow continued use of Store Sets if desired.
+- Added a memDepInfo struct to DynInst objects to track necessary information as loads are executed. 
+- Added an additional commit/ROB status to specify if squashing due to memory order violation.
+
+## UMU Optimisations:
 - Fixed TAGE_SC_L_64K (based on https://github.com/useredsa/spec_tage_scl) now it is called TAGE_EMILIO
 - Added (and fixed) the AssociativeBTB (based on https://github.com/dhschall/gem5-fdp)
 - Ported ITTAGE indirect target predictor (from https://github.com/OpenXiangShan/GEM5)
 - Several correctness and performance fixes
+
+## Additional Optimisations:
+- Includes an L3 Cache, taken from https://github.com/SamAinsworth/gem5-triangel/. Enable all of L3/2/1 at once with `--last-level-cache`. Parameters of each level is configured as normal with --lN_size, --lN_assoc, and now also --lN_mshrs.
+- Latency of L2 reduced to 14 cycles from 40, as there's now an L3.
+- Latency of L1-I reduced to 1 cycle to represent using a u-op cache, as per https://github.com/darchr/gem5-skylake-config/blob/master/configuration-details.md.
+- Store-to-load forwarding latency is parameterised in BaseO3CPU.py as LSQForwardingLatency with a default of 4 cycles.
+- Stride Prefetcher is set to a default degree of 8, prefetch_on_pf_hit is set to True and prefetch_on_access is set to False.
 
 ## Using and Configuring PHAST
 There isn't currently a nice python interface to select the MDP algorithm like with choosing the branch predictor. For now, just change the include file and type of the `depPred` class in `mem_dep_unit.hh` like so:
