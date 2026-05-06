@@ -76,6 +76,10 @@ class BypassMoveStaticInst : public StaticInst
         RegVal prev_load = xc->getRegOperand(this, 1);  // Second operand
 
         result = (src_data & _destRegMask) | (prev_load & ~_destRegMask);
+
+        if (_destRegMask == UINT32_MAX) {
+          result &= _destRegMask; // 32-bit instructions automatically zeros the upper 32 bits.
+        }
       } else 
         result = src_data;
 

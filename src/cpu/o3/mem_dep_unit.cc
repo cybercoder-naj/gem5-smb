@@ -272,15 +272,10 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
     prediction.seqNums = std::vector<InstSeqNum>();
 
     if (inst->isBypassedLoad()) {
-        DPRINTF(MemDepUnit, "FARTS [sn:%llu] Bypass load inserting. smbStore seqNum %llu\n", inst->seqNum, inst->smbStoreSeqNum);
         // SMB loads are only dependent on the store they are paired with, so skip the predictor and just add that dependency.
         MemDepHashIt hash_it = memDepHash.find(inst->smbStoreSeqNum);
-        if (hash_it != memDepHash.end()) {
-            DPRINTF(MemDepUnit, "FARTS [sn:%llu] Bypass load inserting. smbStore found! Adding dep\n", inst->seqNum, inst->smbStoreSeqNum);
+        if (hash_it != memDepHash.end())
             dependencies.push_back((*hash_it).second);
-        } else {
-            DPRINTF(MemDepUnit, "FARTS [sn:%llu] Bypass load inserting. smbStore not found! Why??\n", inst->seqNum, inst->smbStoreSeqNum);
-        }
     } else
         prediction = depPred.checkInst(inst->pcState().instAddr(), inst->seqNum, branchHistory, inst->isLoad());
 

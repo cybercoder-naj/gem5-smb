@@ -760,6 +760,8 @@ Rename::renameInsts(ThreadID tid)
 
                         DynInstPtr bypassMove = buildBypassMoveInst(tid, inst);
                         inst->bypassMoveInst = bypassMove;
+                        
+                        ++toDecode->renameInfo[tid].bypassMoves;
 
                         // We don't add to historyBuffer for cleanup when
                         // instruction commits or squashes.

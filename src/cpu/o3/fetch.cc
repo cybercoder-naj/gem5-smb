@@ -1107,11 +1107,11 @@ retrieveDestRegMask(const std::string& disassembly) {
         if (reg.front() == 't') {
             switch(reg.back()) {
                 case 'b':
-                    return 0xFF;
+                    return UINT8_MAX;
                 case 'w':
-                    return 0xFFFF;
+                    return UINT16_MAX;
                 case 'd':
-                    return 0xFFFFFFFF;
+                    return UINT32_MAX;
                 case 'q':
                 case '0':
                 case '1':

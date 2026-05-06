@@ -128,7 +128,9 @@ struct TimeStruct
 
     DecodeComm decodeInfo[MaxThreads];
 
-    struct RenameComm {};
+    struct RenameComm { 
+        unsigned bypassMoves;
+    };
 
     RenameComm renameInfo[MaxThreads];
 
