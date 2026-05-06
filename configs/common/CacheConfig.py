@@ -121,19 +121,11 @@ def config_cache(options, system):
             None,
         )
 
-    # Set the cache line size of the system
-    system.cache_line_size = options.cacheline_size
-
     if options.last_level_cache:
         l3_cache_class = L3Cache
     
-    if options.last_level_cache:
-        system.l3 = l3_cache_class(
-            clk_domian=system.cpu_clk_domain, **_get_cache_opts("l3", options)
-        )
-        system.tol3bus = L2XBar(clk_domain=system.cpu_clk_domain)
-        system.l3.cpu_side = system.tol3bus.mem_side_ports
-        system.l3.mem_side = system.membus.cpu_side_ports        
+    # Set the cache line size of the system
+    system.cache_line_size = options.cacheline_size
 
     # If elastic trace generation is enabled, make sure the memory system is
     # minimal so that compute delays do not include memory access latencies.
@@ -153,6 +145,14 @@ def config_cache(options, system):
         system.tol2bus = L2XBar(clk_domain=system.cpu_clk_domain)
         system.l2.cpu_side = system.tol2bus.mem_side_ports
         system.l2.mem_side = system.membus.cpu_side_ports
+
+    if options.last_level_cache:
+        system.l3 = l3_cache_class(
+            clk_domain=system.cpu_clk_domain, **_get_cache_opts("l3", options)
+        )
+        system.tol3bus = L2XBar(clk_domain=system.cpu_clk_domain)
+        system.l3.cpu_side = system.tol3bus.mem_side_ports
+        system.l3.mem_side = system.membus.cpu_side_ports        
 
     if options.memchecker:
         system.memchecker = MemChecker()
