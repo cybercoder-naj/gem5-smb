@@ -1,0 +1,67 @@
+#!/usr/bin/env bash
+
+set -e
+
+# Usage: ./coremark-results/benchmark <prog> [--smb-only/--baseline-only]
+pwd=$(dirname $0)
+prog=$1
+shift
+
+smb_only=false
+baseline_only=false
+
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    --smb-only) smb_only=true; shift;;
+    --baseline-only) baseline_only=true; shift;;
+    *) echo "Unknown argument: $1"; exit 1;;
+  esac
+done
+
+scons build/X86/gem5.fast --ignore-style -j$(nproc)
+g++ -O3 -o memprofile memprofile.cc
+
+if ! which $prog; then
+  echo "Error: $prog not found in PATH"
+  exit 1
+fi
+cmd=$(which $prog)
+
+# basename is prog filename without path, with extension
+basename=$(basename $cmd)
+filename="${basename%.*}"
+cptBase="/home/nj421/gem5-smb/coremark-results/checkpoints"
+
+config="--cpu-type=DerivO3CPU \
+    --caches --l2cache \
+    --l1d_size=64KiB --l1i_size=64KiB --l2_size=2MB \
+    --l1d-hwp-type=StridePrefetcher \
+    --l1i-hwp-type=StridePrefetcher \
+    --l2-hwp-type=StridePrefetcher"
+
+export MEM_TRACE_FILE="$pwd/$filename.memtrace"
+if [ "$smb_only" = false ]; then
+  systemd-run --user --slice=workloads.slice --scope ./build/X86/gem5.fast \
+    --outdir=/home/nj421/gem5-smb/m5out/$filename/no-smb \
+    configs/deprecated/example/se.py \
+    --cmd="$cmd" \
+    $config \
+    --options="-i1 -v0"
+  cp m5out/stats.txt $pwd/$filename-stats-no-smb.txt
+fi
+
+if [ "$baseline_only" = true ]; then
+  exit 0
+fi
+
+export SMB_PREDICTIONS_FILE="$pwd/$filename.predictions"
+./memprofile $MEM_TRACE_FILE $SMB_PREDICTIONS_FILE
+unset MEM_TRACE_FILE
+systemd-run --user --slice=workloads.slice --scope ./build/X86/gem5.fast \
+  --outdir=/home/nj421/gem5-smb/m5out/$filename/smb \
+  configs/deprecated/example/se.py \
+  --cmd="$cmd" \
+  $config \
+  --options="-i1 -v0"
+
+cp m5out/stats.txt $pwd/$filename-stats-smb.txt

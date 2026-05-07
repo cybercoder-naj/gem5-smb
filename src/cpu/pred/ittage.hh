@@ -34,6 +34,7 @@ class ITTAGE : public IndirectPredictor {
 public:
 
     ITTAGE(const ITTAGEParams &params);
+    ~ITTAGE();
 
     // New Interface
     void reset();
@@ -120,6 +121,7 @@ private:
         std::deque<HistoryEntry> pathHist;
         unsigned headHistEntry;
         bitset ghr;
+        std::vector<bitset*> allocatedIndirectHistories;
     };
 
     const unsigned observeHistLen{27};

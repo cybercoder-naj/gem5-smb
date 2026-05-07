@@ -530,6 +530,9 @@ class LSQUnit
         /** Tota number of memory ordering violations. */
         statistics::Scalar memOrderViolation;
 
+        /** Tota number of memory ordering violations for bypassed loads. */
+        statistics::Scalar bypassedLoadMemOrderViolation;
+
         /** Total number of squashed stores. */
         statistics::Scalar squashedStores;
 

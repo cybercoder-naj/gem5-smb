@@ -512,12 +512,6 @@ IEW::unblock(ThreadID tid)
 }
 
 void
-IEW::wakeDependents(const DynInstPtr& inst)
-{
-    instQueue.wakeDependents(inst);
-}
-
-void
 IEW::rescheduleMemInst(const DynInstPtr& inst)
 {
     instQueue.rescheduleMemInst(inst);
@@ -1241,7 +1235,7 @@ IEW::executeInsts()
             // Such case can happen when it faulted during ITLB translation.
             // If we execute the instruction (even if it's a nop) the fault
             // will be replaced and we will lose it.
-            if (inst->getFault() == NoFault) {
+            if (inst->getFault() == NoFault && !inst->skipExecution()) {
                 inst->execute();
                 if (!inst->readPredicate())
                     inst->forwardOldRegs();
@@ -1381,7 +1375,7 @@ IEW::writebackInsts()
             for (int i = 0; i < inst->numDestRegs(); i++) {
                 // Mark register as ready if not pinned
                 if (inst->renamedDestIdx(i)->
-                        getNumPinnedWritesToComplete() == 0) {
+                        getNumPinnedWritesToComplete() <= 0) {
                     DPRINTF(IEW,"Setting Destination Register %i (%s)\n",
                             inst->renamedDestIdx(i)->index(),
                             inst->renamedDestIdx(i)->className());

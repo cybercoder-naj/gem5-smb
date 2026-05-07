@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+
+EXES=$(ls /home/nj421/coremark-pro/builds/linux64/gcc64/bin/*.exe)
+SESSION="nj421-coremark"
+
+pwd=$(dirname $0)
+config="--cpu-type=DerivO3CPU \
+  --caches --l2cache \
+  --l1d_size=64KiB --l1i_size=64KiB --l2_size=2MB \
+  --l1d-hwp-type=StridePrefetcher \
+  --l1i-hwp-type=StridePrefetcher \
+  --l2-hwp-type=StridePrefetcher"
+
+scons build/X86/gem5.fast --ignore-style -j$(nproc)
+g++ -O3 -o memprofile memprofile.cc
+
+function doBenchmark() {
+  local cmd=$1
+  local name=$(basename "$cmd" .exe)
+  
+  export MEM_TRACE_FILE="$pwd/$name.memtrace"
+  systemd-run --user --slice=workloads.slice --scope ./build/X86/gem5.fast \
+    configs/deprecated/example/se.py \
+    --cmd="$cmd" \
+    $config \
+    --options="-i1 -v0"
+  cp m5out/stats.txt $pwd/$name-stats-no-smb.txt
+
+  export SMB_PREDICTIONS_FILE="$pwd/$name.predictions"
+  ./memprofile $MEM_TRACE_FILE $SMB_PREDICTIONS_FILE
+
+  unset MEM_TRACE_FILE
+  systemd-run --user --slice=workloads.slice --scope ./build/X86/gem5.fast \
+    configs/deprecated/example/se.py \
+    --cmd="$cmd" \
+    $config \
+    --options="-i1 -v0"
+  cp m5out/stats.txt $pwd/$name-stats-smb.txt
+}
+
+# Export the function so tmux panes can use it via bash -c
+export -f doBenchmark
+
+# Kill existing session if it exists
+tmux kill-session -t "$SESSION" 2>/dev/null
+
+# Create a new detached session with the first exe
+FIRST=1
+for exe in $EXES; do
+  name=$(basename "$exe" .exe)
+
+  if [ $FIRST -eq 1 ]; then
+    tmux new-session -d -s "$SESSION" -n "$name"
+    tmux send-keys -t "$SESSION:$name" "doBenchmark '$exe'; echo 'Done: $name'" Enter
+    FIRST=0
+  else
+    tmux new-window -t "$SESSION" -n "$name"
+    tmux send-keys -t "$SESSION:$name" "doBenchmark '$exe'; echo 'Done: $name'" Enter
+  fi
+done
+
+# Attach to the session
+tmux attach-session -t "$SESSION"

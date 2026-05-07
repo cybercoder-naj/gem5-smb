@@ -1032,7 +1032,7 @@ InstructionQueue::wakeDependents(const DynInstPtr &completed_inst)
         if (dest_reg->isPinned())
             completed_inst->setPinnedRegsWritten();
 
-        if (dest_reg->getNumPinnedWritesToComplete() != 0) {
+        if (dest_reg->getNumPinnedWritesToComplete() > 0) {
             DPRINTF(IQ, "Reg %d [%s] is pinned, skipping\n",
                     dest_reg->index(), dest_reg->className());
             continue;

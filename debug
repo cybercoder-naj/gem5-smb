@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+
+set -e
+
+# Usage: ./debug <prog> [--smb <file>] [--memtrace <file>] [--debug-flags <flags>] [--debug-start <flag>] [--debug-stop <flag>]
+prog=$1
+shift
+
+smb_file=""
+mem_trace_file=""
+debugflags="--debug-flags=O3CPUAll"
+debugstart=""
+debugstop=""
+debugbreak=""
+cmd=$(which $prog)
+
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    --smb)          smb_file=$2;       shift 2;;
+    --memtrace)     mem_trace_file=$2; shift 2;;
+    --debug-flags)  debugflags="--debug-flags=$2";     shift 2;;
+    --debug-start)  debugstart="--debug-start=$2";     shift 2;;
+    --debug-stop)   debugstop="--debug-stop=$2";      shift 2;;
+    *) echo "Unknown argument: $1"; exit 1;;
+  esac
+done
+
+# Set env vars if provided
+[[ -n $smb_file ]]       && export SMB_PREDICTIONS_FILE=$smb_file
+[[ -n $mem_trace_file ]] && export MEM_TRACE_FILE=$mem_trace_file
+
+scons build/X86/gem5.debug --ignore-style -j$(nproc)
+
+config="--cpu-type=DerivO3CPU --caches --l2cache --l1d_size=64KiB --l1i_size=64KiB --l2_size=2MB --l1d-hwp-type=StridePrefetcher --l1i-hwp-type=StridePrefetcher --l2-hwp-type=StridePrefetcher"
+
+gdb \
+  -ex "set args $debugflags $debugstart $debugstop configs/deprecated/example/se.py $config --cmd=$cmd" \
+  ./build/X86/gem5.debug

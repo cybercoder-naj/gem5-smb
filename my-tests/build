@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+set -e
+
+scons build/X86/gem5.$1 -j$(nproc) --ignore-style

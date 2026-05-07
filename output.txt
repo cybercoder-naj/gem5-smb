@@ -1,0 +1,2089 @@
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x5939040 is 0 bytes inside a block of size 17 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0xACB5A7: _M_construct<char const*> (basic_string.tcc:229)
+==31249==    by 0xACB5A7: basic_string<> (basic_string.h:649)
+==31249==    by 0xACB5A7: __static_initialization_and_destruction_0 (badmicroop.cc:62)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x593db40 is 0 bytes inside a block of size 25 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x593e440 is 0 bytes inside a block of size 26 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x593e5f0 is 0 bytes inside a block of size 26 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x593e800 is 0 bytes inside a block of size 26 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x593ea10 is 0 bytes inside a block of size 26 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x593ec20 is 0 bytes inside a block of size 26 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x593ee30 is 0 bytes inside a block of size 25 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x593f040 is 0 bytes inside a block of size 25 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x593f250 is 0 bytes inside a block of size 25 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x593fe50 is 0 bytes inside a block of size 20 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x5940000 is 0 bytes inside a block of size 20 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x59402a0 is 0 bytes inside a block of size 20 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x59404b0 is 0 bytes inside a block of size 18 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x59406c0 is 0 bytes inside a block of size 18 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x59408d0 is 0 bytes inside a block of size 18 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x5940a80 is 0 bytes inside a block of size 18 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x5940c90 is 0 bytes inside a block of size 18 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x599e160 is 0 bytes inside a block of size 20 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x599f5d0 is 0 bytes inside a block of size 18 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x599f780 is 0 bytes inside a block of size 18 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x599fa20 is 0 bytes inside a block of size 19 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x599fbd0 is 0 bytes inside a block of size 19 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x59a07e0 is 0 bytes inside a block of size 21 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x59a0a00 is 0 bytes inside a block of size 21 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x59a0e20 is 0 bytes inside a block of size 27 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x59a1030 is 0 bytes inside a block of size 27 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x59a13c0 is 0 bytes inside a block of size 21 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x59a1a20 is 0 bytes inside a block of size 27 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x59a1c30 is 0 bytes inside a block of size 25 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x59a1e50 is 0 bytes inside a block of size 31 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x59a20f0 is 0 bytes inside a block of size 18 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x59a2300 is 0 bytes inside a block of size 25 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x59a2520 is 0 bytes inside a block of size 31 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x59a2d30 is 0 bytes inside a block of size 20 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x59a3390 is 0 bytes inside a block of size 20 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x59a3990 is 0 bytes inside a block of size 20 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x59a46b0 is 0 bytes inside a block of size 18 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x59a48c0 is 0 bytes inside a block of size 18 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x59aa850 is 0 bytes inside a block of size 17 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x59aaaf0 is 0 bytes inside a block of size 17 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x59aad00 is 0 bytes inside a block of size 17 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x59aaf10 is 0 bytes inside a block of size 17 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x59ab120 is 0 bytes inside a block of size 17 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x5cdf310 is 0 bytes inside a block of size 17 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x5cdf600 is 0 bytes inside a block of size 17 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x5cdf810 is 0 bytes inside a block of size 20 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x5cdfa20 is 0 bytes inside a block of size 20 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x5cdfc30 is 0 bytes inside a block of size 20 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x5cdfe40 is 0 bytes inside a block of size 20 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x5ce0050 is 0 bytes inside a block of size 20 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x5ce0260 is 0 bytes inside a block of size 20 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x5ce0470 is 0 bytes inside a block of size 20 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x5ce0680 is 0 bytes inside a block of size 20 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x5ce0890 is 0 bytes inside a block of size 20 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x5ce0aa0 is 0 bytes inside a block of size 20 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x5ce7420 is 0 bytes inside a block of size 17 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x5cf3ac0 is 0 bytes inside a block of size 23 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x5cf3b80 is 0 bytes inside a block of size 23 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0xB16207: ~basic_string (basic_string.h:804)
+==31249==    by 0xB16207: __static_initialization_and_destruction_0() (packet.cc:240)
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x6572260 is 0 bytes inside a block of size 21 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0xB14D10: _M_construct<char const*> (basic_string.tcc:229)
+==31249==    by 0xB14D10: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string<std::allocator<char> >(char const*, std::allocator<char> const&) [clone .constprop.0] (basic_string.h:649)
+==31249==    by 0xB15F12: __static_initialization_and_destruction_0() (packet.cc:240)
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0xB16214: ~basic_string (basic_string.h:804)
+==31249==    by 0xB16214: __static_initialization_and_destruction_0() (packet.cc:240)
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x6572200 is 0 bytes inside a block of size 20 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0xB14D10: _M_construct<char const*> (basic_string.tcc:229)
+==31249==    by 0xB14D10: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string<std::allocator<char> >(char const*, std::allocator<char> const&) [clone .constprop.0] (basic_string.h:649)
+==31249==    by 0xB15EBA: __static_initialization_and_destruction_0() (packet.cc:240)
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0xB16248: ~basic_string (basic_string.h:804)
+==31249==    by 0xB16248: __static_initialization_and_destruction_0() (packet.cc:240)
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x65721a0 is 0 bytes inside a block of size 17 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0xB14D10: _M_construct<char const*> (basic_string.tcc:229)
+==31249==    by 0xB14D10: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string<std::allocator<char> >(char const*, std::allocator<char> const&) [clone .constprop.0] (basic_string.h:649)
+==31249==    by 0xB15D65: __static_initialization_and_destruction_0() (packet.cc:240)
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0xB16255: ~basic_string (basic_string.h:804)
+==31249==    by 0xB16255: __static_initialization_and_destruction_0() (packet.cc:240)
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x6572140 is 0 bytes inside a block of size 17 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0xB14D10: _M_construct<char const*> (basic_string.tcc:229)
+==31249==    by 0xB14D10: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string<std::allocator<char> >(char const*, std::allocator<char> const&) [clone .constprop.0] (basic_string.h:649)
+==31249==    by 0xB15D11: __static_initialization_and_destruction_0() (packet.cc:240)
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0xB162AE: ~basic_string (basic_string.h:804)
+==31249==    by 0xB162AE: __static_initialization_and_destruction_0() (packet.cc:240)
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x65720e0 is 0 bytes inside a block of size 23 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0xB14D10: _M_construct<char const*> (basic_string.tcc:229)
+==31249==    by 0xB14D10: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string<std::allocator<char> >(char const*, std::allocator<char> const&) [clone .constprop.0] (basic_string.h:649)
+==31249==    by 0xB15A82: __static_initialization_and_destruction_0() (packet.cc:240)
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0xB162B8: ~basic_string (basic_string.h:804)
+==31249==    by 0xB162B8: __static_initialization_and_destruction_0() (packet.cc:240)
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x6572080 is 0 bytes inside a block of size 22 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0xB14D10: _M_construct<char const*> (basic_string.tcc:229)
+==31249==    by 0xB14D10: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string<std::allocator<char> >(char const*, std::allocator<char> const&) [clone .constprop.0] (basic_string.h:649)
+==31249==    by 0xB15A4F: __static_initialization_and_destruction_0() (packet.cc:240)
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0xB162D9: ~basic_string (basic_string.h:804)
+==31249==    by 0xB162D9: __static_initialization_and_destruction_0() (packet.cc:240)
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x6572020 is 0 bytes inside a block of size 19 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0xB14D10: _M_construct<char const*> (basic_string.tcc:229)
+==31249==    by 0xB14D10: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string<std::allocator<char> >(char const*, std::allocator<char> const&) [clone .constprop.0] (basic_string.h:649)
+==31249==    by 0xB15965: __static_initialization_and_destruction_0() (packet.cc:240)
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0xB162E1: ~basic_string (basic_string.h:804)
+==31249==    by 0xB162E1: __static_initialization_and_destruction_0() (packet.cc:240)
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x6571fc0 is 0 bytes inside a block of size 18 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0xB14D10: _M_construct<char const*> (basic_string.tcc:229)
+==31249==    by 0xB14D10: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string<std::allocator<char> >(char const*, std::allocator<char> const&) [clone .constprop.0] (basic_string.h:649)
+==31249==    by 0xB15912: __static_initialization_and_destruction_0() (packet.cc:240)
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0xB162EE: ~basic_string (basic_string.h:804)
+==31249==    by 0xB162EE: __static_initialization_and_destruction_0() (packet.cc:240)
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x6571f60 is 0 bytes inside a block of size 18 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0xB14D10: _M_construct<char const*> (basic_string.tcc:229)
+==31249==    by 0xB14D10: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string<std::allocator<char> >(char const*, std::allocator<char> const&) [clone .constprop.0] (basic_string.h:649)
+==31249==    by 0xB158BD: __static_initialization_and_destruction_0() (packet.cc:240)
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0xB162FB: ~basic_string (basic_string.h:804)
+==31249==    by 0xB162FB: __static_initialization_and_destruction_0() (packet.cc:240)
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x6571f00 is 0 bytes inside a block of size 17 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0xB14D10: _M_construct<char const*> (basic_string.tcc:229)
+==31249==    by 0xB14D10: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string<std::allocator<char> >(char const*, std::allocator<char> const&) [clone .constprop.0] (basic_string.h:649)
+==31249==    by 0xB1585A: __static_initialization_and_destruction_0() (packet.cc:240)
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0xB16315: ~basic_string (basic_string.h:804)
+==31249==    by 0xB16315: __static_initialization_and_destruction_0() (packet.cc:240)
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x6571ea0 is 0 bytes inside a block of size 17 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0xB14D10: _M_construct<char const*> (basic_string.tcc:229)
+==31249==    by 0xB14D10: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string<std::allocator<char> >(char const*, std::allocator<char> const&) [clone .constprop.0] (basic_string.h:649)
+==31249==    by 0xB15798: __static_initialization_and_destruction_0() (packet.cc:240)
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0xB1637D: ~basic_string (basic_string.h:804)
+==31249==    by 0xB1637D: __static_initialization_and_destruction_0() (packet.cc:240)
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x6571e40 is 0 bytes inside a block of size 17 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0xB14D10: _M_construct<char const*> (basic_string.tcc:229)
+==31249==    by 0xB14D10: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string<std::allocator<char> >(char const*, std::allocator<char> const&) [clone .constprop.0] (basic_string.h:649)
+==31249==    by 0xB154B9: __static_initialization_and_destruction_0() (packet.cc:240)
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0xB16424: ~basic_string (basic_string.h:804)
+==31249==    by 0xB16424: __static_initialization_and_destruction_0() (packet.cc:240)
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x6571de0 is 0 bytes inside a block of size 18 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0xB14D10: _M_construct<char const*> (basic_string.tcc:229)
+==31249==    by 0xB14D10: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string<std::allocator<char> >(char const*, std::allocator<char> const&) [clone .constprop.0] (basic_string.h:649)
+==31249==    by 0xB14F9C: __static_initialization_and_destruction_0() (packet.cc:240)
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0xB16441: ~basic_string (basic_string.h:804)
+==31249==    by 0xB16441: __static_initialization_and_destruction_0() (packet.cc:240)
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x6571d80 is 0 bytes inside a block of size 23 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0xB14D10: _M_construct<char const*> (basic_string.tcc:229)
+==31249==    by 0xB14D10: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string<std::allocator<char> >(char const*, std::allocator<char> const&) [clone .constprop.0] (basic_string.h:649)
+==31249==    by 0xB14EAB: __static_initialization_and_destruction_0() (packet.cc:240)
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0xB16B64: ~basic_string (basic_string.h:804)
+==31249==    by 0xB16B64: DefaultRequestPort (port.cc:68)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x6572350 is 0 bytes inside a block of size 21 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1B32ACC: _M_construct<char const*> (basic_string.tcc:229)
+==31249==    by 0x1B32ACC: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string<std::allocator<char> >(char const*, std::allocator<char> const&) (basic_string.h:649)
+==31249==    by 0xB16B03: DefaultRequestPort (port.cc:68)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0xB16C22: ~basic_string (basic_string.h:804)
+==31249==    by 0xB16C22: DefaultResponsePort (port.cc:93)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x65723b0 is 0 bytes inside a block of size 22 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1B32ACC: _M_construct<char const*> (basic_string.tcc:229)
+==31249==    by 0x1B32ACC: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string<std::allocator<char> >(char const*, std::allocator<char> const&) (basic_string.h:649)
+==31249==    by 0xB16BC0: DefaultResponsePort (port.cc:93)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x5cfd340 is 0 bytes inside a block of size 20 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x5cfe9f0 is 0 bytes inside a block of size 17 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x5cfec00 is 0 bytes inside a block of size 17 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x5cfee10 is 0 bytes inside a block of size 17 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x5cff020 is 0 bytes inside a block of size 17 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x5cff230 is 0 bytes inside a block of size 24 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x5cff4d0 is 0 bytes inside a block of size 17 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x5cff780 is 0 bytes inside a block of size 17 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x5cff990 is 0 bytes inside a block of size 17 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x5cffff0 is 0 bytes inside a block of size 17 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x5d001a0 is 0 bytes inside a block of size 17 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x5d00350 is 0 bytes inside a block of size 17 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x5d00500 is 0 bytes inside a block of size 17 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x5d006b0 is 0 bytes inside a block of size 17 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x5d009b0 is 0 bytes inside a block of size 22 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x5d00b60 is 0 bytes inside a block of size 22 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x5d00da0 is 0 bytes inside a block of size 22 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x5d00f50 is 0 bytes inside a block of size 22 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x5d01190 is 0 bytes inside a block of size 22 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x5d01340 is 0 bytes inside a block of size 22 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x5d014f0 is 0 bytes inside a block of size 22 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x5d01850 is 0 bytes inside a block of size 22 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x5d01f10 is 0 bytes inside a block of size 19 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x5d02120 is 0 bytes inside a block of size 19 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF95B5: ~basic_string (basic_string.h:804)
+==31249==    by 0x1CF95B5: ~pair (stl_pair.h:187)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==  Address 0x5d02570 is 0 bytes inside a block of size 23 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1CF7CF9: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char*>(char*, char*, std::forward_iterator_tag) [clone .isra.0] (basic_string.tcc:229)
+==31249==    by 0x1CF9492: basic_string (basic_string.h:551)
+==31249==    by 0x1CF9492: gem5::EmbeddedPyBind::init() (init.cc:87)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== 
+==31249== More than 100 errors detected.  Subsequent errors
+==31249== will still be recorded, but in less detail than before.
+==31249== Mismatched free() / delete / delete []
+--
+==31249==    by 0x5476349: std::basic_filebuf<char, std::char_traits<char> >::close() (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+==31249==    by 0x1473D01: close (fstream:739)
+==31249==    by 0x1473D01: gem5::o3::SMB::SMB(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (smb.cc:46)
+==31249==    by 0x13C2F2D: gem5::o3::CPU::CPU(gem5::BaseO3CPUParams const&) (cpu.cc:118)
+==31249==    by 0x139BE84: create (param_BaseO3CPU.cc:213)
+==31249==    by 0x139BE84: gem5::BaseO3CPUParams::create() const (param_BaseO3CPU.cc:246)
+==31249==    by 0x13A0B26: pybind11::cpp_function::initialize<pybind11::cpp_function::initialize<gem5::o3::CPU*, gem5::BaseO3CPUParams, , pybind11::name, pybind11::is_method, pybind11::sibling>(gem5::o3::CPU* (gem5::BaseO3CPUParams::*)() const, pybind11::name const&, pybind11::is_method const&, pybind11::sibling const&)::{lambda(gem5::BaseO3CPUParams const*)#1}, gem5::o3::CPU*, gem5::BaseO3CPUParams const*, pybind11::name, pybind11::is_method, pybind11::sibling>(pybind11::cpp_function::initialize<gem5::o3::CPU*, gem5::BaseO3CPUParams, , pybind11::name, pybind11::is_method, pybind11::sibling>(gem5::o3::CPU* (gem5::BaseO3CPUParams::*)() const, pybind11::name const&, pybind11::is_method const&, pybind11::sibling const&)::{lambda(gem5::BaseO3CPUParams const*)#1}&&, gem5::o3::CPU* (*)(gem5::BaseO3CPUParams const*), pybind11::name const&, pybind11::is_method const&, pybind11::sibling const&)::{lambda(pybind11::detail::function_call&)#1}::_FUN(pybind11::detail::function_call&) (pybind11.h:132)
+==31249==    by 0xB3B08D: pybind11::cpp_function::dispatcher(_object*, _object*, _object*) (pybind11.h:939)
+--
+==31249==    by 0x5476F46: std::basic_filebuf<char, std::char_traits<char> >::open(char const*, std::_Ios_Openmode) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33)
+==31249==    by 0x14737A8: open (fstream:667)
+==31249==    by 0x14737A8: gem5::o3::SMB::SMB(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) (smb.cc:31)
+==31249==    by 0x13C2F2D: gem5::o3::CPU::CPU(gem5::BaseO3CPUParams const&) (cpu.cc:118)
+==31249==    by 0x139BE84: create (param_BaseO3CPU.cc:213)
+==31249==    by 0x139BE84: gem5::BaseO3CPUParams::create() const (param_BaseO3CPU.cc:246)
+==31249==    by 0x13A0B26: pybind11::cpp_function::initialize<pybind11::cpp_function::initialize<gem5::o3::CPU*, gem5::BaseO3CPUParams, , pybind11::name, pybind11::is_method, pybind11::sibling>(gem5::o3::CPU* (gem5::BaseO3CPUParams::*)() const, pybind11::name const&, pybind11::is_method const&, pybind11::sibling const&)::{lambda(gem5::BaseO3CPUParams const*)#1}, gem5::o3::CPU*, gem5::BaseO3CPUParams const*, pybind11::name, pybind11::is_method, pybind11::sibling>(pybind11::cpp_function::initialize<gem5::o3::CPU*, gem5::BaseO3CPUParams, , pybind11::name, pybind11::is_method, pybind11::sibling>(gem5::o3::CPU* (gem5::BaseO3CPUParams::*)() const, pybind11::name const&, pybind11::is_method const&, pybind11::sibling const&)::{lambda(gem5::BaseO3CPUParams const*)#1}&&, gem5::o3::CPU* (*)(gem5::BaseO3CPUParams const*), pybind11::name const&, pybind11::is_method const&, pybind11::sibling const&)::{lambda(pybind11::detail::function_call&)#1}::_FUN(pybind11::detail::function_call&) (pybind11.h:132)
+==31249==    by 0xB3B08D: pybind11::cpp_function::dispatcher(_object*, _object*, _object*) (pybind11.h:939)
+--
+==31249==    by 0x143CCE1: DistBase (statistics.hh:1316)
+==31249==    by 0x143CCE1: Distribution (statistics.hh:2094)
+==31249==    by 0x143CCE1: gem5::o3::LSQUnit::LSQUnitStats::LSQUnitStats(gem5::statistics::Group*) (lsq_unit.cc:275)
+==31249==    by 0x143D285: gem5::o3::LSQUnit::LSQUnit(unsigned int, unsigned int) (lsq_unit.cc:198)
+==31249==    by 0x142CC5A: construct<gem5::o3::LSQUnit, unsigned int&, unsigned int&> (new_allocator.h:191)
+==31249==    by 0x142CC5A: construct<gem5::o3::LSQUnit, unsigned int&, unsigned int&> (alloc_traits.h:538)
+==31249==    by 0x142CC5A: emplace_back<unsigned int&, unsigned int&> (vector.tcc:117)
+==31249==    by 0x142CC5A: gem5::o3::LSQ::LSQ(gem5::o3::CPU*, gem5::o3::IEW*, gem5::BaseO3CPUParams const&) (lsq.cc:116)
+==31249==    by 0x140E09B: gem5::o3::IEW::IEW(gem5::o3::CPU*, gem5::BaseO3CPUParams const&) (iew.cc:71)
+--
+==31249==    by 0x143CCD9: DistBase (statistics.hh:1316)
+==31249==    by 0x143CCD9: Distribution (statistics.hh:2094)
+==31249==    by 0x143CCD9: gem5::o3::LSQUnit::LSQUnitStats::LSQUnitStats(gem5::statistics::Group*) (lsq_unit.cc:275)
+==31249==    by 0x143D285: gem5::o3::LSQUnit::LSQUnit(unsigned int, unsigned int) (lsq_unit.cc:198)
+==31249==    by 0x142CC5A: construct<gem5::o3::LSQUnit, unsigned int&, unsigned int&> (new_allocator.h:191)
+==31249==    by 0x142CC5A: construct<gem5::o3::LSQUnit, unsigned int&, unsigned int&> (alloc_traits.h:538)
+==31249==    by 0x142CC5A: emplace_back<unsigned int&, unsigned int&> (vector.tcc:117)
+==31249==    by 0x142CC5A: gem5::o3::LSQ::LSQ(gem5::o3::CPU*, gem5::o3::IEW*, gem5::BaseO3CPUParams const&) (lsq.cc:116)
+==31249==    by 0x140E09B: gem5::o3::IEW::IEW(gem5::o3::CPU*, gem5::BaseO3CPUParams const&) (iew.cc:71)
+--
+==31249==    by 0x2202C12: gem5::BaseCache::CpuSidePort::recvTimingReq(gem5::Packet*) (base.cc:2582)
+==31249==    by 0x143E90F: sendTimingReq (port.hh:607)
+==31249==    by 0x143E90F: gem5::o3::LSQUnit::trySendPacket(bool, gem5::Packet*) (lsq_unit.cc:1274)
+==31249==    by 0x142510D: gem5::o3::LSQ::SingleDataRequest::sendPacketToCache() (lsq.cc:1326)
+==31249==    by 0x143F8D8: gem5::o3::LSQUnit::writebackStores() (lsq_unit.cc:946)
+==31249==    by 0x1429A3C: gem5::o3::LSQ::writebackStores() (lsq.cc:278)
+==31249==    by 0x1410828: gem5::o3::IEW::tick() (iew.cc:1468)
+==31249==    by 0x13C20FD: gem5::o3::CPU::tick() (cpu.cc:383)
+==31249==    by 0x1CE94E6: operator() (std_function.h:591)
+==31249==    by 0x1CE94E6: process (eventq.hh:1162)
+--
+==31249==    by 0x2202C12: gem5::BaseCache::CpuSidePort::recvTimingReq(gem5::Packet*) (base.cc:2582)
+==31249==    by 0x143E90F: sendTimingReq (port.hh:607)
+==31249==    by 0x143E90F: gem5::o3::LSQUnit::trySendPacket(bool, gem5::Packet*) (lsq_unit.cc:1274)
+==31249==    by 0x142510D: gem5::o3::LSQ::SingleDataRequest::sendPacketToCache() (lsq.cc:1326)
+==31249==    by 0x143F8D8: gem5::o3::LSQUnit::writebackStores() (lsq_unit.cc:946)
+==31249==    by 0x1429A3C: gem5::o3::LSQ::writebackStores() (lsq.cc:278)
+==31249==    by 0x1410828: gem5::o3::IEW::tick() (iew.cc:1468)
+==31249==    by 0x13C20FD: gem5::o3::CPU::tick() (cpu.cc:383)
+==31249==    by 0x1CE94E6: operator() (std_function.h:591)
+==31249==    by 0x1CE94E6: process (eventq.hh:1162)
+--
+==31249==  Address 0x2df98920 is 0 bytes inside a block of size 8 alloc'd
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x1442C9A: gem5::o3::LSQUnit::read(gem5::o3::LSQ::LSQRequest*, long) (lsq_unit.cc:1544)
+==31249==    by 0x14278E1: gem5::o3::LSQ::read(gem5::o3::LSQ::LSQRequest*, long) (lsq.cc:1531)
+==31249==    by 0x142DF97: gem5::o3::LSQ::pushRequest(gem5::RefCountingPtr<gem5::o3::DynInst> const&, bool, unsigned char*, unsigned int, unsigned long, gem5::Flags<unsigned long>, unsigned long*, std::unique_ptr<gem5::AtomicOpFunctor, std::default_delete<gem5::AtomicOpFunctor> >, std::vector<bool, std::allocator<bool> > const&) (lsq.cc:847)
+==31249==    by 0x13DAAD6: pushRequest (cpu.hh:578)
+==31249==    by 0x13DAAD6: gem5::o3::DynInst::initiateMemRead(unsigned long, unsigned int, gem5::Flags<unsigned long>, std::vector<bool, std::allocator<bool> > const&) (dyn_inst.cc:439)
+==31249==    by 0x10E2326: gem5::X86ISA::initiateMemRead(gem5::ExecContext*, gem5::trace::InstRecord*, unsigned long, unsigned int, gem5::Flags<unsigned long>) [clone .isra.0] (memhelpers.hh:52)
+==31249==    by 0x110E0B5: gem5::X86ISAInst::LdBig::initiateAcc(gem5::ExecContext*, gem5::trace::InstRecord*) const (exec-ns.cc.inc:18127)
+==31249==    by 0x13D8B26: gem5::o3::DynInst::initiateAcc() (dyn_inst.cc:395)
+==31249==    by 0x1440BAC: gem5::o3::LSQUnit::executeLoad(gem5::RefCountingPtr<gem5::o3::DynInst> const&) (lsq_unit.cc:640)
+==31249==    by 0x1425F2A: gem5::o3::LSQ::executeLoad(gem5::RefCountingPtr<gem5::o3::DynInst> const&) (lsq.cc:241)
+==31249==    by 0x140F9FF: gem5::o3::IEW::executeInsts() (iew.cc:1202)
+==31249==    by 0x1410C17: gem5::o3::IEW::tick() (iew.cc:1444)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+--
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x13D88B3: gem5::o3::DynInst::operator new(unsigned long, gem5::o3::DynInst::Arrays&) (dyn_inst.cc:192)
+==31249==    by 0x145E40F: gem5::o3::Rename::buildBypassMoveInst(short, gem5::RefCountingPtr<gem5::o3::DynInst> const&) (rename.cc:1243)
+==31249==    by 0x145FFE0: gem5::o3::Rename::renameInsts(short) (rename.cc:761)
+==31249==    by 0x14605C3: gem5::o3::Rename::rename(bool&, short) (rename.cc:504)
+==31249==    by 0x146086B: gem5::o3::Rename::tick() (rename.cc:426)
+==31249==    by 0x13C20F1: gem5::o3::CPU::tick() (cpu.cc:381)
+==31249==    by 0x1CE94E6: operator() (std_function.h:591)
+==31249==    by 0x1CE94E6: process (eventq.hh:1162)
+==31249==    by 0x1CE94E6: gem5::EventQueue::serviceOne() (eventq.cc:249)
+==31249==    by 0x1D154EF: gem5::doSimLoop(gem5::EventQueue*) (simulate.cc:331)
+--
+==31249==    by 0x2202C12: gem5::BaseCache::CpuSidePort::recvTimingReq(gem5::Packet*) (base.cc:2582)
+==31249==    by 0x143E90F: sendTimingReq (port.hh:607)
+==31249==    by 0x143E90F: gem5::o3::LSQUnit::trySendPacket(bool, gem5::Packet*) (lsq_unit.cc:1274)
+==31249==    by 0x142510D: gem5::o3::LSQ::SingleDataRequest::sendPacketToCache() (lsq.cc:1326)
+==31249==    by 0x144219C: gem5::o3::LSQUnit::read(gem5::o3::LSQ::LSQRequest*, long) (lsq_unit.cc:1695)
+==31249==    by 0x14278E1: gem5::o3::LSQ::read(gem5::o3::LSQ::LSQRequest*, long) (lsq.cc:1531)
+==31249==    by 0x142DF97: gem5::o3::LSQ::pushRequest(gem5::RefCountingPtr<gem5::o3::DynInst> const&, bool, unsigned char*, unsigned int, unsigned long, gem5::Flags<unsigned long>, unsigned long*, std::unique_ptr<gem5::AtomicOpFunctor, std::default_delete<gem5::AtomicOpFunctor> >, std::vector<bool, std::allocator<bool> > const&) (lsq.cc:847)
+==31249==    by 0x13DAAD6: pushRequest (cpu.hh:578)
+==31249==    by 0x13DAAD6: gem5::o3::DynInst::initiateMemRead(unsigned long, unsigned int, gem5::Flags<unsigned long>, std::vector<bool, std::allocator<bool> > const&) (dyn_inst.cc:439)
+==31249==    by 0x10E2326: gem5::X86ISA::initiateMemRead(gem5::ExecContext*, gem5::trace::InstRecord*, unsigned long, unsigned int, gem5::Flags<unsigned long>) [clone .isra.0] (memhelpers.hh:52)
+--
+==31249==    by 0x2202C12: gem5::BaseCache::CpuSidePort::recvTimingReq(gem5::Packet*) (base.cc:2582)
+==31249==    by 0x143E90F: sendTimingReq (port.hh:607)
+==31249==    by 0x143E90F: gem5::o3::LSQUnit::trySendPacket(bool, gem5::Packet*) (lsq_unit.cc:1274)
+==31249==    by 0x142510D: gem5::o3::LSQ::SingleDataRequest::sendPacketToCache() (lsq.cc:1326)
+==31249==    by 0x144219C: gem5::o3::LSQUnit::read(gem5::o3::LSQ::LSQRequest*, long) (lsq_unit.cc:1695)
+==31249==    by 0x14278E1: gem5::o3::LSQ::read(gem5::o3::LSQ::LSQRequest*, long) (lsq.cc:1531)
+==31249==    by 0x142DF97: gem5::o3::LSQ::pushRequest(gem5::RefCountingPtr<gem5::o3::DynInst> const&, bool, unsigned char*, unsigned int, unsigned long, gem5::Flags<unsigned long>, unsigned long*, std::unique_ptr<gem5::AtomicOpFunctor, std::default_delete<gem5::AtomicOpFunctor> >, std::vector<bool, std::allocator<bool> > const&) (lsq.cc:847)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+--
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x2419982: Data::CommandAnalysis::handleAct(unsigned int, long) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==    by 0x240B371: Data::CommandAnalysis::evaluateCommands(std::vector<Data::MemCommand, std::allocator<Data::MemCommand> >&) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==    by 0x240B28F: Data::CommandAnalysis::getCommands(std::vector<Data::MemCommand, std::allocator<Data::MemCommand> >&, bool, long) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==    by 0x2406FB3: libDRAMPower::updateCounters(bool, long) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==    by 0x2407071: libDRAMPower::calcWindowEnergy(long) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==    by 0x1ED2EF0: gem5::memory::DRAMInterface::Rank::updatePowerStats() (dram_interface.cc:1777)
+==31249==    by 0x1ED3D73: gem5::memory::DRAMInterface::Rank::processRefreshEvent() (dram_interface.cc:1417)
+==31249==    by 0x1CE94E6: operator() (std_function.h:591)
+==31249==    by 0x1CE94E6: process (eventq.hh:1162)
+==31249==    by 0x1CE94E6: gem5::EventQueue::serviceOne() (eventq.cc:249)
+--
+==31249==    by 0x1B32ACC: _M_construct<char const*> (basic_string.tcc:229)
+==31249==    by 0x1B32ACC: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string<std::allocator<char> >(char const*, std::allocator<char> const&) (basic_string.h:649)
+==31249==    by 0x2419954: Data::CommandAnalysis::handleAct(unsigned int, long) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==    by 0x240B371: Data::CommandAnalysis::evaluateCommands(std::vector<Data::MemCommand, std::allocator<Data::MemCommand> >&) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==    by 0x240B28F: Data::CommandAnalysis::getCommands(std::vector<Data::MemCommand, std::allocator<Data::MemCommand> >&, bool, long) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==    by 0x2406FB3: libDRAMPower::updateCounters(bool, long) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==    by 0x2407071: libDRAMPower::calcWindowEnergy(long) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==    by 0x1ED2EF0: gem5::memory::DRAMInterface::Rank::updatePowerStats() (dram_interface.cc:1777)
+==31249==    by 0x1ED3D73: gem5::memory::DRAMInterface::Rank::processRefreshEvent() (dram_interface.cc:1417)
+==31249==    by 0x1CE94E6: operator() (std_function.h:591)
+==31249==    by 0x1CE94E6: process (eventq.hh:1162)
+==31249==    by 0x1CE94E6: gem5::EventQueue::serviceOne() (eventq.cc:249)
+--
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x2419BFE: Data::CommandAnalysis::handleRd(unsigned int, long) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==    by 0x240B394: Data::CommandAnalysis::evaluateCommands(std::vector<Data::MemCommand, std::allocator<Data::MemCommand> >&) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==    by 0x240B28F: Data::CommandAnalysis::getCommands(std::vector<Data::MemCommand, std::allocator<Data::MemCommand> >&, bool, long) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==    by 0x2406FB3: libDRAMPower::updateCounters(bool, long) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==    by 0x2407071: libDRAMPower::calcWindowEnergy(long) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==    by 0x1ED2EF0: gem5::memory::DRAMInterface::Rank::updatePowerStats() (dram_interface.cc:1777)
+==31249==    by 0x1ED3D73: gem5::memory::DRAMInterface::Rank::processRefreshEvent() (dram_interface.cc:1417)
+==31249==    by 0x1CE94E6: operator() (std_function.h:591)
+==31249==    by 0x1CE94E6: process (eventq.hh:1162)
+==31249==    by 0x1CE94E6: gem5::EventQueue::serviceOne() (eventq.cc:249)
+--
+==31249==    by 0x1B32ACC: _M_construct<char const*> (basic_string.tcc:229)
+==31249==    by 0x1B32ACC: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string<std::allocator<char> >(char const*, std::allocator<char> const&) (basic_string.h:649)
+==31249==    by 0x2419BD0: Data::CommandAnalysis::handleRd(unsigned int, long) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==    by 0x240B394: Data::CommandAnalysis::evaluateCommands(std::vector<Data::MemCommand, std::allocator<Data::MemCommand> >&) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==    by 0x240B28F: Data::CommandAnalysis::getCommands(std::vector<Data::MemCommand, std::allocator<Data::MemCommand> >&, bool, long) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==    by 0x2406FB3: libDRAMPower::updateCounters(bool, long) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==    by 0x2407071: libDRAMPower::calcWindowEnergy(long) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==    by 0x1ED2EF0: gem5::memory::DRAMInterface::Rank::updatePowerStats() (dram_interface.cc:1777)
+==31249==    by 0x1ED3D73: gem5::memory::DRAMInterface::Rank::processRefreshEvent() (dram_interface.cc:1417)
+==31249==    by 0x1CE94E6: operator() (std_function.h:591)
+==31249==    by 0x1CE94E6: process (eventq.hh:1162)
+==31249==    by 0x1CE94E6: gem5::EventQueue::serviceOne() (eventq.cc:249)
+--
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x241A5B2: Data::CommandAnalysis::handlePre(unsigned int, long) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==    by 0x240B420: Data::CommandAnalysis::evaluateCommands(std::vector<Data::MemCommand, std::allocator<Data::MemCommand> >&) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==    by 0x240B28F: Data::CommandAnalysis::getCommands(std::vector<Data::MemCommand, std::allocator<Data::MemCommand> >&, bool, long) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==    by 0x2406FB3: libDRAMPower::updateCounters(bool, long) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==    by 0x2407071: libDRAMPower::calcWindowEnergy(long) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==    by 0x1ED2EF0: gem5::memory::DRAMInterface::Rank::updatePowerStats() (dram_interface.cc:1777)
+==31249==    by 0x1ED3D73: gem5::memory::DRAMInterface::Rank::processRefreshEvent() (dram_interface.cc:1417)
+==31249==    by 0x1CE94E6: operator() (std_function.h:591)
+==31249==    by 0x1CE94E6: process (eventq.hh:1162)
+==31249==    by 0x1CE94E6: gem5::EventQueue::serviceOne() (eventq.cc:249)
+--
+==31249==    by 0x1B32ACC: _M_construct<char const*> (basic_string.tcc:229)
+==31249==    by 0x1B32ACC: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string<std::allocator<char> >(char const*, std::allocator<char> const&) (basic_string.h:649)
+==31249==    by 0x241A584: Data::CommandAnalysis::handlePre(unsigned int, long) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==    by 0x240B420: Data::CommandAnalysis::evaluateCommands(std::vector<Data::MemCommand, std::allocator<Data::MemCommand> >&) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==    by 0x240B28F: Data::CommandAnalysis::getCommands(std::vector<Data::MemCommand, std::allocator<Data::MemCommand> >&, bool, long) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==    by 0x2406FB3: libDRAMPower::updateCounters(bool, long) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==    by 0x2407071: libDRAMPower::calcWindowEnergy(long) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==    by 0x1ED2EF0: gem5::memory::DRAMInterface::Rank::updatePowerStats() (dram_interface.cc:1777)
+==31249==    by 0x1ED3D73: gem5::memory::DRAMInterface::Rank::processRefreshEvent() (dram_interface.cc:1417)
+==31249==    by 0x1CE94E6: operator() (std_function.h:591)
+==31249==    by 0x1CE94E6: process (eventq.hh:1162)
+==31249==    by 0x1CE94E6: gem5::EventQueue::serviceOne() (eventq.cc:249)
+--
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x241A903: Data::CommandAnalysis::handlePreA(unsigned int, long) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==    by 0x240B443: Data::CommandAnalysis::evaluateCommands(std::vector<Data::MemCommand, std::allocator<Data::MemCommand> >&) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==    by 0x240B28F: Data::CommandAnalysis::getCommands(std::vector<Data::MemCommand, std::allocator<Data::MemCommand> >&, bool, long) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==    by 0x2406FB3: libDRAMPower::updateCounters(bool, long) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==    by 0x2407071: libDRAMPower::calcWindowEnergy(long) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==    by 0x1ED2EF0: gem5::memory::DRAMInterface::Rank::updatePowerStats() (dram_interface.cc:1777)
+==31249==    by 0x1ED3D73: gem5::memory::DRAMInterface::Rank::processRefreshEvent() (dram_interface.cc:1417)
+==31249==    by 0x1CE94E6: operator() (std_function.h:591)
+==31249==    by 0x1CE94E6: process (eventq.hh:1162)
+==31249==    by 0x1CE94E6: gem5::EventQueue::serviceOne() (eventq.cc:249)
+--
+==31249==    by 0x1B32ACC: _M_construct<char const*> (basic_string.tcc:229)
+==31249==    by 0x1B32ACC: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string<std::allocator<char> >(char const*, std::allocator<char> const&) (basic_string.h:649)
+==31249==    by 0x241A8CC: Data::CommandAnalysis::handlePreA(unsigned int, long) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==    by 0x240B443: Data::CommandAnalysis::evaluateCommands(std::vector<Data::MemCommand, std::allocator<Data::MemCommand> >&) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==    by 0x240B28F: Data::CommandAnalysis::getCommands(std::vector<Data::MemCommand, std::allocator<Data::MemCommand> >&, bool, long) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==    by 0x2406FB3: libDRAMPower::updateCounters(bool, long) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==    by 0x2407071: libDRAMPower::calcWindowEnergy(long) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==    by 0x1ED2EF0: gem5::memory::DRAMInterface::Rank::updatePowerStats() (dram_interface.cc:1777)
+==31249==    by 0x1ED3D73: gem5::memory::DRAMInterface::Rank::processRefreshEvent() (dram_interface.cc:1417)
+==31249==    by 0x1CE94E6: operator() (std_function.h:591)
+==31249==    by 0x1CE94E6: process (eventq.hh:1162)
+==31249==    by 0x1CE94E6: gem5::EventQueue::serviceOne() (eventq.cc:249)
+--
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x241A037: Data::CommandAnalysis::handleRef(unsigned int, long) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==    by 0x240B3DA: Data::CommandAnalysis::evaluateCommands(std::vector<Data::MemCommand, std::allocator<Data::MemCommand> >&) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==    by 0x240B28F: Data::CommandAnalysis::getCommands(std::vector<Data::MemCommand, std::allocator<Data::MemCommand> >&, bool, long) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==    by 0x2406FB3: libDRAMPower::updateCounters(bool, long) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==    by 0x2407071: libDRAMPower::calcWindowEnergy(long) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==    by 0x1ED2EF0: gem5::memory::DRAMInterface::Rank::updatePowerStats() (dram_interface.cc:1777)
+==31249==    by 0x1ED3D73: gem5::memory::DRAMInterface::Rank::processRefreshEvent() (dram_interface.cc:1417)
+==31249==    by 0x1CE94E6: operator() (std_function.h:591)
+==31249==    by 0x1CE94E6: process (eventq.hh:1162)
+==31249==    by 0x1CE94E6: gem5::EventQueue::serviceOne() (eventq.cc:249)
+--
+==31249==    by 0x1B32ACC: _M_construct<char const*> (basic_string.tcc:229)
+==31249==    by 0x1B32ACC: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string<std::allocator<char> >(char const*, std::allocator<char> const&) (basic_string.h:649)
+==31249==    by 0x241A007: Data::CommandAnalysis::handleRef(unsigned int, long) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==    by 0x240B3DA: Data::CommandAnalysis::evaluateCommands(std::vector<Data::MemCommand, std::allocator<Data::MemCommand> >&) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==    by 0x240B28F: Data::CommandAnalysis::getCommands(std::vector<Data::MemCommand, std::allocator<Data::MemCommand> >&, bool, long) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==    by 0x2406FB3: libDRAMPower::updateCounters(bool, long) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==    by 0x2407071: libDRAMPower::calcWindowEnergy(long) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==    by 0x1ED2EF0: gem5::memory::DRAMInterface::Rank::updatePowerStats() (dram_interface.cc:1777)
+==31249==    by 0x1ED3D73: gem5::memory::DRAMInterface::Rank::processRefreshEvent() (dram_interface.cc:1417)
+==31249==    by 0x1CE94E6: operator() (std_function.h:591)
+==31249==    by 0x1CE94E6: process (eventq.hh:1162)
+==31249==    by 0x1CE94E6: gem5::EventQueue::serviceOne() (eventq.cc:249)
+--
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x241A09F: Data::CommandAnalysis::handleRef(unsigned int, long) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==    by 0x240B3DA: Data::CommandAnalysis::evaluateCommands(std::vector<Data::MemCommand, std::allocator<Data::MemCommand> >&) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==    by 0x240B28F: Data::CommandAnalysis::getCommands(std::vector<Data::MemCommand, std::allocator<Data::MemCommand> >&, bool, long) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==    by 0x2406FB3: libDRAMPower::updateCounters(bool, long) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==    by 0x2407071: libDRAMPower::calcWindowEnergy(long) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==    by 0x1ED2EF0: gem5::memory::DRAMInterface::Rank::updatePowerStats() (dram_interface.cc:1777)
+==31249==    by 0x1ED3D73: gem5::memory::DRAMInterface::Rank::processRefreshEvent() (dram_interface.cc:1417)
+==31249==    by 0x1CE94E6: operator() (std_function.h:591)
+==31249==    by 0x1CE94E6: process (eventq.hh:1162)
+==31249==    by 0x1CE94E6: gem5::EventQueue::serviceOne() (eventq.cc:249)
+--
+==31249==    by 0x1B32ACC: _M_construct<char const*> (basic_string.tcc:229)
+==31249==    by 0x1B32ACC: std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string<std::allocator<char> >(char const*, std::allocator<char> const&) (basic_string.h:649)
+==31249==    by 0x241A06F: Data::CommandAnalysis::handleRef(unsigned int, long) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==    by 0x240B3DA: Data::CommandAnalysis::evaluateCommands(std::vector<Data::MemCommand, std::allocator<Data::MemCommand> >&) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==    by 0x240B28F: Data::CommandAnalysis::getCommands(std::vector<Data::MemCommand, std::allocator<Data::MemCommand> >&, bool, long) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==    by 0x2406FB3: libDRAMPower::updateCounters(bool, long) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==    by 0x2407071: libDRAMPower::calcWindowEnergy(long) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249==    by 0x1ED2EF0: gem5::memory::DRAMInterface::Rank::updatePowerStats() (dram_interface.cc:1777)
+==31249==    by 0x1ED3D73: gem5::memory::DRAMInterface::Rank::processRefreshEvent() (dram_interface.cc:1417)
+==31249==    by 0x1CE94E6: operator() (std_function.h:591)
+==31249==    by 0x1CE94E6: process (eventq.hh:1162)
+==31249==    by 0x1CE94E6: gem5::EventQueue::serviceOne() (eventq.cc:249)
+--
+==31249==    by 0x2202C12: gem5::BaseCache::CpuSidePort::recvTimingReq(gem5::Packet*) (base.cc:2582)
+==31249==    by 0x143E90F: sendTimingReq (port.hh:607)
+==31249==    by 0x143E90F: gem5::o3::LSQUnit::trySendPacket(bool, gem5::Packet*) (lsq_unit.cc:1274)
+==31249==    by 0x142510D: gem5::o3::LSQ::SingleDataRequest::sendPacketToCache() (lsq.cc:1326)
+==31249==    by 0x143F8D8: gem5::o3::LSQUnit::writebackStores() (lsq_unit.cc:946)
+==31249==    by 0x1429A3C: gem5::o3::LSQ::writebackStores() (lsq.cc:278)
+==31249==    by 0x1410828: gem5::o3::IEW::tick() (iew.cc:1468)
+==31249==    by 0x13C20FD: gem5::o3::CPU::tick() (cpu.cc:383)
+==31249==    by 0x1CE94E6: operator() (std_function.h:591)
+==31249==    by 0x1CE94E6: process (eventq.hh:1162)
+--
+==31249==    by 0x2202C12: gem5::BaseCache::CpuSidePort::recvTimingReq(gem5::Packet*) (base.cc:2582)
+==31249==    by 0x143E90F: sendTimingReq (port.hh:607)
+==31249==    by 0x143E90F: gem5::o3::LSQUnit::trySendPacket(bool, gem5::Packet*) (lsq_unit.cc:1274)
+==31249==    by 0x142510D: gem5::o3::LSQ::SingleDataRequest::sendPacketToCache() (lsq.cc:1326)
+==31249==    by 0x143F8D8: gem5::o3::LSQUnit::writebackStores() (lsq_unit.cc:946)
+==31249==    by 0x1429A3C: gem5::o3::LSQ::writebackStores() (lsq.cc:278)
+==31249==    by 0x1410828: gem5::o3::IEW::tick() (iew.cc:1468)
+==31249==    by 0x13C20FD: gem5::o3::CPU::tick() (cpu.cc:383)
+==31249==  Block was alloc'd at
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+--
+==31249==    by 0x2202C12: gem5::BaseCache::CpuSidePort::recvTimingReq(gem5::Packet*) (base.cc:2582)
+==31249==    by 0x143E90F: sendTimingReq (port.hh:607)
+==31249==    by 0x143E90F: gem5::o3::LSQUnit::trySendPacket(bool, gem5::Packet*) (lsq_unit.cc:1274)
+==31249==    by 0x142510D: gem5::o3::LSQ::SingleDataRequest::sendPacketToCache() (lsq.cc:1326)
+==31249==    by 0x144219C: gem5::o3::LSQUnit::read(gem5::o3::LSQ::LSQRequest*, long) (lsq_unit.cc:1695)
+==31249==    by 0x14278E1: gem5::o3::LSQ::read(gem5::o3::LSQ::LSQRequest*, long) (lsq.cc:1531)
+==31249== 
+==31249== Mismatched free() / delete / delete []
+==31249==    at 0x484988F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x14287CD: deleteData (packet.hh:1359)
+--
+==31249==    at 0x48485C3: operator new[](unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==31249==    by 0x142BC73: gem5::o3::LSQ::SplitDataRequest::buildPackets() (lsq.cc:1292)
+==31249==    by 0x143F455: gem5::o3::LSQUnit::writebackStores() (lsq_unit.cc:894)
+==31249==    by 0x1429A3C: gem5::o3::LSQ::writebackStores() (lsq.cc:278)
+==31249==    by 0x1410828: gem5::o3::IEW::tick() (iew.cc:1468)
+==31249==    by 0x13C20FD: gem5::o3::CPU::tick() (cpu.cc:383)
+==31249==    by 0x1CE94E6: operator() (std_function.h:591)
+==31249==    by 0x1CE94E6: process (eventq.hh:1162)
+--
+==31249==    by 0x5707303: call_init (libc-start.c:145)
+==31249==    by 0x5707303: __libc_start_main@@GLIBC_2.34 (libc-start.c:347)
+==31249==    by 0xB2A9A4: (below main) (in /home/nj421/gem5-smb/build/X86/gem5.opt)
+==31249== 
+==31249== 
+==31249== HEAP SUMMARY:
+==31249==     in use at exit: 51,226,031 bytes in 294,813 blocks
+==31249==   total heap usage: 238,430,879 allocs, 238,136,066 frees, 15,326,529,378 bytes allocated

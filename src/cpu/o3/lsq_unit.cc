@@ -263,6 +263,8 @@ LSQUnit::LSQUnitStats::LSQUnitStats(statistics::Group *parent)
                "squashed"),
       ADD_STAT(memOrderViolation, statistics::units::Count::get(),
                "Number of memory ordering violations"),
+      ADD_STAT(bypassedLoadMemOrderViolation, statistics::units::Count::get(),
+               "Number of memory ordering violations for bypassed loads"),
       ADD_STAT(squashedStores, statistics::units::Count::get(),
                "Number of stores squashed"),
       ADD_STAT(rescheduledLoads, statistics::units::Count::get(),
@@ -335,6 +337,33 @@ LSQUnit::insertLoad(const DynInstPtr &load_inst)
     load_inst->lqIdx = loadQueue.tail();
     assert(load_inst->lqIdx > 0);
     load_inst->lqIt = loadQueue.getIterator(load_inst->lqIdx);
+
+    if (load_inst->isBypassedLoad()) {
+        assert(load_inst->smbStoreSeqNum != 0);
+
+        auto smb_store_it = storeQueue.end();
+        --smb_store_it;
+
+        // Assert that smb_store_it is still inflight
+        assert(smb_store_it->valid());
+        assert(smb_store_it.idx() >= getStoreHead());
+        if (smb_store_it->instruction()->isCompleted()) {
+            assert(smb_store_it->instruction()->sqIt <= storeWBIt);
+        }
+
+        while (smb_store_it != storeQueue.begin()) {
+            if (smb_store_it->instruction()->seqNum == load_inst->smbStoreSeqNum) {
+                break;
+            }
+            --smb_store_it;
+        }
+        if (smb_store_it == storeQueue.begin() && smb_store_it->instruction()->seqNum != load_inst->smbStoreSeqNum) {
+            panic("Could not find matching store sequence number %llu for bypassed load [sn:%lli]\n",
+                  load_inst->smbStoreSeqNum, load_inst->seqNum);
+        }
+
+        load_inst->smbPredStoreIt = smb_store_it;
+    }
 
     // hardware transactional memory
     // transactional state and nesting depth must be tracked
@@ -1097,8 +1126,34 @@ LSQUnit::writeback(const DynInstPtr &inst, PacketPtr pkt)
         inst->setExecuted();
 
         if (inst->fault == NoFault) {
-            // Complete access to copy data to proper place.
-            inst->completeAcc(pkt);
+            bool perform_value_check = false;
+            if (inst->isBypassedLoad()) {
+                assert(inst->bypassMoveInst);
+
+                if (inst->bypassMoveInst->isExecuted())
+                    perform_value_check = true;
+                else
+                    inst->bypassMoveInst->setSkipExecution();
+            } 
+            
+            if (perform_value_check) {
+                ThreadID tid = inst->threadNumber;
+                PhysRegIdPtr dest_reg = inst->renamedDestIdx(0);
+
+                auto before = cpu->getReg(dest_reg, tid);
+                inst->completeAcc(pkt);
+                auto after = cpu->getReg(dest_reg, tid);
+
+                if (before != after) {
+                    DPRINTF(LSQUnit, "Bypassed load [sn:%lli] value check failed! "
+                            "Speculated: %#llx, actual: %#llx\n",
+                            inst->seqNum, before, after);
+                    inst->setSmbViolation();
+                }
+            } else {
+                // Complete access to copy data to proper place.
+                inst->completeAcc(pkt);
+            }
         } else {
             // If the instruction has an outstanding fault, we cannot complete
             // the access as this discards the current fault.
@@ -1395,9 +1450,13 @@ LSQUnit::read(LSQRequest *request, ssize_t load_idx)
 
     // Check the SQ for any previous stores that might lead to forwarding
     auto store_it = load_inst->sqIt;
-    assert (store_it >= storeWBIt);
+    auto end_it = storeWBIt;
+    // Narrow the window only if the source store hasn't written back yet. If it has the load goes to cache.
+    if (load_inst->isBypassedLoad() && load_inst->smbPredStoreIt > end_it) 
+        end_it = load_inst->smbPredStoreIt;
+    assert (store_it >= end_it);
     // End once we've reached the top of the LSQ
-    while (store_it != storeWBIt && !load_inst->isDataPrefetch()) {
+    while (store_it != end_it && !load_inst->isDataPrefetch()) {
         // Move the index to one younger
         store_it--;
         assert(store_it->valid());
@@ -1460,6 +1519,21 @@ LSQUnit::read(LSQRequest *request, ssize_t load_idx)
             }
 
             if (coverage == AddrRangeCoverage::FullAddrRangeCoverage) {
+                if (load_inst->isBypassedLoad() && store_it->instruction()->seqNum != load_inst->smbStoreSeqNum) {
+                    DPRINTF(LSQUnit, "Memory order violation detected for bypassed load [sn:%lli]."
+                        "Found intervening store [sn:%lli] at address %#x with full coverage.\n",
+                        load_inst->seqNum, store_it->instruction()->seqNum, request->mainReq()->getVaddr());
+
+                    memDepViolator = load_inst;
+                    ++stats.bypassedLoadMemOrderViolation;
+
+                    auto req_s_dep = store_it->request()->getVaddr();
+                    return std::make_shared<GenericISA::M5PanicFault>(
+                        "Detected fault with "
+                        "inst [sn:%lli] and [sn:%lli] at address %#x\n",
+                        store_it->instruction()->seqNum, load_inst->seqNum, req_s_dep);
+                }
+
                 // Get shift amount for offset into the store's data.
                 int shift_amt = request->mainReq()->getVaddr() -
                     store_it->instruction()->effAddr;
@@ -1543,6 +1617,21 @@ LSQUnit::read(LSQRequest *request, ssize_t load_idx)
                 if (store_it->completed()) {
                     panic("Should not check one of these");
                     continue;
+                }
+
+                if (load_inst->isBypassedLoad()) {
+                    DPRINTF(LSQUnit, "Memory order violation detected for bypassed load [sn:%lli]."
+                        "Found intervening store [sn:%lli] at address %#x with partial coverage.\n",
+                        load_inst->seqNum, store_it->instruction()->seqNum, request->mainReq()->getVaddr());
+
+                    memDepViolator = load_inst;
+                    ++stats.bypassedLoadMemOrderViolation;
+
+                    auto req_s_dep = store_it->request()->getVaddr();
+                    return std::make_shared<GenericISA::M5PanicFault>(
+                        "Detected fault with "
+                        "inst [sn:%lli] and [sn:%lli] at address %#x\n",
+                        store_it->instruction()->seqNum, load_inst->seqNum, req_s_dep);
                 }
 
                 // Must stall load and force it to retry, so long as it's the

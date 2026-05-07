@@ -1,0 +1,1307 @@
+      0: system.cpu.iew.lsq: LSQ sharing policy set to Partitioned: 132 entries per LQ | 72 entries per SQ
+      0: system.cpu.rob: ROB sharing policy set to Partitioned
+      0: system.cpu.fetch: Waking up from quiesce
+      0: system.cpu.fetch: Running stage.
+      0: system.cpu.fetch: Attempting to fetch from [tid:0]
+      0: system.cpu.fetch: [tid:0] Attempting to translate and read instruction, starting at PC (0x401000=>0x401008).(0=>1).
+      0: system.cpu.fetch: [tid:0] Fetching cache line 0x401000 for addr 0x401000
+      0: system.cpu.fetch: Fetch: Doing instruction read.
+      0: system.cpu.fetch: [tid:0] Doing Icache access.
+    500: system.cpu.fetch: [tid:0] Squashing instructions due to squash from commit.
+    500: system.cpu.fetch: [tid:0] Squash from commit.
+    500: system.cpu.fetch: [tid:0] Squashing, setting PC to: (0x401000=>0x401008).(0=>1).
+    500: system.cpu.fetch: [tid:0] Squashing outstanding Icache miss.
+    500: system.cpu.fetch: Running stage.
+    500: system.cpu.fetch: There are no more threads available to fetch from.
+    500: system.cpu.fetch: [tid:0] Fetch is squashing!
+   1000: system.cpu.fetch: [tid:0] Done squashing, switching to running.
+   1000: system.cpu.fetch: Running stage.
+   1000: system.cpu.fetch: Attempting to fetch from [tid:0]
+   1000: system.cpu.fetch: [tid:0] Attempting to translate and read instruction, starting at PC (0x401000=>0x401008).(0=>1).
+   1000: system.cpu.fetch: [tid:0] Fetching cache line 0x401000 for addr 0x401000
+   1000: system.cpu.fetch: Fetch: Doing instruction read.
+   1000: system.cpu.fetch: [tid:0] Doing Icache access.
+   1500: system.cpu.fetch: Running stage.
+   1500: system.cpu.fetch: There are no more threads available to fetch from.
+   1500: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+   2000: system.cpu.fetch: Running stage.
+   2000: system.cpu.fetch: There are no more threads available to fetch from.
+   2000: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+   2500: system.cpu.fetch: Running stage.
+   2500: system.cpu.fetch: There are no more threads available to fetch from.
+   2500: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+   3000: system.cpu.fetch: Running stage.
+   3000: system.cpu.fetch: There are no more threads available to fetch from.
+   3000: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+   3500: system.cpu.fetch: Running stage.
+   3500: system.cpu.fetch: There are no more threads available to fetch from.
+   3500: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+   4000: system.cpu.fetch: Running stage.
+   4000: system.cpu.fetch: There are no more threads available to fetch from.
+   4000: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+   4500: system.cpu.fetch: Running stage.
+   4500: system.cpu.fetch: There are no more threads available to fetch from.
+   4500: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+   5000: system.cpu.fetch: Running stage.
+   5000: system.cpu.fetch: There are no more threads available to fetch from.
+   5000: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+   5500: system.cpu.fetch: Running stage.
+   5500: system.cpu.fetch: There are no more threads available to fetch from.
+   5500: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+  88500: system.cpu.fetch: [tid:0] Waking up from cache miss.
+  88501: system.cpu.fetch: [tid:0] Waking up from cache miss.
+  89000: system.cpu.fetch: Running stage.
+  89000: system.cpu.fetch: Attempting to fetch from [tid:0]
+  89000: system.cpu.fetch: [tid:0] Icache miss is complete.
+  89000: system.cpu.fetch: [tid:0] Adding instructions to queue to decode.
+  89000: system.cpu.fetch: [tid:0] Instruction PC (0x401000=>0x401003).(0=>1) created [sn:1].
+  89000: system.cpu.fetch: [tid:0] Instruction is:   XOR_R_R : xor   rax, rax, rax
+  89000: system.cpu.fetch: [tid:0] Fetch queue entry created (1/128).
+  89000: system.cpu.fetch: [tid:0] Instruction PC (0x401003=>0x401005).(0=>1) created [sn:2].
+  89000: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   ah, 0xffffffffffffffab
+  89000: system.cpu.fetch: [tid:0] Fetch queue entry created (2/128).
+  89000: system.cpu.fetch: [tid:0] Instruction PC (0x401005=>0x401007).(0=>1) created [sn:3].
+  89000: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   al, 0xffffffffffffffcd
+  89000: system.cpu.fetch: [tid:0] Fetch queue entry created (3/128).
+  89000: system.cpu.fetch: [tid:0] Instruction PC (0x401007=>0x40100b).(0=>1) created [sn:4].
+  89000: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   ax, 0xabcd
+  89000: system.cpu.fetch: [tid:0] Fetch queue entry created (4/128).
+  89000: system.cpu.fetch: [tid:0] Instruction PC (0x40100b=>0x401010).(0=>1) created [sn:5].
+  89000: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   eax, 0xabcdef
+  89000: system.cpu.fetch: [tid:0] Fetch queue entry created (5/128).
+  89000: system.cpu.fetch: [tid:0] Instruction PC (0x401010=>0x40101a).(0=>1) created [sn:6].
+  89000: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   rax, 0x90abcdef
+  89000: system.cpu.fetch: [tid:0] Fetch queue entry created (6/128).
+  89000: system.cpu.fetch: [tid:0] Instruction PC (0x40101a=>0x40101c).(0=>1) created [sn:7].
+  89000: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   ch, 0xffffffffffffffab
+  89000: system.cpu.fetch: [tid:0] Fetch queue entry created (7/128).
+  89000: system.cpu.fetch: [tid:0] Instruction PC (0x40101c=>0x40101e).(0=>1) created [sn:8].
+  89000: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   cl, 0xffffffffffffffcd
+  89000: system.cpu.fetch: [tid:0] Fetch queue entry created (8/128).
+  89000: system.cpu.fetch: [tid:0] Instruction PC (0x40101e=>0x401022).(0=>1) created [sn:9].
+  89000: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   cx, 0xabcd
+  89000: system.cpu.fetch: [tid:0] Fetch queue entry created (9/128).
+  89000: system.cpu.fetch: [tid:0] Instruction PC (0x401022=>0x401027).(0=>1) created [sn:10].
+  89000: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   ecx, 0xabcdef
+  89000: system.cpu.fetch: [tid:0] Fetch queue entry created (10/128).
+  89000: system.cpu.fetch: [tid:0] Done fetching, reached fetch bandwidth for this cycle.
+  89000: system.cpu.fetch: [tid:0] [sn:1] Sending instruction to decode from fetch queue. Fetch queue size: 10.
+  89000: system.cpu.fetch: [tid:0] [sn:2] Sending instruction to decode from fetch queue. Fetch queue size: 9.
+  89000: system.cpu.fetch: [tid:0] [sn:3] Sending instruction to decode from fetch queue. Fetch queue size: 8.
+  89000: system.cpu.fetch: [tid:0] [sn:4] Sending instruction to decode from fetch queue. Fetch queue size: 7.
+  89000: system.cpu.fetch: [tid:0] [sn:5] Sending instruction to decode from fetch queue. Fetch queue size: 6.
+  89000: system.cpu.fetch: [tid:0] [sn:6] Sending instruction to decode from fetch queue. Fetch queue size: 5.
+  89000: system.cpu.fetch: [tid:0] [sn:7] Sending instruction to decode from fetch queue. Fetch queue size: 4.
+  89000: system.cpu.fetch: [tid:0] [sn:8] Sending instruction to decode from fetch queue. Fetch queue size: 3.
+  89000: system.cpu.fetch: [tid:0] [sn:9] Sending instruction to decode from fetch queue. Fetch queue size: 2.
+  89000: system.cpu.fetch: [tid:0] [sn:10] Sending instruction to decode from fetch queue. Fetch queue size: 1.
+  89500: system.cpu.fetch: Running stage.
+  89500: system.cpu.fetch: Attempting to fetch from [tid:0]
+  89500: system.cpu.fetch: [tid:0] Adding instructions to queue to decode.
+  89500: system.cpu.fetch: [tid:0] Instruction PC (0x401027=>0x401031).(0=>1) created [sn:11].
+  89500: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   rcx, 0x90abcdef
+  89500: system.cpu.fetch: [tid:0] Fetch queue entry created (1/128).
+  89500: system.cpu.fetch: [tid:0] Instruction PC (0x401031=>0x401033).(0=>1) created [sn:12].
+  89500: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   dh, 0xffffffffffffffab
+  89500: system.cpu.fetch: [tid:0] Fetch queue entry created (2/128).
+  89500: system.cpu.fetch: [tid:0] Instruction PC (0x401033=>0x401035).(0=>1) created [sn:13].
+  89500: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   dl, 0xffffffffffffffcd
+  89500: system.cpu.fetch: [tid:0] Fetch queue entry created (3/128).
+  89500: system.cpu.fetch: [tid:0] Instruction PC (0x401035=>0x401039).(0=>1) created [sn:14].
+  89500: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   dx, 0xabcd
+  89500: system.cpu.fetch: [tid:0] Fetch queue entry created (4/128).
+  89500: system.cpu.fetch: [tid:0] Instruction PC (0x401039=>0x40103e).(0=>1) created [sn:15].
+  89500: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   edx, 0xabcdef
+  89500: system.cpu.fetch: [tid:0] Fetch queue entry created (5/128).
+  89500: system.cpu.fetch: [tid:0] Issuing a pipelined I-cache access, starting at PC (0x40103e=>0x401046).(0=>1).
+  89500: system.cpu.fetch: [tid:0] Fetching cache line 0x401040 for addr 0x401040
+  89500: system.cpu.fetch: Fetch: Doing instruction read.
+  89500: system.cpu.fetch: [tid:0] Doing Icache access.
+  89500: system.cpu.fetch: [tid:0] [sn:11] Sending instruction to decode from fetch queue. Fetch queue size: 5.
+  89500: system.cpu.fetch: [tid:0] [sn:12] Sending instruction to decode from fetch queue. Fetch queue size: 4.
+  89500: system.cpu.fetch: [tid:0] [sn:13] Sending instruction to decode from fetch queue. Fetch queue size: 3.
+  89500: system.cpu.fetch: [tid:0] [sn:14] Sending instruction to decode from fetch queue. Fetch queue size: 2.
+  89500: system.cpu.fetch: [tid:0] [sn:15] Sending instruction to decode from fetch queue. Fetch queue size: 1.
+  90000: system.cpu.fetch: Running stage.
+  90000: system.cpu.fetch: There are no more threads available to fetch from.
+  90000: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+  90500: system.cpu.fetch: Running stage.
+  90500: system.cpu.fetch: There are no more threads available to fetch from.
+  90500: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+  91000: system.cpu.fetch: Running stage.
+  91000: system.cpu.fetch: There are no more threads available to fetch from.
+  91000: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+  91500: system.cpu.fetch: Running stage.
+  91500: system.cpu.fetch: There are no more threads available to fetch from.
+  91500: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+  92000: system.cpu.fetch: Running stage.
+  92000: system.cpu.fetch: There are no more threads available to fetch from.
+  92000: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+  92500: system.cpu.fetch: Running stage.
+  92500: system.cpu.fetch: There are no more threads available to fetch from.
+  92500: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+  89000: system.cpu: T0 : 0x401000 @_start    : xor	rax                   
+  89000: system.cpu: T0 : 0x401000 @_start. 0 :   XOR_R_R : xor   rax, rax, rax : IntAlu :  D=0x0000000000000000
+  93000: system.cpu.fetch: Running stage.
+  93000: system.cpu.fetch: There are no more threads available to fetch from.
+  93000: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+  89000: system.cpu: T0 : 0x401003 @_start+3    : mov	spl, 0xffffffffffffffab
+  89000: system.cpu: T0 : 0x401003 @_start+3. 0 :   MOV_R_I : limm   ah, 0xffffffffffffffab : IntAlu :  D=0x000000000000ab00
+  93500: system.cpu.fetch: Running stage.
+  93500: system.cpu.fetch: There are no more threads available to fetch from.
+  93500: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+  89000: system.cpu: T0 : 0x401005 @_start+5    : mov	al, 0xffffffffffffffcd
+  89000: system.cpu: T0 : 0x401005 @_start+5. 0 :   MOV_R_I : limm   al, 0xffffffffffffffcd : IntAlu :  D=0x000000000000abcd
+  94000: system.cpu.fetch: Running stage.
+  94000: system.cpu.fetch: There are no more threads available to fetch from.
+  94000: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+  89000: system.cpu: T0 : 0x401007 @_start+7    : mov	ax, 0xabcd            
+  89000: system.cpu: T0 : 0x401007 @_start+7. 0 :   MOV_R_I : limm   ax, 0xabcd : IntAlu :  D=0x000000000000abcd
+  89000: system.cpu: T0 : 0x40100b @_start+11    : mov	eax, 0xabcdef         
+  89000: system.cpu: T0 : 0x40100b @_start+11. 0 :   MOV_R_I : limm   eax, 0xabcdef : IntAlu :  D=0x0000000000abcdef
+  89000: system.cpu: T0 : 0x401010 @_start+16    : mov	rax, 0x90abcdef       
+  89000: system.cpu: T0 : 0x401010 @_start+16. 0 :   MOV_R_I : limm   rax, 0x90abcdef : IntAlu :  D=0x0000000090abcdef
+  89000: system.cpu: T0 : 0x40101a @_start+26    : mov	bpl, 0xffffffffffffffab
+  89000: system.cpu: T0 : 0x40101a @_start+26. 0 :   MOV_R_I : limm   ch, 0xffffffffffffffab : IntAlu :  D=0x000000000000ab00
+  89000: system.cpu: T0 : 0x40101c @_start+28    : mov	cl, 0xffffffffffffffcd
+  89000: system.cpu: T0 : 0x40101c @_start+28. 0 :   MOV_R_I : limm   cl, 0xffffffffffffffcd : IntAlu :  D=0x000000000000abcd
+  89000: system.cpu: T0 : 0x40101e @_start+30    : mov	cx, 0xabcd            
+  89000: system.cpu: T0 : 0x40101e @_start+30. 0 :   MOV_R_I : limm   cx, 0xabcd : IntAlu :  D=0x000000000000abcd
+  89000: system.cpu: T0 : 0x401022 @_start+34    : mov	ecx, 0xabcdef         
+  89000: system.cpu: T0 : 0x401022 @_start+34. 0 :   MOV_R_I : limm   ecx, 0xabcdef : IntAlu :  D=0x0000000000abcdef
+  89500: system.cpu: T0 : 0x401027 @_start+39    : mov	rcx, 0x90abcdef       
+  89500: system.cpu: T0 : 0x401027 @_start+39. 0 :   MOV_R_I : limm   rcx, 0x90abcdef : IntAlu :  D=0x0000000090abcdef
+  89500: system.cpu: T0 : 0x401031 @_start+49    : mov	sil, 0xffffffffffffffab
+  89500: system.cpu: T0 : 0x401031 @_start+49. 0 :   MOV_R_I : limm   dh, 0xffffffffffffffab : IntAlu :  D=0x000000000000ab00
+  89500: system.cpu: T0 : 0x401033 @_start+51    : mov	dl, 0xffffffffffffffcd
+  89500: system.cpu: T0 : 0x401033 @_start+51. 0 :   MOV_R_I : limm   dl, 0xffffffffffffffcd : IntAlu :  D=0x000000000000abcd
+  94500: system.cpu.fetch: Running stage.
+  94500: system.cpu.fetch: There are no more threads available to fetch from.
+  94500: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+  89500: system.cpu: T0 : 0x401035 @_start+53    : mov	dx, 0xabcd            
+  89500: system.cpu: T0 : 0x401035 @_start+53. 0 :   MOV_R_I : limm   dx, 0xabcd : IntAlu :  D=0x000000000000abcd
+  89500: system.cpu: T0 : 0x401039 @_start+57    : mov	edx, 0xabcdef         
+  89500: system.cpu: T0 : 0x401039 @_start+57. 0 :   MOV_R_I : limm   edx, 0xabcdef : IntAlu :  D=0x0000000000abcdef
+  95000: system.cpu.fetch: Running stage.
+  95000: system.cpu.fetch: There are no more threads available to fetch from.
+  95000: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+  95500: system.cpu.fetch: Running stage.
+  95500: system.cpu.fetch: There are no more threads available to fetch from.
+  95500: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+  96000: system.cpu.fetch: Running stage.
+  96000: system.cpu.fetch: There are no more threads available to fetch from.
+  96000: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+  96500: system.cpu.fetch: Running stage.
+  96500: system.cpu.fetch: There are no more threads available to fetch from.
+  96500: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+  97000: system.cpu.fetch: Running stage.
+  97000: system.cpu.fetch: There are no more threads available to fetch from.
+  97000: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+  97500: system.cpu.fetch: Running stage.
+  97500: system.cpu.fetch: There are no more threads available to fetch from.
+  97500: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+  98000: system.cpu.fetch: Running stage.
+  98000: system.cpu.fetch: There are no more threads available to fetch from.
+  98000: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+  98500: system.cpu.fetch: Running stage.
+  98500: system.cpu.fetch: There are no more threads available to fetch from.
+  98500: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+  99000: system.cpu.fetch: Running stage.
+  99000: system.cpu.fetch: There are no more threads available to fetch from.
+  99000: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+  99500: system.cpu.fetch: Running stage.
+  99500: system.cpu.fetch: There are no more threads available to fetch from.
+  99500: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 100000: system.cpu.fetch: Running stage.
+ 100000: system.cpu.fetch: There are no more threads available to fetch from.
+ 100000: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 100500: system.cpu.fetch: Running stage.
+ 100500: system.cpu.fetch: There are no more threads available to fetch from.
+ 100500: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 161500: system.cpu.fetch: [tid:0] Waking up from cache miss.
+ 161500: system.cpu.fetch: Running stage.
+ 161500: system.cpu.fetch: Attempting to fetch from [tid:0]
+ 161500: system.cpu.fetch: [tid:0] Icache miss is complete.
+ 161500: system.cpu.fetch: [tid:0] Adding instructions to queue to decode.
+ 161500: system.cpu.fetch: [tid:0] Instruction PC (0x40103e=>0x401048).(0=>1) created [sn:16].
+ 161500: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   rdx, 0x90abcdef
+ 161500: system.cpu.fetch: [tid:0] Fetch queue entry created (1/128).
+ 161500: system.cpu.fetch: [tid:0] Instruction PC (0x401048=>0x40104a).(0=>1) created [sn:17].
+ 161500: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   bh, 0xffffffffffffffab
+ 161500: system.cpu.fetch: [tid:0] Fetch queue entry created (2/128).
+ 161500: system.cpu.fetch: [tid:0] Instruction PC (0x40104a=>0x40104c).(0=>1) created [sn:18].
+ 161500: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   bl, 0xffffffffffffffcd
+ 161500: system.cpu.fetch: [tid:0] Fetch queue entry created (3/128).
+ 161500: system.cpu.fetch: [tid:0] Instruction PC (0x40104c=>0x401050).(0=>1) created [sn:19].
+ 161500: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   bx, 0xabcd
+ 161500: system.cpu.fetch: [tid:0] Fetch queue entry created (4/128).
+ 161500: system.cpu.fetch: [tid:0] Instruction PC (0x401050=>0x401055).(0=>1) created [sn:20].
+ 161500: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   ebx, 0xabcdef
+ 161500: system.cpu.fetch: [tid:0] Fetch queue entry created (5/128).
+ 161500: system.cpu.fetch: [tid:0] Instruction PC (0x401055=>0x40105f).(0=>1) created [sn:21].
+ 161500: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   rbx, 0x90abcdef
+ 161500: system.cpu.fetch: [tid:0] Fetch queue entry created (6/128).
+ 161500: system.cpu.fetch: [tid:0] Instruction PC (0x40105f=>0x401062).(0=>1) created [sn:22].
+ 161500: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   spl, 0xffffffffffffffab
+ 161500: system.cpu.fetch: [tid:0] Fetch queue entry created (7/128).
+ 161500: system.cpu.fetch: [tid:0] Instruction PC (0x401062=>0x401066).(0=>1) created [sn:23].
+ 161500: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   sp, 0xabcd
+ 161500: system.cpu.fetch: [tid:0] Fetch queue entry created (8/128).
+ 161500: system.cpu.fetch: [tid:0] Instruction PC (0x401066=>0x40106b).(0=>1) created [sn:24].
+ 161500: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   esp, 0xabcdef
+ 161500: system.cpu.fetch: [tid:0] Fetch queue entry created (9/128).
+ 161500: system.cpu.fetch: [tid:0] Instruction PC (0x40106b=>0x401075).(0=>1) created [sn:25].
+ 161500: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   rsp, 0x90abcdef
+ 161500: system.cpu.fetch: [tid:0] Fetch queue entry created (10/128).
+ 161500: system.cpu.fetch: [tid:0] Done fetching, reached fetch bandwidth for this cycle.
+ 161500: system.cpu.fetch: [tid:0] [sn:16] Sending instruction to decode from fetch queue. Fetch queue size: 10.
+ 161500: system.cpu.fetch: [tid:0] [sn:17] Sending instruction to decode from fetch queue. Fetch queue size: 9.
+ 161500: system.cpu.fetch: [tid:0] [sn:18] Sending instruction to decode from fetch queue. Fetch queue size: 8.
+ 161500: system.cpu.fetch: [tid:0] [sn:19] Sending instruction to decode from fetch queue. Fetch queue size: 7.
+ 161500: system.cpu.fetch: [tid:0] [sn:20] Sending instruction to decode from fetch queue. Fetch queue size: 6.
+ 161500: system.cpu.fetch: [tid:0] [sn:21] Sending instruction to decode from fetch queue. Fetch queue size: 5.
+ 161500: system.cpu.fetch: [tid:0] [sn:22] Sending instruction to decode from fetch queue. Fetch queue size: 4.
+ 161500: system.cpu.fetch: [tid:0] [sn:23] Sending instruction to decode from fetch queue. Fetch queue size: 3.
+ 161500: system.cpu.fetch: [tid:0] [sn:24] Sending instruction to decode from fetch queue. Fetch queue size: 2.
+ 161500: system.cpu.fetch: [tid:0] [sn:25] Sending instruction to decode from fetch queue. Fetch queue size: 1.
+ 162000: system.cpu.fetch: Running stage.
+ 162000: system.cpu.fetch: Attempting to fetch from [tid:0]
+ 162000: system.cpu.fetch: [tid:0] Adding instructions to queue to decode.
+ 162000: system.cpu.fetch: [tid:0] Instruction PC (0x401075=>0x401078).(0=>1) created [sn:26].
+ 162000: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   bpl, 0xffffffffffffffab
+ 162000: system.cpu.fetch: [tid:0] Fetch queue entry created (1/128).
+ 162000: system.cpu.fetch: [tid:0] Instruction PC (0x401078=>0x40107c).(0=>1) created [sn:27].
+ 162000: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   bp, 0xabcd
+ 162000: system.cpu.fetch: [tid:0] Fetch queue entry created (2/128).
+ 162000: system.cpu.fetch: [tid:0] Issuing a pipelined I-cache access, starting at PC (0x40107c=>0x401084).(0=>1).
+ 162000: system.cpu.fetch: [tid:0] Fetching cache line 0x401080 for addr 0x401080
+ 162000: system.cpu.fetch: Fetch: Doing instruction read.
+ 162000: system.cpu.fetch: [tid:0] Doing Icache access.
+ 162000: system.cpu.fetch: [tid:0] [sn:26] Sending instruction to decode from fetch queue. Fetch queue size: 2.
+ 162000: system.cpu.fetch: [tid:0] [sn:27] Sending instruction to decode from fetch queue. Fetch queue size: 1.
+ 162500: system.cpu.fetch: Running stage.
+ 162500: system.cpu.fetch: There are no more threads available to fetch from.
+ 162500: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 163000: system.cpu.fetch: Running stage.
+ 163000: system.cpu.fetch: There are no more threads available to fetch from.
+ 163000: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 163500: system.cpu.fetch: Running stage.
+ 163500: system.cpu.fetch: There are no more threads available to fetch from.
+ 163500: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 164000: system.cpu.fetch: Running stage.
+ 164000: system.cpu.fetch: There are no more threads available to fetch from.
+ 164000: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 164500: system.cpu.fetch: Running stage.
+ 164500: system.cpu.fetch: There are no more threads available to fetch from.
+ 164500: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 165000: system.cpu.fetch: Running stage.
+ 165000: system.cpu.fetch: There are no more threads available to fetch from.
+ 165000: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 161500: system.cpu: T0 : 0x40103e @_start+62    : mov	rdx, 0x90abcdef       
+ 161500: system.cpu: T0 : 0x40103e @_start+62. 0 :   MOV_R_I : limm   rdx, 0x90abcdef : IntAlu :  D=0x0000000090abcdef
+ 161500: system.cpu: T0 : 0x401048 @_start+72    : mov	dil, 0xffffffffffffffab
+ 161500: system.cpu: T0 : 0x401048 @_start+72. 0 :   MOV_R_I : limm   bh, 0xffffffffffffffab : IntAlu :  D=0x000000000000ab00
+ 165500: system.cpu.fetch: Running stage.
+ 165500: system.cpu.fetch: There are no more threads available to fetch from.
+ 165500: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 161500: system.cpu: T0 : 0x40104a @_start+74    : mov	bl, 0xffffffffffffffcd
+ 161500: system.cpu: T0 : 0x40104a @_start+74. 0 :   MOV_R_I : limm   bl, 0xffffffffffffffcd : IntAlu :  D=0x000000000000abcd
+ 166000: system.cpu.fetch: Running stage.
+ 166000: system.cpu.fetch: There are no more threads available to fetch from.
+ 166000: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 161500: system.cpu: T0 : 0x40104c @_start+76    : mov	bx, 0xabcd            
+ 161500: system.cpu: T0 : 0x40104c @_start+76. 0 :   MOV_R_I : limm   bx, 0xabcd : IntAlu :  D=0x000000000000abcd
+ 161500: system.cpu: T0 : 0x401050 @_start+80    : mov	ebx, 0xabcdef         
+ 161500: system.cpu: T0 : 0x401050 @_start+80. 0 :   MOV_R_I : limm   ebx, 0xabcdef : IntAlu :  D=0x0000000000abcdef
+ 161500: system.cpu: T0 : 0x401055 @_start+85    : mov	rbx, 0x90abcdef       
+ 161500: system.cpu: T0 : 0x401055 @_start+85. 0 :   MOV_R_I : limm   rbx, 0x90abcdef : IntAlu :  D=0x0000000090abcdef
+ 161500: system.cpu: T0 : 0x40105f @_start+95    : mov	spl, 0xffffffffffffffab
+ 161500: system.cpu: T0 : 0x40105f @_start+95. 0 :   MOV_R_I : limm   spl, 0xffffffffffffffab : IntAlu :  D=0x00007fffffffeeab
+ 161500: system.cpu: T0 : 0x401062 @_start+98    : mov	sp, 0xabcd            
+ 161500: system.cpu: T0 : 0x401062 @_start+98. 0 :   MOV_R_I : limm   sp, 0xabcd : IntAlu :  D=0x00007fffffffabcd
+ 161500: system.cpu: T0 : 0x401066 @_start+102    : mov	esp, 0xabcdef         
+ 161500: system.cpu: T0 : 0x401066 @_start+102. 0 :   MOV_R_I : limm   esp, 0xabcdef : IntAlu :  D=0x0000000000abcdef
+ 161500: system.cpu: T0 : 0x40106b @_start+107    : mov	rsp, 0x90abcdef       
+ 161500: system.cpu: T0 : 0x40106b @_start+107. 0 :   MOV_R_I : limm   rsp, 0x90abcdef : IntAlu :  D=0x0000000090abcdef
+ 162000: system.cpu: T0 : 0x401075 @_start+117    : mov	bpl, 0xffffffffffffffab
+ 162000: system.cpu: T0 : 0x401075 @_start+117. 0 :   MOV_R_I : limm   bpl, 0xffffffffffffffab : IntAlu :  D=0x00000000000000ab
+ 162000: system.cpu: T0 : 0x401078 @_start+120    : mov	bp, 0xabcd            
+ 162000: system.cpu: T0 : 0x401078 @_start+120. 0 :   MOV_R_I : limm   bp, 0xabcd : IntAlu :  D=0x000000000000abcd
+ 166500: system.cpu.fetch: Running stage.
+ 166500: system.cpu.fetch: There are no more threads available to fetch from.
+ 166500: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 167000: system.cpu.fetch: Running stage.
+ 167000: system.cpu.fetch: There are no more threads available to fetch from.
+ 167000: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 167500: system.cpu.fetch: Running stage.
+ 167500: system.cpu.fetch: There are no more threads available to fetch from.
+ 167500: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 168000: system.cpu.fetch: Running stage.
+ 168000: system.cpu.fetch: There are no more threads available to fetch from.
+ 168000: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 168500: system.cpu.fetch: Running stage.
+ 168500: system.cpu.fetch: There are no more threads available to fetch from.
+ 168500: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 169000: system.cpu.fetch: Running stage.
+ 169000: system.cpu.fetch: There are no more threads available to fetch from.
+ 169000: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 169500: system.cpu.fetch: Running stage.
+ 169500: system.cpu.fetch: There are no more threads available to fetch from.
+ 169500: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 170000: system.cpu.fetch: Running stage.
+ 170000: system.cpu.fetch: There are no more threads available to fetch from.
+ 170000: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 170500: system.cpu.fetch: Running stage.
+ 170500: system.cpu.fetch: There are no more threads available to fetch from.
+ 170500: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 171000: system.cpu.fetch: Running stage.
+ 171000: system.cpu.fetch: There are no more threads available to fetch from.
+ 171000: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 171500: system.cpu.fetch: Running stage.
+ 171500: system.cpu.fetch: There are no more threads available to fetch from.
+ 171500: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 172000: system.cpu.fetch: Running stage.
+ 172000: system.cpu.fetch: There are no more threads available to fetch from.
+ 172000: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 234500: system.cpu.fetch: [tid:0] Waking up from cache miss.
+ 234500: system.cpu.fetch: Running stage.
+ 234500: system.cpu.fetch: Attempting to fetch from [tid:0]
+ 234500: system.cpu.fetch: [tid:0] Icache miss is complete.
+ 234500: system.cpu.fetch: [tid:0] Adding instructions to queue to decode.
+ 234500: system.cpu.fetch: [tid:0] Instruction PC (0x40107c=>0x401081).(0=>1) created [sn:28].
+ 234500: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   ebp, 0xabcdef
+ 234500: system.cpu.fetch: [tid:0] Fetch queue entry created (1/128).
+ 234500: system.cpu.fetch: [tid:0] Instruction PC (0x401081=>0x40108b).(0=>1) created [sn:29].
+ 234500: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   rbp, 0x90abcdef
+ 234500: system.cpu.fetch: [tid:0] Fetch queue entry created (2/128).
+ 234500: system.cpu.fetch: [tid:0] Instruction PC (0x40108b=>0x40108e).(0=>1) created [sn:30].
+ 234500: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   sil, 0xffffffffffffffab
+ 234500: system.cpu.fetch: [tid:0] Fetch queue entry created (3/128).
+ 234500: system.cpu.fetch: [tid:0] Instruction PC (0x40108e=>0x401092).(0=>1) created [sn:31].
+ 234500: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   si, 0xabcd
+ 234500: system.cpu.fetch: [tid:0] Fetch queue entry created (4/128).
+ 234500: system.cpu.fetch: [tid:0] Instruction PC (0x401092=>0x401097).(0=>1) created [sn:32].
+ 234500: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   esi, 0xabcdef
+ 234500: system.cpu.fetch: [tid:0] Fetch queue entry created (5/128).
+ 234500: system.cpu.fetch: [tid:0] Instruction PC (0x401097=>0x4010a1).(0=>1) created [sn:33].
+ 234500: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   rsi, 0x90abcdef
+ 234500: system.cpu.fetch: [tid:0] Fetch queue entry created (6/128).
+ 234500: system.cpu.fetch: [tid:0] Instruction PC (0x4010a1=>0x4010a4).(0=>1) created [sn:34].
+ 234500: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   dil, 0xffffffffffffffab
+ 234500: system.cpu.fetch: [tid:0] Fetch queue entry created (7/128).
+ 234500: system.cpu.fetch: [tid:0] Instruction PC (0x4010a4=>0x4010a8).(0=>1) created [sn:35].
+ 234500: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   di, 0xabcd
+ 234500: system.cpu.fetch: [tid:0] Fetch queue entry created (8/128).
+ 234500: system.cpu.fetch: [tid:0] Instruction PC (0x4010a8=>0x4010ad).(0=>1) created [sn:36].
+ 234500: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   edi, 0xabcdef
+ 234500: system.cpu.fetch: [tid:0] Fetch queue entry created (9/128).
+ 234500: system.cpu.fetch: [tid:0] Instruction PC (0x4010ad=>0x4010b7).(0=>1) created [sn:37].
+ 234500: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   rdi, 0x90abcdef
+ 234500: system.cpu.fetch: [tid:0] Fetch queue entry created (10/128).
+ 234500: system.cpu.fetch: [tid:0] Done fetching, reached fetch bandwidth for this cycle.
+ 234500: system.cpu.fetch: [tid:0] [sn:28] Sending instruction to decode from fetch queue. Fetch queue size: 10.
+ 234500: system.cpu.fetch: [tid:0] [sn:29] Sending instruction to decode from fetch queue. Fetch queue size: 9.
+ 234500: system.cpu.fetch: [tid:0] [sn:30] Sending instruction to decode from fetch queue. Fetch queue size: 8.
+ 234500: system.cpu.fetch: [tid:0] [sn:31] Sending instruction to decode from fetch queue. Fetch queue size: 7.
+ 234500: system.cpu.fetch: [tid:0] [sn:32] Sending instruction to decode from fetch queue. Fetch queue size: 6.
+ 234500: system.cpu.fetch: [tid:0] [sn:33] Sending instruction to decode from fetch queue. Fetch queue size: 5.
+ 234500: system.cpu.fetch: [tid:0] [sn:34] Sending instruction to decode from fetch queue. Fetch queue size: 4.
+ 234500: system.cpu.fetch: [tid:0] [sn:35] Sending instruction to decode from fetch queue. Fetch queue size: 3.
+ 234500: system.cpu.fetch: [tid:0] [sn:36] Sending instruction to decode from fetch queue. Fetch queue size: 2.
+ 234500: system.cpu.fetch: [tid:0] [sn:37] Sending instruction to decode from fetch queue. Fetch queue size: 1.
+ 235000: system.cpu.fetch: Running stage.
+ 235000: system.cpu.fetch: Attempting to fetch from [tid:0]
+ 235000: system.cpu.fetch: [tid:0] Adding instructions to queue to decode.
+ 235000: system.cpu.fetch: [tid:0] Instruction PC (0x4010b7=>0x4010ba).(0=>1) created [sn:38].
+ 235000: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   r8b, 0xffffffffffffffab
+ 235000: system.cpu.fetch: [tid:0] Fetch queue entry created (1/128).
+ 235000: system.cpu.fetch: [tid:0] Instruction PC (0x4010ba=>0x4010bf).(0=>1) created [sn:39].
+ 235000: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   r8w, 0xabcd
+ 235000: system.cpu.fetch: [tid:0] Fetch queue entry created (2/128).
+ 235000: system.cpu.fetch: [tid:0] Issuing a pipelined I-cache access, starting at PC (0x4010bf=>0x4010c7).(0=>1).
+ 235000: system.cpu.fetch: [tid:0] Fetching cache line 0x4010c0 for addr 0x4010c0
+ 235000: system.cpu.fetch: Fetch: Doing instruction read.
+ 235000: system.cpu.fetch: [tid:0] Doing Icache access.
+ 235000: system.cpu.fetch: [tid:0] [sn:38] Sending instruction to decode from fetch queue. Fetch queue size: 2.
+ 235000: system.cpu.fetch: [tid:0] [sn:39] Sending instruction to decode from fetch queue. Fetch queue size: 1.
+ 235500: system.cpu.fetch: Running stage.
+ 235500: system.cpu.fetch: There are no more threads available to fetch from.
+ 235500: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 236000: system.cpu.fetch: Running stage.
+ 236000: system.cpu.fetch: There are no more threads available to fetch from.
+ 236000: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 236500: system.cpu.fetch: Running stage.
+ 236500: system.cpu.fetch: There are no more threads available to fetch from.
+ 236500: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 237000: system.cpu.fetch: Running stage.
+ 237000: system.cpu.fetch: There are no more threads available to fetch from.
+ 237000: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 237500: system.cpu.fetch: Running stage.
+ 237500: system.cpu.fetch: There are no more threads available to fetch from.
+ 237500: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 238000: system.cpu.fetch: Running stage.
+ 238000: system.cpu.fetch: There are no more threads available to fetch from.
+ 238000: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 234500: system.cpu: T0 : 0x40107c @_start+124    : mov	ebp, 0xabcdef         
+ 234500: system.cpu: T0 : 0x40107c @_start+124. 0 :   MOV_R_I : limm   ebp, 0xabcdef : IntAlu :  D=0x0000000000abcdef
+ 234500: system.cpu: T0 : 0x401081 @_start+129    : mov	rbp, 0x90abcdef       
+ 234500: system.cpu: T0 : 0x401081 @_start+129. 0 :   MOV_R_I : limm   rbp, 0x90abcdef : IntAlu :  D=0x0000000090abcdef
+ 234500: system.cpu: T0 : 0x40108b @_start+139    : mov	sil, 0xffffffffffffffab
+ 234500: system.cpu: T0 : 0x40108b @_start+139. 0 :   MOV_R_I : limm   sil, 0xffffffffffffffab : IntAlu :  D=0x00000000000000ab
+ 238500: system.cpu.fetch: Running stage.
+ 238500: system.cpu.fetch: There are no more threads available to fetch from.
+ 238500: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 234500: system.cpu: T0 : 0x40108e @_start+142    : mov	si, 0xabcd            
+ 234500: system.cpu: T0 : 0x40108e @_start+142. 0 :   MOV_R_I : limm   si, 0xabcd : IntAlu :  D=0x000000000000abcd
+ 234500: system.cpu: T0 : 0x401092 @_start+146    : mov	esi, 0xabcdef         
+ 234500: system.cpu: T0 : 0x401092 @_start+146. 0 :   MOV_R_I : limm   esi, 0xabcdef : IntAlu :  D=0x0000000000abcdef
+ 234500: system.cpu: T0 : 0x401097 @_start+151    : mov	rsi, 0x90abcdef       
+ 234500: system.cpu: T0 : 0x401097 @_start+151. 0 :   MOV_R_I : limm   rsi, 0x90abcdef : IntAlu :  D=0x0000000090abcdef
+ 234500: system.cpu: T0 : 0x4010a1 @_start+161    : mov	dil, 0xffffffffffffffab
+ 234500: system.cpu: T0 : 0x4010a1 @_start+161. 0 :   MOV_R_I : limm   dil, 0xffffffffffffffab : IntAlu :  D=0x00000000000000ab
+ 234500: system.cpu: T0 : 0x4010a4 @_start+164    : mov	di, 0xabcd            
+ 234500: system.cpu: T0 : 0x4010a4 @_start+164. 0 :   MOV_R_I : limm   di, 0xabcd : IntAlu :  D=0x000000000000abcd
+ 234500: system.cpu: T0 : 0x4010a8 @_start+168    : mov	edi, 0xabcdef         
+ 234500: system.cpu: T0 : 0x4010a8 @_start+168. 0 :   MOV_R_I : limm   edi, 0xabcdef : IntAlu :  D=0x0000000000abcdef
+ 234500: system.cpu: T0 : 0x4010ad @_start+173    : mov	rdi, 0x90abcdef       
+ 234500: system.cpu: T0 : 0x4010ad @_start+173. 0 :   MOV_R_I : limm   rdi, 0x90abcdef : IntAlu :  D=0x0000000090abcdef
+ 235000: system.cpu: T0 : 0x4010b7 @_start+183    : mov	r8b, 0xffffffffffffffab
+ 235000: system.cpu: T0 : 0x4010b7 @_start+183. 0 :   MOV_R_I : limm   r8b, 0xffffffffffffffab : IntAlu :  D=0x00000000000000ab
+ 239000: system.cpu.fetch: Running stage.
+ 239000: system.cpu.fetch: There are no more threads available to fetch from.
+ 239000: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 235000: system.cpu: T0 : 0x4010ba @_start+186    : mov	r8w, 0xabcd           
+ 235000: system.cpu: T0 : 0x4010ba @_start+186. 0 :   MOV_R_I : limm   r8w, 0xabcd : IntAlu :  D=0x000000000000abcd
+ 239500: system.cpu.fetch: Running stage.
+ 239500: system.cpu.fetch: There are no more threads available to fetch from.
+ 239500: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 240000: system.cpu.fetch: Running stage.
+ 240000: system.cpu.fetch: There are no more threads available to fetch from.
+ 240000: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 240500: system.cpu.fetch: Running stage.
+ 240500: system.cpu.fetch: There are no more threads available to fetch from.
+ 240500: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 241000: system.cpu.fetch: Running stage.
+ 241000: system.cpu.fetch: There are no more threads available to fetch from.
+ 241000: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 241500: system.cpu.fetch: Running stage.
+ 241500: system.cpu.fetch: There are no more threads available to fetch from.
+ 241500: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 242000: system.cpu.fetch: Running stage.
+ 242000: system.cpu.fetch: There are no more threads available to fetch from.
+ 242000: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 242500: system.cpu.fetch: Running stage.
+ 242500: system.cpu.fetch: There are no more threads available to fetch from.
+ 242500: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 243000: system.cpu.fetch: Running stage.
+ 243000: system.cpu.fetch: There are no more threads available to fetch from.
+ 243000: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 243500: system.cpu.fetch: Running stage.
+ 243500: system.cpu.fetch: There are no more threads available to fetch from.
+ 243500: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 244000: system.cpu.fetch: Running stage.
+ 244000: system.cpu.fetch: There are no more threads available to fetch from.
+ 244000: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 244500: system.cpu.fetch: Running stage.
+ 244500: system.cpu.fetch: There are no more threads available to fetch from.
+ 244500: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 245000: system.cpu.fetch: Running stage.
+ 245000: system.cpu.fetch: There are no more threads available to fetch from.
+ 245000: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 307500: system.cpu.fetch: [tid:0] Waking up from cache miss.
+ 307500: system.cpu.fetch: Running stage.
+ 307500: system.cpu.fetch: Attempting to fetch from [tid:0]
+ 307500: system.cpu.fetch: [tid:0] Icache miss is complete.
+ 307500: system.cpu.fetch: [tid:0] Adding instructions to queue to decode.
+ 307500: system.cpu.fetch: [tid:0] Instruction PC (0x4010bf=>0x4010c5).(0=>1) created [sn:40].
+ 307500: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   r8d, 0xabcdef
+ 307500: system.cpu.fetch: [tid:0] Fetch queue entry created (1/128).
+ 307500: system.cpu.fetch: [tid:0] Instruction PC (0x4010c5=>0x4010cf).(0=>1) created [sn:41].
+ 307500: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   r8, 0x90abcdef
+ 307500: system.cpu.fetch: [tid:0] Fetch queue entry created (2/128).
+ 307500: system.cpu.fetch: [tid:0] Instruction PC (0x4010cf=>0x4010d2).(0=>1) created [sn:42].
+ 307500: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   r9b, 0xffffffffffffffab
+ 307500: system.cpu.fetch: [tid:0] Fetch queue entry created (3/128).
+ 307500: system.cpu.fetch: [tid:0] Instruction PC (0x4010d2=>0x4010d7).(0=>1) created [sn:43].
+ 307500: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   r9w, 0xabcd
+ 307500: system.cpu.fetch: [tid:0] Fetch queue entry created (4/128).
+ 307500: system.cpu.fetch: [tid:0] Instruction PC (0x4010d7=>0x4010dd).(0=>1) created [sn:44].
+ 307500: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   r9d, 0xabcdef
+ 307500: system.cpu.fetch: [tid:0] Fetch queue entry created (5/128).
+ 307500: system.cpu.fetch: [tid:0] Instruction PC (0x4010dd=>0x4010e7).(0=>1) created [sn:45].
+ 307500: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   r9, 0x90abcdef
+ 307500: system.cpu.fetch: [tid:0] Fetch queue entry created (6/128).
+ 307500: system.cpu.fetch: [tid:0] Instruction PC (0x4010e7=>0x4010ea).(0=>1) created [sn:46].
+ 307500: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   r10b, 0xffffffffffffffab
+ 307500: system.cpu.fetch: [tid:0] Fetch queue entry created (7/128).
+ 307500: system.cpu.fetch: [tid:0] Instruction PC (0x4010ea=>0x4010ef).(0=>1) created [sn:47].
+ 307500: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   r10w, 0xabcd
+ 307500: system.cpu.fetch: [tid:0] Fetch queue entry created (8/128).
+ 307500: system.cpu.fetch: [tid:0] Instruction PC (0x4010ef=>0x4010f5).(0=>1) created [sn:48].
+ 307500: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   r10d, 0xabcdef
+ 307500: system.cpu.fetch: [tid:0] Fetch queue entry created (9/128).
+ 307500: system.cpu.fetch: [tid:0] Instruction PC (0x4010f5=>0x4010ff).(0=>1) created [sn:49].
+ 307500: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   r10, 0x90abcdef
+ 307500: system.cpu.fetch: [tid:0] Fetch queue entry created (10/128).
+ 307500: system.cpu.fetch: [tid:0] Done fetching, reached fetch bandwidth for this cycle.
+ 307500: system.cpu.fetch: [tid:0] [sn:40] Sending instruction to decode from fetch queue. Fetch queue size: 10.
+ 307500: system.cpu.fetch: [tid:0] [sn:41] Sending instruction to decode from fetch queue. Fetch queue size: 9.
+ 307500: system.cpu.fetch: [tid:0] [sn:42] Sending instruction to decode from fetch queue. Fetch queue size: 8.
+ 307500: system.cpu.fetch: [tid:0] [sn:43] Sending instruction to decode from fetch queue. Fetch queue size: 7.
+ 307500: system.cpu.fetch: [tid:0] [sn:44] Sending instruction to decode from fetch queue. Fetch queue size: 6.
+ 307500: system.cpu.fetch: [tid:0] [sn:45] Sending instruction to decode from fetch queue. Fetch queue size: 5.
+ 307500: system.cpu.fetch: [tid:0] [sn:46] Sending instruction to decode from fetch queue. Fetch queue size: 4.
+ 307500: system.cpu.fetch: [tid:0] [sn:47] Sending instruction to decode from fetch queue. Fetch queue size: 3.
+ 307500: system.cpu.fetch: [tid:0] [sn:48] Sending instruction to decode from fetch queue. Fetch queue size: 2.
+ 307500: system.cpu.fetch: [tid:0] [sn:49] Sending instruction to decode from fetch queue. Fetch queue size: 1.
+ 308000: system.cpu.fetch: Running stage.
+ 308000: system.cpu.fetch: Attempting to fetch from [tid:0]
+ 308000: system.cpu.fetch: [tid:0] Adding instructions to queue to decode.
+ 308000: system.cpu.fetch: [tid:0] Issuing a pipelined I-cache access, starting at PC (0x4010ff=>0x401107).(0=>1).
+ 308000: system.cpu.fetch: [tid:0] Fetching cache line 0x401100 for addr 0x401100
+ 308000: system.cpu.fetch: Fetch: Doing instruction read.
+ 308000: system.cpu.fetch: [tid:0] Doing Icache access.
+ 308500: system.cpu.fetch: Running stage.
+ 308500: system.cpu.fetch: There are no more threads available to fetch from.
+ 308500: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 309000: system.cpu.fetch: Running stage.
+ 309000: system.cpu.fetch: There are no more threads available to fetch from.
+ 309000: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 309500: system.cpu.fetch: Running stage.
+ 309500: system.cpu.fetch: There are no more threads available to fetch from.
+ 309500: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 310000: system.cpu.fetch: Running stage.
+ 310000: system.cpu.fetch: There are no more threads available to fetch from.
+ 310000: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 310500: system.cpu.fetch: Running stage.
+ 310500: system.cpu.fetch: There are no more threads available to fetch from.
+ 310500: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 311000: system.cpu.fetch: Running stage.
+ 311000: system.cpu.fetch: There are no more threads available to fetch from.
+ 311000: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 307500: system.cpu: T0 : 0x4010bf @_start+191    : mov	r8d, 0xabcdef         
+ 307500: system.cpu: T0 : 0x4010bf @_start+191. 0 :   MOV_R_I : limm   r8d, 0xabcdef : IntAlu :  D=0x0000000000abcdef
+ 307500: system.cpu: T0 : 0x4010c5 @_start+197    : mov	r8, 0x90abcdef        
+ 307500: system.cpu: T0 : 0x4010c5 @_start+197. 0 :   MOV_R_I : limm   r8, 0x90abcdef : IntAlu :  D=0x0000000090abcdef
+ 307500: system.cpu: T0 : 0x4010cf @_start+207    : mov	r9b, 0xffffffffffffffab
+ 307500: system.cpu: T0 : 0x4010cf @_start+207. 0 :   MOV_R_I : limm   r9b, 0xffffffffffffffab : IntAlu :  D=0x00000000000000ab
+ 311500: system.cpu.fetch: Running stage.
+ 311500: system.cpu.fetch: There are no more threads available to fetch from.
+ 311500: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 307500: system.cpu: T0 : 0x4010d2 @_start+210    : mov	r9w, 0xabcd           
+ 307500: system.cpu: T0 : 0x4010d2 @_start+210. 0 :   MOV_R_I : limm   r9w, 0xabcd : IntAlu :  D=0x000000000000abcd
+ 307500: system.cpu: T0 : 0x4010d7 @_start+215    : mov	r9d, 0xabcdef         
+ 307500: system.cpu: T0 : 0x4010d7 @_start+215. 0 :   MOV_R_I : limm   r9d, 0xabcdef : IntAlu :  D=0x0000000000abcdef
+ 307500: system.cpu: T0 : 0x4010dd @_start+221    : mov	r9, 0x90abcdef        
+ 307500: system.cpu: T0 : 0x4010dd @_start+221. 0 :   MOV_R_I : limm   r9, 0x90abcdef : IntAlu :  D=0x0000000090abcdef
+ 307500: system.cpu: T0 : 0x4010e7 @_start+231    : mov	r10b, 0xffffffffffffffab
+ 307500: system.cpu: T0 : 0x4010e7 @_start+231. 0 :   MOV_R_I : limm   r10b, 0xffffffffffffffab : IntAlu :  D=0x00000000000000ab
+ 307500: system.cpu: T0 : 0x4010ea @_start+234    : mov	r10w, 0xabcd          
+ 307500: system.cpu: T0 : 0x4010ea @_start+234. 0 :   MOV_R_I : limm   r10w, 0xabcd : IntAlu :  D=0x000000000000abcd
+ 307500: system.cpu: T0 : 0x4010ef @_start+239    : mov	r10d, 0xabcdef        
+ 307500: system.cpu: T0 : 0x4010ef @_start+239. 0 :   MOV_R_I : limm   r10d, 0xabcdef : IntAlu :  D=0x0000000000abcdef
+ 307500: system.cpu: T0 : 0x4010f5 @_start+245    : mov	r10, 0x90abcdef       
+ 307500: system.cpu: T0 : 0x4010f5 @_start+245. 0 :   MOV_R_I : limm   r10, 0x90abcdef : IntAlu :  D=0x0000000090abcdef
+ 312000: system.cpu.fetch: Running stage.
+ 312000: system.cpu.fetch: There are no more threads available to fetch from.
+ 312000: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 312500: system.cpu.fetch: Running stage.
+ 312500: system.cpu.fetch: There are no more threads available to fetch from.
+ 312500: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 313000: system.cpu.fetch: Running stage.
+ 313000: system.cpu.fetch: There are no more threads available to fetch from.
+ 313000: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 313500: system.cpu.fetch: Running stage.
+ 313500: system.cpu.fetch: There are no more threads available to fetch from.
+ 313500: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 314000: system.cpu.fetch: Running stage.
+ 314000: system.cpu.fetch: There are no more threads available to fetch from.
+ 314000: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 314500: system.cpu.fetch: Running stage.
+ 314500: system.cpu.fetch: There are no more threads available to fetch from.
+ 314500: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 315000: system.cpu.fetch: Running stage.
+ 315000: system.cpu.fetch: There are no more threads available to fetch from.
+ 315000: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 315500: system.cpu.fetch: Running stage.
+ 315500: system.cpu.fetch: There are no more threads available to fetch from.
+ 315500: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 316000: system.cpu.fetch: Running stage.
+ 316000: system.cpu.fetch: There are no more threads available to fetch from.
+ 316000: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 316500: system.cpu.fetch: Running stage.
+ 316500: system.cpu.fetch: There are no more threads available to fetch from.
+ 316500: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 317000: system.cpu.fetch: Running stage.
+ 317000: system.cpu.fetch: There are no more threads available to fetch from.
+ 317000: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 317500: system.cpu.fetch: Running stage.
+ 317500: system.cpu.fetch: There are no more threads available to fetch from.
+ 317500: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 380500: system.cpu.fetch: [tid:0] Waking up from cache miss.
+ 380500: system.cpu.fetch: Running stage.
+ 380500: system.cpu.fetch: Attempting to fetch from [tid:0]
+ 380500: system.cpu.fetch: [tid:0] Icache miss is complete.
+ 380500: system.cpu.fetch: [tid:0] Adding instructions to queue to decode.
+ 380500: system.cpu.fetch: [tid:0] Instruction PC (0x4010ff=>0x401102).(0=>1) created [sn:50].
+ 380500: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   r11b, 0xffffffffffffffab
+ 380500: system.cpu.fetch: [tid:0] Fetch queue entry created (1/128).
+ 380500: system.cpu.fetch: [tid:0] Instruction PC (0x401102=>0x401107).(0=>1) created [sn:51].
+ 380500: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   r11w, 0xabcd
+ 380500: system.cpu.fetch: [tid:0] Fetch queue entry created (2/128).
+ 380500: system.cpu.fetch: [tid:0] Instruction PC (0x401107=>0x40110d).(0=>1) created [sn:52].
+ 380500: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   r11d, 0xabcdef
+ 380500: system.cpu.fetch: [tid:0] Fetch queue entry created (3/128).
+ 380500: system.cpu.fetch: [tid:0] Instruction PC (0x40110d=>0x401117).(0=>1) created [sn:53].
+ 380500: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   r11, 0x90abcdef
+ 380500: system.cpu.fetch: [tid:0] Fetch queue entry created (4/128).
+ 380500: system.cpu.fetch: [tid:0] Instruction PC (0x401117=>0x40111a).(0=>1) created [sn:54].
+ 380500: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   r12b, 0xffffffffffffffab
+ 380500: system.cpu.fetch: [tid:0] Fetch queue entry created (5/128).
+ 380500: system.cpu.fetch: [tid:0] Instruction PC (0x40111a=>0x40111f).(0=>1) created [sn:55].
+ 380500: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   r12w, 0xabcd
+ 380500: system.cpu.fetch: [tid:0] Fetch queue entry created (6/128).
+ 380500: system.cpu.fetch: [tid:0] Instruction PC (0x40111f=>0x401125).(0=>1) created [sn:56].
+ 380500: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   r12d, 0xabcdef
+ 380500: system.cpu.fetch: [tid:0] Fetch queue entry created (7/128).
+ 380500: system.cpu.fetch: [tid:0] Instruction PC (0x401125=>0x40112f).(0=>1) created [sn:57].
+ 380500: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   r12, 0x90abcdef
+ 380500: system.cpu.fetch: [tid:0] Fetch queue entry created (8/128).
+ 380500: system.cpu.fetch: [tid:0] Instruction PC (0x40112f=>0x401132).(0=>1) created [sn:58].
+ 380500: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   r13b, 0xffffffffffffffab
+ 380500: system.cpu.fetch: [tid:0] Fetch queue entry created (9/128).
+ 380500: system.cpu.fetch: [tid:0] Instruction PC (0x401132=>0x401137).(0=>1) created [sn:59].
+ 380500: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   r13w, 0xabcd
+ 380500: system.cpu.fetch: [tid:0] Fetch queue entry created (10/128).
+ 380500: system.cpu.fetch: [tid:0] Done fetching, reached fetch bandwidth for this cycle.
+ 380500: system.cpu.fetch: [tid:0] [sn:50] Sending instruction to decode from fetch queue. Fetch queue size: 10.
+ 380500: system.cpu.fetch: [tid:0] [sn:51] Sending instruction to decode from fetch queue. Fetch queue size: 9.
+ 380500: system.cpu.fetch: [tid:0] [sn:52] Sending instruction to decode from fetch queue. Fetch queue size: 8.
+ 380500: system.cpu.fetch: [tid:0] [sn:53] Sending instruction to decode from fetch queue. Fetch queue size: 7.
+ 380500: system.cpu.fetch: [tid:0] [sn:54] Sending instruction to decode from fetch queue. Fetch queue size: 6.
+ 380500: system.cpu.fetch: [tid:0] [sn:55] Sending instruction to decode from fetch queue. Fetch queue size: 5.
+ 380500: system.cpu.fetch: [tid:0] [sn:56] Sending instruction to decode from fetch queue. Fetch queue size: 4.
+ 380500: system.cpu.fetch: [tid:0] [sn:57] Sending instruction to decode from fetch queue. Fetch queue size: 3.
+ 380500: system.cpu.fetch: [tid:0] [sn:58] Sending instruction to decode from fetch queue. Fetch queue size: 2.
+ 380500: system.cpu.fetch: [tid:0] [sn:59] Sending instruction to decode from fetch queue. Fetch queue size: 1.
+ 381000: system.cpu.fetch: Running stage.
+ 381000: system.cpu.fetch: Attempting to fetch from [tid:0]
+ 381000: system.cpu.fetch: [tid:0] Adding instructions to queue to decode.
+ 381000: system.cpu.fetch: [tid:0] Instruction PC (0x401137=>0x40113d).(0=>1) created [sn:60].
+ 381000: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   r13d, 0xabcdef
+ 381000: system.cpu.fetch: [tid:0] Fetch queue entry created (1/128).
+ 381000: system.cpu.fetch: [tid:0] Issuing a pipelined I-cache access, starting at PC (0x40113d=>0x401145).(0=>1).
+ 381000: system.cpu.fetch: [tid:0] Fetching cache line 0x401140 for addr 0x401140
+ 381000: system.cpu.fetch: Fetch: Doing instruction read.
+ 381000: system.cpu.fetch: [tid:0] Doing Icache access.
+ 381000: system.cpu.fetch: [tid:0] [sn:60] Sending instruction to decode from fetch queue. Fetch queue size: 1.
+ 381500: system.cpu.fetch: Running stage.
+ 381500: system.cpu.fetch: There are no more threads available to fetch from.
+ 381500: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 382000: system.cpu.fetch: Running stage.
+ 382000: system.cpu.fetch: There are no more threads available to fetch from.
+ 382000: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 382500: system.cpu.fetch: Running stage.
+ 382500: system.cpu.fetch: There are no more threads available to fetch from.
+ 382500: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 383000: system.cpu.fetch: Running stage.
+ 383000: system.cpu.fetch: There are no more threads available to fetch from.
+ 383000: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 383500: system.cpu.fetch: Running stage.
+ 383500: system.cpu.fetch: There are no more threads available to fetch from.
+ 383500: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 384000: system.cpu.fetch: Running stage.
+ 384000: system.cpu.fetch: There are no more threads available to fetch from.
+ 384000: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 380500: system.cpu: T0 : 0x4010ff @_start+255    : mov	r11b, 0xffffffffffffffab
+ 380500: system.cpu: T0 : 0x4010ff @_start+255. 0 :   MOV_R_I : limm   r11b, 0xffffffffffffffab : IntAlu :  D=0x00000000000000ab
+ 384500: system.cpu.fetch: Running stage.
+ 384500: system.cpu.fetch: There are no more threads available to fetch from.
+ 384500: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 380500: system.cpu: T0 : 0x401102 @_start+258    : mov	r11w, 0xabcd          
+ 380500: system.cpu: T0 : 0x401102 @_start+258. 0 :   MOV_R_I : limm   r11w, 0xabcd : IntAlu :  D=0x000000000000abcd
+ 380500: system.cpu: T0 : 0x401107 @_start+263    : mov	r11d, 0xabcdef        
+ 380500: system.cpu: T0 : 0x401107 @_start+263. 0 :   MOV_R_I : limm   r11d, 0xabcdef : IntAlu :  D=0x0000000000abcdef
+ 380500: system.cpu: T0 : 0x40110d @_start+269    : mov	r11, 0x90abcdef       
+ 380500: system.cpu: T0 : 0x40110d @_start+269. 0 :   MOV_R_I : limm   r11, 0x90abcdef : IntAlu :  D=0x0000000090abcdef
+ 380500: system.cpu: T0 : 0x401117 @_start+279    : mov	r12b, 0xffffffffffffffab
+ 380500: system.cpu: T0 : 0x401117 @_start+279. 0 :   MOV_R_I : limm   r12b, 0xffffffffffffffab : IntAlu :  D=0x00000000000000ab
+ 380500: system.cpu: T0 : 0x40111a @_start+282    : mov	r12w, 0xabcd          
+ 380500: system.cpu: T0 : 0x40111a @_start+282. 0 :   MOV_R_I : limm   r12w, 0xabcd : IntAlu :  D=0x000000000000abcd
+ 380500: system.cpu: T0 : 0x40111f @_start+287    : mov	r12d, 0xabcdef        
+ 380500: system.cpu: T0 : 0x40111f @_start+287. 0 :   MOV_R_I : limm   r12d, 0xabcdef : IntAlu :  D=0x0000000000abcdef
+ 380500: system.cpu: T0 : 0x401125 @_start+293    : mov	r12, 0x90abcdef       
+ 380500: system.cpu: T0 : 0x401125 @_start+293. 0 :   MOV_R_I : limm   r12, 0x90abcdef : IntAlu :  D=0x0000000090abcdef
+ 380500: system.cpu: T0 : 0x40112f @_start+303    : mov	r13b, 0xffffffffffffffab
+ 380500: system.cpu: T0 : 0x40112f @_start+303. 0 :   MOV_R_I : limm   r13b, 0xffffffffffffffab : IntAlu :  D=0x00000000000000ab
+ 380500: system.cpu: T0 : 0x401132 @_start+306    : mov	r13w, 0xabcd          
+ 380500: system.cpu: T0 : 0x401132 @_start+306. 0 :   MOV_R_I : limm   r13w, 0xabcd : IntAlu :  D=0x000000000000abcd
+ 381000: system.cpu: T0 : 0x401137 @_start+311    : mov	r13d, 0xabcdef        
+ 381000: system.cpu: T0 : 0x401137 @_start+311. 0 :   MOV_R_I : limm   r13d, 0xabcdef : IntAlu :  D=0x0000000000abcdef
+ 385000: system.cpu.fetch: Running stage.
+ 385000: system.cpu.fetch: There are no more threads available to fetch from.
+ 385000: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 385500: system.cpu.fetch: Running stage.
+ 385500: system.cpu.fetch: There are no more threads available to fetch from.
+ 385500: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 386000: system.cpu.fetch: Running stage.
+ 386000: system.cpu.fetch: There are no more threads available to fetch from.
+ 386000: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 386500: system.cpu.fetch: Running stage.
+ 386500: system.cpu.fetch: There are no more threads available to fetch from.
+ 386500: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 387000: system.cpu.fetch: Running stage.
+ 387000: system.cpu.fetch: There are no more threads available to fetch from.
+ 387000: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 387500: system.cpu.fetch: Running stage.
+ 387500: system.cpu.fetch: There are no more threads available to fetch from.
+ 387500: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 388000: system.cpu.fetch: Running stage.
+ 388000: system.cpu.fetch: There are no more threads available to fetch from.
+ 388000: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 388500: system.cpu.fetch: Running stage.
+ 388500: system.cpu.fetch: There are no more threads available to fetch from.
+ 388500: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 389000: system.cpu.fetch: Running stage.
+ 389000: system.cpu.fetch: There are no more threads available to fetch from.
+ 389000: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 389500: system.cpu.fetch: Running stage.
+ 389500: system.cpu.fetch: There are no more threads available to fetch from.
+ 389500: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 390000: system.cpu.fetch: Running stage.
+ 390000: system.cpu.fetch: There are no more threads available to fetch from.
+ 390000: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 390500: system.cpu.fetch: Running stage.
+ 390500: system.cpu.fetch: There are no more threads available to fetch from.
+ 390500: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 453500: system.cpu.fetch: [tid:0] Waking up from cache miss.
+ 453500: system.cpu.fetch: Running stage.
+ 453500: system.cpu.fetch: Attempting to fetch from [tid:0]
+ 453500: system.cpu.fetch: [tid:0] Icache miss is complete.
+ 453500: system.cpu.fetch: [tid:0] Adding instructions to queue to decode.
+ 453500: system.cpu.fetch: [tid:0] Instruction PC (0x40113d=>0x401147).(0=>1) created [sn:61].
+ 453500: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   r13, 0x90abcdef
+ 453500: system.cpu.fetch: [tid:0] Fetch queue entry created (1/128).
+ 453500: system.cpu.fetch: [tid:0] Instruction PC (0x401147=>0x40114a).(0=>1) created [sn:62].
+ 453500: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   r14b, 0xffffffffffffffab
+ 453500: system.cpu.fetch: [tid:0] Fetch queue entry created (2/128).
+ 453500: system.cpu.fetch: [tid:0] Instruction PC (0x40114a=>0x40114f).(0=>1) created [sn:63].
+ 453500: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   r14w, 0xabcd
+ 453500: system.cpu.fetch: [tid:0] Fetch queue entry created (3/128).
+ 453500: system.cpu.fetch: [tid:0] Instruction PC (0x40114f=>0x401155).(0=>1) created [sn:64].
+ 453500: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   r14d, 0xabcdef
+ 453500: system.cpu.fetch: [tid:0] Fetch queue entry created (4/128).
+ 453500: system.cpu.fetch: [tid:0] Instruction PC (0x401155=>0x40115f).(0=>1) created [sn:65].
+ 453500: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   r14, 0x90abcdef
+ 453500: system.cpu.fetch: [tid:0] Fetch queue entry created (5/128).
+ 453500: system.cpu.fetch: [tid:0] Instruction PC (0x40115f=>0x401162).(0=>1) created [sn:66].
+ 453500: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   r15b, 0xffffffffffffffab
+ 453500: system.cpu.fetch: [tid:0] Fetch queue entry created (6/128).
+ 453500: system.cpu.fetch: [tid:0] Instruction PC (0x401162=>0x401167).(0=>1) created [sn:67].
+ 453500: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   r15w, 0xabcd
+ 453500: system.cpu.fetch: [tid:0] Fetch queue entry created (7/128).
+ 453500: system.cpu.fetch: [tid:0] Instruction PC (0x401167=>0x40116d).(0=>1) created [sn:68].
+ 453500: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   r15d, 0xabcdef
+ 453500: system.cpu.fetch: [tid:0] Fetch queue entry created (8/128).
+ 453500: system.cpu.fetch: [tid:0] Instruction PC (0x40116d=>0x401177).(0=>1) created [sn:69].
+ 453500: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   r15, 0x90abcdef
+ 453500: system.cpu.fetch: [tid:0] Fetch queue entry created (9/128).
+ 453500: system.cpu.fetch: [tid:0] Instruction PC (0x401177=>0x40117a).(0=>1) created [sn:70].
+ 453500: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_R : mov   rdi, rdi, rax
+ 453500: system.cpu.fetch: [tid:0] Fetch queue entry created (10/128).
+ 453500: system.cpu.fetch: [tid:0] Done fetching, reached fetch bandwidth for this cycle.
+ 453500: system.cpu.fetch: [tid:0] [sn:61] Sending instruction to decode from fetch queue. Fetch queue size: 10.
+ 453500: system.cpu.fetch: [tid:0] [sn:62] Sending instruction to decode from fetch queue. Fetch queue size: 9.
+ 453500: system.cpu.fetch: [tid:0] [sn:63] Sending instruction to decode from fetch queue. Fetch queue size: 8.
+ 453500: system.cpu.fetch: [tid:0] [sn:64] Sending instruction to decode from fetch queue. Fetch queue size: 7.
+ 453500: system.cpu.fetch: [tid:0] [sn:65] Sending instruction to decode from fetch queue. Fetch queue size: 6.
+ 453500: system.cpu.fetch: [tid:0] [sn:66] Sending instruction to decode from fetch queue. Fetch queue size: 5.
+ 453500: system.cpu.fetch: [tid:0] [sn:67] Sending instruction to decode from fetch queue. Fetch queue size: 4.
+ 453500: system.cpu.fetch: [tid:0] [sn:68] Sending instruction to decode from fetch queue. Fetch queue size: 3.
+ 453500: system.cpu.fetch: [tid:0] [sn:69] Sending instruction to decode from fetch queue. Fetch queue size: 2.
+ 453500: system.cpu.fetch: [tid:0] [sn:70] Sending instruction to decode from fetch queue. Fetch queue size: 1.
+ 454000: system.cpu.fetch: Running stage.
+ 454000: system.cpu.fetch: Attempting to fetch from [tid:0]
+ 454000: system.cpu.fetch: [tid:0] Adding instructions to queue to decode.
+ 454000: system.cpu.fetch: [tid:0] Issuing a pipelined I-cache access, starting at PC (0x40117a=>0x401182).(0=>1).
+ 454000: system.cpu.fetch: [tid:0] Fetching cache line 0x401180 for addr 0x401180
+ 454000: system.cpu.fetch: Fetch: Doing instruction read.
+ 454000: system.cpu.fetch: [tid:0] Doing Icache access.
+ 454500: system.cpu.fetch: Running stage.
+ 454500: system.cpu.fetch: There are no more threads available to fetch from.
+ 454500: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 455000: system.cpu.fetch: Running stage.
+ 455000: system.cpu.fetch: There are no more threads available to fetch from.
+ 455000: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 455500: system.cpu.fetch: Running stage.
+ 455500: system.cpu.fetch: There are no more threads available to fetch from.
+ 455500: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 456000: system.cpu.fetch: Running stage.
+ 456000: system.cpu.fetch: There are no more threads available to fetch from.
+ 456000: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 456500: system.cpu.fetch: Running stage.
+ 456500: system.cpu.fetch: There are no more threads available to fetch from.
+ 456500: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 457000: system.cpu.fetch: Running stage.
+ 457000: system.cpu.fetch: There are no more threads available to fetch from.
+ 457000: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 453500: system.cpu: T0 : 0x40113d @_start+317    : mov	r13, 0x90abcdef       
+ 453500: system.cpu: T0 : 0x40113d @_start+317. 0 :   MOV_R_I : limm   r13, 0x90abcdef : IntAlu :  D=0x0000000090abcdef
+ 453500: system.cpu: T0 : 0x401147 @_start+327    : mov	r14b, 0xffffffffffffffab
+ 453500: system.cpu: T0 : 0x401147 @_start+327. 0 :   MOV_R_I : limm   r14b, 0xffffffffffffffab : IntAlu :  D=0x00000000000000ab
+ 457500: system.cpu.fetch: Running stage.
+ 457500: system.cpu.fetch: There are no more threads available to fetch from.
+ 457500: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 453500: system.cpu: T0 : 0x40114a @_start+330    : mov	r14w, 0xabcd          
+ 453500: system.cpu: T0 : 0x40114a @_start+330. 0 :   MOV_R_I : limm   r14w, 0xabcd : IntAlu :  D=0x000000000000abcd
+ 453500: system.cpu: T0 : 0x40114f @_start+335    : mov	r14d, 0xabcdef        
+ 453500: system.cpu: T0 : 0x40114f @_start+335. 0 :   MOV_R_I : limm   r14d, 0xabcdef : IntAlu :  D=0x0000000000abcdef
+ 453500: system.cpu: T0 : 0x401155 @_start+341    : mov	r14, 0x90abcdef       
+ 453500: system.cpu: T0 : 0x401155 @_start+341. 0 :   MOV_R_I : limm   r14, 0x90abcdef : IntAlu :  D=0x0000000090abcdef
+ 453500: system.cpu: T0 : 0x40115f @_start+351    : mov	r15b, 0xffffffffffffffab
+ 453500: system.cpu: T0 : 0x40115f @_start+351. 0 :   MOV_R_I : limm   r15b, 0xffffffffffffffab : IntAlu :  D=0x00000000000000ab
+ 453500: system.cpu: T0 : 0x401162 @_start+354    : mov	r15w, 0xabcd          
+ 453500: system.cpu: T0 : 0x401162 @_start+354. 0 :   MOV_R_I : limm   r15w, 0xabcd : IntAlu :  D=0x000000000000abcd
+ 453500: system.cpu: T0 : 0x401167 @_start+359    : mov	r15d, 0xabcdef        
+ 453500: system.cpu: T0 : 0x401167 @_start+359. 0 :   MOV_R_I : limm   r15d, 0xabcdef : IntAlu :  D=0x0000000000abcdef
+ 453500: system.cpu: T0 : 0x40116d @_start+365    : mov	r15, 0x90abcdef       
+ 453500: system.cpu: T0 : 0x40116d @_start+365. 0 :   MOV_R_I : limm   r15, 0x90abcdef : IntAlu :  D=0x0000000090abcdef
+ 453500: system.cpu: T0 : 0x401177 @_start+375    : mov	rax                   
+ 453500: system.cpu: T0 : 0x401177 @_start+375. 0 :   MOV_R_R : mov   rdi, rdi, rax : IntAlu :  D=0x0000000090abcdef
+ 458000: system.cpu.fetch: Running stage.
+ 458000: system.cpu.fetch: There are no more threads available to fetch from.
+ 458000: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 458500: system.cpu.fetch: Running stage.
+ 458500: system.cpu.fetch: There are no more threads available to fetch from.
+ 458500: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 459000: system.cpu.fetch: Running stage.
+ 459000: system.cpu.fetch: There are no more threads available to fetch from.
+ 459000: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 459500: system.cpu.fetch: Running stage.
+ 459500: system.cpu.fetch: There are no more threads available to fetch from.
+ 459500: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 460000: system.cpu.fetch: Running stage.
+ 460000: system.cpu.fetch: There are no more threads available to fetch from.
+ 460000: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 460500: system.cpu.fetch: Running stage.
+ 460500: system.cpu.fetch: There are no more threads available to fetch from.
+ 460500: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 461000: system.cpu.fetch: Running stage.
+ 461000: system.cpu.fetch: There are no more threads available to fetch from.
+ 461000: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 461500: system.cpu.fetch: Running stage.
+ 461500: system.cpu.fetch: There are no more threads available to fetch from.
+ 461500: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 462000: system.cpu.fetch: Running stage.
+ 462000: system.cpu.fetch: There are no more threads available to fetch from.
+ 462000: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 462500: system.cpu.fetch: Running stage.
+ 462500: system.cpu.fetch: There are no more threads available to fetch from.
+ 462500: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 463000: system.cpu.fetch: Running stage.
+ 463000: system.cpu.fetch: There are no more threads available to fetch from.
+ 463000: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 463500: system.cpu.fetch: Running stage.
+ 463500: system.cpu.fetch: There are no more threads available to fetch from.
+ 463500: system.cpu.fetch: [tid:0] Fetch is waiting cache response!
+ 526500: system.cpu.fetch: [tid:0] Waking up from cache miss.
+ 526500: system.cpu.fetch: Running stage.
+ 526500: system.cpu.fetch: Attempting to fetch from [tid:0]
+ 526500: system.cpu.fetch: [tid:0] Icache miss is complete.
+ 526500: system.cpu.fetch: [tid:0] Adding instructions to queue to decode.
+ 526500: system.cpu.fetch: [tid:0] Instruction PC (0x40117a=>0x401181).(0=>1) created [sn:71].
+ 526500: system.cpu.fetch: [tid:0] Instruction is:   MOV_R_I : limm   rax, 0x3c
+ 526500: system.cpu.fetch: [tid:0] Fetch queue entry created (1/128).
+ 526500: system.cpu.fetch: [tid:0] Instruction PC (0x401181=>0x401183).(0=>1) created [sn:72].
+ 526500: system.cpu.fetch: [tid:0] Instruction is:   syscall   
+ 526500: system.cpu.fetch: [tid:0] Fetch queue entry created (2/128).
+ 526500: system.cpu.fetch: [tid:0] Instruction PC (0x401183=>0x401185).(0=>1) created [sn:73].
+ 526500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
+ 526500: system.cpu.fetch: [tid:0] Fetch queue entry created (3/128).
+ 526500: system.cpu.fetch: [tid:0] Instruction PC (0x401183=>0x401185).(1=>2) created [sn:74].
+ 526500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : add   t1b, t1b, al
+ 526500: system.cpu.fetch: [tid:0] Fetch queue entry created (4/128).
+ 526500: system.cpu.fetch: [tid:0] Instruction PC (0x401183=>0x401185).(2=>3) created [sn:75].
+ 526500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : st   t1b, DS:[rax]
+ 526500: system.cpu.fetch: [tid:0] Fetch queue entry created (5/128).
+ 526500: system.cpu.fetch: [tid:0] Instruction PC (0x401185=>0x401187).(0=>1) created [sn:76].
+ 526500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
+ 526500: system.cpu.fetch: [tid:0] Fetch queue entry created (6/128).
+ 526500: system.cpu.fetch: [tid:0] Instruction PC (0x401185=>0x401187).(1=>2) created [sn:77].
+ 526500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : add   t1b, t1b, al
+ 526500: system.cpu.fetch: [tid:0] Fetch queue entry created (7/128).
+ 526500: system.cpu.fetch: [tid:0] Instruction PC (0x401185=>0x401187).(2=>3) created [sn:78].
+ 526500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : st   t1b, DS:[rax]
+ 526500: system.cpu.fetch: [tid:0] Fetch queue entry created (8/128).
+ 526500: system.cpu.fetch: [tid:0] Instruction PC (0x401187=>0x401189).(0=>1) created [sn:79].
+ 526500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
+ 526500: system.cpu.fetch: [tid:0] Fetch queue entry created (9/128).
+ 526500: system.cpu.fetch: [tid:0] Instruction PC (0x401187=>0x401189).(1=>2) created [sn:80].
+ 526500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : add   t1b, t1b, al
+ 526500: system.cpu.fetch: [tid:0] Fetch queue entry created (10/128).
+ 526500: system.cpu.fetch: [tid:0] Done fetching, reached fetch bandwidth for this cycle.
+ 526500: system.cpu.fetch: [tid:0] [sn:71] Sending instruction to decode from fetch queue. Fetch queue size: 10.
+ 526500: system.cpu.fetch: [tid:0] [sn:72] Sending instruction to decode from fetch queue. Fetch queue size: 9.
+ 526500: system.cpu.fetch: [tid:0] [sn:73] Sending instruction to decode from fetch queue. Fetch queue size: 8.
+ 526500: system.cpu.fetch: [tid:0] [sn:74] Sending instruction to decode from fetch queue. Fetch queue size: 7.
+ 526500: system.cpu.fetch: [tid:0] [sn:75] Sending instruction to decode from fetch queue. Fetch queue size: 6.
+ 526500: system.cpu.fetch: [tid:0] [sn:76] Sending instruction to decode from fetch queue. Fetch queue size: 5.
+ 526500: system.cpu.fetch: [tid:0] [sn:77] Sending instruction to decode from fetch queue. Fetch queue size: 4.
+ 526500: system.cpu.fetch: [tid:0] [sn:78] Sending instruction to decode from fetch queue. Fetch queue size: 3.
+ 526500: system.cpu.fetch: [tid:0] [sn:79] Sending instruction to decode from fetch queue. Fetch queue size: 2.
+ 526500: system.cpu.fetch: [tid:0] [sn:80] Sending instruction to decode from fetch queue. Fetch queue size: 1.
+ 527000: system.cpu.fetch: Running stage.
+ 527000: system.cpu.fetch: Attempting to fetch from [tid:0]
+ 527000: system.cpu.fetch: [tid:0] Adding instructions to queue to decode.
+ 527000: system.cpu.fetch: [tid:0] Instruction PC (0x401187=>0x401189).(2=>3) created [sn:81].
+ 527000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : st   t1b, DS:[rax]
+ 527000: system.cpu.fetch: [tid:0] Fetch queue entry created (1/128).
+ 527000: system.cpu.fetch: [tid:0] Instruction PC (0x401189=>0x40118b).(0=>1) created [sn:82].
+ 527000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
+ 527000: system.cpu.fetch: [tid:0] Fetch queue entry created (2/128).
+ 527000: system.cpu.fetch: [tid:0] Instruction PC (0x401189=>0x40118b).(1=>2) created [sn:83].
+ 527000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : add   t1b, t1b, al
+ 527000: system.cpu.fetch: [tid:0] Fetch queue entry created (3/128).
+ 527000: system.cpu.fetch: [tid:0] Instruction PC (0x401189=>0x40118b).(2=>3) created [sn:84].
+ 527000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : st   t1b, DS:[rax]
+ 527000: system.cpu.fetch: [tid:0] Fetch queue entry created (4/128).
+ 527000: system.cpu.fetch: [tid:0] Instruction PC (0x40118b=>0x40118d).(0=>1) created [sn:85].
+ 527000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
+ 527000: system.cpu.fetch: [tid:0] Fetch queue entry created (5/128).
+ 527000: system.cpu.fetch: [tid:0] Instruction PC (0x40118b=>0x40118d).(1=>2) created [sn:86].
+ 527000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : add   t1b, t1b, al
+ 527000: system.cpu.fetch: [tid:0] Fetch queue entry created (6/128).
+ 527000: system.cpu.fetch: [tid:0] Instruction PC (0x40118b=>0x40118d).(2=>3) created [sn:87].
+ 527000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : st   t1b, DS:[rax]
+ 527000: system.cpu.fetch: [tid:0] Fetch queue entry created (7/128).
+ 527000: system.cpu.fetch: [tid:0] Instruction PC (0x40118d=>0x40118f).(0=>1) created [sn:88].
+ 527000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
+ 527000: system.cpu.fetch: [tid:0] Fetch queue entry created (8/128).
+ 527000: system.cpu.fetch: [tid:0] Instruction PC (0x40118d=>0x40118f).(1=>2) created [sn:89].
+ 527000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : add   t1b, t1b, al
+ 527000: system.cpu.fetch: [tid:0] Fetch queue entry created (9/128).
+ 527000: system.cpu.fetch: [tid:0] Instruction PC (0x40118d=>0x40118f).(2=>3) created [sn:90].
+ 527000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : st   t1b, DS:[rax]
+ 527000: system.cpu.fetch: [tid:0] Fetch queue entry created (10/128).
+ 527000: system.cpu.fetch: [tid:0] Done fetching, reached fetch bandwidth for this cycle.
+ 527000: system.cpu.fetch: [tid:0] [sn:81] Sending instruction to decode from fetch queue. Fetch queue size: 10.
+ 527000: system.cpu.fetch: [tid:0] [sn:82] Sending instruction to decode from fetch queue. Fetch queue size: 9.
+ 527000: system.cpu.fetch: [tid:0] [sn:83] Sending instruction to decode from fetch queue. Fetch queue size: 8.
+ 527000: system.cpu.fetch: [tid:0] [sn:84] Sending instruction to decode from fetch queue. Fetch queue size: 7.
+ 527000: system.cpu.fetch: [tid:0] [sn:85] Sending instruction to decode from fetch queue. Fetch queue size: 6.
+ 527000: system.cpu.fetch: [tid:0] [sn:86] Sending instruction to decode from fetch queue. Fetch queue size: 5.
+ 527000: system.cpu.fetch: [tid:0] [sn:87] Sending instruction to decode from fetch queue. Fetch queue size: 4.
+ 527000: system.cpu.fetch: [tid:0] [sn:88] Sending instruction to decode from fetch queue. Fetch queue size: 3.
+ 527000: system.cpu.fetch: [tid:0] [sn:89] Sending instruction to decode from fetch queue. Fetch queue size: 2.
+ 527000: system.cpu.fetch: [tid:0] [sn:90] Sending instruction to decode from fetch queue. Fetch queue size: 1.
+ 527500: system.cpu.fetch: Running stage.
+ 527500: system.cpu.fetch: Attempting to fetch from [tid:0]
+ 527500: system.cpu.fetch: [tid:0] Adding instructions to queue to decode.
+ 527500: system.cpu.fetch: [tid:0] Instruction PC (0x40118f=>0x401191).(0=>1) created [sn:91].
+ 527500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
+ 527500: system.cpu.fetch: [tid:0] Fetch queue entry created (1/128).
+ 527500: system.cpu.fetch: [tid:0] Instruction PC (0x40118f=>0x401191).(1=>2) created [sn:92].
+ 527500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : add   t1b, t1b, al
+ 527500: system.cpu.fetch: [tid:0] Fetch queue entry created (2/128).
+ 527500: system.cpu.fetch: [tid:0] Instruction PC (0x40118f=>0x401191).(2=>3) created [sn:93].
+ 527500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : st   t1b, DS:[rax]
+ 527500: system.cpu.fetch: [tid:0] Fetch queue entry created (3/128).
+ 527500: system.cpu.fetch: [tid:0] Instruction PC (0x401191=>0x401193).(0=>1) created [sn:94].
+ 527500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
+ 527500: system.cpu.fetch: [tid:0] Fetch queue entry created (4/128).
+ 527500: system.cpu.fetch: [tid:0] Instruction PC (0x401191=>0x401193).(1=>2) created [sn:95].
+ 527500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : add   t1b, t1b, al
+ 527500: system.cpu.fetch: [tid:0] Fetch queue entry created (5/128).
+ 527500: system.cpu.fetch: [tid:0] Instruction PC (0x401191=>0x401193).(2=>3) created [sn:96].
+ 527500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : st   t1b, DS:[rax]
+ 527500: system.cpu.fetch: [tid:0] Fetch queue entry created (6/128).
+ 527500: system.cpu.fetch: [tid:0] Instruction PC (0x401193=>0x401195).(0=>1) created [sn:97].
+ 527500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
+ 527500: system.cpu.fetch: [tid:0] Fetch queue entry created (7/128).
+ 527500: system.cpu.fetch: [tid:0] Instruction PC (0x401193=>0x401195).(1=>2) created [sn:98].
+ 527500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : add   t1b, t1b, al
+ 527500: system.cpu.fetch: [tid:0] Fetch queue entry created (8/128).
+ 527500: system.cpu.fetch: [tid:0] Instruction PC (0x401193=>0x401195).(2=>3) created [sn:99].
+ 527500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : st   t1b, DS:[rax]
+ 527500: system.cpu.fetch: [tid:0] Fetch queue entry created (9/128).
+ 527500: system.cpu.fetch: [tid:0] Instruction PC (0x401195=>0x401197).(0=>1) created [sn:100].
+ 527500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
+ 527500: system.cpu.fetch: [tid:0] Fetch queue entry created (10/128).
+ 527500: system.cpu.fetch: [tid:0] Done fetching, reached fetch bandwidth for this cycle.
+ 527500: system.cpu.fetch: [tid:0] [sn:91] Sending instruction to decode from fetch queue. Fetch queue size: 10.
+ 527500: system.cpu.fetch: [tid:0] [sn:92] Sending instruction to decode from fetch queue. Fetch queue size: 9.
+ 527500: system.cpu.fetch: [tid:0] [sn:93] Sending instruction to decode from fetch queue. Fetch queue size: 8.
+ 527500: system.cpu.fetch: [tid:0] [sn:94] Sending instruction to decode from fetch queue. Fetch queue size: 7.
+ 527500: system.cpu.fetch: [tid:0] [sn:95] Sending instruction to decode from fetch queue. Fetch queue size: 6.
+ 527500: system.cpu.fetch: [tid:0] [sn:96] Sending instruction to decode from fetch queue. Fetch queue size: 5.
+ 527500: system.cpu.fetch: [tid:0] [sn:97] Sending instruction to decode from fetch queue. Fetch queue size: 4.
+ 527500: system.cpu.fetch: [tid:0] [sn:98] Sending instruction to decode from fetch queue. Fetch queue size: 3.
+ 527500: system.cpu.fetch: [tid:0] [sn:99] Sending instruction to decode from fetch queue. Fetch queue size: 2.
+ 527500: system.cpu.fetch: [tid:0] [sn:100] Sending instruction to decode from fetch queue. Fetch queue size: 1.
+ 528000: system.cpu.fetch: Running stage.
+ 528000: system.cpu.fetch: Attempting to fetch from [tid:0]
+ 528000: system.cpu.fetch: [tid:0] Adding instructions to queue to decode.
+ 528000: system.cpu.fetch: [tid:0] Instruction PC (0x401195=>0x401197).(1=>2) created [sn:101].
+ 528000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : add   t1b, t1b, al
+ 528000: system.cpu.fetch: [tid:0] Fetch queue entry created (1/128).
+ 528000: system.cpu.fetch: [tid:0] Instruction PC (0x401195=>0x401197).(2=>3) created [sn:102].
+ 528000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : st   t1b, DS:[rax]
+ 528000: system.cpu.fetch: [tid:0] Fetch queue entry created (2/128).
+ 528000: system.cpu.fetch: [tid:0] Instruction PC (0x401197=>0x401199).(0=>1) created [sn:103].
+ 528000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
+ 528000: system.cpu.fetch: [tid:0] Fetch queue entry created (3/128).
+ 528000: system.cpu.fetch: [tid:0] Instruction PC (0x401197=>0x401199).(1=>2) created [sn:104].
+ 528000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : add   t1b, t1b, al
+ 528000: system.cpu.fetch: [tid:0] Fetch queue entry created (4/128).
+ 528000: system.cpu.fetch: [tid:0] Instruction PC (0x401197=>0x401199).(2=>3) created [sn:105].
+ 528000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : st   t1b, DS:[rax]
+ 528000: system.cpu.fetch: [tid:0] Fetch queue entry created (5/128).
+ 528000: system.cpu.fetch: [tid:0] Instruction PC (0x401199=>0x40119b).(0=>1) created [sn:106].
+ 528000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
+ 528000: system.cpu.fetch: [tid:0] Fetch queue entry created (6/128).
+ 528000: system.cpu.fetch: [tid:0] Instruction PC (0x401199=>0x40119b).(1=>2) created [sn:107].
+ 528000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : add   t1b, t1b, al
+ 528000: system.cpu.fetch: [tid:0] Fetch queue entry created (7/128).
+ 528000: system.cpu.fetch: [tid:0] Instruction PC (0x401199=>0x40119b).(2=>3) created [sn:108].
+ 528000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : st   t1b, DS:[rax]
+ 528000: system.cpu.fetch: [tid:0] Fetch queue entry created (8/128).
+ 528000: system.cpu.fetch: [tid:0] Instruction PC (0x40119b=>0x40119d).(0=>1) created [sn:109].
+ 528000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
+ 528000: system.cpu.fetch: [tid:0] Fetch queue entry created (9/128).
+ 528000: system.cpu.fetch: [tid:0] Instruction PC (0x40119b=>0x40119d).(1=>2) created [sn:110].
+ 528000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : add   t1b, t1b, al
+ 528000: system.cpu.fetch: [tid:0] Fetch queue entry created (10/128).
+ 528000: system.cpu.fetch: [tid:0] Done fetching, reached fetch bandwidth for this cycle.
+ 528000: system.cpu.fetch: [tid:0] [sn:101] Sending instruction to decode from fetch queue. Fetch queue size: 10.
+ 528000: system.cpu.fetch: [tid:0] [sn:102] Sending instruction to decode from fetch queue. Fetch queue size: 9.
+ 528000: system.cpu.fetch: [tid:0] [sn:103] Sending instruction to decode from fetch queue. Fetch queue size: 8.
+ 528000: system.cpu.fetch: [tid:0] [sn:104] Sending instruction to decode from fetch queue. Fetch queue size: 7.
+ 528000: system.cpu.fetch: [tid:0] [sn:105] Sending instruction to decode from fetch queue. Fetch queue size: 6.
+ 528000: system.cpu.fetch: [tid:0] [sn:106] Sending instruction to decode from fetch queue. Fetch queue size: 5.
+ 528000: system.cpu.fetch: [tid:0] [sn:107] Sending instruction to decode from fetch queue. Fetch queue size: 4.
+ 528000: system.cpu.fetch: [tid:0] [sn:108] Sending instruction to decode from fetch queue. Fetch queue size: 3.
+ 528000: system.cpu.fetch: [tid:0] [sn:109] Sending instruction to decode from fetch queue. Fetch queue size: 2.
+ 528000: system.cpu.fetch: [tid:0] [sn:110] Sending instruction to decode from fetch queue. Fetch queue size: 1.
+ 528500: system.cpu.fetch: Running stage.
+ 528500: system.cpu.fetch: Attempting to fetch from [tid:0]
+ 528500: system.cpu.fetch: [tid:0] Adding instructions to queue to decode.
+ 528500: system.cpu.fetch: [tid:0] Instruction PC (0x40119b=>0x40119d).(2=>3) created [sn:111].
+ 528500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : st   t1b, DS:[rax]
+ 528500: system.cpu.fetch: [tid:0] Fetch queue entry created (1/128).
+ 528500: system.cpu.fetch: [tid:0] Instruction PC (0x40119d=>0x40119f).(0=>1) created [sn:112].
+ 528500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
+ 528500: system.cpu.fetch: [tid:0] Fetch queue entry created (2/128).
+ 528500: system.cpu.fetch: [tid:0] Instruction PC (0x40119d=>0x40119f).(1=>2) created [sn:113].
+ 528500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : add   t1b, t1b, al
+ 528500: system.cpu.fetch: [tid:0] Fetch queue entry created (3/128).
+ 528500: system.cpu.fetch: [tid:0] Instruction PC (0x40119d=>0x40119f).(2=>3) created [sn:114].
+ 528500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : st   t1b, DS:[rax]
+ 528500: system.cpu.fetch: [tid:0] Fetch queue entry created (4/128).
+ 528500: system.cpu.fetch: [tid:0] Instruction PC (0x40119f=>0x4011a1).(0=>1) created [sn:115].
+ 528500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
+ 528500: system.cpu.fetch: [tid:0] Fetch queue entry created (5/128).
+ 528500: system.cpu.fetch: [tid:0] Instruction PC (0x40119f=>0x4011a1).(1=>2) created [sn:116].
+ 528500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : add   t1b, t1b, al
+ 528500: system.cpu.fetch: [tid:0] Fetch queue entry created (6/128).
+ 528500: system.cpu.fetch: [tid:0] Instruction PC (0x40119f=>0x4011a1).(2=>3) created [sn:117].
+ 528500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : st   t1b, DS:[rax]
+ 528500: system.cpu.fetch: [tid:0] Fetch queue entry created (7/128).
+ 528500: system.cpu.fetch: [tid:0] Instruction PC (0x4011a1=>0x4011a3).(0=>1) created [sn:118].
+ 528500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
+ 528500: system.cpu.fetch: [tid:0] Fetch queue entry created (8/128).
+ 528500: system.cpu.fetch: [tid:0] Instruction PC (0x4011a1=>0x4011a3).(1=>2) created [sn:119].
+ 528500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : add   t1b, t1b, al
+ 528500: system.cpu.fetch: [tid:0] Fetch queue entry created (9/128).
+ 528500: system.cpu.fetch: [tid:0] Instruction PC (0x4011a1=>0x4011a3).(2=>3) created [sn:120].
+ 528500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : st   t1b, DS:[rax]
+ 528500: system.cpu.fetch: [tid:0] Fetch queue entry created (10/128).
+ 528500: system.cpu.fetch: [tid:0] Done fetching, reached fetch bandwidth for this cycle.
+ 528500: system.cpu.fetch: [tid:0] [sn:111] Sending instruction to decode from fetch queue. Fetch queue size: 10.
+ 528500: system.cpu.fetch: [tid:0] [sn:112] Sending instruction to decode from fetch queue. Fetch queue size: 9.
+ 528500: system.cpu.fetch: [tid:0] [sn:113] Sending instruction to decode from fetch queue. Fetch queue size: 8.
+ 528500: system.cpu.fetch: [tid:0] [sn:114] Sending instruction to decode from fetch queue. Fetch queue size: 7.
+ 528500: system.cpu.fetch: [tid:0] [sn:115] Sending instruction to decode from fetch queue. Fetch queue size: 6.
+ 528500: system.cpu.fetch: [tid:0] [sn:116] Sending instruction to decode from fetch queue. Fetch queue size: 5.
+ 528500: system.cpu.fetch: [tid:0] [sn:117] Sending instruction to decode from fetch queue. Fetch queue size: 4.
+ 528500: system.cpu.fetch: [tid:0] [sn:118] Sending instruction to decode from fetch queue. Fetch queue size: 3.
+ 528500: system.cpu.fetch: [tid:0] [sn:119] Sending instruction to decode from fetch queue. Fetch queue size: 2.
+ 528500: system.cpu.fetch: [tid:0] [sn:120] Sending instruction to decode from fetch queue. Fetch queue size: 1.
+ 529000: system.cpu.fetch: Running stage.
+ 529000: system.cpu.fetch: Attempting to fetch from [tid:0]
+ 529000: system.cpu.fetch: [tid:0] Adding instructions to queue to decode.
+ 529000: system.cpu.fetch: [tid:0] Instruction PC (0x4011a3=>0x4011a5).(0=>1) created [sn:121].
+ 529000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
+ 529000: system.cpu.fetch: [tid:0] Fetch queue entry created (1/128).
+ 529000: system.cpu.fetch: [tid:0] Instruction PC (0x4011a3=>0x4011a5).(1=>2) created [sn:122].
+ 529000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : add   t1b, t1b, al
+ 529000: system.cpu.fetch: [tid:0] Fetch queue entry created (2/128).
+ 529000: system.cpu.fetch: [tid:0] Instruction PC (0x4011a3=>0x4011a5).(2=>3) created [sn:123].
+ 529000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : st   t1b, DS:[rax]
+ 529000: system.cpu.fetch: [tid:0] Fetch queue entry created (3/128).
+ 529000: system.cpu.fetch: [tid:0] Instruction PC (0x4011a5=>0x4011a7).(0=>1) created [sn:124].
+ 529000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
+ 529000: system.cpu.fetch: [tid:0] Fetch queue entry created (4/128).
+ 529000: system.cpu.fetch: [tid:0] Instruction PC (0x4011a5=>0x4011a7).(1=>2) created [sn:125].
+ 529000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : add   t1b, t1b, al
+ 529000: system.cpu.fetch: [tid:0] Fetch queue entry created (5/128).
+ 529000: system.cpu.fetch: [tid:0] Instruction PC (0x4011a5=>0x4011a7).(2=>3) created [sn:126].
+ 529000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : st   t1b, DS:[rax]
+ 529000: system.cpu.fetch: [tid:0] Fetch queue entry created (6/128).
+ 529000: system.cpu.fetch: [tid:0] Instruction PC (0x4011a7=>0x4011a9).(0=>1) created [sn:127].
+ 529000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
+ 529000: system.cpu.fetch: [tid:0] Fetch queue entry created (7/128).
+ 529000: system.cpu.fetch: [tid:0] Instruction PC (0x4011a7=>0x4011a9).(1=>2) created [sn:128].
+ 529000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : add   t1b, t1b, al
+ 529000: system.cpu.fetch: [tid:0] Fetch queue entry created (8/128).
+ 529000: system.cpu.fetch: [tid:0] Instruction PC (0x4011a7=>0x4011a9).(2=>3) created [sn:129].
+ 529000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : st   t1b, DS:[rax]
+ 529000: system.cpu.fetch: [tid:0] Fetch queue entry created (9/128).
+ 529000: system.cpu.fetch: [tid:0] Instruction PC (0x4011a9=>0x4011ab).(0=>1) created [sn:130].
+ 529000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
+ 529000: system.cpu.fetch: [tid:0] Fetch queue entry created (10/128).
+ 529000: system.cpu.fetch: [tid:0] Done fetching, reached fetch bandwidth for this cycle.
+ 529000: system.cpu.fetch: [tid:0] [sn:121] Sending instruction to decode from fetch queue. Fetch queue size: 10.
+ 529000: system.cpu.fetch: [tid:0] [sn:122] Sending instruction to decode from fetch queue. Fetch queue size: 9.
+ 529000: system.cpu.fetch: [tid:0] [sn:123] Sending instruction to decode from fetch queue. Fetch queue size: 8.
+ 529000: system.cpu.fetch: [tid:0] [sn:124] Sending instruction to decode from fetch queue. Fetch queue size: 7.
+ 529000: system.cpu.fetch: [tid:0] [sn:125] Sending instruction to decode from fetch queue. Fetch queue size: 6.
+ 529000: system.cpu.fetch: [tid:0] [sn:126] Sending instruction to decode from fetch queue. Fetch queue size: 5.
+ 529000: system.cpu.fetch: [tid:0] [sn:127] Sending instruction to decode from fetch queue. Fetch queue size: 4.
+ 529000: system.cpu.fetch: [tid:0] [sn:128] Sending instruction to decode from fetch queue. Fetch queue size: 3.
+ 529000: system.cpu.fetch: [tid:0] [sn:129] Sending instruction to decode from fetch queue. Fetch queue size: 2.
+ 529000: system.cpu.fetch: [tid:0] [sn:130] Sending instruction to decode from fetch queue. Fetch queue size: 1.
+ 529500: system.cpu.fetch: Running stage.
+ 529500: system.cpu.fetch: Attempting to fetch from [tid:0]
+ 529500: system.cpu.fetch: [tid:0] Adding instructions to queue to decode.
+ 529500: system.cpu.fetch: [tid:0] Instruction PC (0x4011a9=>0x4011ab).(1=>2) created [sn:131].
+ 529500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : add   t1b, t1b, al
+ 529500: system.cpu.fetch: [tid:0] Fetch queue entry created (1/128).
+ 529500: system.cpu.fetch: [tid:0] Instruction PC (0x4011a9=>0x4011ab).(2=>3) created [sn:132].
+ 529500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : st   t1b, DS:[rax]
+ 529500: system.cpu.fetch: [tid:0] Fetch queue entry created (2/128).
+ 529500: system.cpu.fetch: [tid:0] Instruction PC (0x4011ab=>0x4011ad).(0=>1) created [sn:133].
+ 529500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
+ 529500: system.cpu.fetch: [tid:0] Fetch queue entry created (3/128).
+ 529500: system.cpu.fetch: [tid:0] Instruction PC (0x4011ab=>0x4011ad).(1=>2) created [sn:134].
+ 529500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : add   t1b, t1b, al
+ 529500: system.cpu.fetch: [tid:0] Fetch queue entry created (4/128).
+ 529500: system.cpu.fetch: [tid:0] Instruction PC (0x4011ab=>0x4011ad).(2=>3) created [sn:135].
+ 529500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : st   t1b, DS:[rax]
+ 529500: system.cpu.fetch: [tid:0] Fetch queue entry created (5/128).
+ 529500: system.cpu.fetch: [tid:0] Instruction PC (0x4011ad=>0x4011af).(0=>1) created [sn:136].
+ 529500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
+ 529500: system.cpu.fetch: [tid:0] Fetch queue entry created (6/128).
+ 529500: system.cpu.fetch: [tid:0] Instruction PC (0x4011ad=>0x4011af).(1=>2) created [sn:137].
+ 529500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : add   t1b, t1b, al
+ 529500: system.cpu.fetch: [tid:0] Fetch queue entry created (7/128).
+ 529500: system.cpu.fetch: [tid:0] Instruction PC (0x4011ad=>0x4011af).(2=>3) created [sn:138].
+ 529500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : st   t1b, DS:[rax]
+ 529500: system.cpu.fetch: [tid:0] Fetch queue entry created (8/128).
+ 529500: system.cpu.fetch: [tid:0] Instruction PC (0x4011af=>0x4011b1).(0=>1) created [sn:139].
+ 529500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
+ 529500: system.cpu.fetch: [tid:0] Fetch queue entry created (9/128).
+ 529500: system.cpu.fetch: [tid:0] Instruction PC (0x4011af=>0x4011b1).(1=>2) created [sn:140].
+ 529500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : add   t1b, t1b, al
+ 529500: system.cpu.fetch: [tid:0] Fetch queue entry created (10/128).
+ 529500: system.cpu.fetch: [tid:0] Done fetching, reached fetch bandwidth for this cycle.
+ 529500: system.cpu.fetch: [tid:0] [sn:131] Sending instruction to decode from fetch queue. Fetch queue size: 10.
+ 529500: system.cpu.fetch: [tid:0] [sn:132] Sending instruction to decode from fetch queue. Fetch queue size: 9.
+ 529500: system.cpu.fetch: [tid:0] [sn:133] Sending instruction to decode from fetch queue. Fetch queue size: 8.
+ 529500: system.cpu.fetch: [tid:0] [sn:134] Sending instruction to decode from fetch queue. Fetch queue size: 7.
+ 529500: system.cpu.fetch: [tid:0] [sn:135] Sending instruction to decode from fetch queue. Fetch queue size: 6.
+ 529500: system.cpu.fetch: [tid:0] [sn:136] Sending instruction to decode from fetch queue. Fetch queue size: 5.
+ 529500: system.cpu.fetch: [tid:0] [sn:137] Sending instruction to decode from fetch queue. Fetch queue size: 4.
+ 529500: system.cpu.fetch: [tid:0] [sn:138] Sending instruction to decode from fetch queue. Fetch queue size: 3.
+ 529500: system.cpu.fetch: [tid:0] [sn:139] Sending instruction to decode from fetch queue. Fetch queue size: 2.
+ 529500: system.cpu.fetch: [tid:0] [sn:140] Sending instruction to decode from fetch queue. Fetch queue size: 1.
+ 530000: system.cpu.fetch: Running stage.
+ 530000: system.cpu.fetch: Attempting to fetch from [tid:0]
+ 530000: system.cpu.fetch: [tid:0] Adding instructions to queue to decode.
+ 530000: system.cpu.fetch: [tid:0] Instruction PC (0x4011af=>0x4011b1).(2=>3) created [sn:141].
+ 530000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : st   t1b, DS:[rax]
+ 530000: system.cpu.fetch: [tid:0] Fetch queue entry created (1/128).
+ 530000: system.cpu.fetch: [tid:0] Instruction PC (0x4011b1=>0x4011b3).(0=>1) created [sn:142].
+ 530000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
+ 530000: system.cpu.fetch: [tid:0] Fetch queue entry created (2/128).
+ 530000: system.cpu.fetch: [tid:0] Instruction PC (0x4011b1=>0x4011b3).(1=>2) created [sn:143].
+ 530000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : add   t1b, t1b, al
+ 530000: system.cpu.fetch: [tid:0] Fetch queue entry created (3/128).
+ 530000: system.cpu.fetch: [tid:0] Instruction PC (0x4011b1=>0x4011b3).(2=>3) created [sn:144].
+ 530000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : st   t1b, DS:[rax]
+ 530000: system.cpu.fetch: [tid:0] Fetch queue entry created (4/128).
+ 530000: system.cpu.fetch: [tid:0] Instruction PC (0x4011b3=>0x4011b5).(0=>1) created [sn:145].
+ 530000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
+ 530000: system.cpu.fetch: [tid:0] Fetch queue entry created (5/128).
+ 530000: system.cpu.fetch: [tid:0] Instruction PC (0x4011b3=>0x4011b5).(1=>2) created [sn:146].
+ 530000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : add   t1b, t1b, al
+ 530000: system.cpu.fetch: [tid:0] Fetch queue entry created (6/128).
+ 530000: system.cpu.fetch: [tid:0] Instruction PC (0x4011b3=>0x4011b5).(2=>3) created [sn:147].
+ 530000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : st   t1b, DS:[rax]
+ 530000: system.cpu.fetch: [tid:0] Fetch queue entry created (7/128).
+ 530000: system.cpu.fetch: [tid:0] Instruction PC (0x4011b5=>0x4011b7).(0=>1) created [sn:148].
+ 530000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
+ 530000: system.cpu.fetch: [tid:0] Fetch queue entry created (8/128).
+ 530000: system.cpu.fetch: [tid:0] Instruction PC (0x4011b5=>0x4011b7).(1=>2) created [sn:149].
+ 530000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : add   t1b, t1b, al
+ 530000: system.cpu.fetch: [tid:0] Fetch queue entry created (9/128).
+ 530000: system.cpu.fetch: [tid:0] Instruction PC (0x4011b5=>0x4011b7).(2=>3) created [sn:150].
+ 530000: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : st   t1b, DS:[rax]
+ 530000: system.cpu.fetch: [tid:0] Fetch queue entry created (10/128).
+ 530000: system.cpu.fetch: [tid:0] Done fetching, reached fetch bandwidth for this cycle.
+ 530000: system.cpu.fetch: [tid:0] [sn:141] Sending instruction to decode from fetch queue. Fetch queue size: 10.
+ 530000: system.cpu.fetch: [tid:0] [sn:142] Sending instruction to decode from fetch queue. Fetch queue size: 9.
+ 530000: system.cpu.fetch: [tid:0] [sn:143] Sending instruction to decode from fetch queue. Fetch queue size: 8.
+ 530000: system.cpu.fetch: [tid:0] [sn:144] Sending instruction to decode from fetch queue. Fetch queue size: 7.
+ 530000: system.cpu.fetch: [tid:0] [sn:145] Sending instruction to decode from fetch queue. Fetch queue size: 6.
+ 530000: system.cpu.fetch: [tid:0] [sn:146] Sending instruction to decode from fetch queue. Fetch queue size: 5.
+ 530000: system.cpu.fetch: [tid:0] [sn:147] Sending instruction to decode from fetch queue. Fetch queue size: 4.
+ 530000: system.cpu.fetch: [tid:0] [sn:148] Sending instruction to decode from fetch queue. Fetch queue size: 3.
+ 530000: system.cpu.fetch: [tid:0] [sn:149] Sending instruction to decode from fetch queue. Fetch queue size: 2.
+ 530000: system.cpu.fetch: [tid:0] [sn:150] Sending instruction to decode from fetch queue. Fetch queue size: 1.
+ 526500: system.cpu: T0 : 0x40117a @_start+378    : mov	rdi, 0x3c             
+ 526500: system.cpu: T0 : 0x40117a @_start+378. 0 :   MOV_R_I : limm   rax, 0x3c : IntAlu :  D=0x000000000000003c
+ 530500: system.cpu.fetch: Running stage.
+ 530500: system.cpu.fetch: Attempting to fetch from [tid:0]
+ 530500: system.cpu.fetch: [tid:0] Adding instructions to queue to decode.
+ 530500: system.cpu.fetch: [tid:0] Instruction PC (0x4011b7=>0x4011b9).(0=>1) created [sn:151].
+ 530500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
+ 530500: system.cpu.fetch: [tid:0] Fetch queue entry created (1/128).
+ 530500: system.cpu.fetch: [tid:0] Instruction PC (0x4011b7=>0x4011b9).(1=>2) created [sn:152].
+ 530500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : add   t1b, t1b, al
+ 530500: system.cpu.fetch: [tid:0] Fetch queue entry created (2/128).
+ 530500: system.cpu.fetch: [tid:0] Instruction PC (0x4011b7=>0x4011b9).(2=>3) created [sn:153].
+ 530500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : st   t1b, DS:[rax]
+ 530500: system.cpu.fetch: [tid:0] Fetch queue entry created (3/128).
+ 530500: system.cpu.fetch: [tid:0] Instruction PC (0x4011b9=>0x4011bb).(0=>1) created [sn:154].
+ 530500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
+ 530500: system.cpu.fetch: [tid:0] Fetch queue entry created (4/128).
+ 530500: system.cpu.fetch: [tid:0] Instruction PC (0x4011b9=>0x4011bb).(1=>2) created [sn:155].
+ 530500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : add   t1b, t1b, al
+ 530500: system.cpu.fetch: [tid:0] Fetch queue entry created (5/128).
+ 530500: system.cpu.fetch: [tid:0] Instruction PC (0x4011b9=>0x4011bb).(2=>3) created [sn:156].
+ 530500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : st   t1b, DS:[rax]
+ 530500: system.cpu.fetch: [tid:0] Fetch queue entry created (6/128).
+ 530500: system.cpu.fetch: [tid:0] Instruction PC (0x4011bb=>0x4011bd).(0=>1) created [sn:157].
+ 530500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
+ 530500: system.cpu.fetch: [tid:0] Fetch queue entry created (7/128).
+ 530500: system.cpu.fetch: [tid:0] Instruction PC (0x4011bb=>0x4011bd).(1=>2) created [sn:158].
+ 530500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : add   t1b, t1b, al
+ 530500: system.cpu.fetch: [tid:0] Fetch queue entry created (8/128).
+ 530500: system.cpu.fetch: [tid:0] Instruction PC (0x4011bb=>0x4011bd).(2=>3) created [sn:159].
+ 530500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : st   t1b, DS:[rax]
+ 530500: system.cpu.fetch: [tid:0] Fetch queue entry created (9/128).
+ 530500: system.cpu.fetch: [tid:0] Instruction PC (0x4011bd=>0x4011bf).(0=>1) created [sn:160].
+ 530500: system.cpu.fetch: [tid:0] Instruction is:   ADD_M_R : ldst   t1b, DS:[rax]
+ 530500: system.cpu.fetch: [tid:0] Fetch queue entry created (10/128).
+ 530500: system.cpu.fetch: [tid:0] Done fetching, reached fetch bandwidth for this cycle.
+ 530500: system.cpu.fetch: [tid:0] [sn:151] Sending instruction to decode from fetch queue. Fetch queue size: 10.
+ 530500: system.cpu.fetch: [tid:0] [sn:152] Sending instruction to decode from fetch queue. Fetch queue size: 9.
+ 530500: system.cpu.fetch: [tid:0] [sn:153] Sending instruction to decode from fetch queue. Fetch queue size: 8.
+ 530500: system.cpu.fetch: [tid:0] [sn:154] Sending instruction to decode from fetch queue. Fetch queue size: 7.
+ 530500: system.cpu.fetch: [tid:0] [sn:155] Sending instruction to decode from fetch queue. Fetch queue size: 6.
+ 530500: system.cpu.fetch: [tid:0] [sn:156] Sending instruction to decode from fetch queue. Fetch queue size: 5.
+ 530500: system.cpu.fetch: [tid:0] [sn:157] Sending instruction to decode from fetch queue. Fetch queue size: 4.
+ 530500: system.cpu.fetch: [tid:0] [sn:158] Sending instruction to decode from fetch queue. Fetch queue size: 3.
+ 530500: system.cpu.fetch: [tid:0] [sn:159] Sending instruction to decode from fetch queue. Fetch queue size: 2.
+ 530500: system.cpu.fetch: [tid:0] [sn:160] Sending instruction to decode from fetch queue. Fetch queue size: 1.
+ 526500: system.cpu: T0 : 0x401181 @_start+385    :   syscall                  : IntAlu : 

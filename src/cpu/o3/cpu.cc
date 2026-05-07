@@ -111,10 +111,11 @@ CPU::CPU(const BaseO3CPUParams &params)
                   params.backComSize + params.forwardComSize,
                   params.activity),
 
-      globalSeqNum(1),
+      globalSeqNum(10),
       system(params.system),
       lastRunningCycle(curCycle()),
-      cpuStats(this)
+      cpuStats(this),
+      smb(this->name() + ".smb")
 {
     fatal_if(FullSystem && params.numThreads > 1,
             "SMT is not supported in O3 in full system mode currently.");
@@ -168,6 +169,7 @@ CPU::CPU(const BaseO3CPUParams &params)
     decode.setDecodeQueue(&decodeQueue);
     rename.setDecodeQueue(&decodeQueue);
     rename.setRenameQueue(&renameQueue);
+    rename.setSMBPredictor(&smb);
     iew.setRenameQueue(&renameQueue);
     iew.setIEWQueue(&iewQueue);
     commit.setIEWQueue(&iewQueue);
@@ -1139,6 +1141,16 @@ CPU::addInst(const DynInstPtr &inst)
     return --(instList.end());
 }
 
+// inserts a new instruction before the given instruction in the instruction list
+CPU::ListIt 
+CPU::insertBefore(const DynInstPtr &before, const DynInstPtr &new_inst) {
+    auto before_it = before->getInstListIt();
+    auto new_it = instList.insert(before_it, new_inst);
+
+    // return the iterator to the newly inserted instruction
+    return new_it;
+}
+
 void
 CPU::instDone(ThreadID tid, const DynInstPtr &inst)
 {
@@ -1267,13 +1279,14 @@ void
 CPU::cleanUpRemovedInsts()
 {
     while (!removeList.empty()) {
+        auto front = removeList.front();
         DPRINTF(O3CPU, "Removing instruction, "
                 "[tid:%i] [sn:%lli] PC %s\n",
-                (*removeList.front())->threadNumber,
-                (*removeList.front())->seqNum,
-                (*removeList.front())->pcState());
+                (*front)->threadNumber,
+                (*front)->seqNum,
+                (*front)->pcState());
 
-        instList.erase(removeList.front());
+        instList.erase(front);
 
         removeList.pop();
     }
@@ -1307,13 +1320,7 @@ CPU::dumpInsts()
         ++num;
     }
 }
-/*
-void
-CPU::wakeDependents(const DynInstPtr &inst)
-{
-    iew.wakeDependents(inst);
-}
-*/
+
 void
 CPU::wakeCPU()
 {

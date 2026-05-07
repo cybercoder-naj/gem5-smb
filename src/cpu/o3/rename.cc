@@ -43,6 +43,7 @@
 
 #include <list>
 
+#include "cpu/o3/bypass_move_inst.hh"
 #include "cpu/o3/cpu.hh"
 #include "cpu/o3/dyn_inst.hh"
 #include "cpu/o3/limits.hh"
@@ -86,6 +87,8 @@ Rename::Rename(CPU *_cpu, const BaseO3CPUParams &params)
         serializeInst[tid] = nullptr;
         serializeOnNextInst[tid] = false;
     }
+
+    storeRegs.clear();
 }
 
 std::string
@@ -145,7 +148,9 @@ Rename::RenameStats::RenameStats(statistics::Group *parent)
       ADD_STAT(tempSerializing, statistics::units::Count::get(),
                "count of temporary serializing insts renamed"),
       ADD_STAT(skidInsts, statistics::units::Count::get(),
-               "count of insts added to the skid buffer")
+               "count of insts added to the skid buffer"),
+      ADD_STAT(bypassedLoads, statistics::units::Count::get(),
+               "count of bypassed loads renamed")
 {
     squashCycles.prereq(squashCycles);
     idleCycles.prereq(idleCycles);
@@ -209,6 +214,12 @@ Rename::setRenameQueue(TimeBuffer<RenameStruct> *rq_ptr)
 
     // Setup wire to write information to future stages.
     toIEW = renameQueue->getWire(0);
+}
+
+void
+Rename::setSMBPredictor(SMB *smb_ptr)
+{
+    smb = smb_ptr;
 }
 
 void
@@ -597,9 +608,8 @@ Rename::renameInsts(ThreadID tid)
 
     int renamed_insts = 0;
 
+    DPRINTF(Rename, "[tid:%i] Sending instructions to IEW.\n", tid);
     while (insts_available > 0 &&  toIEWIndex < renameWidth) {
-        DPRINTF(Rename, "[tid:%i] Sending instructions to IEW.\n", tid);
-
         assert(!insts_to_rename.empty());
 
         DynInstPtr inst = insts_to_rename.front();
@@ -652,23 +662,33 @@ Rename::renameInsts(ThreadID tid)
             continue;
         }
 
-        DPRINTF(Rename,
-                "[tid:%i] "
-                "Processing instruction [sn:%llu] with PC %s.\n",
-                tid, inst->seqNum, inst->pcState());
-
-        // Check here to make sure there are enough destination registers
-        // to rename to.  Otherwise block.
-        if (!renameMap[tid]->canRename(inst)) {
+        if (!inst->isBypassedLoad() && !inst->isBypassMove()) {
             DPRINTF(Rename,
-                    "Blocking due to "
-                    " lack of free physical registers to rename to.\n");
-            blockThisCycle = true;
-            insts_to_rename.push_front(inst);
-            ++stats.fullRegistersEvents;
+                    "[tid:%i] "
+                    "Processing instruction [sn:%llu] with PC %s.\n",
+                    tid, inst->seqNum, inst->pcState());
 
-            break;
+            // Check here to make sure there are enough destination registers
+            // to rename to.  Otherwise block.
+            // Bypassed instructions re-iterated through the loop
+            // are already renamed. No need to check this.
+            if (!renameMap[tid]->canRename(inst)) {
+                DPRINTF(Rename,
+                        "Blocking due to "
+                        " lack of free physical registers to rename to.\n");
+                blockThisCycle = true;
+                insts_to_rename.push_front(inst);
+                ++stats.fullRegistersEvents;
+
+                break;
+            }
+        } else {
+            DPRINTF(Rename, 
+                    "[tid:%i] "
+                    "Re-processing %s instruction [sn:%llu] .\n",
+                    tid, inst->isBypassedLoad() ? "bypassed load" : "bypass move", inst->seqNum);
         }
+
 
         // Handle serializeAfter/serializeBefore instructions.
         // serializeAfter marks the next instruction as serializeBefore.
@@ -710,9 +730,51 @@ Rename::renameInsts(ThreadID tid)
             serializeAfter(insts_to_rename, tid);
         }
 
-        renameSrcRegs(inst, inst->threadNumber);
+        if ((inst->isBypassable() && !inst->isBypassedLoad()) || inst->isStore())
+            smb->registerMemoryAccess(inst->pcState().instAddr(), inst->seqNum, inst->isStore());
 
-        renameDestRegs(inst, inst->threadNumber);
+        if (!inst->isBypassedLoad() && !inst->isBypassMove()) {
+            // Bypassed instruction? here?
+            // Oh yes it's because they are re-iterating (see below xD)
+            // Don't rename the registers again.
+            renameSrcRegs(inst, inst->threadNumber);
+
+            renameDestRegs(inst, inst->threadNumber);
+
+            if (inst->isBypassable()) {
+                const InstSeqNum smb_store_seqnum = smb->predictSourceStore(inst->seqNum);
+                if (smb_store_seqnum != 0) {
+                    DPRINTF(Rename,
+                            "[tid:%i] [sn:%llu] "
+                            "SMB Predictor predicted store with sequence number "
+                            "%llu as source of load.\n",
+                            tid, inst->seqNum, smb_store_seqnum);
+
+                    const auto doneSeqNum = commit_ptr->getDoneSeqNum(tid);
+                    if (doneSeqNum >= smb_store_seqnum) {
+                        //? is this required
+                        // ++stats.smbStoreOutsideInstWindow;
+                    } else {
+                        inst->setBypassedLoad(smb_store_seqnum);
+                        ++stats.bypassedLoads;
+
+                        DynInstPtr bypassMove = buildBypassMoveInst(tid, inst);
+                        inst->bypassMoveInst = bypassMove;
+                        
+                        ++toDecode->renameInfo[tid].bypassMoves;
+
+                        // We don't add to historyBuffer for cleanup when
+                        // instruction commits or squashes.
+                        // Because we are reusing existing physical registers
+                        // and their life remains unchanged.
+
+                        // Put in reverse order so bypassMove is sent to IEW first. 
+                        insts_to_rename.push_front(inst);
+                        inst = bypassMove;
+                    }
+                }
+            }
+        }
 
         if (inst->isAtomic() || inst->isStore()) {
             storesInProgress[tid]++;
@@ -765,6 +827,11 @@ Rename::skidInsert(ThreadID tid)
         inst = insts[tid].front();
 
         insts[tid].pop_front();
+
+        if (inst->isBypassMove()) {
+            // Don't add this to the skidBuffer
+            continue;
+        }
 
         assert(tid == inst->threadNumber);
 
@@ -963,6 +1030,9 @@ Rename::doSquash(const InstSeqNum &squashed_seq_num, ThreadID tid)
 
         ++stats.undoneMaps;
     }
+
+    smb->squash();
+    storeRegs.clear();
 }
 
 void
@@ -1083,6 +1153,10 @@ Rename::renameSrcRegs(const DynInstPtr &inst, ThreadID tid)
                     renamed_reg->className());
         }
 
+        if (inst->isStore() && src_idx == 2) {
+            storeRegs[inst->seqNum] = std::make_pair(src_reg, renamed_reg); 
+        }
+
         ++stats.lookups;
     }
 }
@@ -1139,6 +1213,69 @@ Rename::renameDestRegs(const DynInstPtr &inst, ThreadID tid)
 
         ++stats.renamedOperands;
     }
+}
+
+DynInstPtr
+Rename::buildBypassMoveInst(ThreadID tid, const DynInstPtr &bypassed_load)
+{
+    assert(bypassed_load->isBypassedLoad());
+
+    // NOTE that all this is ULTRA specific to x86.
+    // ICBA to go through gem5 isa frontend.
+    auto prev_phys_reg = bypassed_load->prevDestIdx(0);
+    auto new_phys_reg = bypassed_load->renamedDestIdx(0);
+    const auto& [store_src, store_phys_reg] = storeRegs[bypassed_load->smbStoreSeqNum];
+
+    // Get a sequence number.
+    InstSeqNum seq = bypassed_load->seqNum - 5; // Give it a sequence number slightly before the load, so it maintains the ordering.
+    RegId load_dest = bypassed_load->destRegIdx(0);
+
+    StaticInstPtr staticInst = buildBypassMoveStaticInst(store_src, load_dest, load_dest, bypassed_load->destRegMask);
+
+    DynInst::Arrays arrays;
+    arrays.numSrcs = staticInst->numSrcRegs();
+    arrays.numDests = staticInst->numDestRegs();
+
+    auto& pc = bypassed_load->pcState();
+
+    // Create a new DynInst from the instruction fetched.
+    DynInstPtr instruction = new (arrays) DynInst(
+            arrays, staticInst, nullptr, pc, pc, seq, cpu);
+    instruction->setTid(tid);
+    instruction->setThreadState(cpu->thread[tid]);
+
+    instruction->traceData = NULL;
+
+    // Add instruction to the CPU's list of instructions.
+    instruction->setInstListIt(cpu->insertBefore(bypassed_load, instruction));
+
+    auto *isa = instruction->tcBase()->getIsaPtr();
+    instruction->flattenedDestIdx(0, load_dest.flatten(*isa));
+
+    bool partial_write = bypassed_load->destRegMask != UINT64_MAX;
+    instruction->setBypassMove();
+
+    DPRINTF(Rename, "[tid:%i] Bypass Move Instruction created [sn:%lli]. Dest reg mask %llx.\n", tid, seq, bypassed_load->destRegMask);
+
+    instruction->renameSrcReg(0, store_phys_reg);
+    DPRINTF(Rename, "[tid:%i] [sn:%lli] Store source phys reg %i.\n", tid, seq, store_phys_reg->index());
+    if (partial_write) {
+        DPRINTF(Rename, "[tid:%i] [sn:%lli] Older load phys reg %i.\n", tid, seq, prev_phys_reg->index());
+        instruction->renameSrcReg(1, prev_phys_reg); // previous mapping
+    }
+
+    if (scoreboard->getReg(store_phys_reg))
+        instruction->markSrcRegReady(0);
+    if (partial_write && scoreboard->getReg(prev_phys_reg))
+        instruction->markSrcRegReady(1);
+
+    instruction->renameDestReg(0, new_phys_reg, prev_phys_reg); // new mapping
+    DPRINTF(Rename, "[tid:%i] [sn:%lli] Newer load phys reg %i.\n", tid, seq, prev_phys_reg->index());
+    scoreboard->unsetReg(new_phys_reg);
+
+    ++stats.renamedOperands;
+
+    return instruction;
 }
 
 int

@@ -168,9 +168,6 @@ class IEW
     /** Squashes instructions in IEW for a specific thread. */
     void squash(ThreadID tid);
 
-    /** Wakes all dependents of a completed instruction. */
-    void wakeDependents(const DynInstPtr &inst);
-
     /** Tells memory dependence unit that a memory instruction needs to be
      * rescheduled. It will re-execute once replayMemInst() is called.
      */

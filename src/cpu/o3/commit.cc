@@ -131,8 +131,28 @@ Commit::Commit(CPU *_cpu, const BaseO3CPUParams &params)
         renameMap[tid] = nullptr;
         htmStarts[tid] = 0;
         htmStops[tid] = 0;
+        doneSeqNum[tid] = 0;
     }
     interrupt = NoFault;
+
+    const char* env = std::getenv("MEM_TRACE_FILE");
+    if (!env) {
+        DPRINTF(Commit, "MEM_TRACE_FILE environment variable not set. No predictions loaded.\n");
+        return;
+    }
+
+    memTraceFile.open(env);
+    if (!memTraceFile.is_open()) {
+        DPRINTF(Commit, "Could not open MEM_TRACE_FILE\n");
+        return;
+    }
+}
+
+Commit::~Commit()
+{
+    if (memTraceFile.is_open()) {
+        memTraceFile.close();
+    }
 }
 
 std::string Commit::name() const { return cpu->name() + ".commit"; }
@@ -169,6 +189,8 @@ Commit::CommitStats::CommitStats(CPU *cpu, Commit *commit)
                "Class of committed instruction"),
       ADD_STAT(memOrderViolationEvents, statistics::units::Count::get(),
                "Number of memory order violations"),
+      ADD_STAT(bypassedLoadValueCheckViolation, statistics::units::Count::get(),
+               "Number of bypassed load violations"),
       ADD_STAT(commitEligibleSamples, statistics::units::Cycle::get(),
                "number cycles where commit BW limit reached")
 {
@@ -494,7 +516,7 @@ Commit::squashAll(ThreadID tid)
     // Hopefully this doesn't mess things up.  Basically I want to squash
     // all instructions of this thread.
     InstSeqNum squashed_inst = rob->isEmpty(tid) ?
-        lastCommitedSeqNum[tid] : rob->readHeadInst(tid)->seqNum - 1;
+        lastCommitedSeqNum[tid] : rob->readHeadInst(tid)->seqNum - 10;
 
     // All younger instructions will be squashed. Set the sequence
     // number as the youngest instruction in the ROB (0 in this case.
@@ -813,7 +835,7 @@ Commit::commit()
             InstSeqNum squashed_inst = fromIEW->squashedSeqNum[tid];
 
             if (fromIEW->includeSquashInst[tid]) {
-                squashed_inst--;
+                squashed_inst -= 10;
             }
 
             // All younger instructions will be squashed. Set the sequence
@@ -900,6 +922,24 @@ Commit::commit()
         }
 
     }
+}
+
+void
+Commit::dumpMemInstruction(const DynInstPtr &head_inst) {
+    assert(head_inst->shouldDumpIntoMemtrace());
+    assert(head_inst->effAddrValid());
+
+    InstSeqNum seq_num = head_inst->seqNum;
+    Addr pc_state = head_inst->pcState().instAddr();
+    Addr eff_addr = head_inst->effAddr;
+    unsigned int eff_size = head_inst->effSize;
+    bool is_load = head_inst->isLoad();
+
+    memTraceFile << seq_num << " "
+        << std::hex << pc_state << " "
+        << std::hex << eff_addr << " "
+        << std::dec << eff_size << " "
+        << (is_load ? "L" : "S") << "\n";
 }
 
 void
@@ -1039,6 +1079,7 @@ Commit::commitInsts()
 
                 // Set the doneSeqNum to the youngest committed instruction.
                 toIEW->commitInfo[tid].doneSeqNum = head_inst->seqNum;
+                setDoneSeqNum(tid, head_inst->seqNum);
 
                 if (tid == 0)
                     canHandleInterrupts = !head_inst->isDelayedCommit();
@@ -1107,6 +1148,10 @@ Commit::commitInsts()
                     }
                 }
 
+                if (head_inst->shouldDumpIntoMemtrace()) {
+                    dumpMemInstruction(head_inst);
+                }
+
                 // Check if an instruction just enabled interrupts and we've
                 // previously had an interrupt pending that was not handled
                 // because interrupts were subsequently disabled before the
@@ -1126,6 +1171,8 @@ Commit::commitInsts()
             }
         }
     }
+
+    memTraceFile.flush();
 
     DPRINTF(CommitRate, "%i\n", num_committed);
     stats.numCommittedDist.sample(num_committed);
@@ -1287,6 +1334,13 @@ Commit::commitHead(const DynInstPtr &head_inst, unsigned inst_num)
 
         // Generate trap squash event.
         generateTrapEvent(tid, inst_fault);
+        return false;
+    }
+
+    if (head_inst->isBypassedLoad() && head_inst->smbViolation()) {
+        commitStatus[tid] = ROBSquashing;
+        ++stats.bypassedLoadValueCheckViolation;
+        squashAll(tid);
         return false;
     }
 

@@ -123,6 +123,9 @@ class DynInst : public ExecContext, public RefCounted
     /** The sequence number of the instruction. */
     InstSeqNum seqNum = 0;
 
+    /** The mask of the destination reg of x86 loads. */
+    uint64_t destRegMask = 0; // Only used for X86 load instructions.
+
     /** The StaticInst used by this BaseDynInst. */
     const StaticInstPtr staticInst;
 
@@ -190,6 +193,8 @@ class DynInst : public ExecContext, public RefCounted
         ReqMade,
         MemOpDone,
         HtmFromTransaction,
+        BypassedLoad,
+        BypassMove,
         MaxFlags
     };
 
@@ -377,6 +382,52 @@ class DynInst : public ExecContext, public RefCounted
         bool predicted = false;
     } memDepInfo;
 
+    /////////////////////// SMB Data //////////////////////
+
+    InstSeqNum smbStoreSeqNum = 0;
+    bool _smbViolation = false;
+    DynInstPtr bypassMoveInst = nullptr;
+
+    /** Iterator of the SQ pointing to the SMB predicted source store. */
+    typename LSQUnit::SQIterator smbPredStoreIt;
+
+    bool isBypassable() const {
+        // This is specific to x86
+        return staticInst->isLoad() && 
+                !staticInst->isRMW() && 
+                !staticInst->isRMWA() &&
+                destRegIdx(0).classValue() == RegClassType::IntRegClass;
+    }
+    bool shouldDumpIntoMemtrace() const {
+        // This is specific to x86
+        return isBypassable() ||
+                (staticInst->isStore() &&
+                !staticInst->isRMW() && 
+                !staticInst->isRMWA() &&
+                staticInst->srcRegIdx(2).classValue() == RegClassType::IntRegClass);
+    }
+    bool isBypassedLoad() const {
+        return staticInst->isLoad() && instFlags.test(BypassedLoad);
+    }
+    void setBypassedLoad(InstSeqNum seq_num) {
+        assert(isBypassable());
+        instFlags.set(BypassedLoad);
+        smbStoreSeqNum = seq_num;
+    }
+    void setSmbViolation() {
+        assert(isBypassedLoad());
+        _smbViolation = true;
+    }
+    bool smbViolation() const {
+        return _smbViolation;
+    }
+
+    bool _skipExecution = false;
+    bool isBypassMove() { return instFlags.test(BypassMove); }
+    void setBypassMove() { instFlags.set(BypassMove); }
+    bool skipExecution() { return _skipExecution; }
+    void setSkipExecution() { _skipExecution = true; }
+
     /////////////////////// TLB Miss //////////////////////
     /**
      * Saved memory request (needed when the DTB address translation is
@@ -550,6 +601,12 @@ class DynInst : public ExecContext, public RefCounted
     bool
     mispredicted()
     {
+        // Bypass moves are not real instructions.
+        // They have the same PC as the load they are bypassing.
+        // Therefore, they should not be considered mispredicted. 
+        if (isBypassMove())
+            return false;
+
         std::unique_ptr<PCStateBase> next_pc(pc->clone());
         staticInst->advancePC(*next_pc);
         return *next_pc != *predPC;

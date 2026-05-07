@@ -137,9 +137,16 @@ class Commit
     /** Mark the thread as processing a trap. */
     void processTrapEvent(ThreadID tid);
 
+    /** Monotonically increasing sequence number of the last committed instruction. */
+    InstSeqNum doneSeqNum[MaxThreads];
+
+    std::ofstream memTraceFile;
+
   public:
     /** Construct a Commit with the given parameters. */
     Commit(CPU *_cpu, const BaseO3CPUParams &params);
+
+    ~Commit();
 
     /** Returns the name of the Commit. */
     std::string name() const;
@@ -228,11 +235,19 @@ class Commit
      */
     void generateTCEvent(ThreadID tid);
 
+    InstSeqNum getDoneSeqNum(ThreadID tid) const { return doneSeqNum[tid]; }
+    void setDoneSeqNum(ThreadID tid, InstSeqNum seq_num) { 
+      assert(doneSeqNum[tid] <= seq_num);
+      doneSeqNum[tid] = seq_num; 
+    }
+
   private:
     /** Updates the overall status of commit with the nextStatus, and
      * tell the CPU if commit is active/inactive.
      */
     void updateStatus();
+
+    void dumpMemInstruction(const DynInstPtr &head_inst);
 
     /** Returns if any of the threads have the number of ROB entries changed
      * on this cycle. Used to determine if the number of free ROB entries needs
@@ -500,6 +515,9 @@ class Commit
 
         /** Number of memory order violations. */
         statistics::Scalar memOrderViolationEvents;
+
+        /* Number of squashes due to bypass load violations. */
+        statistics::Scalar bypassedLoadValueCheckViolation;
     } stats;
 };
 

@@ -51,6 +51,17 @@ ITTAGE::ITTAGE(const ITTAGEParams &params):
     reset_counter = 128;
 }
 
+ITTAGE::~ITTAGE()
+{
+    // Free any indirect-history pointers that remain tracked
+    for (auto &t : threadInfo) {
+        for (auto p : t.allocatedIndirectHistories) {
+            delete p;
+        }
+        t.allocatedIndirectHistories.clear();
+    }
+}
+
 ITTAGE::ITTAGEStats::ITTAGEStats(statistics::Group* parent):
     statistics::Group(parent),
     ADD_STAT(mainlookupHit, statistics::units::Count::get(), "ittage the provider component lookup hit"),
@@ -152,7 +163,9 @@ ITTAGE::genIndirectInfo(ThreadID tid, void* & indirect_history)
     // record the GHR as it was before this prediction
     // It will be used to recover the history in case this prediction is
     // wrong or belongs to bad path
-    indirect_history = new bitset(threadInfo[tid].ghr);
+    bitset *b = new bitset(threadInfo[tid].ghr);
+    indirect_history = b;
+    threadInfo[tid].allocatedIndirectHistories.push_back(b);
 }
 
 void
@@ -260,7 +273,7 @@ ITTAGE::lookup_helper(Addr br_addr, bitset& ghr, PCStateBase& target,
 }
 
 bool ITTAGE::lookup(Addr br_addr, PCStateBase& target, ThreadID tid) {
-    PCStateBase *alt_target = target.clone();
+    std::unique_ptr<PCStateBase> alt_target(target.clone());
     int predictor = 0;
     int predictor_index = 0;
     int alt_predictor = 0;
@@ -276,7 +289,6 @@ bool ITTAGE::lookup(Addr br_addr, PCStateBase& target, ThreadID tid) {
     //     return false;
     // }
     if (use_alt_pred) {
-        assert(alt_target);
         set(target, *alt_target);
     }
     // std::cout<<"DEBUG: target.instAddr="<<target.instAddr()<<std::endl;
@@ -338,6 +350,11 @@ ITTAGE::commit(InstSeqNum seq_num, ThreadID tid,
             ++t_info.headHistEntry;
         }
     }
+    // Remove from tracking list and delete
+    auto &vec = threadInfo[tid].allocatedIndirectHistories;
+    auto it = std::find(vec.begin(), vec.end(), previousGhr);
+    if (it != vec.end())
+        vec.erase(it);
     delete previousGhr;
 }
 
@@ -374,6 +391,11 @@ ITTAGE::deleteIndirectInfo(ThreadID tid, void * indirect_history)
     bitset* previousGhr = static_cast<bitset*>(indirect_history);
     threadInfo[tid].ghr = *previousGhr;
 
+    // Remove from tracking list and delete
+    auto &vec = threadInfo[tid].allocatedIndirectHistories;
+    auto it = std::find(vec.begin(), vec.end(), previousGhr);
+    if (it != vec.end())
+        vec.erase(it);
     delete previousGhr;
 }
 
@@ -410,19 +432,19 @@ ITTAGE::recordTarget(
     int predictor_sel = 0;
     int predictor_index_sel = 0;
     bool use_alt_pred = false;
-    PCStateBase *target_1 = target.clone();
-    PCStateBase *target_2 = target.clone();
+    std::unique_ptr<PCStateBase> target_1(target.clone());
+    std::unique_ptr<PCStateBase> target_2(target.clone());
     std::unique_ptr<PCStateBase> target_sel;
     bool predictor_found =
         lookup_helper(hist_entry.pcAddr, ghr, *target_1, *target_2, tid,
                       predictor, predictor_index, alt_predictor,
                       alt_predictor_index, pred_count, use_alt_pred);
     if (predictor_found && use_alt_pred) {
-        set(target_sel, target_2);
+        target_sel = std::move(target_2);
         predictor_sel = alt_predictor;
         predictor_index_sel = alt_predictor_index;
     } else if (predictor_found) {
-        set(target_sel, target_1);
+        target_sel = std::move(target_1);
         predictor_sel = predictor;
         predictor_index_sel = predictor_index;
     } else {
