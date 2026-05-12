@@ -37,7 +37,6 @@
 #include "cpu/o3/dyn_inst.hh"
 #include "cpu/o3/inst_queue.hh"
 #include "cpu/o3/limits.hh"
-#include "cpu/o3/mascot.hh"
 #include "debug/MemDepUnit.hh"
 #include "params/BaseO3CPU.hh"
 
@@ -274,26 +273,25 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
     inst_entry->listIt = --(instList[tid].end());
 
     std::vector<MemDepEntryPtr> dependencies;
-    auto mascotInfo = &inst->mascotInfo;
+    auto& mascotInfo = inst->mascotInfo;
 
-    if (inst->isBypassedLoad()) {
-        // SMB loads are only dependent on the store they are paired with, so skip the predictor and just add that dependency.
+    // Preserve existing SMB predictions
+    if (!mascotInfo.predicted())
+        mascotInfo.prediction = mascot.predict(inst->pcState().instAddr(), inst->seqNum, branchHistory);
+
+    const auto& pred = mascotInfo.prediction;
+
+    if (pred.type == MASCOT::PredictionType::SMB && inst->isBypassedLoad()) {
+        // SMB loads are only dependent on the store they are paired with, so just add that dependency.
         MemDepHashIt hash_it = memDepHash.find(inst->mascotInfo.prediction.storeSeqNum);
         if (hash_it != memDepHash.end())
             dependencies.push_back((*hash_it).second);
-    } else if (inst->isLoad() && !mascotInfo->smbPredicted)
-        // prediction = depPred.checkInst(inst->pcState().instAddr(), inst->seqNum, branchHistory, inst->isLoad());
-        mascotInfo->prediction = mascot.predict(inst->pcState().instAddr(), inst->seqNum, branchHistory);
+    } else if (pred.type == MASCOT::PredictionType::MDP || 
+               pred.type == MASCOT::PredictionType::SMB) {
+        assert(pred.distance);
 
-    if (mascotInfo->prediction.type == MASCOT::PredictionType::MDP) {
-        assert(mascotInfo->prediction.distance);
-
-        //make a PHAST prediction, as long as the SQ offset is valid
-        bool foundStore = addSQDistanceDep(inst, mascotInfo->prediction.distance, dependencies);
-
-        if (foundStore) {
-            mascotInfo->mdpPredicted = true;
-        }
+        //make a MASCOT prediction, as long as the SQ offset is valid
+        mascotInfo.mdpPredicted = addSQDistanceDep(inst, pred.distance, dependencies);
     }
 
     /* 2nd Step: Concurrently, check the in-flight Barriers; the Load

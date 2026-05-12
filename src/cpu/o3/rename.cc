@@ -759,15 +759,12 @@ Rename::renameInsts(ThreadID tid)
                         //? is this required
                         // ++stats.smbStoreOutsideInstWindow;
                     } else {
-                        DynInst::MascotInfo info;
-                        info.prediction = pred;
-                        info.smbPredicted = true;
+                        DynInst::MascotInfo info {
+                            .prediction = pred,
+                            .smbPredicted = true
+                        };
 
-                        inst->setBypassedLoad(info);
-                        ++stats.bypassedLoads;
-
-                        DynInstPtr bypassMove = buildBypassMoveInst(tid, inst);
-                        inst->bypassMoveInst = bypassMove;
+                        DynInstPtr bypassMove = buildBypassMoveManeuver(tid, inst, info);
                         
                         ++toDecode->renameInfo[tid].bypassMoves;
 
@@ -1226,15 +1223,20 @@ Rename::renameDestRegs(const DynInstPtr &inst, ThreadID tid)
 }
 
 DynInstPtr
-Rename::buildBypassMoveInst(ThreadID tid, const DynInstPtr &bypassed_load)
+Rename::buildBypassMoveManeuver(ThreadID tid, const DynInstPtr &bypassed_load, DynInst::MascotInfo info)
 {
-    assert(bypassed_load->isBypassedLoad());
+    auto store_reg_it = storeRegs.find(info.prediction.storeSeqNum);
+    if (store_reg_it == storeRegs.end())
+        return nullptr;
 
+    bypassed_load->setBypassedLoad(info);
+    ++stats.bypassedLoads;
+
+    const auto& [store_src, store_phys_reg] = store_reg_it->second;
     // NOTE that all this is ULTRA specific to x86.
     // ICBA to go through gem5 isa frontend.
     auto prev_phys_reg = bypassed_load->prevDestIdx(0);
     auto new_phys_reg = bypassed_load->renamedDestIdx(0);
-    const auto& [store_src, store_phys_reg] = storeRegs[bypassed_load->mascotInfo.prediction.storeSeqNum];
 
     // Get a sequence number.
     InstSeqNum seq = bypassed_load->seqNum - 5; // Give it a sequence number slightly before the load, so it maintains the ordering.
@@ -1285,6 +1287,7 @@ Rename::buildBypassMoveInst(ThreadID tid, const DynInstPtr &bypassed_load)
 
     ++stats.renamedOperands;
 
+    bypassed_load->bypassMoveInst = instruction;    
     return instruction;
 }
 

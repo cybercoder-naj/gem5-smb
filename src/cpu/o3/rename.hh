@@ -52,7 +52,6 @@
 #include "cpu/o3/free_list.hh"
 #include "cpu/o3/iew.hh"
 #include "cpu/o3/limits.hh"
-#include "cpu/o3/mascot.hh"
 #include "cpu/o3/smb.hh"
 #include "cpu/timebuf.hh"
 #include "sim/probe/probe.hh"
@@ -260,7 +259,7 @@ class Rename
     void renameDestRegs(const DynInstPtr &inst, ThreadID tid);
 
     /** Renames the destination registers of an instruction. */
-    DynInstPtr buildBypassMoveInst(ThreadID tid, const DynInstPtr &bypassed_load);
+    DynInstPtr buildBypassMoveManeuver(ThreadID tid, const DynInstPtr &bypassed_load, DynInst::MascotInfo info);
 
     /** Calculates the number of free ROB entries for a specific thread. */
     int calcFreeROBEntries(ThreadID tid);

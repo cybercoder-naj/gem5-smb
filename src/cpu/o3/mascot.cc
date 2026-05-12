@@ -76,9 +76,11 @@ MASCOT::predict(Addr load_pc, InstSeqNum load_seq_num, BranchHistory branch_hist
       return prediction;
 
     // "Whenever the distance field is not zero, a memory dependence prediction
-    //  is made regardless of the value of the usefulness field, whereas
-    //  speculative memory bypassing is only predicted if both the usefulness
-    //  and bypassing counters are saturated."
+    //  is made regardless of the value of the usefulness field, 
+    prediction.type = MDP;
+
+    //  whereas speculative memory bypassing is only predicted if both the 
+    //  usefulness and bypassing counters are saturated."
     if (entry->isHighConfidence() && entry->canBypass() && entry->distance <= storeBuffer.size()) {
       auto store_idx = storeBuffer.size() - entry->distance;
       prediction.type = storeBuffer[store_idx].isStore ? SMB : MDP; 
@@ -89,7 +91,6 @@ MASCOT::predict(Addr load_pc, InstSeqNum load_seq_num, BranchHistory branch_hist
       }
     }
     ++(*(memDepUnit->pathWrites[i])); //? Shouldn't this be pathReads??
-
 
     return prediction;
   }
