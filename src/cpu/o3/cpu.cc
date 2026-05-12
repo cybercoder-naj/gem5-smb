@@ -115,8 +115,7 @@ CPU::CPU(const BaseO3CPUParams &params)
       system(params.system),
       lastRunningCycle(curCycle()),
       cpuStats(this),
-      smb(this->name() + ".smb"),
-      mascot(params, nullptr)
+      smb(this->name() + ".smb")
 {
     fatal_if(FullSystem && params.numThreads > 1,
             "SMT is not supported in O3 in full system mode currently.");
@@ -180,7 +179,6 @@ CPU::CPU(const BaseO3CPUParams &params)
     rename.setCommitStage(&commit);
 
     rename.setSMBPredictor(&smb);
-    rename.setMascotPredictor(&mascot);
 
     ThreadID active_threads;
     if (FullSystem) {

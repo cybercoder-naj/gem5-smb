@@ -237,8 +237,6 @@ class LSQUnit
     /** Takes over from another CPU's thread. */
     void takeOverFrom();
 
-    /** Inserts an instruction. */
-    void insert(const DynInstPtr &inst);
     /** Inserts a load instruction. */
     void insertLoad(const DynInstPtr &load_inst);
     /** Inserts a store instruction. */

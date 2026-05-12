@@ -150,9 +150,6 @@ class Rename
     /** Sets pointer to file based SMB predictor. */
     void setSMBPredictor(SMB *smb_ptr);
 
-    /** Sets pointer to Mascot predictor. */
-    void setMascotPredictor(MASCOT *smb_ptr);
-
     /** Sets pointer to commit stage. Used only for initialization. */
     void
     setCommitStage(Commit *commit_stage)
@@ -360,9 +357,6 @@ class Rename
 
     /** The file-based SMB predictor. Unused */
     SMB *smb;
-
-    /** The Mascot predictor. */
-    MASCOT *mascot;
 
     /** Queue of all instructions coming from decode this cycle. */
     InstQueue insts[MaxThreads];

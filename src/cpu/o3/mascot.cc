@@ -18,12 +18,18 @@ namespace o3
 
 using Prediction = MASCOT::Prediction;
   
-MASCOT::MASCOT(const BaseO3CPUParams& params, MemDepUnit* mem_dep_unit)
-  : depCheckShift(params.LSQDepCheckShift),
-    memDepUnit(mem_dep_unit),
+MASCOT::MASCOT()
+  : depCheckShift(0),
+    memDepUnit(nullptr),
     histories({0, 2, 4, 8, 16, 32, 64, 128}),
     tables(histories.size(), Table()),
-    stores(tables.size()) {}
+    storeBuffer(MAX_DISTANCE) {}
+
+void
+MASCOT::init(const BaseO3CPUParams& params, MemDepUnit* mem_dep_unit) {
+  depCheckShift = params.LSQDepCheckShift;
+  memDepUnit = mem_dep_unit;
+}
 
 Prediction
 MASCOT::predict(Addr load_pc, InstSeqNum load_seq_num, BranchHistory branch_history) {
@@ -55,31 +61,37 @@ MASCOT::predict(Addr load_pc, InstSeqNum load_seq_num, BranchHistory branch_hist
   }
 
   //? Should I get lowest first?
-  for (size_t i = 0; i <= table_limit_idx; ++i) {
+  for (long i = table_limit_idx - 1; i >= 0; --i) {
     const uint64_t hash = generateBranchHash(histories[i], branch_history, historyBegin);
     const auto entry = tables[i].getEntry(load_pc, hash);
     if (entry == nullptr)
       continue;
 
-    if (entry->distance != 0 || entry->isNdep()) {
-      prediction.distance = entry->distance;
-      prediction.tableIdx = i;
-      prediction.hash = hash;
+    prediction.distance = entry->distance;
+    prediction.tableIdx = i;
+    prediction.hash = hash;
 
-      if (entry->isHighConfidence()) {
-        ++(*(memDepUnit->pathWrites[i])); //? Shouldn't this be pathReads??
-        prediction.type = entry->canBypass() ? SMB : MDP;
+    // "A distance field of all 0s indicates that the entry is nondependent"
+    if (entry->isNdep())
+      return prediction;
 
-        if (prediction.type == SMB) {
-          auto store_it = stores.end();
-          store_it -= entry->distance;
-          prediction.storeSeqNum = store_it->first;
-          prediction.storePC = store_it->second;
-        }
+    // "Whenever the distance field is not zero, a memory dependence prediction
+    //  is made regardless of the value of the usefulness field, whereas
+    //  speculative memory bypassing is only predicted if both the usefulness
+    //  and bypassing counters are saturated."
+    if (entry->isHighConfidence() && entry->canBypass() && entry->distance <= storeBuffer.size()) {
+      auto store_idx = storeBuffer.size() - entry->distance;
+      prediction.type = storeBuffer[store_idx].isStore ? SMB : MDP; 
 
-        return prediction;
-      } 
+      if (prediction.type == SMB) {
+        prediction.storeSeqNum = storeBuffer[store_idx].seq_num;
+        prediction.storePC = storeBuffer[store_idx].isStore;
+      }
     }
+    ++(*(memDepUnit->pathWrites[i])); //? Shouldn't this be pathReads??
+
+
+    return prediction;
   }
 
   return prediction;
@@ -183,23 +195,29 @@ MASCOT::clear() {
 }
 
 void
-MASCOT::pushStore(InstSeqNum store_seq_num, Addr pc) {
-  stores.advance_tail();
-  stores.back() = std::make_pair(store_seq_num, pc);
+MASCOT::pushStore(InstSeqNum store_seq_num, Addr pc, bool is_store) {
+  storeBuffer.advance_tail();
+
+  StoreBufferEntry entry {
+    .seq_num = store_seq_num,
+    .pc = pc,
+    .isStore = is_store
+  };
+  storeBuffer.back() = entry;
 }
 
 void
 MASCOT::popStores(InstSeqNum squashed_seq_num) {
-  while (stores.size() != 0 &&
-         stores.back().first > squashed_seq_num)
-    stores.pop_back();
+  while (storeBuffer.size() != 0 &&
+         storeBuffer.back().seq_num > squashed_seq_num)
+    storeBuffer.pop_back();
 }
 
 void 
 MASCOT::removeStores(InstSeqNum seq_num) {
-  while (stores.size() != 0 &&
-         stores.front().first <= seq_num)
-    stores.pop_front();
+  while (storeBuffer.size() != 0 &&
+         storeBuffer.front().seq_num <= seq_num)
+    storeBuffer.pop_front();
 }
 
 void

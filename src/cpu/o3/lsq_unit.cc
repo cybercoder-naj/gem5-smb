@@ -303,22 +303,6 @@ LSQUnit::takeOverFrom()
 }
 
 void
-LSQUnit::insert(const DynInstPtr &inst)
-{
-    assert(inst->isMemRef());
-
-    assert(inst->isLoad() || inst->isStore() || inst->isAtomic());
-
-    if (inst->isLoad()) {
-        insertLoad(inst);
-    } else {
-        insertStore(inst);
-    }
-
-    inst->setInLSQ();
-}
-
-void
 LSQUnit::insertLoad(const DynInstPtr &load_inst)
 {
     assert(!loadQueue.full());

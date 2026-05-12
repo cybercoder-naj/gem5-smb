@@ -223,12 +223,6 @@ Rename::setSMBPredictor(SMB *smb_ptr)
 }
 
 void
-Rename::setMascotPredictor(MASCOT* mascot_ptr)
-{
-    mascot = mascot_ptr;
-}
-
-void
 Rename::setDecodeQueue(TimeBuffer<DecodeStruct> *dq_ptr)
 {
     decodeQueue = dq_ptr;
@@ -736,8 +730,9 @@ Rename::renameInsts(ThreadID tid)
             serializeAfter(insts_to_rename, tid);
         }
 
-        if (inst->isStore())
-            mascot->pushStore(inst->seqNum, inst->pcState().instAddr());
+        auto mascot = iew_ptr->getMascot(tid);
+        if (inst->isStore() || inst->isAtomic())
+            mascot->pushStore(inst->seqNum, inst->pcState().instAddr(), inst->isStore());
 
         if (!inst->isBypassedLoad() && !inst->isBypassMove()) {
             // Bypassed instruction? here?
@@ -1044,7 +1039,7 @@ Rename::doSquash(const InstSeqNum &squashed_seq_num, ThreadID tid)
         ++stats.undoneMaps;
     }
 
-    mascot->popStores(squashed_seq_num);
+    iew_ptr->getMascot(tid)->popStores(squashed_seq_num);
     storeRegs.clear();
 }
 
@@ -1096,7 +1091,7 @@ Rename::removeFromHistory(InstSeqNum inst_seq_num, ThreadID tid)
         historyBuffer[tid].erase(hb_it--);
     }
 
-    mascot->removeStores(inst_seq_num);
+    iew_ptr->getMascot(tid)->removeStores(inst_seq_num);
 }
 
 void

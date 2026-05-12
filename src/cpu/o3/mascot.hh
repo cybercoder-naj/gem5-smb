@@ -73,8 +73,12 @@ class MASCOT
       }
     };
 
-    MASCOT(const BaseO3CPUParams& params, MemDepUnit* mem_dep_unit);
+    MASCOT();
+    MASCOT(const BaseO3CPUParams& params, MemDepUnit* mem_dep_unit) { init(params, mem_dep_unit); }
+
     ~MASCOT() {};
+
+    void init(const BaseO3CPUParams& params, MemDepUnit* mem_dep_unit);
 
     MemDepUnit* memDepUnit;
 
@@ -117,7 +121,7 @@ class MASCOT
 
     void clear();
 
-    void pushStore(InstSeqNum store_seq_num, Addr pc);
+    void pushStore(InstSeqNum store_seq_num, Addr pc, bool is_store);
     void popStores(InstSeqNum squashed_seq_num);
     void removeStores(InstSeqNum seq_num);
 
@@ -131,7 +135,7 @@ class MASCOT
     static constexpr uint8_t MAX_CONFIDENCE = (1 << 3) - 1;
     static constexpr uint8_t MAX_BYPASS_COUNTER = (1 << 2) - 1;
 
-    static constexpr uint8_t NDEP_DISTANCE = 1;
+    static constexpr uint8_t NDEP_DISTANCE = 0;
     static constexpr uint8_t NDEP_CONFIDENCE = 2;
     static constexpr uint8_t NDEP_BYPASS = 0;
     static constexpr uint8_t INIT_CONFIDENCE = 6;
@@ -206,6 +210,12 @@ class MASCOT
           return fold;
         }
     };
+
+    struct StoreBufferEntry {
+      InstSeqNum seq_num;
+      Addr pc;
+      bool isStore; // could be atomic as well.
+    };
     
     unsigned depCheckShift;
 
@@ -214,7 +224,7 @@ class MASCOT
 
     /* Earlier the buffer, the older the stores */
     // Pair of seq_num to PC
-    CircularQueue<std::pair<InstSeqNum, Addr>> stores;
+    CircularQueue<StoreBufferEntry> storeBuffer;
 
     void allocateEntry(const unsigned startTableIdx,
                       Addr load_pc,

@@ -59,7 +59,8 @@ MemDepUnit::MemDepUnit(const BaseO3CPUParams &params)
     : _name(params.name + ".memdepunit"),
       depPred(params, this),
       stats(nullptr),
-      iqPtr(NULL)
+      iqPtr(NULL),
+      mascot(params, this)
 {
     DPRINTF(MemDepUnit, "Creating MemDepUnit object.\n");
 }
@@ -98,8 +99,7 @@ MemDepUnit::init(const BaseO3CPUParams &params, ThreadID tid, CPU *_cpu)
     cpu = _cpu;
 
     // depPred.init(params, this);
-    mascot = cpu->getMascot();
-    mascot->memDepUnit = this;
+    mascot.init(params, this);
 
     std::string stats_group_name = csprintf("MemDepUnit__%i", tid);
     cpu->addStatGroup(stats_group_name.c_str(), &stats);
@@ -174,7 +174,7 @@ MemDepUnit::isDrained() const
 
 void MemDepUnit::clear_dep_pred() { 
     // depPred.clear(); 
-    mascot->clear();
+    mascot.clear();
 }
 
 void
@@ -195,7 +195,7 @@ MemDepUnit::takeOverFrom()
     loadBarrierSNs.clear();
     storeBarrierSNs.clear();
     // depPred.clear();
-    mascot->clear();
+    mascot.clear();
 }
 
 void
@@ -283,7 +283,7 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
             dependencies.push_back((*hash_it).second);
     } else if (inst->isLoad() && !mascotInfo->smbPredicted)
         // prediction = depPred.checkInst(inst->pcState().instAddr(), inst->seqNum, branchHistory, inst->isLoad());
-        mascotInfo->prediction = mascot->predict(inst->pcState().instAddr(), inst->seqNum, branchHistory);
+        mascotInfo->prediction = mascot.predict(inst->pcState().instAddr(), inst->seqNum, branchHistory);
 
     if (mascotInfo->prediction.type == MASCOT::PredictionType::MDP) {
         assert(mascotInfo->prediction.distance);
@@ -684,7 +684,7 @@ MemDepUnit::squash(const InstSeqNum &squashed_num, ThreadID tid)
 
     // Tell the dependency predictor to squash as well.
     // depPred.squash(squashed_num, tid);
-    mascot->popStores(squashed_num);
+    mascot.popStores(squashed_num);
 }
 
 void
@@ -696,7 +696,7 @@ MemDepUnit::violation(InstSeqNum store_seq_num, Addr store_pc,
             store_seq_num);
 
     // Tell the memory dependence unit of the violation.
-    mascot->violation(violating_load->pcState().instAddr(), store_seq_num, violating_load->mascotInfo.actualSQDist, 
+    mascot.violation(violating_load->pcState().instAddr(), store_seq_num, violating_load->mascotInfo.actualSQDist, 
                       violating_load->mascotInfo.predicted(), violating_load->mascotInfo.prediction, branchHistory);
 }
 
@@ -717,7 +717,7 @@ MemDepUnit::commit(const DynInstPtr &inst, BranchHistory branch_history)
 
     if (inst->isStore()) return;
 
-    mascot->commit(inst->pcState().instAddr(), {inst->effAddr, inst->effSize},
+    mascot.commit(inst->pcState().instAddr(), {inst->effAddr, inst->effSize},
                    inst->mascotInfo.predStoreAddr, inst->mascotInfo.actualSQDist, branch_history, inst->mascotInfo.prediction);
 }
 

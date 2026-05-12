@@ -196,6 +196,8 @@ class MemDepUnit
 
     Cycles curCycle();
 
+    MASCOT* getMascot() { return &mascot; };
+
     /** The thread id of this memory dependence unit. */
     int id;
     struct MemDepUnitStats : public statistics::Group
@@ -334,7 +336,7 @@ class MemDepUnit
     /**
      * SMB + MDP Predictor
      */
-    MASCOT* mascot;
+    MASCOT mascot;
 
     /** Sequence numbers of outstanding load barriers. */
     std::unordered_set<InstSeqNum> loadBarrierSNs;

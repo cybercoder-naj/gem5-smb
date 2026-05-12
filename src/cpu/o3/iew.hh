@@ -233,6 +233,8 @@ class IEW
         ldstQueue.setLastRetiredHtmUid(tid, htmUid);
     }
 
+    MASCOT* getMascot(ThreadID tid);
+
   private:
     /** Sends commit proper information for a squash due to a branch
      * mispredict.
