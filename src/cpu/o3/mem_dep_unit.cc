@@ -280,7 +280,7 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
         MemDepHashIt hash_it = memDepHash.find(inst->mascotInfo.prediction.storeSeqNum);
         if (hash_it != memDepHash.end())
             dependencies.push_back((*hash_it).second);
-    } else if (inst->isLoad() && !mascotInfo->predicted)
+    } else if (inst->isLoad() && !mascotInfo->smbPredicted)
         // prediction = depPred.checkInst(inst->pcState().instAddr(), inst->seqNum, branchHistory, inst->isLoad());
         mascotInfo->prediction = mascot->predict(inst->pcState().instAddr(), inst->seqNum, branchHistory);
 
@@ -291,7 +291,7 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
         bool foundStore = addSQDistanceDep(inst, mascotInfo->prediction.distance, dependencies);
 
         if (foundStore) {
-            mascotInfo->predicted = true;
+            mascotInfo->smbPredicted = true;
         }
     }
 
@@ -590,7 +590,7 @@ MemDepUnit::wakeDependents(const DynInstPtr &inst)
         dependent_inst->memDeps--;
 
         if (dependent_inst->memDeps == 0) {
-            if (dependent_inst->inst->mascotInfo.predicted && inst->isStore()) {
+            if (dependent_inst->inst->mascotInfo.smbPredicted && inst->isStore()) {
                 dependent_inst->inst->mascotInfo.predStoreAddr = { inst->effAddr, inst->effSize };
             }
             if (dependent_inst->regsReady && !dependent_inst->squashed) {
@@ -693,13 +693,9 @@ MemDepUnit::violation(InstSeqNum store_seq_num, Addr store_pc,
     DPRINTF(MemDepUnit, "Passing violating PCs to store sets,"
             " load: %#x, store seq num: %#d\n", violating_load->pcState().instAddr(),
             store_seq_num);
-    // Tell the memory dependence unit of the violation.
-    // depPred.violation(violating_load->pcState().instAddr(), violating_load->seqNum, store_seq_num, store_pc,
-    //                   violating_load->memDepInfo.storeQueueDistance, violating_load->memDepInfo.predicted,
-    //                   violating_load->memDepInfo.predBranchHistLength,
-    //                   violating_load->memDepInfo.predictorHash, branchHistory);
 
-    mascot->violation(violating_load->pcState().instAddr(), store_seq_num, 
+    // Tell the memory dependence unit of the violation.
+    mascot->violation(violating_load->pcState().instAddr(), store_seq_num, violating_load->mascotInfo.actualSQDist, 
                       violating_load->mascotInfo.prediction, branchHistory);
 }
 
@@ -720,12 +716,8 @@ MemDepUnit::commit(const DynInstPtr &inst, BranchHistory branch_history)
 
     if (inst->isStore()) return;
 
-    // depPred.commit(inst->pcState().instAddr(), inst->effAddr,
-    //                inst->effSize, inst->memDepInfo.predStoreAddrs, inst->memDepInfo.predStoreSizes,
-    //                inst->memDepInfo.predBranchHistLength, inst->memDepInfo.predictorHash);
-
     mascot->commit(inst->pcState().instAddr(), {inst->effAddr, inst->effSize},
-                   inst->mascotInfo.predStoreAddr, branch_history, inst->mascotInfo.prediction);
+                   inst->mascotInfo.predStoreAddr, inst->mascotInfo.actualSQDist, branch_history, inst->mascotInfo.prediction);
 }
 
 MemDepUnit::MemDepEntryPtr &

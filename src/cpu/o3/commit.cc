@@ -1012,9 +1012,9 @@ Commit::commitInsts()
             // MemDepUnit training
             // only want to report a violation when we're not on a misspeculated path
             if (head_inst->squashedDueToMemOrder && !updatedMemDep
-                && head_inst->isLoad() && head_inst->memDepInfo.violatingStoreSeqNum) {
-                iewStage->instQueue.violation(head_inst->memDepInfo.violatingStoreSeqNum,
-                                              head_inst->memDepInfo.violatingStorePC,
+                && head_inst->isLoad() && head_inst->mascotInfo.violatingStoreSeqNum) {
+                iewStage->instQueue.violation(head_inst->mascotInfo.violatingStoreSeqNum,
+                                              head_inst->mascotInfo.violatingStorePC,
                                               head_inst, committedBranchHistory);
                 updatedMemDep = true;
                 ++stats.memOrderViolationEvents;
@@ -1054,7 +1054,7 @@ Commit::commitInsts()
                 }
 
                 //update memdep predictor if this load was made to wait on a store by the depPred
-                if (head_inst->isLoad() && head_inst->memDepInfo.predicted) {
+                if (head_inst->isLoad() && head_inst->mascotInfo.predicted()) {
                     iewStage->instQueue.memDepUnit[tid].commit(head_inst, committedBranchHistory);
                 }
 

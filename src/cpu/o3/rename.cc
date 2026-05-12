@@ -766,7 +766,7 @@ Rename::renameInsts(ThreadID tid)
                     } else {
                         DynInst::MascotInfo info;
                         info.prediction = pred;
-                        info.predicted = true;
+                        info.smbPredicted = true;
 
                         inst->setBypassedLoad(info);
                         ++stats.bypassedLoads;

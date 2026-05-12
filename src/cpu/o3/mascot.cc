@@ -76,6 +76,7 @@ void
 MASCOT::commit(Addr load_pc,
                 std::pair<Addr, unsigned> load_addr,
                 std::pair<Addr, unsigned> store_addr,
+                std::ptrdiff_t actual_sq_dist,
                 BranchHistory branch_history,
                 Prediction prediction) {
   Addr load_addr_start = load_addr.first >> depCheckShift;
@@ -91,13 +92,14 @@ MASCOT::commit(Addr load_pc,
 
   if (misprediction) {
     // Allocate non dependency in next table.
-    allocateEntry(prediction.tableIdx + 1, load_pc, branch_history, prediction.distance, true);
+    allocateEntry(prediction.tableIdx + 1, load_pc, branch_history, actual_sq_dist, true);
   }
 }
 
 void
 MASCOT::violation(Addr load_pc,
                   InstSeqNum store_seq_num,
+                  std::ptrdiff_t actual_sq_dist,
                   Prediction prediction,
                   BranchHistory branch_history) {
   // History is newest-first. back() is the oldest branch — if it's still
@@ -130,7 +132,7 @@ MASCOT::violation(Addr load_pc,
 
   auto hash = generateBranchHash(historySize, branch_history, 0);
   tables[prediction.tableIdx].commit(load_pc, prediction.hash, true);
-  allocateEntry(prediction.tableIdx + 1, load_pc, branch_history, prediction.distance, false);
+  allocateEntry(prediction.tableIdx + 1, load_pc, branch_history, actual_sq_dist, false);
 }
 
 void

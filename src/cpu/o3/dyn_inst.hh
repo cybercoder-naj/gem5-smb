@@ -362,33 +362,25 @@ class DynInst : public ExecContext, public RefCounted
     ssize_t sqIdx = -1;
     typename LSQUnit::SQIterator sqIt;
 
-    /** Info needed for each load for PHAST */
-    struct MemDepInfo {
-        /** Store this load received its data from, if any */
-        InstSeqNum forwardedFrom = 0;
-        /** Youngest store this load violated with */
-        InstSeqNum violatingStoreSeqNum = 0;
-        Addr violatingStorePC = 0;
-        /** Relative offset into the SQ for dependent store*/
-        std::ptrdiff_t storeQueueDistance;
-        /** Memory location of store this load was predicted dependent on */
-        /** Pairs to account for when tracking two stores with one entry*/
-        std::pair<Addr, Addr> predStoreAddrs = {0,0};
-        std::pair<int, int> predStoreSizes = {0,0};
-        /** Predicted information validated at commit */
-        unsigned predBranchHistLength = 0;
-        uint64_t predictorHash = 0;
-        /** Was this load predicted to be dependent by the depPred? */
-        bool predicted = false;
-    } memDepInfo;
-
     /////////////////////// SMB Data //////////////////////
 
     struct MascotInfo {
         MASCOT::Prediction prediction;
-        bool predicted = false;
+        
+        InstSeqNum violatingStoreSeqNum = 0;
+        Addr violatingStorePC = 0;
         std::pair<Addr, unsigned> predStoreAddr = {0, 0};
+        std::ptrdiff_t actualSQDist = 0;
+
+        bool smbPredicted = false;
         bool smbViolation = false;
+
+        InstSeqNum mdpForwardedFrom = 0;
+        bool mdpViolation = false;
+
+        bool predicted() const {
+            return smbViolation || mdpViolation;
+        }
     } mascotInfo;
 
     DynInstPtr bypassMoveInst = nullptr;

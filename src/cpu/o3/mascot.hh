@@ -92,6 +92,7 @@ class MASCOT
     void commit(Addr load_pc,
                 std::pair<Addr, unsigned> load_addr,
                 std::pair<Addr, unsigned> store_addr,
+                std::ptrdiff_t actual_sq_dist,
                 BranchHistory branch_history,
                 Prediction prediction);
 
@@ -105,6 +106,7 @@ class MASCOT
      */
     void violation(Addr load_pc,
                   InstSeqNum store_seq_num,
+                  std::ptrdiff_t actual_sq_dist,
                   Prediction prediction,
                   BranchHistory branch_history);
 
