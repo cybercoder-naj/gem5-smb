@@ -162,8 +162,6 @@ class DynInst : public ExecContext, public RefCounted
         Committed,               /// Instruction has committed
         Squashed,                /// Instruction is squashed
         SquashedInIQ,            /// Instruction is squashed in the IQ
-        SquashedInLSQ,           /// Instruction is squashed in the LSQ
-        SquashedInROB,           /// Instruction is squashed in the ROB
         PinnedRegsRenamed,       /// Pinned registers are renamed
         PinnedRegsWritten,       /// Pinned registers are written back
         PinnedRegsSquashDone,    /// Regs pinning status updated after squash
@@ -377,9 +375,13 @@ class DynInst : public ExecContext, public RefCounted
 
         InstSeqNum mdpForwardedFrom = 0;
         bool mdpViolation = false;
+        bool mdpPredicted = false;
 
-        bool predicted() const {
+        bool violation() const {
             return smbViolation || mdpViolation;
+        }
+        bool predicted() const {
+            return smbPredicted || mdpPredicted;
         }
     } mascotInfo;
 
@@ -895,12 +897,6 @@ class DynInst : public ExecContext, public RefCounted
     /** Returns whether or not this instruction is in the LSQ. */
     bool isInLSQ() const { return status[LsqEntry]; }
 
-    /** Sets this instruction as squashed in the LSQ. */
-    void setSquashedInLSQ() { status.set(SquashedInLSQ); status.set(Squashed);}
-
-    /** Returns whether or not this instruction is squashed in the LSQ. */
-    bool isSquashedInLSQ() const { return status[SquashedInLSQ]; }
-
 
     //Reorder Buffer Functions
     //-----------------------
@@ -912,12 +908,6 @@ class DynInst : public ExecContext, public RefCounted
 
     /** Returns whether or not this instruction is in the ROB. */
     bool isInROB() const { return status[RobEntry]; }
-
-    /** Sets this instruction as squashed in the ROB. */
-    void setSquashedInROB() { status.set(SquashedInROB); }
-
-    /** Returns whether or not this instruction is squashed in the ROB. */
-    bool isSquashedInROB() const { return status[SquashedInROB]; }
 
     /** Returns whether pinned registers are renamed */
     bool isPinnedRegsRenamed() const { return status[PinnedRegsRenamed]; }

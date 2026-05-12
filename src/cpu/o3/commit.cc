@@ -1012,7 +1012,7 @@ Commit::commitInsts()
             // MemDepUnit training
             // only want to report a violation when we're not on a misspeculated path
             if (head_inst->squashedDueToMemOrder && !updatedMemDep
-                && head_inst->isLoad() && head_inst->mascotInfo.violatingStoreSeqNum) {
+                && head_inst->isLoad() && head_inst->mascotInfo.violation()) {
                 iewStage->instQueue.violation(head_inst->mascotInfo.violatingStoreSeqNum,
                                               head_inst->mascotInfo.violatingStorePC,
                                               head_inst, committedBranchHistory);
@@ -1337,7 +1337,12 @@ Commit::commitHead(const DynInstPtr &head_inst, unsigned inst_num)
         return false;
     }
 
-    if (head_inst->isBypassedLoad() && head_inst->smbViolation()) {
+    if (head_inst->mascotInfo.violation()) {
+        assert(head_inst->mascotInfo.smbViolation); // Load check violation
+
+        iewStage->instQueue.violation(head_inst->mascotInfo.prediction.storeSeqNum,
+                                        head_inst->mascotInfo.prediction.storePC,
+                                        head_inst, committedBranchHistory);
         commitStatus[tid] = ROBSquashingDueToMemOrder;
         ++stats.bypassedLoadValueCheckViolation;
         squashAll(tid);

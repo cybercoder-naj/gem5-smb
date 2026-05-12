@@ -606,6 +606,7 @@ LSQUnit::checkViolations(typename LoadQueue::iterator& loadIt,
                         inst->seqNum, ld_inst->seqNum, ld_eff_addr1);
 
                 memDepViolator = ld_inst;
+                ld_inst->mascotInfo.mdpViolation = true;
                 ld_inst->mascotInfo.violatingStoreSeqNum = inst->seqNum;
                 ld_inst->mascotInfo.violatingStorePC = inst->pcState().instAddr();
                 ld_inst->mascotInfo.actualSQDist = ld_inst->sqIt - inst->sqIt;
@@ -1527,6 +1528,7 @@ LSQUnit::read(LSQRequest *request, ssize_t load_idx)
 
                     memDepViolator = load_inst;
                     ++stats.bypassedLoadMemOrderViolation;
+                    load_inst->mascotInfo.smbViolation = true;
 
                     auto req_s_dep = store_it->request()->getVaddr();
                     return std::make_shared<GenericISA::M5PanicFault>(
@@ -1627,6 +1629,7 @@ LSQUnit::read(LSQRequest *request, ssize_t load_idx)
 
                     memDepViolator = load_inst;
                     ++stats.bypassedLoadMemOrderViolation;
+                    load_inst->mascotInfo.smbViolation = true;
 
                     auto req_s_dep = store_it->request()->getVaddr();
                     return std::make_shared<GenericISA::M5PanicFault>(

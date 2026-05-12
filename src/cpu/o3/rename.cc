@@ -737,7 +737,7 @@ Rename::renameInsts(ThreadID tid)
         }
 
         if (inst->isStore())
-            mascot->pushStore(inst->seqNum);
+            mascot->pushStore(inst->seqNum, inst->pcState().instAddr());
 
         if (!inst->isBypassedLoad() && !inst->isBypassMove()) {
             // Bypassed instruction? here?

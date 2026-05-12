@@ -24,6 +24,8 @@ struct BaseO3CPUParams;
 namespace o3
 {
 
+class MemDepUnit;
+
 #define BITSETSIZE 500
 
 class MASCOT
@@ -36,7 +38,9 @@ class MASCOT
       unsigned distance;
       size_t tableIdx;
       uint64_t hash;
+
       InstSeqNum storeSeqNum; // used when type == SMB
+      Addr storePC; // used when type == SMB for mispredictions
     };
 
     struct PredictorEntry {
@@ -69,10 +73,10 @@ class MASCOT
       }
     };
 
-    MASCOT(const BaseO3CPUParams& params) : stores(MAX_DISTANCE) { init(params); }
+    MASCOT(const BaseO3CPUParams& params, MemDepUnit* mem_dep_unit);
     ~MASCOT() {};
 
-    void init(const BaseO3CPUParams& params);
+    MemDepUnit* memDepUnit;
 
     /**
      * Returns 
@@ -107,12 +111,13 @@ class MASCOT
     void violation(Addr load_pc,
                   InstSeqNum store_seq_num,
                   std::ptrdiff_t actual_sq_dist,
+                  bool predicted,
                   Prediction prediction,
                   BranchHistory branch_history);
 
     void clear();
 
-    void pushStore(InstSeqNum store_seq_num);
+    void pushStore(InstSeqNum store_seq_num, Addr pc);
     void popStores(InstSeqNum squashed_seq_num);
     void removeStores(InstSeqNum seq_num);
 
@@ -131,9 +136,6 @@ class MASCOT
     static constexpr uint8_t NDEP_BYPASS = 0;
     static constexpr uint8_t INIT_CONFIDENCE = 6;
     static constexpr uint8_t INIT_BYPASS = 1;
-
-    /** Earlier the buffer, the older the stores */
-    CircularQueue<InstSeqNum> stores;
 
     class Table
     {
@@ -205,10 +207,14 @@ class MASCOT
         }
     };
     
+    unsigned depCheckShift;
+
     std::vector<unsigned> histories;
     std::vector<Table> tables;
 
-    unsigned depCheckShift;
+    /* Earlier the buffer, the older the stores */
+    // Pair of seq_num to PC
+    CircularQueue<std::pair<InstSeqNum, Addr>> stores;
 
     void allocateEntry(const unsigned startTableIdx,
                       Addr load_pc,

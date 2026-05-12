@@ -7,6 +7,7 @@
 #include <cassert>
 #include <cmath>
 
+#include "cpu/o3/mem_dep_unit.hh"
 #include "params/BaseO3CPU.hh"
 
 namespace gem5
@@ -17,12 +18,12 @@ namespace o3
 
 using Prediction = MASCOT::Prediction;
   
-void MASCOT::init(const BaseO3CPUParams& params) {
-  depCheckShift = params.LSQDepCheckShift;
-
-  histories.assign({0, 2, 4, 8, 16, 32, 64, 128});
-  tables.resize(histories.size(), Table());
-}
+MASCOT::MASCOT(const BaseO3CPUParams& params, MemDepUnit* mem_dep_unit)
+  : depCheckShift(params.LSQDepCheckShift),
+    memDepUnit(mem_dep_unit),
+    histories({0, 2, 4, 8, 16, 32, 64, 128}),
+    tables(histories.size(), Table()),
+    stores(tables.size()) {}
 
 Prediction
 MASCOT::predict(Addr load_pc, InstSeqNum load_seq_num, BranchHistory branch_history) {
@@ -47,21 +48,33 @@ MASCOT::predict(Addr load_pc, InstSeqNum load_seq_num, BranchHistory branch_hist
   //? bug?
   if (historyBegin > branch_history.size()) return prediction; //no +1 branch
 
-  for (int i = tables.size() - 1; i >= 0; --i) {
+  auto table_limit_idx = 0;
+  while (table_limit_idx + 1 < histories.size() &&
+         histories[table_limit_idx + 1] < branch_history.size()) { 
+    ++table_limit_idx; 
+  }
+
+  //? Should I get lowest first?
+  for (size_t i = 0; i <= table_limit_idx; ++i) {
     const uint64_t hash = generateBranchHash(histories[i], branch_history, historyBegin);
     const auto entry = tables[i].getEntry(load_pc, hash);
-    if (entry != nullptr && (entry->distance != 0 || entry->isNdep())) {
+    if (entry == nullptr)
+      continue;
+
+    if (entry->distance != 0 || entry->isNdep()) {
       prediction.distance = entry->distance;
       prediction.tableIdx = i;
       prediction.hash = hash;
 
       if (entry->isHighConfidence()) {
+        ++(*(memDepUnit->pathWrites[i])); //? Shouldn't this be pathReads??
         prediction.type = entry->canBypass() ? SMB : MDP;
 
         if (prediction.type == SMB) {
           auto store_it = stores.end();
           store_it -= entry->distance;
-          prediction.storeSeqNum = *store_it;
+          prediction.storeSeqNum = store_it->first;
+          prediction.storePC = store_it->second;
         }
 
         return prediction;
@@ -89,10 +102,15 @@ MASCOT::commit(Addr load_pc,
   bool misprediction = !(load_addr_start <= store_addr_end && store_addr_start <= load_addr_end);
 
   tables[prediction.tableIdx].commit(load_pc, prediction.hash, misprediction);
+  ++(*(memDepUnit->pathReads[prediction.tableIdx]));
+  ++(*(memDepUnit->pathWrites[prediction.tableIdx]));
 
   if (misprediction) {
     // Allocate non dependency in next table.
     allocateEntry(prediction.tableIdx + 1, load_pc, branch_history, actual_sq_dist, true);
+    ++(memDepUnit->stats.falseDependencies);
+  } else {
+    ++(memDepUnit->stats.correctPredictions);
   }
 }
 
@@ -100,6 +118,7 @@ void
 MASCOT::violation(Addr load_pc,
                   InstSeqNum store_seq_num,
                   std::ptrdiff_t actual_sq_dist,
+                  bool predicted,
                   Prediction prediction,
                   BranchHistory branch_history) {
   // History is newest-first. back() is the oldest branch — if it's still
@@ -116,22 +135,20 @@ MASCOT::violation(Addr load_pc,
 
   const unsigned actual_branches = static_cast<unsigned>(std::distance(branch_history.begin(), br_it));
 
-  //quantise num branches to first lowest path size
-  unsigned tableIndex = 0;
-  if (actual_branches >= histories.back()) {
-    tableIndex = histories.size() - 1;
-  } else {
-    for (unsigned i = 1; i < histories.size(); ++i) {
-      if (actual_branches < histories[i]) {
-        tableIndex = i - 1;
-        break;
-      }
-    }
+  unsigned table_idx = 0;
+  while (table_idx + 1 < histories.size() &&
+        histories[table_idx + 1] <= actual_branches) {
+    ++table_idx;
   }
-  const auto historySize = histories[tableIndex];
+  const auto historySize = histories[table_idx];
 
-  auto hash = generateBranchHash(historySize, branch_history, 0);
-  tables[prediction.tableIdx].commit(load_pc, prediction.hash, true);
+  if (predicted) {
+    tables[prediction.tableIdx].commit(load_pc, prediction.hash, true);
+    ++(memDepUnit->stats.falseDependencies);
+    ++(*(memDepUnit->pathReads[prediction.tableIdx]));
+    ++(*(memDepUnit->pathWrites[prediction.tableIdx]));
+  }
+
   allocateEntry(prediction.tableIdx + 1, load_pc, branch_history, actual_sq_dist, false);
 }
 
@@ -166,22 +183,22 @@ MASCOT::clear() {
 }
 
 void
-MASCOT::pushStore(InstSeqNum store_seq_num) {
+MASCOT::pushStore(InstSeqNum store_seq_num, Addr pc) {
   stores.advance_tail();
-  stores.back() = store_seq_num;
+  stores.back() = std::make_pair(store_seq_num, pc);
 }
 
 void
 MASCOT::popStores(InstSeqNum squashed_seq_num) {
   while (stores.size() != 0 &&
-         stores.back() > squashed_seq_num)
+         stores.back().first > squashed_seq_num)
     stores.pop_back();
 }
 
 void 
 MASCOT::removeStores(InstSeqNum seq_num) {
   while (stores.size() != 0 &&
-         stores.front() <= seq_num)
+         stores.front().first <= seq_num)
     stores.pop_front();
 }
 

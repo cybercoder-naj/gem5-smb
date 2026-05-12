@@ -99,6 +99,7 @@ MemDepUnit::init(const BaseO3CPUParams &params, ThreadID tid, CPU *_cpu)
 
     // depPred.init(params, this);
     mascot = cpu->getMascot();
+    mascot->memDepUnit = this;
 
     std::string stats_group_name = csprintf("MemDepUnit__%i", tid);
     cpu->addStatGroup(stats_group_name.c_str(), &stats);
@@ -291,7 +292,7 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
         bool foundStore = addSQDistanceDep(inst, mascotInfo->prediction.distance, dependencies);
 
         if (foundStore) {
-            mascotInfo->smbPredicted = true;
+            mascotInfo->mdpPredicted = true;
         }
     }
 
@@ -696,7 +697,7 @@ MemDepUnit::violation(InstSeqNum store_seq_num, Addr store_pc,
 
     // Tell the memory dependence unit of the violation.
     mascot->violation(violating_load->pcState().instAddr(), store_seq_num, violating_load->mascotInfo.actualSQDist, 
-                      violating_load->mascotInfo.prediction, branchHistory);
+                      violating_load->mascotInfo.predicted(), violating_load->mascotInfo.prediction, branchHistory);
 }
 
 void
