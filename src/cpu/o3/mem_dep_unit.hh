@@ -57,6 +57,7 @@
 #include "cpu/inst_seq.hh"
 #include "cpu/o3/dyn_inst_ptr.hh"
 #include "cpu/o3/limits.hh"
+#include "cpu/o3/mascot.hh"
 #include "cpu/o3/phast.hh"
 //#include "cpu/o3/store_set.hh"
 //#include "cpu/o3/store_set_xs.hh"
@@ -188,7 +189,7 @@ class MemDepUnit
     void issue(const DynInstPtr &inst);
 
     /** Commits the given instruction */
-    void commit(const DynInstPtr &inst);
+    void commit(const DynInstPtr &inst, BranchHistory branch_history);
 
     /** Debugging function to dump the lists of instructions. */
     void dumpLists();
@@ -329,6 +330,11 @@ class MemDepUnit
      *  upon.
      */
     PHAST depPred;
+
+    /**
+     * SMB + MDP Predictor
+     */
+    MASCOT* mascot;
 
     /** Sequence numbers of outstanding load barriers. */
     std::unordered_set<InstSeqNum> loadBarrierSNs;

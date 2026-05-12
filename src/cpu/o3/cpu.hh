@@ -59,6 +59,7 @@
 #include "cpu/o3/free_list.hh"
 #include "cpu/o3/iew.hh"
 #include "cpu/o3/limits.hh"
+#include "cpu/o3/mascot.hh"
 #include "cpu/o3/rename.hh"
 #include "cpu/o3/rob.hh"
 #include "cpu/o3/scoreboard.hh"
@@ -416,6 +417,8 @@ class CPU : public BaseCPU
 
     IEW *getIEW() { return &iew; }
 
+    MASCOT *getMascot() { return &mascot; }
+
   protected:
     /** The fetch stage. */
     Fetch fetch;
@@ -423,8 +426,11 @@ class CPU : public BaseCPU
     /** The decode stage. */
     Decode decode;
 
-    /** The SMB predictor. */
+    /** The file-based SMB predictor. Unused */
     SMB smb;
+
+    /** SMB + MDP Predictor */
+    MASCOT mascot;
 
     /** The dispatch stage. */
     Rename rename;

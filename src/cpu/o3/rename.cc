@@ -223,6 +223,12 @@ Rename::setSMBPredictor(SMB *smb_ptr)
 }
 
 void
+Rename::setMascotPredictor(MASCOT* mascot_ptr)
+{
+    mascot = mascot_ptr;
+}
+
+void
 Rename::setDecodeQueue(TimeBuffer<DecodeStruct> *dq_ptr)
 {
     decodeQueue = dq_ptr;
@@ -730,8 +736,8 @@ Rename::renameInsts(ThreadID tid)
             serializeAfter(insts_to_rename, tid);
         }
 
-        if ((inst->isBypassable() && !inst->isBypassedLoad()) || inst->isStore())
-            smb->registerMemoryAccess(inst->pcState().instAddr(), inst->seqNum, inst->isStore());
+        if (inst->isStore())
+            mascot->pushStore(inst->seqNum);
 
         if (!inst->isBypassedLoad() && !inst->isBypassMove()) {
             // Bypassed instruction? here?
@@ -742,8 +748,11 @@ Rename::renameInsts(ThreadID tid)
             renameDestRegs(inst, inst->threadNumber);
 
             if (inst->isBypassable()) {
-                const InstSeqNum smb_store_seqnum = smb->predictSourceStore(inst->seqNum);
-                if (smb_store_seqnum != 0) {
+                const auto pred = mascot->predict(inst->pcState().instAddr(), inst->seqNum, cpu->getDecode()->getBranchHistory());
+                if (pred.type == MASCOT::PredictionType::SMB) {
+                    const InstSeqNum smb_store_seqnum = pred.storeSeqNum;
+                    assert(smb_store_seqnum);
+
                     DPRINTF(Rename,
                             "[tid:%i] [sn:%llu] "
                             "SMB Predictor predicted store with sequence number "
@@ -755,7 +764,11 @@ Rename::renameInsts(ThreadID tid)
                         //? is this required
                         // ++stats.smbStoreOutsideInstWindow;
                     } else {
-                        inst->setBypassedLoad(smb_store_seqnum);
+                        DynInst::MascotInfo info;
+                        info.prediction = pred;
+                        info.predicted = true;
+
+                        inst->setBypassedLoad(info);
                         ++stats.bypassedLoads;
 
                         DynInstPtr bypassMove = buildBypassMoveInst(tid, inst);
@@ -1031,7 +1044,7 @@ Rename::doSquash(const InstSeqNum &squashed_seq_num, ThreadID tid)
         ++stats.undoneMaps;
     }
 
-    smb->squash();
+    mascot->popStores(squashed_seq_num);
     storeRegs.clear();
 }
 
@@ -1082,6 +1095,8 @@ Rename::removeFromHistory(InstSeqNum inst_seq_num, ThreadID tid)
 
         historyBuffer[tid].erase(hb_it--);
     }
+
+    mascot->removeStores(inst_seq_num);
 }
 
 void
@@ -1224,7 +1239,7 @@ Rename::buildBypassMoveInst(ThreadID tid, const DynInstPtr &bypassed_load)
     // ICBA to go through gem5 isa frontend.
     auto prev_phys_reg = bypassed_load->prevDestIdx(0);
     auto new_phys_reg = bypassed_load->renamedDestIdx(0);
-    const auto& [store_src, store_phys_reg] = storeRegs[bypassed_load->smbStoreSeqNum];
+    const auto& [store_src, store_phys_reg] = storeRegs[bypassed_load->mascotInfo.prediction.storeSeqNum];
 
     // Get a sequence number.
     InstSeqNum seq = bypassed_load->seqNum - 5; // Give it a sequence number slightly before the load, so it maintains the ordering.

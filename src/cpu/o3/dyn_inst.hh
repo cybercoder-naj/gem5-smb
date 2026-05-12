@@ -384,8 +384,13 @@ class DynInst : public ExecContext, public RefCounted
 
     /////////////////////// SMB Data //////////////////////
 
-    InstSeqNum smbStoreSeqNum = 0;
-    bool _smbViolation = false;
+    struct MascotInfo {
+        MASCOT::Prediction prediction;
+        bool predicted = false;
+        std::pair<Addr, unsigned> predStoreAddr = {0, 0};
+        bool smbViolation = false;
+    } mascotInfo;
+
     DynInstPtr bypassMoveInst = nullptr;
 
     /** Iterator of the SQ pointing to the SMB predicted source store. */
@@ -409,17 +414,17 @@ class DynInst : public ExecContext, public RefCounted
     bool isBypassedLoad() const {
         return staticInst->isLoad() && instFlags.test(BypassedLoad);
     }
-    void setBypassedLoad(InstSeqNum seq_num) {
+    void setBypassedLoad(MascotInfo info) {
         assert(isBypassable());
         instFlags.set(BypassedLoad);
-        smbStoreSeqNum = seq_num;
+        mascotInfo = info;
     }
     void setSmbViolation() {
         assert(isBypassedLoad());
-        _smbViolation = true;
+        mascotInfo.smbViolation = true;
     }
     bool smbViolation() const {
-        return _smbViolation;
+        return mascotInfo.smbViolation;
     }
 
     bool _skipExecution = false;

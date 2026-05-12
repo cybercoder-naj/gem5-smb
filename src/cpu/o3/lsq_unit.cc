@@ -339,7 +339,8 @@ LSQUnit::insertLoad(const DynInstPtr &load_inst)
     load_inst->lqIt = loadQueue.getIterator(load_inst->lqIdx);
 
     if (load_inst->isBypassedLoad()) {
-        assert(load_inst->smbStoreSeqNum != 0);
+        auto smb_store_seqnum = load_inst->mascotInfo.prediction.storeSeqNum;
+        assert(smb_store_seqnum);
 
         auto smb_store_it = storeQueue.end();
         --smb_store_it;
@@ -352,14 +353,14 @@ LSQUnit::insertLoad(const DynInstPtr &load_inst)
         }
 
         while (smb_store_it != storeQueue.begin()) {
-            if (smb_store_it->instruction()->seqNum == load_inst->smbStoreSeqNum) {
+            if (smb_store_it->instruction()->seqNum == smb_store_seqnum) {
                 break;
             }
             --smb_store_it;
         }
-        if (smb_store_it == storeQueue.begin() && smb_store_it->instruction()->seqNum != load_inst->smbStoreSeqNum) {
+        if (smb_store_it == storeQueue.begin() && smb_store_it->instruction()->seqNum != smb_store_seqnum) {
             panic("Could not find matching store sequence number %llu for bypassed load [sn:%lli]\n",
-                  load_inst->smbStoreSeqNum, load_inst->seqNum);
+                  smb_store_seqnum, load_inst->seqNum);
         }
 
         load_inst->smbPredStoreIt = smb_store_it;
@@ -1519,7 +1520,7 @@ LSQUnit::read(LSQRequest *request, ssize_t load_idx)
             }
 
             if (coverage == AddrRangeCoverage::FullAddrRangeCoverage) {
-                if (load_inst->isBypassedLoad() && store_it->instruction()->seqNum != load_inst->smbStoreSeqNum) {
+                if (load_inst->isBypassedLoad() && store_it->instruction()->seqNum != load_inst->mascotInfo.prediction.storeSeqNum) {
                     DPRINTF(LSQUnit, "Memory order violation detected for bypassed load [sn:%lli]."
                         "Found intervening store [sn:%lli] at address %#x with full coverage.\n",
                         load_inst->seqNum, store_it->instruction()->seqNum, request->mainReq()->getVaddr());

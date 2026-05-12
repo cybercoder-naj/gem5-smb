@@ -47,8 +47,8 @@ MASCOT::predict(Addr load_pc, InstSeqNum load_seq_num, BranchHistory branch_hist
   //? bug?
   if (historyBegin > branch_history.size()) return prediction; //no +1 branch
 
-  for (size_t i = tables.size() - 1; i >= 0; --i) {
-    const uint64_t hash = generateBranchHash(histories[i], branch_history, i);
+  for (int i = tables.size() - 1; i >= 0; --i) {
+    const uint64_t hash = generateBranchHash(histories[i], branch_history, historyBegin);
     const auto entry = tables[i].getEntry(load_pc, hash);
     if (entry != nullptr && (entry->distance != 0 || entry->isNdep())) {
       prediction.distance = entry->distance;
@@ -57,6 +57,13 @@ MASCOT::predict(Addr load_pc, InstSeqNum load_seq_num, BranchHistory branch_hist
 
       if (entry->isHighConfidence()) {
         prediction.type = entry->canBypass() ? SMB : MDP;
+
+        if (prediction.type == SMB) {
+          auto store_it = stores.end();
+          store_it -= entry->distance;
+          prediction.storeSeqNum = *store_it;
+        }
+
         return prediction;
       } 
     }
@@ -67,18 +74,15 @@ MASCOT::predict(Addr load_pc, InstSeqNum load_seq_num, BranchHistory branch_hist
 
 void 
 MASCOT::commit(Addr load_pc,
-                Addr load_addr,
-                unsigned load_size,
-                Addr store_addr,
-                unsigned store_size,
+                std::pair<Addr, unsigned> load_addr,
+                std::pair<Addr, unsigned> store_addr,
                 BranchHistory branch_history,
-                std::ptrdiff_t sq_dist,
                 Prediction prediction) {
-  Addr load_addr_start = load_addr >> depCheckShift;
-  Addr load_addr_end = (load_addr + load_size - 1) >> depCheckShift;
+  Addr load_addr_start = load_addr.first >> depCheckShift;
+  Addr load_addr_end = (load_addr.first + load_addr.second - 1) >> depCheckShift;
 
-  Addr store_addr_start = store_addr >> depCheckShift;
-  Addr store_addr_end = (store_addr + store_size - 1) >> depCheckShift;
+  Addr store_addr_start = store_addr.first >> depCheckShift;
+  Addr store_addr_end = (store_addr.first + store_addr.second - 1) >> depCheckShift;
 
   // misprediction == true iff MDP/SMB was predicted but it didn't have to.
   bool misprediction = !(load_addr_start <= store_addr_end && store_addr_start <= load_addr_end);
@@ -87,14 +91,13 @@ MASCOT::commit(Addr load_pc,
 
   if (misprediction) {
     // Allocate non dependency in next table.
-    allocateEntry(prediction.tableIdx + 1, load_pc, branch_history, sq_dist, true);
+    allocateEntry(prediction.tableIdx + 1, load_pc, branch_history, prediction.distance, true);
   }
 }
 
 void
 MASCOT::violation(Addr load_pc,
                   InstSeqNum store_seq_num,
-                  std::ptrdiff_t sq_dist,
                   Prediction prediction,
                   BranchHistory branch_history) {
   // History is newest-first. back() is the oldest branch — if it's still
@@ -127,7 +130,7 @@ MASCOT::violation(Addr load_pc,
 
   auto hash = generateBranchHash(historySize, branch_history, 0);
   tables[prediction.tableIdx].commit(load_pc, prediction.hash, true);
-  allocateEntry(prediction.tableIdx + 1, load_pc, branch_history, sq_dist, false);
+  allocateEntry(prediction.tableIdx + 1, load_pc, branch_history, prediction.distance, false);
 }
 
 void
@@ -151,6 +154,33 @@ MASCOT::allocateEntry(const unsigned startTableIdx,
     if (tables[idx].tryAllocate(load_pc, hash, sq_dist, non_dep))
       return;
   }
+}
+
+void
+MASCOT::clear() {
+  for (auto& table : tables) {
+    table.clear();
+  }
+}
+
+void
+MASCOT::pushStore(InstSeqNum store_seq_num) {
+  stores.advance_tail();
+  stores.back() = store_seq_num;
+}
+
+void
+MASCOT::popStores(InstSeqNum squashed_seq_num) {
+  while (stores.size() != 0 &&
+         stores.back() > squashed_seq_num)
+    stores.pop_back();
+}
+
+void 
+MASCOT::removeStores(InstSeqNum seq_num) {
+  while (stores.size() != 0 &&
+         stores.front() <= seq_num)
+    stores.pop_front();
 }
 
 void

@@ -11,6 +11,7 @@
 #include <cstdint>
 #include <vector>
 
+#include "base/circular_queue.hh"
 #include "base/types.hh"
 #include "cpu/inst_seq.hh"
 #include "cpu/o3/dyn_inst_ptr.hh"
@@ -35,6 +36,7 @@ class MASCOT
       unsigned distance;
       size_t tableIdx;
       uint64_t hash;
+      InstSeqNum storeSeqNum; // used when type == SMB
     };
 
     struct PredictorEntry {
@@ -67,10 +69,8 @@ class MASCOT
       }
     };
 
-    MASCOT() {};
+    MASCOT(const BaseO3CPUParams& params) : stores(MAX_DISTANCE) { init(params); }
     ~MASCOT() {};
-
-    MASCOT(const BaseO3CPUParams& params) { init(params); }
 
     void init(const BaseO3CPUParams& params);
 
@@ -90,12 +90,9 @@ class MASCOT
      * This function checks the address range match and decides to update the entry or not.
      */
     void commit(Addr load_pc,
-                Addr load_addr,
-                unsigned load_size,
-                Addr store_addr,
-                unsigned store_size,
+                std::pair<Addr, unsigned> load_addr,
+                std::pair<Addr, unsigned> store_addr,
                 BranchHistory branch_history,
-                std::ptrdiff_t sq_dist,
                 Prediction prediction);
 
     /**
@@ -108,9 +105,14 @@ class MASCOT
      */
     void violation(Addr load_pc,
                   InstSeqNum store_seq_num,
-                  std::ptrdiff_t sq_dist,
                   Prediction prediction,
                   BranchHistory branch_history);
+
+    void clear();
+
+    void pushStore(InstSeqNum store_seq_num);
+    void popStores(InstSeqNum squashed_seq_num);
+    void removeStores(InstSeqNum seq_num);
 
     static constexpr std::size_t tableSize = 128;
     static constexpr std::size_t setBits = 7; // log2(tableSize)
@@ -128,10 +130,15 @@ class MASCOT
     static constexpr uint8_t INIT_CONFIDENCE = 6;
     static constexpr uint8_t INIT_BYPASS = 1;
 
+    /** Earlier the buffer, the older the stores */
+    CircularQueue<InstSeqNum> stores;
+
     class Table
     {
       public:
         Table() {
+          blocks.resize(tableSize);
+
           for (auto& block : blocks)
             block.resize(tableAssociativity);
         }
@@ -172,6 +179,11 @@ class MASCOT
           return xorFold(0, (_pc ^ history), tagBits);
         }
 
+        void clear() {
+          for (auto& block : blocks)
+            block.clear();
+        }
+
       private:
         std::vector<std::vector<PredictorEntry>> blocks;
 
@@ -210,7 +222,7 @@ class MASCOT
         return 0;
 
       constexpr unsigned targetBits = 5;
-      const unsigned targetMask = (1 << targetMask) - 1;
+      const unsigned targetMask = (1 << targetBits) - 1;
 
       std::bitset<BITSETSIZE> h = branch_history[end_idx].target & targetMask;
       

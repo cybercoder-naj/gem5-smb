@@ -1009,7 +1009,7 @@ Commit::commitInsts()
 
             rob->retireHead(commit_thread);
 
-            // PHAST training
+            // MemDepUnit training
             // only want to report a violation when we're not on a misspeculated path
             if (head_inst->squashedDueToMemOrder && !updatedMemDep
                 && head_inst->isLoad() && head_inst->memDepInfo.violatingStoreSeqNum) {
@@ -1055,7 +1055,7 @@ Commit::commitInsts()
 
                 //update memdep predictor if this load was made to wait on a store by the depPred
                 if (head_inst->isLoad() && head_inst->memDepInfo.predicted) {
-                    iewStage->instQueue.memDepUnit[tid].commit(head_inst);
+                    iewStage->instQueue.memDepUnit[tid].commit(head_inst, committedBranchHistory);
                 }
 
                 // hardware transactional memory
@@ -1338,7 +1338,7 @@ Commit::commitHead(const DynInstPtr &head_inst, unsigned inst_num)
     }
 
     if (head_inst->isBypassedLoad() && head_inst->smbViolation()) {
-        commitStatus[tid] = ROBSquashing;
+        commitStatus[tid] = ROBSquashingDueToMemOrder;
         ++stats.bypassedLoadValueCheckViolation;
         squashAll(tid);
         return false;

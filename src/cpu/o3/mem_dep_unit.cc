@@ -97,7 +97,8 @@ MemDepUnit::init(const BaseO3CPUParams &params, ThreadID tid, CPU *_cpu)
     id = tid;
     cpu = _cpu;
 
-    depPred.init(params, this);
+    // depPred.init(params, this);
+    mascot = cpu->getMascot();
 
     std::string stats_group_name = csprintf("MemDepUnit__%i", tid);
     cpu->addStatGroup(stats_group_name.c_str(), &stats);
@@ -170,7 +171,10 @@ MemDepUnit::isDrained() const
     return drained;
 }
 
-void MemDepUnit::clear_dep_pred() { depPred.clear(); }
+void MemDepUnit::clear_dep_pred() { 
+    // depPred.clear(); 
+    mascot->clear();
+}
 
 void
 MemDepUnit::drainSanityCheck() const
@@ -189,7 +193,8 @@ MemDepUnit::takeOverFrom()
     // Be sure to reset all state.
     loadBarrierSNs.clear();
     storeBarrierSNs.clear();
-    depPred.clear();
+    // depPred.clear();
+    mascot->clear();
 }
 
 void
@@ -268,38 +273,25 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
     inst_entry->listIt = --(instList[tid].end());
 
     std::vector<MemDepEntryPtr> dependencies;
-    PredictionResult prediction;
-    prediction.storeQueueDistances = {0,0};
-    prediction.seqNums = std::vector<InstSeqNum>();
+    auto mascotInfo = &inst->mascotInfo;
 
     if (inst->isBypassedLoad()) {
         // SMB loads are only dependent on the store they are paired with, so skip the predictor and just add that dependency.
-        MemDepHashIt hash_it = memDepHash.find(inst->smbStoreSeqNum);
+        MemDepHashIt hash_it = memDepHash.find(inst->mascotInfo.prediction.storeSeqNum);
         if (hash_it != memDepHash.end())
             dependencies.push_back((*hash_it).second);
-    } else
-        prediction = depPred.checkInst(inst->pcState().instAddr(), inst->seqNum, branchHistory, inst->isLoad());
+    } else if (inst->isLoad() && !mascotInfo->predicted)
+        // prediction = depPred.checkInst(inst->pcState().instAddr(), inst->seqNum, branchHistory, inst->isLoad());
+        mascotInfo->prediction = mascot->predict(inst->pcState().instAddr(), inst->seqNum, branchHistory);
 
-    if (prediction.storeQueueDistances.first || prediction.storeQueueDistances.second) {
+    if (mascotInfo->prediction.type == MASCOT::PredictionType::MDP) {
+        assert(mascotInfo->prediction.distance);
+
         //make a PHAST prediction, as long as the SQ offset is valid
-        bool foundStore = false;
-        foundStore |= addSQDistanceDep(inst, prediction.storeQueueDistances.first, dependencies);
-        foundStore |= addSQDistanceDep(inst, prediction.storeQueueDistances.second, dependencies);
+        bool foundStore = addSQDistanceDep(inst, mascotInfo->prediction.distance, dependencies);
 
         if (foundStore) {
-            inst->memDepInfo.predBranchHistLength = prediction.predBranchHistLength;
-            inst->memDepInfo.predictorHash = prediction.predictorHash;
-            inst->memDepInfo.predicted = true;
-        }
-
-    } else if (prediction.seqNums.size()) {
-        //make a StoreSet prediction
-        for (auto seqNum : prediction.seqNums) {
-            MemDepHashIt hash_it = memDepHash.find(seqNum);
-            if (hash_it != memDepHash.end()) {
-                dependencies.push_back((*hash_it).second);
-                inst->memDepInfo.predicted = true;
-            }
+            mascotInfo->predicted = true;
         }
     }
 
@@ -390,8 +382,8 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
         DPRINTF(MemDepUnit, "Inserting store/atomic PC %s [sn:%lli].\n",
                 inst->pcState(), inst->seqNum);
 
-        depPred.insertStore(inst->pcState().instAddr(), inst->seqNum,
-                            inst->threadNumber);
+        // depPred.insertStore(inst->pcState().instAddr(), inst->seqNum,
+        //                     inst->threadNumber);
 
         ++stats.insertedStores;
     } else if (inst->isLoad()) {
@@ -412,8 +404,8 @@ MemDepUnit::insertNonSpec(const DynInstPtr &inst)
         DPRINTF(MemDepUnit, "Inserting store/atomic PC %s [sn:%lli].\n",
                 inst->pcState(), inst->seqNum);
 
-        depPred.insertStore(inst->pcState().instAddr(), inst->seqNum,
-                inst->threadNumber);
+        // depPred.insertStore(inst->pcState().instAddr(), inst->seqNum,
+        //         inst->threadNumber);
 
         ++stats.insertedStores;
     } else if (inst->isLoad()) {
@@ -598,15 +590,8 @@ MemDepUnit::wakeDependents(const DynInstPtr &inst)
         dependent_inst->memDeps--;
 
         if (dependent_inst->memDeps == 0) {
-            if (dependent_inst->inst->memDepInfo.predicted && inst->isStore()) {
-                if (dependent_inst->inst->memDepInfo.predStoreAddrs.first == 0) {
-                    dependent_inst->inst->memDepInfo.predStoreAddrs.first = inst->effAddr;
-                    dependent_inst->inst->memDepInfo.predStoreSizes.first = inst->effSize;
-                }
-                else {
-                    dependent_inst->inst->memDepInfo.predStoreAddrs.second = inst->effAddr;
-                    dependent_inst->inst->memDepInfo.predStoreSizes.second = inst->effSize;
-                }
+            if (dependent_inst->inst->mascotInfo.predicted && inst->isStore()) {
+                dependent_inst->inst->mascotInfo.predStoreAddr = { inst->effAddr, inst->effSize };
             }
             if (dependent_inst->regsReady && !dependent_inst->squashed) {
                 DPRINTF(MemDepUnit, "Inst PC: %#x [sn:%lli] is just "
@@ -697,7 +682,8 @@ MemDepUnit::squash(const InstSeqNum &squashed_num, ThreadID tid)
     }
 
     // Tell the dependency predictor to squash as well.
-    depPred.squash(squashed_num, tid);
+    // depPred.squash(squashed_num, tid);
+    mascot->popStores(squashed_num);
 }
 
 void
@@ -708,10 +694,13 @@ MemDepUnit::violation(InstSeqNum store_seq_num, Addr store_pc,
             " load: %#x, store seq num: %#d\n", violating_load->pcState().instAddr(),
             store_seq_num);
     // Tell the memory dependence unit of the violation.
-    depPred.violation(violating_load->pcState().instAddr(), violating_load->seqNum, store_seq_num, store_pc,
-                      violating_load->memDepInfo.storeQueueDistance, violating_load->memDepInfo.predicted,
-                      violating_load->memDepInfo.predBranchHistLength,
-                      violating_load->memDepInfo.predictorHash, branchHistory);
+    // depPred.violation(violating_load->pcState().instAddr(), violating_load->seqNum, store_seq_num, store_pc,
+    //                   violating_load->memDepInfo.storeQueueDistance, violating_load->memDepInfo.predicted,
+    //                   violating_load->memDepInfo.predBranchHistLength,
+    //                   violating_load->memDepInfo.predictorHash, branchHistory);
+
+    mascot->violation(violating_load->pcState().instAddr(), store_seq_num, 
+                      violating_load->mascotInfo.prediction, branchHistory);
 }
 
 void
@@ -720,20 +709,23 @@ MemDepUnit::issue(const DynInstPtr &inst)
     DPRINTF(MemDepUnit, "Issuing instruction PC %#x [sn:%lli].\n",
             inst->pcState().instAddr(), inst->seqNum);
 
-    depPred.issued(inst->pcState().instAddr(), inst->seqNum, inst->isStore());
+    // depPred.issued(inst->pcState().instAddr(), inst->seqNum, inst->isStore());
 }
 
 void
-MemDepUnit::commit(const DynInstPtr &inst)
+MemDepUnit::commit(const DynInstPtr &inst, BranchHistory branch_history)
 {
     DPRINTF(MemDepUnit, "Committing instruction PC %#x [sn:%lli].\n",
             inst->pcState().instAddr(), inst->seqNum);
 
     if (inst->isStore()) return;
 
-    depPred.commit(inst->pcState().instAddr(), inst->effAddr,
-                   inst->effSize, inst->memDepInfo.predStoreAddrs, inst->memDepInfo.predStoreSizes,
-                   inst->memDepInfo.predBranchHistLength, inst->memDepInfo.predictorHash);
+    // depPred.commit(inst->pcState().instAddr(), inst->effAddr,
+    //                inst->effSize, inst->memDepInfo.predStoreAddrs, inst->memDepInfo.predStoreSizes,
+    //                inst->memDepInfo.predBranchHistLength, inst->memDepInfo.predictorHash);
+
+    mascot->commit(inst->pcState().instAddr(), {inst->effAddr, inst->effSize},
+                   inst->mascotInfo.predStoreAddr, branch_history, inst->mascotInfo.prediction);
 }
 
 MemDepUnit::MemDepEntryPtr &

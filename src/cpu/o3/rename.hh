@@ -52,6 +52,7 @@
 #include "cpu/o3/free_list.hh"
 #include "cpu/o3/iew.hh"
 #include "cpu/o3/limits.hh"
+#include "cpu/o3/mascot.hh"
 #include "cpu/o3/smb.hh"
 #include "cpu/timebuf.hh"
 #include "sim/probe/probe.hh"
@@ -146,8 +147,11 @@ class Rename
     /** Sets pointer to IEW stage. Used only for initialization. */
     void setIEWStage(IEW *iew_stage) { iew_ptr = iew_stage; }
 
-    /** Sets pointer to SMB predictor. */
+    /** Sets pointer to file based SMB predictor. */
     void setSMBPredictor(SMB *smb_ptr);
+
+    /** Sets pointer to Mascot predictor. */
+    void setMascotPredictor(MASCOT *smb_ptr);
 
     /** Sets pointer to commit stage. Used only for initialization. */
     void
@@ -354,8 +358,11 @@ class Rename
     /** Wire to get decode's output from decode queue. */
     TimeBuffer<DecodeStruct>::wire fromDecode;
 
-    /** The SMB predictor. */
+    /** The file-based SMB predictor. Unused */
     SMB *smb;
+
+    /** The Mascot predictor. */
+    MASCOT *mascot;
 
     /** Queue of all instructions coming from decode this cycle. */
     InstQueue insts[MaxThreads];
