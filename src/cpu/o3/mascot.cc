@@ -26,7 +26,12 @@ void MASCOT::init(const BaseO3CPUParams& params) {
 
 Prediction
 MASCOT::predict(Addr load_pc, InstSeqNum load_seq_num, BranchHistory branch_history) {
-  Prediction prediction { NDEP, 0 };
+  Prediction prediction { 
+    .type = NDEP, 
+    .distance = 0,
+    .tableIdx = 0,
+    .hash = 0
+  };
   if (branch_history.empty())
     return prediction;
 
@@ -46,13 +51,14 @@ MASCOT::predict(Addr load_pc, InstSeqNum load_seq_num, BranchHistory branch_hist
     const uint64_t hash = generateBranchHash(histories[i], branch_history, i);
     const auto entry = tables[i].getEntry(load_pc, hash);
     if (entry != nullptr && (entry->distance != 0 || entry->isNdep())) {
+      prediction.distance = entry->distance;
+      prediction.tableIdx = i;
+      prediction.hash = hash;
+
       if (entry->isHighConfidence()) {
-        prediction.distance = entry->distance;
         prediction.type = entry->canBypass() ? SMB : MDP;
-        prediction.tableIdx = i;
-        prediction.hash = hash;
         return prediction;
-      }
+      } 
     }
   }
 
@@ -65,6 +71,8 @@ MASCOT::commit(Addr load_pc,
                 unsigned load_size,
                 Addr store_addr,
                 unsigned store_size,
+                BranchHistory branch_history,
+                std::ptrdiff_t sq_dist,
                 Prediction prediction) {
   Addr load_addr_start = load_addr >> depCheckShift;
   Addr load_addr_end = (load_addr + load_size - 1) >> depCheckShift;
@@ -72,15 +80,14 @@ MASCOT::commit(Addr load_pc,
   Addr store_addr_start = store_addr >> depCheckShift;
   Addr store_addr_end = (store_addr + store_size - 1) >> depCheckShift;
 
+  // misprediction == true iff MDP/SMB was predicted but it didn't have to.
   bool misprediction = !(load_addr_start <= store_addr_end && store_addr_start <= load_addr_end);
-  
+
   tables[prediction.tableIdx].commit(load_pc, prediction.hash, misprediction);
 
   if (misprediction) {
-    // todo Predicted dependency but no dependence
-    // How to get hash... this is confusing
-    // auto hash = generateBranchHash(historySize, branch_history, 0);
-    // allocateEntry(prediction.tableIdx, load_pc, hash, true);
+    // Allocate non dependency in next table.
+    allocateEntry(prediction.tableIdx + 1, load_pc, branch_history, sq_dist, true);
   }
 }
 
@@ -88,7 +95,6 @@ void
 MASCOT::violation(Addr load_pc,
                   InstSeqNum store_seq_num,
                   std::ptrdiff_t sq_dist,
-                  bool predicted,
                   Prediction prediction,
                   BranchHistory branch_history) {
   // History is newest-first. back() is the oldest branch — if it's still
@@ -107,40 +113,43 @@ MASCOT::violation(Addr load_pc,
 
   //quantise num branches to first lowest path size
   unsigned tableIndex = 0;
-  if (actual_branches > histories.back()) {
+  if (actual_branches >= histories.back()) {
     tableIndex = histories.size() - 1;
   } else {
     for (unsigned i = 1; i < histories.size(); ++i) {
       if (actual_branches < histories[i]) {
         tableIndex = i - 1;
+        break;
       }
     }
   }
   const auto historySize = histories[tableIndex];
 
   auto hash = generateBranchHash(historySize, branch_history, 0);
-
-  if (predicted) {
-    tables[prediction.tableIdx].commit(load_pc, prediction.hash, true);
-    allocateEntry(prediction.tableIdx, load_pc, hash, sq_dist, false);
-  } else {
-    allocateEntry(-1, load_pc, hash, sq_dist, false);
-  }
+  tables[prediction.tableIdx].commit(load_pc, prediction.hash, true);
+  allocateEntry(prediction.tableIdx + 1, load_pc, branch_history, sq_dist, false);
 }
 
 void
-MASCOT::allocateEntry(unsigned tableIdx, Addr load_pc, uint64_t hash, std::ptrdiff_t sq_dist, bool non_dep) {
-  // Assuming I know it is based on a prediction
-  // allocate to next table.
-  auto _tableIdx = tableIdx + 1;
-  while (_tableIdx < tables.size() && 
-          !tables[_tableIdx].tryAllocate(load_pc, hash, sq_dist, non_dep)) {
-    tables[_tableIdx].decrConfidence(load_pc, hash);
-    ++_tableIdx;
-  }
+MASCOT::allocateEntry(const unsigned startTableIdx,
+                      Addr load_pc,
+                      BranchHistory branch_history,
+                      std::ptrdiff_t sq_dist,
+                      bool non_dep) {
+  if (startTableIdx >= tables.size()) return;
 
-  if (_tableIdx >= tables.size()) {
-    //? What happens now?
+  auto idx = startTableIdx;
+  uint64_t hash = generateBranchHash(histories[idx], branch_history, 0);
+
+  if (tables[idx].tryAllocate(load_pc, hash, sq_dist, non_dep))
+    return;
+
+  tables[idx].decrConfidence(load_pc, hash);
+
+  while (++idx < tables.size()) {
+    hash = generateBranchHash(histories[idx], branch_history, 0);
+    if (tables[idx].tryAllocate(load_pc, hash, sq_dist, non_dep))
+      return;
   }
 }
 
@@ -151,7 +160,6 @@ MASCOT::Table::commit(Addr load_pc, uint64_t hash, bool misprediction) {
     return;
 
   if (misprediction) {
-    //? Can MASCOT correctly predict one but not the other?
     entry->decrConfidence();
     entry->resetCanBypass();
   } else {
@@ -167,9 +175,15 @@ MASCOT::Table::tryAllocate(Addr load_pc, uint64_t hash, std::ptrdiff_t sq_dist, 
     return false;
 
   entry->tag = getTag(load_pc, hash);
-  entry->distance = static_cast<unsigned>(sq_dist);
-  entry->confidence = non_dep ? 2 : 6; // todo magic numbers
-  entry->bypassCounter = 1;
+  if (non_dep) {
+    entry->distance = NDEP_DISTANCE;
+    entry->confidence = NDEP_CONFIDENCE;
+    entry->bypassCounter = NDEP_BYPASS;
+  } else {
+    entry->distance = static_cast<unsigned>(sq_dist);
+    entry->confidence = INIT_CONFIDENCE;
+    entry->bypassCounter = INIT_BYPASS;
+  }
 
   return true;
 }

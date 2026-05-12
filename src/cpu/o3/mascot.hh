@@ -43,13 +43,10 @@ class MASCOT
       unsigned confidence = 0;    // 3 bits (usefulness)
       unsigned bypassCounter = 0; // 2 bits
     
-      bool isNdep() const { return distance == 0; }
+      bool isNdep() const { return distance == NDEP_DISTANCE; }
       bool canBypass() const { return bypassCounter == MAX_BYPASS_COUNTER; } 
       bool isHighConfidence() const { return confidence == MAX_CONFIDENCE; }
       bool canEvict() const { return confidence == 0; }
-
-      void setNdep(bool yes = true) { if(yes) distance = 0; }
-      void setCanBypass(bool yes = true) { bypassCounter = yes ? 1 : 0; }
 
       void resetCanBypass() { bypassCounter = 0; }
       void incrCanBypass() {
@@ -71,7 +68,7 @@ class MASCOT
     };
 
     MASCOT() {};
-    ~MASCOT();
+    ~MASCOT() {};
 
     MASCOT(const BaseO3CPUParams& params) { init(params); }
 
@@ -92,7 +89,14 @@ class MASCOT
      * 
      * This function checks the address range match and decides to update the entry or not.
      */
-    void commit(Addr load_pc, Addr load_addr, unsigned load_size, Addr store_addr, unsigned store_size, Prediction prediction);
+    void commit(Addr load_pc,
+                Addr load_addr,
+                unsigned load_size,
+                Addr store_addr,
+                unsigned store_size,
+                BranchHistory branch_history,
+                std::ptrdiff_t sq_dist,
+                Prediction prediction);
 
     /**
      * This is called when any load must squash. This means (all bad):
@@ -105,7 +109,6 @@ class MASCOT
     void violation(Addr load_pc,
                   InstSeqNum store_seq_num,
                   std::ptrdiff_t sq_dist,
-                  bool predicted,
                   Prediction prediction,
                   BranchHistory branch_history);
 
@@ -118,6 +121,12 @@ class MASCOT
     static constexpr uint8_t MAX_DISTANCE = (1 << 7) - 1;
     static constexpr uint8_t MAX_CONFIDENCE = (1 << 3) - 1;
     static constexpr uint8_t MAX_BYPASS_COUNTER = (1 << 2) - 1;
+
+    static constexpr uint8_t NDEP_DISTANCE = 1;
+    static constexpr uint8_t NDEP_CONFIDENCE = 2;
+    static constexpr uint8_t NDEP_BYPASS = 0;
+    static constexpr uint8_t INIT_CONFIDENCE = 6;
+    static constexpr uint8_t INIT_BYPASS = 1;
 
     class Table
     {
@@ -139,6 +148,7 @@ class MASCOT
 
         /**
          * Invoke this function to change the counters in the entry.
+         * @return false if the entry is not found.
          */
         void commit(Addr load_pc, uint64_t hash, bool misprediction);
 
@@ -186,7 +196,11 @@ class MASCOT
 
     unsigned depCheckShift;
 
-    void allocateEntry(unsigned tableIdx, Addr load_pc, uint64_t hash, std::ptrdiff_t sq_dist, bool non_dep);
+    void allocateEntry(const unsigned startTableIdx,
+                      Addr load_pc,
+                      BranchHistory branch_history,
+                      std::ptrdiff_t sq_dist,
+                      bool non_dep);
 
     uint64_t generateBranchHash(unsigned num_branches,
                                 BranchHistory branch_history,
