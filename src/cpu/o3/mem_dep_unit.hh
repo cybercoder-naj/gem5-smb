@@ -217,7 +217,11 @@ class MemDepUnit
         statistics::Scalar falseDependencies;
         /* Number of true dependencies predicted by depPred */
         statistics::Scalar correctPredictions;
-        /** ==== Store Sets ==== */
+        /* ==== MASCOT ==== */
+        statistics::Scalar predictsNDep;
+        statistics::Scalar predictsMDP;
+        statistics::Scalar predictsSMB;
+        /* ==== Store Sets ==== */
         statistics::Scalar LFSTReads;
         statistics::Scalar LFSTWrites;
         /**  Sorry for this. Need to track reads/writes for each

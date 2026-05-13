@@ -33,6 +33,20 @@ MASCOT::init(const BaseO3CPUParams& params, MemDepUnit* mem_dep_unit) {
 
 Prediction
 MASCOT::predict(Addr load_pc, InstSeqNum load_seq_num, BranchHistory branch_history) {
+  const auto prediction = doPredict(load_pc, load_seq_num, branch_history);
+
+  if (prediction.type == NDEP)
+    ++(memDepUnit->stats.predictsNDep);
+  else if (prediction.type == MDP)
+    ++(memDepUnit->stats.predictsMDP);
+  else
+    ++(memDepUnit->stats.predictsSMB);
+
+  return prediction;
+}
+
+Prediction
+MASCOT::doPredict(Addr load_pc, InstSeqNum load_seq_num, BranchHistory branch_history) {
   Prediction prediction { 
     .type = NDEP, 
     .distance = 0,
@@ -70,6 +84,7 @@ MASCOT::predict(Addr load_pc, InstSeqNum load_seq_num, BranchHistory branch_hist
     prediction.distance = entry->distance;
     prediction.tableIdx = i;
     prediction.hash = hash;
+    ++(*(memDepUnit->pathReads[i])); //? Why was this pathWrites in PHAST
 
     // "A distance field of all 0s indicates that the entry is nondependent"
     if (entry->isNdep())
@@ -90,7 +105,6 @@ MASCOT::predict(Addr load_pc, InstSeqNum load_seq_num, BranchHistory branch_hist
         prediction.storePC = storeBuffer[store_idx].isStore;
       }
     }
-    ++(*(memDepUnit->pathWrites[i])); //? Shouldn't this be pathReads??
 
     return prediction;
   }
@@ -115,8 +129,8 @@ MASCOT::commit(Addr load_pc,
   bool misprediction = !(load_addr_start <= store_addr_end && store_addr_start <= load_addr_end);
 
   tables[prediction.tableIdx].commit(load_pc, prediction.hash, misprediction);
-  ++(*(memDepUnit->pathReads[prediction.tableIdx]));
-  ++(*(memDepUnit->pathWrites[prediction.tableIdx]));
+  ++(*(memDepUnit->pathReads[prediction.tableIdx])); // reads an entry
+  ++(*(memDepUnit->pathWrites[prediction.tableIdx])); // modifies it.
 
   if (misprediction) {
     // Allocate non dependency in next table.
@@ -158,8 +172,8 @@ MASCOT::violation(Addr load_pc,
   if (predicted) {
     tables[prediction.tableIdx].commit(load_pc, prediction.hash, true);
     ++(memDepUnit->stats.falseDependencies);
-    ++(*(memDepUnit->pathReads[prediction.tableIdx]));
-    ++(*(memDepUnit->pathWrites[prediction.tableIdx]));
+    ++(*(memDepUnit->pathReads[prediction.tableIdx])); // reads an entry
+    ++(*(memDepUnit->pathWrites[prediction.tableIdx])); // modifies it
   }
 
   allocateEntry(prediction.tableIdx + 1, load_pc, branch_history, actual_sq_dist, false);
@@ -176,14 +190,20 @@ MASCOT::allocateEntry(const unsigned startTableIdx,
   auto idx = startTableIdx;
   uint64_t hash = generateBranchHash(histories[idx], branch_history, 0);
 
-  if (tables[idx].tryAllocate(load_pc, hash, sq_dist, non_dep))
+  ++(*(memDepUnit->pathReads[idx])); // reads for eviction target
+  if (tables[idx].tryAllocate(load_pc, hash, sq_dist, non_dep)) {
+    ++(*(memDepUnit->pathWrites[idx])); // it was successful in writing it.
     return;
+  }
 
   tables[idx].decrConfidence(load_pc, hash);
+  ++(*(memDepUnit->pathWrites[idx])); // writes to all entries in set.
 
   while (++idx < tables.size()) {
     hash = generateBranchHash(histories[idx], branch_history, 0);
+    ++(*(memDepUnit->pathReads[idx])); // reads for eviction target
     if (tables[idx].tryAllocate(load_pc, hash, sq_dist, non_dep))
+      ++(*(memDepUnit->pathWrites[idx])); // it was successful in writing it.
       return;
   }
 }

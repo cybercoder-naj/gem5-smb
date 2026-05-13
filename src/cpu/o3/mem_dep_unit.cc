@@ -114,16 +114,23 @@ MemDepUnit::MemDepUnitStats::MemDepUnitStats(statistics::Group *parent)
                "Number of conflicting loads."),
       ADD_STAT(conflictingStores, statistics::units::Count::get(),
                "Number of conflicting stores."),
-      /** ==== Store Set ==== */
+      /* ==== Store Set ==== */
       ADD_STAT(LFSTReads, statistics::units::Count::get(),
                "Number of LFST reads."),
       ADD_STAT(LFSTWrites, statistics::units::Count::get(),
                "Number of LFST writes."),
-      /** ==== PHAST ==== */
+      /* ==== PHAST ==== */
       ADD_STAT(falseDependencies, statistics::units::Count::get(),
                "Number of times load's address didn't match predicted store's address"),
       ADD_STAT(correctPredictions, statistics::units::Count::get(),
                "Number of times load's address did match predicted store's address"),
+      /* ==== MASCOT ==== */
+      ADD_STAT(predictsNDep, statistics::units::Count::get(),
+               "Number of Non-dependent predictions by Mascot"),
+      ADD_STAT(predictsMDP, statistics::units::Count::get(),
+               "Number of MDP predictions by Mascot"),
+      ADD_STAT(predictsSMB, statistics::units::Count::get(),
+               "Number of SMB predictions by Mascot"),
       ADD_STAT(readsPath1, statistics::units::Count::get(),
                "Number of reads to path table 1."),
       ADD_STAT(readsPath2, statistics::units::Count::get(),

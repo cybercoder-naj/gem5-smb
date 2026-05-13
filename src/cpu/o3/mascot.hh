@@ -226,6 +226,8 @@ class MASCOT
     // Pair of seq_num to PC
     CircularQueue<StoreBufferEntry> storeBuffer;
 
+    Prediction doPredict(Addr load_pc, InstSeqNum load_seq_num, BranchHistory branch_history);
+
     void allocateEntry(const unsigned startTableIdx,
                       Addr load_pc,
                       BranchHistory branch_history,
@@ -280,6 +282,30 @@ class MASCOT
     }
 
 };
+
+struct MascotInfo {
+  MASCOT::Prediction prediction;
+  
+  InstSeqNum violatingStoreSeqNum = 0;
+  Addr violatingStorePC = 0;
+  std::pair<Addr, unsigned> predStoreAddr = {0, 0};
+  std::ptrdiff_t actualSQDist = 0;
+
+  bool smbPredicted = false;
+  bool smbViolation = false;
+
+  InstSeqNum mdpForwardedFrom = 0;
+  bool mdpViolation = false;
+  bool mdpPredicted = false;
+
+  bool violation() const {
+    return smbViolation || mdpViolation;
+  }
+  bool predicted() const {
+    return smbPredicted || mdpPredicted;
+  }
+};
+
   
 } // namespace o3
 } // namespace gem5

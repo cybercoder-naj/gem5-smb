@@ -362,28 +362,7 @@ class DynInst : public ExecContext, public RefCounted
 
     /////////////////////// SMB Data //////////////////////
 
-    struct MascotInfo {
-        MASCOT::Prediction prediction;
-        
-        InstSeqNum violatingStoreSeqNum = 0;
-        Addr violatingStorePC = 0;
-        std::pair<Addr, unsigned> predStoreAddr = {0, 0};
-        std::ptrdiff_t actualSQDist = 0;
-
-        bool smbPredicted = false;
-        bool smbViolation = false;
-
-        InstSeqNum mdpForwardedFrom = 0;
-        bool mdpViolation = false;
-        bool mdpPredicted = false;
-
-        bool violation() const {
-            return smbViolation || mdpViolation;
-        }
-        bool predicted() const {
-            return smbPredicted || mdpPredicted;
-        }
-    } mascotInfo;
+    MascotInfo mascotInfo;
 
     DynInstPtr bypassMoveInst = nullptr;
 

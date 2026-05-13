@@ -759,23 +759,24 @@ Rename::renameInsts(ThreadID tid)
                         //? is this required
                         // ++stats.smbStoreOutsideInstWindow;
                     } else {
-                        DynInst::MascotInfo info {
+                        MascotInfo info {
                             .prediction = pred,
                             .smbPredicted = true
                         };
 
                         DynInstPtr bypassMove = buildBypassMoveManeuver(tid, inst, info);
-                        
-                        ++toDecode->renameInfo[tid].bypassMoves;
+                        if (bypassMove) {
+                            ++toDecode->renameInfo[tid].bypassMoves;
 
-                        // We don't add to historyBuffer for cleanup when
-                        // instruction commits or squashes.
-                        // Because we are reusing existing physical registers
-                        // and their life remains unchanged.
+                            // We don't add to historyBuffer for cleanup when
+                            // instruction commits or squashes.
+                            // Because we are reusing existing physical registers
+                            // and their life remains unchanged.
 
-                        // Put in reverse order so bypassMove is sent to IEW first. 
-                        insts_to_rename.push_front(inst);
-                        inst = bypassMove;
+                            // Put in reverse order so bypassMove is sent to IEW first. 
+                            insts_to_rename.push_front(inst);
+                            inst = bypassMove;
+                        }
                     }
                 }
             }
@@ -1223,7 +1224,7 @@ Rename::renameDestRegs(const DynInstPtr &inst, ThreadID tid)
 }
 
 DynInstPtr
-Rename::buildBypassMoveManeuver(ThreadID tid, const DynInstPtr &bypassed_load, DynInst::MascotInfo info)
+Rename::buildBypassMoveManeuver(ThreadID tid, const DynInstPtr &bypassed_load, MascotInfo info)
 {
     auto store_reg_it = storeRegs.find(info.prediction.storeSeqNum);
     if (store_reg_it == storeRegs.end())
