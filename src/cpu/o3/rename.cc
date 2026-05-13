@@ -41,6 +41,7 @@
 
 #include "cpu/o3/rename.hh"
 
+#include <cstdio>
 #include <list>
 
 #include "cpu/o3/bypass_move_inst.hh"
@@ -150,7 +151,9 @@ Rename::RenameStats::RenameStats(statistics::Group *parent)
       ADD_STAT(skidInsts, statistics::units::Count::get(),
                "count of insts added to the skid buffer"),
       ADD_STAT(bypassedLoads, statistics::units::Count::get(),
-               "count of bypassed loads renamed")
+               "count of bypassed loads renamed"),
+      ADD_STAT(bypassingStoreOutsideWindow, statistics::units::Count::get(),
+               "count of attempted bypassing stores that were commited")
 {
     squashCycles.prereq(squashCycles);
     idleCycles.prereq(idleCycles);
@@ -756,8 +759,7 @@ Rename::renameInsts(ThreadID tid)
 
                     const auto doneSeqNum = commit_ptr->getDoneSeqNum(tid);
                     if (doneSeqNum >= smb_store_seqnum) {
-                        //? is this required
-                        // ++stats.smbStoreOutsideInstWindow;
+                        ++stats.bypassingStoreOutsideWindow;
                     } else {
                         MascotInfo info {
                             .prediction = pred,
@@ -1038,7 +1040,16 @@ Rename::doSquash(const InstSeqNum &squashed_seq_num, ThreadID tid)
     }
 
     iew_ptr->getMascot(tid)->popStores(squashed_seq_num);
-    storeRegs.clear();
+
+    // Clean up storeRegs entries for squashed instructions
+    auto sr_it = storeRegs.begin();
+    while (sr_it != storeRegs.end()) {
+        if (sr_it->first > squashed_seq_num) {
+            sr_it = storeRegs.erase(sr_it);
+        } else {
+            ++sr_it;
+        }
+    }
 }
 
 void
@@ -1090,6 +1101,16 @@ Rename::removeFromHistory(InstSeqNum inst_seq_num, ThreadID tid)
     }
 
     iew_ptr->getMascot(tid)->removeStores(inst_seq_num);
+
+    // Clean up storeRegs entries for committed instructions
+    auto sr_it = storeRegs.begin();
+    while (sr_it != storeRegs.end()) {
+        if (sr_it->first <= inst_seq_num) {
+            sr_it = storeRegs.erase(sr_it);
+        } else {
+            ++sr_it;
+        }
+    }
 }
 
 void
@@ -1161,12 +1182,13 @@ Rename::renameSrcRegs(const DynInstPtr &inst, ThreadID tid)
                     renamed_reg->className());
         }
 
-        if (inst->isStore() && src_idx == 2) {
-            storeRegs[inst->seqNum] = std::make_pair(src_reg, renamed_reg); 
-        }
-
         ++stats.lookups;
     }
+
+    if (inst->isStore()) {
+        storeRegs[inst->seqNum] = std::make_pair(inst->srcRegIdx(2), inst->renamedSrcIdx(2)); 
+    }
+
 }
 
 void
@@ -1223,9 +1245,30 @@ Rename::renameDestRegs(const DynInstPtr &inst, ThreadID tid)
     }
 }
 
+static void
+printStoreRegs(std::unordered_map<InstSeqNum, std::pair<RegId, PhysRegIdPtr>> &storeRegs) {
+  if (storeRegs.empty()) {
+    std::fprintf(stderr, "StoreRegs: empty\n");
+    return;
+  }
+
+  std::fprintf(stderr, "StoreRegs: size=%zu\n", storeRegs.size());
+  for (const auto& [seq_num, reg_pair] : storeRegs) {
+    const auto& [arch_reg, phys_reg] = reg_pair;
+    std::fprintf(stderr, "  [sn:%llu] arch_reg=%s:%d phys_reg=%s:%d\n",
+                 static_cast<unsigned long long>(seq_num),
+                 arch_reg.className(),
+                 arch_reg.index(),
+                 phys_reg->className(),
+                 phys_reg->index());
+  }
+}
+
 DynInstPtr
 Rename::buildBypassMoveManeuver(ThreadID tid, const DynInstPtr &bypassed_load, MascotInfo info)
 {
+    printStoreRegs(storeRegs);
+
     auto store_reg_it = storeRegs.find(info.prediction.storeSeqNum);
     if (store_reg_it == storeRegs.end())
         return nullptr;

@@ -6,6 +6,7 @@
 
 #include <cassert>
 #include <cmath>
+#include <cstdio>
 
 #include "cpu/o3/mem_dep_unit.hh"
 #include "params/BaseO3CPU.hh"
@@ -18,6 +19,23 @@ namespace o3
 
 using Prediction = MASCOT::Prediction;
   
+static void
+printStoreBuffer(const CircularQueue<MASCOT::StoreBufferEntry> &buffer) {
+  if (buffer.empty()) {
+    std::fprintf(stderr, "StoreBuffer: empty\n");
+    return;
+  }
+
+  std::fprintf(stderr, "StoreBuffer: size=%zu\n", buffer.size());
+  for (auto it = buffer.begin(); it != buffer.end(); ++it) {
+    const auto &e = *it;
+    std::fprintf(stderr, "  [sn:%llu] pc=%#llx isStore=%d\n",
+                 static_cast<unsigned long long>(e.seq_num),
+                 static_cast<unsigned long long>(e.pc),
+                 static_cast<int>(e.isStore));
+  }
+}
+
 MASCOT::MASCOT()
   : depCheckShift(0),
     memDepUnit(nullptr),
@@ -28,6 +46,7 @@ MASCOT::MASCOT()
 void
 MASCOT::init(const BaseO3CPUParams& params, MemDepUnit* mem_dep_unit) {
   depCheckShift = params.LSQDepCheckShift;
+  sqEntries = params.SQEntries;
   memDepUnit = mem_dep_unit;
 }
 
@@ -49,7 +68,7 @@ Prediction
 MASCOT::doPredict(Addr load_pc, InstSeqNum load_seq_num, BranchHistory branch_history) {
   Prediction prediction { 
     .type = NDEP, 
-    .distance = 0,
+    .distances = {0, 0},
     .tableIdx = 0,
     .hash = 0
   };
@@ -81,7 +100,7 @@ MASCOT::doPredict(Addr load_pc, InstSeqNum load_seq_num, BranchHistory branch_hi
     if (entry == nullptr)
       continue;
 
-    prediction.distance = entry->distance;
+    prediction.distances = entry->distances;
     prediction.tableIdx = i;
     prediction.hash = hash;
     ++(*(memDepUnit->pathReads[i])); //? Why was this pathWrites in PHAST
@@ -96,11 +115,13 @@ MASCOT::doPredict(Addr load_pc, InstSeqNum load_seq_num, BranchHistory branch_hi
 
     //  whereas speculative memory bypassing is only predicted if both the 
     //  usefulness and bypassing counters are saturated."
-    if (entry->isHighConfidence() && entry->canBypass() && entry->distance <= storeBuffer.size()) {
-      auto store_idx = storeBuffer.size() - entry->distance;
+    if (entry->isHighConfidence() && entry->canBypass() && entry->smbDistance() <= storeBuffer.size()) {
+      auto store_idx = storeBuffer.size() - entry->smbDistance();
       prediction.type = storeBuffer[store_idx].isStore ? SMB : MDP; 
 
       if (prediction.type == SMB) {
+        printStoreBuffer(storeBuffer);
+
         prediction.storeSeqNum = storeBuffer[store_idx].seq_num;
         prediction.storePC = storeBuffer[store_idx].isStore;
       }
@@ -114,19 +135,31 @@ MASCOT::doPredict(Addr load_pc, InstSeqNum load_seq_num, BranchHistory branch_hi
 
 void 
 MASCOT::commit(Addr load_pc,
-                std::pair<Addr, unsigned> load_addr,
-                std::pair<Addr, unsigned> store_addr,
+                AddrSize load_addr,
+                AddrSize store_addr,
+                AddrSize store2_addr, // possibly empty 
                 std::ptrdiff_t actual_sq_dist,
                 BranchHistory branch_history,
                 Prediction prediction) {
-  Addr load_addr_start = load_addr.first >> depCheckShift;
-  Addr load_addr_end = (load_addr.first + load_addr.second - 1) >> depCheckShift;
-
-  Addr store_addr_start = store_addr.first >> depCheckShift;
-  Addr store_addr_end = (store_addr.first + store_addr.second - 1) >> depCheckShift;
-
-  // misprediction == true iff MDP/SMB was predicted but it didn't have to.
-  bool misprediction = !(load_addr_start <= store_addr_end && store_addr_start <= load_addr_end);
+  bool misprediction;
+  switch (prediction.type)
+  {
+  case MDP:
+    // misprediction if both addrs don't overlap
+    misprediction = !(addrOverlap(load_addr, store_addr,  depCheckShift) || addrOverlap(load_addr, store2_addr, depCheckShift));
+    break;
+  
+  case SMB:
+    // misprediction if addrs dont't directly match
+    // This is the case where we cannot accurately get partial writes
+    // when the base addresses don't match.
+    misprediction = load_addr.first == store_addr.first && load_addr.second <= store_addr.second;
+    break;
+  
+  default:
+    panic("NDEP type should not invoke MASCOT::commit.");
+    break;
+  }
 
   tables[prediction.tableIdx].commit(load_pc, prediction.hash, misprediction);
   ++(*(memDepUnit->pathReads[prediction.tableIdx])); // reads an entry
@@ -191,7 +224,7 @@ MASCOT::allocateEntry(const unsigned startTableIdx,
   uint64_t hash = generateBranchHash(histories[idx], branch_history, 0);
 
   ++(*(memDepUnit->pathReads[idx])); // reads for eviction target
-  if (tables[idx].tryAllocate(load_pc, hash, sq_dist, non_dep)) {
+  if (tables[idx].tryAllocate(load_pc, hash, sq_dist, non_dep, sqEntries)) {
     ++(*(memDepUnit->pathWrites[idx])); // it was successful in writing it.
     return;
   }
@@ -202,7 +235,7 @@ MASCOT::allocateEntry(const unsigned startTableIdx,
   while (++idx < tables.size()) {
     hash = generateBranchHash(histories[idx], branch_history, 0);
     ++(*(memDepUnit->pathReads[idx])); // reads for eviction target
-    if (tables[idx].tryAllocate(load_pc, hash, sq_dist, non_dep))
+    if (tables[idx].tryAllocate(load_pc, hash, sq_dist, non_dep, sqEntries))
       ++(*(memDepUnit->pathWrites[idx])); // it was successful in writing it.
       return;
   }
@@ -257,21 +290,38 @@ MASCOT::Table::commit(Addr load_pc, uint64_t hash, bool misprediction) {
 }
 
 bool
-MASCOT::Table::tryAllocate(Addr load_pc, uint64_t hash, std::ptrdiff_t sq_dist, bool non_dep) {
-  auto entry = getEvictionTarget(load_pc, hash); 
-  if (entry == nullptr)
-    return false;
+MASCOT::Table::tryAllocate(Addr load_pc, uint64_t hash, std::ptrdiff_t sq_dist, bool non_dep, unsigned sq_entries) {
+  auto entry = getEntry(load_pc, hash);
+  if (entry == nullptr) {
+    // no entry exists, evict one and allocate
+    auto entry = getEvictionTarget(load_pc, hash); 
+    if (entry == nullptr) // can't evict in this table
+      return false;
 
-  entry->tag = getTag(load_pc, hash);
-  if (non_dep) {
-    entry->distance = NDEP_DISTANCE;
-    entry->confidence = NDEP_CONFIDENCE;
-    entry->bypassCounter = NDEP_BYPASS;
-  } else {
-    entry->distance = static_cast<unsigned>(sq_dist);
-    entry->confidence = INIT_CONFIDENCE;
-    entry->bypassCounter = INIT_BYPASS;
+    entry->tag = getTag(load_pc, hash);
+    entry->distances.first = non_dep ? NDEP_DISTANCE : sq_dist;
+    entry->distances.second = NDEP_DISTANCE;
+    entry->confidence = non_dep ? NDEP_CONFIDENCE : INIT_CONFIDENCE;
+    entry->bypassCounter = non_dep ? NDEP_BYPASS : INIT_BYPASS;
+
+    return true;
   }
+
+  if (entry->distances.first != sq_dist &&
+      entry->distances.second == 0 &&
+      entry->distances.first == sq_entries / 2 &&
+      sq_dist < sq_entries / 2) {
+    entry->distances.second = sq_dist;
+    entry->confidence = non_dep ? NDEP_CONFIDENCE : INIT_CONFIDENCE;
+    entry->bypassCounter = non_dep ? NDEP_BYPASS : INIT_BYPASS;
+
+    return true;
+  }
+
+  entry->distances.first = non_dep ? NDEP_DISTANCE : sq_dist;
+  entry->distances.second = NDEP_DISTANCE;
+  entry->confidence = non_dep ? NDEP_CONFIDENCE : INIT_CONFIDENCE;
+  entry->bypassCounter = non_dep ? NDEP_BYPASS : INIT_BYPASS;
 
   return true;
 }

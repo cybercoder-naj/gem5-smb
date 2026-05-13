@@ -28,7 +28,7 @@ config="--cpu-type=DerivO3CPU \
     --l2-hwp-type=StridePrefetcher"
 
 systemd-run --user --slice=workloads.slice --scope ./build/X86/gem5.fast \
-  --outdir=/home/nj421/gem5-smb/m5out/$filename \
+  --outdir=$pwd/$filename \
   configs/deprecated/example/se.py \
   --cmd="$cmd" \
   $config \

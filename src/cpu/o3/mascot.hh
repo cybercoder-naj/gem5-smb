@@ -15,6 +15,7 @@
 #include "base/types.hh"
 #include "cpu/inst_seq.hh"
 #include "cpu/o3/dyn_inst_ptr.hh"
+#include "cpu/o3/utils.hh"
 
 namespace gem5
 {
@@ -35,7 +36,7 @@ class MASCOT
 
     struct Prediction {
       PredictionType type;
-      unsigned distance;
+      std::pair<std::ptrdiff_t, std::ptrdiff_t> distances;
       size_t tableIdx;
       uint64_t hash;
 
@@ -44,15 +45,27 @@ class MASCOT
     };
 
     struct PredictorEntry {
-      unsigned tag = 0;           // 16 bits
-      unsigned distance  = 0;     // 7 bits
-      unsigned confidence = 0;    // 3 bits (usefulness)
-      unsigned bypassCounter = 0; // 2 bits
+      uint16_t tag = 0;                                              // 16 bits
+      std::pair<std::ptrdiff_t, std::ptrdiff_t> distances = {0, 0};  // each 7 bits
+      uint8_t confidence = 0;                                        // 3 bits (usefulness)
+      uint8_t bypassCounter = 0;                                     // 2 bits
     
-      bool isNdep() const { return distance == NDEP_DISTANCE; }
-      bool canBypass() const { return bypassCounter == MAX_BYPASS_COUNTER; } 
+      bool isNdep() const { 
+        return distances.first == NDEP_DISTANCE &
+               distances.second == NDEP_DISTANCE; 
+      }
+      /** true if counter is saturated and we have exactly one distance value */
+      bool canBypass() const { 
+        return bypassCounter == MAX_BYPASS_COUNTER && 
+               (distances.first == NDEP_DISTANCE ^ 
+                distances.second == NDEP_DISTANCE ); 
+      } 
       bool isHighConfidence() const { return confidence == MAX_CONFIDENCE; }
       bool canEvict() const { return confidence == 0; }
+      std::ptrdiff_t smbDistance() {
+        assert(canBypass());
+        return distances.first != NDEP_DISTANCE ? distances.first : distances.second;
+      }
 
       void resetCanBypass() { bypassCounter = 0; }
       void incrCanBypass() {
@@ -71,6 +84,12 @@ class MASCOT
           ++confidence;
         }
       }
+    };
+
+    struct StoreBufferEntry {
+      InstSeqNum seq_num;
+      Addr pc;
+      bool isStore; // could be atomic as well.
     };
 
     MASCOT();
@@ -98,8 +117,9 @@ class MASCOT
      * This function checks the address range match and decides to update the entry or not.
      */
     void commit(Addr load_pc,
-                std::pair<Addr, unsigned> load_addr,
-                std::pair<Addr, unsigned> store_addr,
+                AddrSize load_addr,
+                AddrSize store_addr,
+                AddrSize store2_addr,
                 std::ptrdiff_t actual_sq_dist,
                 BranchHistory branch_history,
                 Prediction prediction);
@@ -167,7 +187,7 @@ class MASCOT
          */
         void commit(Addr load_pc, uint64_t hash, bool misprediction);
 
-        bool tryAllocate(Addr load_pc, uint64_t hash, std::ptrdiff_t sq_dist, bool non_dep);
+        bool tryAllocate(Addr load_pc, uint64_t hash, std::ptrdiff_t sq_dist, bool non_dep, unsigned sq_entries);
 
         void decrConfidence(Addr load_pc, uint64_t hash) {
           const auto index = getIndex(load_pc, hash);
@@ -211,13 +231,8 @@ class MASCOT
         }
     };
 
-    struct StoreBufferEntry {
-      InstSeqNum seq_num;
-      Addr pc;
-      bool isStore; // could be atomic as well.
-    };
-    
     unsigned depCheckShift;
+    unsigned sqEntries;
 
     std::vector<unsigned> histories;
     std::vector<Table> tables;
@@ -288,7 +303,8 @@ struct MascotInfo {
   
   InstSeqNum violatingStoreSeqNum = 0;
   Addr violatingStorePC = 0;
-  std::pair<Addr, unsigned> predStoreAddr = {0, 0};
+  AddrSize predStoreAddr = {0, 0};
+  AddrSize predStore2Addr = {0, 0};
   std::ptrdiff_t actualSQDist = 0;
 
   bool smbPredicted = false;

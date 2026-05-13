@@ -98,8 +98,6 @@ ROB::ROB(CPU *_cpu, const BaseO3CPUParams &params)
         maxEntries[tid] = 0;
     }
 
-    depCheckShift = params.LSQDepCheckShift;
-
     resetState();
 }
 

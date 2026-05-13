@@ -288,17 +288,13 @@ MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory)
 
     const auto& pred = mascotInfo.prediction;
 
-    if (pred.type == MASCOT::PredictionType::SMB && inst->isBypassedLoad()) {
-        // SMB loads are only dependent on the store they are paired with, so just add that dependency.
-        MemDepHashIt hash_it = memDepHash.find(inst->mascotInfo.prediction.storeSeqNum);
-        if (hash_it != memDepHash.end())
-            dependencies.push_back((*hash_it).second);
-    } else if (pred.type == MASCOT::PredictionType::MDP || 
-               pred.type == MASCOT::PredictionType::SMB) {
-        assert(pred.distance);
+    if (pred.type == MASCOT::PredictionType::MDP || 
+        pred.type == MASCOT::PredictionType::SMB) {
+        assert(pred.distances.first || pred.distances.second);
 
         //make a MASCOT prediction, as long as the SQ offset is valid
-        mascotInfo.mdpPredicted = addSQDistanceDep(inst, pred.distance, dependencies);
+        mascotInfo.mdpPredicted = addSQDistanceDep(inst, pred.distances.first, dependencies)
+                                | addSQDistanceDep(inst, pred.distances.second, dependencies);
     }
 
     /* 2nd Step: Concurrently, check the in-flight Barriers; the Load
@@ -596,8 +592,11 @@ MemDepUnit::wakeDependents(const DynInstPtr &inst)
         dependent_inst->memDeps--;
 
         if (dependent_inst->memDeps == 0) {
-            if (dependent_inst->inst->mascotInfo.smbPredicted && inst->isStore()) {
-                dependent_inst->inst->mascotInfo.predStoreAddr = { inst->effAddr, inst->effSize };
+            auto& mascotInfo = dependent_inst->inst->mascotInfo;
+            if (mascotInfo.predicted() && inst->isStore()) {
+                if (mascotInfo.predStoreAddr.first == 0)
+                    mascotInfo.predStoreAddr = { inst->effAddr, inst->effSize };
+                else mascotInfo.predStore2Addr = { inst->effAddr, inst->effSize };
             }
             if (dependent_inst->regsReady && !dependent_inst->squashed) {
                 DPRINTF(MemDepUnit, "Inst PC: %#x [sn:%lli] is just "
@@ -722,8 +721,13 @@ MemDepUnit::commit(const DynInstPtr &inst, BranchHistory branch_history)
 
     if (inst->isStore()) return;
 
-    mascot.commit(inst->pcState().instAddr(), {inst->effAddr, inst->effSize},
-                   inst->mascotInfo.predStoreAddr, inst->mascotInfo.actualSQDist, branch_history, inst->mascotInfo.prediction);
+    mascot.commit(inst->pcState().instAddr(), 
+                  {inst->effAddr, inst->effSize},
+                  inst->mascotInfo.predStoreAddr, 
+                  inst->mascotInfo.predStore2Addr, 
+                  inst->mascotInfo.actualSQDist, 
+                  branch_history, 
+                  inst->mascotInfo.prediction);
 }
 
 MemDepUnit::MemDepEntryPtr &

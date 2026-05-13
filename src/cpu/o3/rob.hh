@@ -275,8 +275,6 @@ class ROB
     /** Pointer to the CPU. */
     CPU *cpu;
 
-    unsigned depCheckShift;
-
     /** Active Threads in CPU */
     std::list<ThreadID> *activeThreads;
 
