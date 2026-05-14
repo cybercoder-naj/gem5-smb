@@ -51,7 +51,7 @@ class MASCOT
       uint8_t bypassCounter = 0;                                     // 2 bits
     
       bool isNdep() const { 
-        return distances.first == NDEP_DISTANCE &
+        return distances.first == NDEP_DISTANCE &&
                distances.second == NDEP_DISTANCE; 
       }
       /** true if counter is saturated and we have exactly one distance value */

@@ -94,7 +94,7 @@ MASCOT::doPredict(Addr load_pc, InstSeqNum load_seq_num, BranchHistory branch_hi
   }
 
   //? Should I get lowest first?
-  for (long i = table_limit_idx - 1; i >= 0; --i) {
+  for (long i = table_limit_idx; i >= 0; --i) {
     const uint64_t hash = generateBranchHash(histories[i], branch_history, historyBegin);
     const auto entry = tables[i].getEntry(load_pc, hash);
     if (entry == nullptr)
@@ -123,7 +123,7 @@ MASCOT::doPredict(Addr load_pc, InstSeqNum load_seq_num, BranchHistory branch_hi
         printStoreBuffer(storeBuffer);
 
         prediction.storeSeqNum = storeBuffer[store_idx].seq_num;
-        prediction.storePC = storeBuffer[store_idx].isStore;
+        prediction.storePC = storeBuffer[store_idx].pc;
       }
     }
 
@@ -153,7 +153,7 @@ MASCOT::commit(Addr load_pc,
     // misprediction if addrs dont't directly match
     // This is the case where we cannot accurately get partial writes
     // when the base addresses don't match.
-    misprediction = load_addr.first == store_addr.first && load_addr.second <= store_addr.second;
+    misprediction = load_addr.first != store_addr.first || load_addr.second > store_addr.second;
     break;
   
   default:
@@ -207,9 +207,12 @@ MASCOT::violation(Addr load_pc,
     ++(memDepUnit->stats.falseDependencies);
     ++(*(memDepUnit->pathReads[prediction.tableIdx])); // reads an entry
     ++(*(memDepUnit->pathWrites[prediction.tableIdx])); // modifies it
+
+    allocateEntry(prediction.tableIdx + 1, load_pc, branch_history, actual_sq_dist, false);
+  } else {
+    allocateEntry(0, load_pc, branch_history, actual_sq_dist, false);
   }
 
-  allocateEntry(prediction.tableIdx + 1, load_pc, branch_history, actual_sq_dist, false);
 }
 
 void
@@ -309,7 +312,7 @@ MASCOT::Table::tryAllocate(Addr load_pc, uint64_t hash, std::ptrdiff_t sq_dist, 
 
   if (entry->distances.first != sq_dist &&
       entry->distances.second == 0 &&
-      entry->distances.first == sq_entries / 2 &&
+      entry->distances.first < sq_entries / 2 &&
       sq_dist < sq_entries / 2) {
     entry->distances.second = sq_dist;
     entry->confidence = non_dep ? NDEP_CONFIDENCE : INIT_CONFIDENCE;

@@ -523,7 +523,8 @@ Commit::squashAll(ThreadID tid)
     // Hopefully nothing breaks.)
     youngestSeqNum[tid] = lastCommitedSeqNum[tid];
 
-    rob->squash(squashed_inst, tid, false);
+    bool squashDueToMemOrder = commitStatus[tid] == ROBSquashingDueToMemOrder;
+    rob->squash(squashed_inst, tid, squashDueToMemOrder);
     changedROBNumEntries[tid] = true;
 
     // Send back the sequence number of the squashed instruction.
