@@ -18,30 +18,12 @@ namespace o3
 {
 
 using Prediction = MASCOT::Prediction;
-  
-static void
-printStoreBuffer(const CircularQueue<MASCOT::StoreBufferEntry> &buffer) {
-  if (buffer.empty()) {
-    std::fprintf(stderr, "StoreBuffer: empty\n");
-    return;
-  }
-
-  std::fprintf(stderr, "StoreBuffer: size=%zu\n", buffer.size());
-  for (auto it = buffer.begin(); it != buffer.end(); ++it) {
-    const auto &e = *it;
-    std::fprintf(stderr, "  [sn:%llu] pc=%#llx isStore=%d\n",
-                 static_cast<unsigned long long>(e.seq_num),
-                 static_cast<unsigned long long>(e.pc),
-                 static_cast<int>(e.isStore));
-  }
-}
 
 MASCOT::MASCOT()
   : depCheckShift(0),
     memDepUnit(nullptr),
     histories({0, 2, 4, 8, 16, 32, 64, 128}),
-    tables(histories.size(), Table()),
-    storeBuffer(MAX_DISTANCE) {}
+    tables(histories.size(), Table()) {}
 
 void
 MASCOT::init(const BaseO3CPUParams& params, MemDepUnit* mem_dep_unit) {
@@ -69,7 +51,7 @@ MASCOT::doPredict(Addr load_pc, InstSeqNum load_seq_num, BranchHistory branch_hi
   Prediction prediction { 
     .type = NDEP, 
     .distances = {0, 0},
-    .tableIdx = 0,
+    .tableIdx = BASE_PREDICTOR_IDX,
     .hash = 0
   };
   if (branch_history.empty())
@@ -93,11 +75,12 @@ MASCOT::doPredict(Addr load_pc, InstSeqNum load_seq_num, BranchHistory branch_hi
     ++table_limit_idx; 
   }
 
-  //? Should I get lowest first?
+  // "The tables are searched in parallel, and the entry from the highest-context table that has a match is used for prediction."
   for (long i = table_limit_idx; i >= 0; --i) {
     const uint64_t hash = generateBranchHash(histories[i], branch_history, historyBegin);
     const auto entry = tables[i].getEntry(load_pc, hash);
     if (entry == nullptr)
+      // When the predictor finds no matching entry it will default to predicting a non-dependency (termed the base predictor)
       continue;
 
     prediction.distances = entry->distances;
@@ -111,21 +94,9 @@ MASCOT::doPredict(Addr load_pc, InstSeqNum load_seq_num, BranchHistory branch_hi
 
     // "Whenever the distance field is not zero, a memory dependence prediction
     //  is made regardless of the value of the usefulness field, 
-    prediction.type = MDP;
-
     //  whereas speculative memory bypassing is only predicted if both the 
     //  usefulness and bypassing counters are saturated."
-    if (entry->isHighConfidence() && entry->canBypass() && entry->smbDistance() <= storeBuffer.size()) {
-      auto store_idx = storeBuffer.size() - entry->smbDistance();
-      prediction.type = storeBuffer[store_idx].isStore ? SMB : MDP; 
-
-      if (prediction.type == SMB) {
-        printStoreBuffer(storeBuffer);
-
-        prediction.storeSeqNum = storeBuffer[store_idx].seq_num;
-        prediction.storePC = storeBuffer[store_idx].pc;
-      }
-    }
+    prediction.type = entry->isHighConfidence() && entry->canBypass() ? SMB : MDP;
 
     return prediction;
   }
@@ -137,11 +108,12 @@ void
 MASCOT::commit(Addr load_pc,
                 AddrSize load_addr,
                 AddrSize store_addr,
-                AddrSize store2_addr, // possibly empty 
+                AddrSize store2_addr,
                 std::ptrdiff_t actual_sq_dist,
                 BranchHistory branch_history,
                 Prediction prediction) {
-  bool misprediction;
+  bool misprediction = false;
+
   switch (prediction.type)
   {
   case MDP:
@@ -150,10 +122,10 @@ MASCOT::commit(Addr load_pc,
     break;
   
   case SMB:
-    // misprediction if addrs dont't directly match
-    // This is the case where we cannot accurately get partial writes
-    // when the base addresses don't match.
-    misprediction = load_addr.first != store_addr.first || load_addr.second > store_addr.second;
+    // Must be empty!
+    assert(store2_addr.first == 0);
+    if (store_addr.first != 0)
+      misprediction = load_addr.first != store_addr.first || load_addr.second > store_addr.second;
     break;
   
   default:
@@ -178,41 +150,18 @@ void
 MASCOT::violation(Addr load_pc,
                   InstSeqNum store_seq_num,
                   std::ptrdiff_t actual_sq_dist,
-                  bool predicted,
                   Prediction prediction,
                   BranchHistory branch_history) {
-  // History is newest-first. back() is the oldest branch — if it's still
-  // newer than the store, no +1 branch exists and we cannot form a history
-  if (branch_history.empty() || branch_history.back().seqNum > store_seq_num) 
-    return;
-
-  // Walk from the load end to the +1 branch (the first branch at or before
-  // the store), then step past it so it's included in the count.
-  auto br_it = branch_history.begin();
-  do {
-    br_it++; // includes +1 branch.
-  } while (br_it != branch_history.end() && br_it->seqNum > store_seq_num);
-
-  const unsigned actual_branches = static_cast<unsigned>(std::distance(branch_history.begin(), br_it));
-
-  unsigned table_idx = 0;
-  while (table_idx + 1 < histories.size() &&
-        histories[table_idx + 1] <= actual_branches) {
-    ++table_idx;
-  }
-  const auto historySize = histories[table_idx];
-
-  if (predicted) {
+  if (prediction.tableIdx != BASE_PREDICTOR_IDX) {
+    // The prediction came from a table in MASCOT. 
+    // update counters for next hash.
     tables[prediction.tableIdx].commit(load_pc, prediction.hash, true);
     ++(memDepUnit->stats.falseDependencies);
     ++(*(memDepUnit->pathReads[prediction.tableIdx])); // reads an entry
     ++(*(memDepUnit->pathWrites[prediction.tableIdx])); // modifies it
-
-    allocateEntry(prediction.tableIdx + 1, load_pc, branch_history, actual_sq_dist, false);
-  } else {
-    allocateEntry(0, load_pc, branch_history, actual_sq_dist, false);
   }
 
+  allocateEntry(prediction.tableIdx + 1, load_pc, branch_history, actual_sq_dist, false);
 }
 
 void
@@ -224,6 +173,10 @@ MASCOT::allocateEntry(const unsigned startTableIdx,
   if (startTableIdx >= tables.size()) return;
 
   auto idx = startTableIdx;
+  // This is called from violation/commit only,
+  // where we pass the 'committedBranchHistory'
+  // so index = 0 is the youngest branch older than
+  // the load. so 0 is fine here.
   uint64_t hash = generateBranchHash(histories[idx], branch_history, 0);
 
   ++(*(memDepUnit->pathReads[idx])); // reads for eviction target
@@ -249,32 +202,6 @@ MASCOT::clear() {
   for (auto& table : tables) {
     table.clear();
   }
-}
-
-void
-MASCOT::pushStore(InstSeqNum store_seq_num, Addr pc, bool is_store) {
-  storeBuffer.advance_tail();
-
-  StoreBufferEntry entry {
-    .seq_num = store_seq_num,
-    .pc = pc,
-    .isStore = is_store
-  };
-  storeBuffer.back() = entry;
-}
-
-void
-MASCOT::popStores(InstSeqNum squashed_seq_num) {
-  while (storeBuffer.size() != 0 &&
-         storeBuffer.back().seq_num > squashed_seq_num)
-    storeBuffer.pop_back();
-}
-
-void 
-MASCOT::removeStores(InstSeqNum seq_num) {
-  while (storeBuffer.size() != 0 &&
-         storeBuffer.front().seq_num <= seq_num)
-    storeBuffer.pop_front();
 }
 
 void

@@ -563,6 +563,9 @@ class LSQUnit
     /** Returns the sequence number of the head store instruction. */
     InstSeqNum getStoreHeadSeqNum();
 
+    /** Check if the store by seqeunce number exists in the store queue. */
+    bool isStoreInStoreQueue(InstSeqNum store_seqnum);
+
     /** Returns whether or not the LSQ unit is stalled. */
     bool isStalled()  { return stalled; }
   public:

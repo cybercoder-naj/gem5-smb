@@ -131,7 +131,6 @@ Commit::Commit(CPU *_cpu, const BaseO3CPUParams &params)
         renameMap[tid] = nullptr;
         htmStarts[tid] = 0;
         htmStops[tid] = 0;
-        doneSeqNum[tid] = 0;
     }
     interrupt = NoFault;
 
@@ -1014,9 +1013,7 @@ Commit::commitInsts()
             // only want to report a violation when we're not on a misspeculated path
             if (head_inst->squashedDueToMemOrder && !updatedMemDep
                 && head_inst->isLoad() && head_inst->mascotInfo.violation()) {
-                iewStage->instQueue.violation(head_inst->mascotInfo.violatingStoreSeqNum,
-                                              head_inst->mascotInfo.violatingStorePC,
-                                              head_inst, committedBranchHistory);
+                iewStage->instQueue.violation(head_inst, committedBranchHistory);
                 updatedMemDep = true;
                 ++stats.memOrderViolationEvents;
             }
@@ -1080,7 +1077,6 @@ Commit::commitInsts()
 
                 // Set the doneSeqNum to the youngest committed instruction.
                 toIEW->commitInfo[tid].doneSeqNum = head_inst->seqNum;
-                setDoneSeqNum(tid, head_inst->seqNum);
 
                 if (tid == 0)
                     canHandleInterrupts = !head_inst->isDelayedCommit();
@@ -1341,9 +1337,7 @@ Commit::commitHead(const DynInstPtr &head_inst, unsigned inst_num)
     if (head_inst->mascotInfo.violation()) {
         assert(head_inst->mascotInfo.smbViolation); // Load check violation
 
-        iewStage->instQueue.violation(head_inst->mascotInfo.prediction.storeSeqNum,
-                                        head_inst->mascotInfo.prediction.storePC,
-                                        head_inst, committedBranchHistory);
+        iewStage->instQueue.violation(head_inst, committedBranchHistory);
         commitStatus[tid] = ROBSquashingDueToMemOrder;
         ++stats.bypassedLoadValueCheckViolation;
         squashAll(tid);

@@ -387,14 +387,17 @@ class DynInst : public ExecContext, public RefCounted
     bool isBypassedLoad() const {
         return staticInst->isLoad() && instFlags.test(BypassedLoad);
     }
-    void setBypassedLoad(MascotInfo info) {
+    void setBypassedLoad(InstSeqNum store_seqnum) {
         assert(isBypassable());
         instFlags.set(BypassedLoad);
-        mascotInfo = info;
+        
+        mascotInfo.smbPredicted = true;
+        mascotInfo.smbStoreSeqNum = store_seqnum;
     }
     void setSmbViolation() {
         assert(isBypassedLoad());
         mascotInfo.smbViolation = true;
+        mascotInfo.violatingStoreSeqNum = mascotInfo.smbStoreSeqNum;
     }
     bool smbViolation() const {
         return mascotInfo.smbViolation;

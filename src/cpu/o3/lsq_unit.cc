@@ -323,7 +323,7 @@ LSQUnit::insertLoad(const DynInstPtr &load_inst)
     load_inst->lqIt = loadQueue.getIterator(load_inst->lqIdx);
 
     if (load_inst->isBypassedLoad()) {
-        auto smb_store_seqnum = load_inst->mascotInfo.prediction.storeSeqNum;
+        auto smb_store_seqnum = load_inst->mascotInfo.smbStoreSeqNum;
         assert(smb_store_seqnum);
 
         auto smb_store_it = storeQueue.end();
@@ -348,6 +348,8 @@ LSQUnit::insertLoad(const DynInstPtr &load_inst)
         }
 
         load_inst->smbPredStoreIt = smb_store_it;
+
+        
     }
 
     // hardware transactional memory
@@ -1505,14 +1507,19 @@ LSQUnit::read(LSQRequest *request, ssize_t load_idx)
             }
 
             if (coverage == AddrRangeCoverage::FullAddrRangeCoverage) {
-                if (load_inst->isBypassedLoad() && store_it->instruction()->seqNum != load_inst->mascotInfo.prediction.storeSeqNum) {
+                if (load_inst->isBypassedLoad() && 
+                        (store_it->instruction()->seqNum != load_inst->mascotInfo.smbStoreSeqNum || req_s != st_s)) {
+                    
+                    // Full address is faulting for bypass loads iff
+                    // The full coverage is found in an intervening store (checked with seqNum)
+                    // OR At the bypassing store, the base address don't match.
                     DPRINTF(LSQUnit, "Memory order violation detected for bypassed load [sn:%lli]."
                         "Found intervening store [sn:%lli] at address %#x with full coverage.\n",
                         load_inst->seqNum, store_it->instruction()->seqNum, request->mainReq()->getVaddr());
 
                     memDepViolator = load_inst;
                     ++stats.bypassedLoadMemOrderViolation;
-                    load_inst->mascotInfo.smbViolation = true;
+                    load_inst->setSmbViolation();
 
                     auto req_s_dep = store_it->request()->getVaddr();
                     return std::make_shared<GenericISA::M5PanicFault>(
@@ -1613,7 +1620,7 @@ LSQUnit::read(LSQRequest *request, ssize_t load_idx)
 
                     memDepViolator = load_inst;
                     ++stats.bypassedLoadMemOrderViolation;
-                    load_inst->mascotInfo.smbViolation = true;
+                    load_inst->setSmbViolation();
 
                     auto req_s_dep = store_it->request()->getVaddr();
                     return std::make_shared<GenericISA::M5PanicFault>(
@@ -1732,6 +1739,17 @@ LSQUnit::getStoreHeadSeqNum()
         return storeQueue.front().instruction()->seqNum;
     else
         return 0;
+}
+
+bool 
+LSQUnit::isStoreInStoreQueue(InstSeqNum store_seqnum) {
+  auto it = storeQueue.begin();
+  while (it != storeQueue.end()) {
+    if (it->instruction()->seqNum == store_seqnum)
+      return true;
+    ++it;
+  }
+  return false;
 }
 
 } // namespace o3

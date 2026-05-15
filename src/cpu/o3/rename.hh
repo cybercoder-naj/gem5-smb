@@ -45,6 +45,7 @@
 #include <list>
 #include <utility>
 
+#include "base/circular_queue.hh"
 #include "base/statistics.hh"
 #include "cpu/o3/comm.hh"
 #include "cpu/o3/commit.hh"
@@ -259,7 +260,7 @@ class Rename
     void renameDestRegs(const DynInstPtr &inst, ThreadID tid);
 
     /** Renames the destination registers of an instruction. */
-    DynInstPtr buildBypassMoveManeuver(ThreadID tid, const DynInstPtr &bypassed_load, MascotInfo info);
+    DynInstPtr buildBypassMoveInst(ThreadID tid, const DynInstPtr &bypassed_load, RegId store_src, PhysRegIdPtr store_phys_reg);
 
     /** Calculates the number of free ROB entries for a specific thread. */
     int calcFreeROBEntries(ThreadID tid);
@@ -472,8 +473,15 @@ class Rename
     /** The maximum skid buffer size. */
     unsigned skidBufferMax;
 
-    /** Map of store instructions' associated physical registers. */
-    std::unordered_map<InstSeqNum, std::pair<RegId, PhysRegIdPtr>> storeRegs;
+    struct StoreQueueEntry {
+      InstSeqNum seqNum;
+      RegId archReg;
+      PhysRegIdPtr physReg;
+      bool isStore;
+    };
+
+    /** Rename Store Queue (SINGLE-THREADED ONLY). */
+    CircularQueue<StoreQueueEntry> storeQueue;
 
     /** Enum to record the source of a structure full stall.  Can come from
      * either ROB, IQ, LSQ, and it is priortized in that order.
