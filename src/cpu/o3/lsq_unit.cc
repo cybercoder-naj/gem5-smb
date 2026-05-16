@@ -326,25 +326,16 @@ LSQUnit::insertLoad(const DynInstPtr &load_inst)
         auto smb_store_seqnum = load_inst->mascotInfo.smbStoreSeqNum;
         assert(smb_store_seqnum);
 
-        auto smb_store_it = storeQueue.end();
-        --smb_store_it;
+        auto smb_store_it = getStoreInStoreQueue(smb_store_seqnum);
+        panic_if(smb_store_it == storeQueue.end(), 
+                 "Could not find matching store sequence number %llu for bypassed load [sn:%lli]\n",
+                 smb_store_seqnum, load_inst->seqNum);
 
         // Assert that smb_store_it is still inflight
         assert(smb_store_it->valid());
         assert(smb_store_it.idx() >= getStoreHead());
         if (smb_store_it->instruction()->isCompleted()) {
             assert(smb_store_it->instruction()->sqIt <= storeWBIt);
-        }
-
-        while (smb_store_it != storeQueue.begin()) {
-            if (smb_store_it->instruction()->seqNum == smb_store_seqnum) {
-                break;
-            }
-            --smb_store_it;
-        }
-        if (smb_store_it == storeQueue.begin() && smb_store_it->instruction()->seqNum != smb_store_seqnum) {
-            panic("Could not find matching store sequence number %llu for bypassed load [sn:%lli]\n",
-                  smb_store_seqnum, load_inst->seqNum);
         }
 
         load_inst->smbPredStoreIt = smb_store_it;
@@ -1139,7 +1130,7 @@ LSQUnit::writeback(const DynInstPtr &inst, PacketPtr pkt)
                     DPRINTF(LSQUnit, "Bypassed load [sn:%lli] value check failed! "
                             "Speculated: %#llx, actual: %#llx\n",
                             inst->seqNum, before, after);
-                    inst->setSmbViolation();
+                    inst->setSmbViolation(0);
                 }
             } else {
                 // Complete access to copy data to proper place.
@@ -1522,7 +1513,7 @@ LSQUnit::read(LSQRequest *request, ssize_t load_idx)
 
                     memDepViolator = load_inst;
                     ++stats.bypassedLoadMemOrderViolation;
-                    load_inst->setSmbViolation();
+                    load_inst->setSmbViolation(std::distance(load_inst->sqIt, store_it));
 
                     auto req_s_dep = store_it->request()->getVaddr();
                     return std::make_shared<GenericISA::M5PanicFault>(
@@ -1623,7 +1614,7 @@ LSQUnit::read(LSQRequest *request, ssize_t load_idx)
 
                     memDepViolator = load_inst;
                     ++stats.bypassedLoadMemOrderViolation;
-                    load_inst->setSmbViolation();
+                    load_inst->setSmbViolation(std::distance(load_inst->sqIt, store_it));
 
                     auto req_s_dep = store_it->request()->getVaddr();
                     return std::make_shared<GenericISA::M5PanicFault>(
@@ -1744,15 +1735,20 @@ LSQUnit::getStoreHeadSeqNum()
         return 0;
 }
 
-bool 
-LSQUnit::isStoreInStoreQueue(InstSeqNum store_seqnum) {
+LSQUnit::SQIterator 
+LSQUnit::getStoreInStoreQueue(InstSeqNum store_seqnum) {
   auto it = storeQueue.begin();
   while (it != storeQueue.end()) {
     if (it->instruction()->seqNum == store_seqnum)
-      return true;
+      return it;
     ++it;
   }
-  return false;
+  return it;
+}
+
+bool 
+LSQUnit::isStoreInStoreQueue(InstSeqNum store_seqnum) {
+    return getStoreInStoreQueue(store_seqnum) != storeQueue.end();
 }
 
 } // namespace o3

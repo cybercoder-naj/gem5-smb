@@ -394,10 +394,11 @@ class DynInst : public ExecContext, public RefCounted
         mascotInfo.smbPredicted = true;
         mascotInfo.smbStoreSeqNum = store_seqnum;
     }
-    void setSmbViolation() {
+    void setSmbViolation(std::ptrdiff_t sq_dist) {
         assert(isBypassedLoad());
         mascotInfo.smbViolation = true;
         mascotInfo.violatingStoreSeqNum = mascotInfo.smbStoreSeqNum;
+        mascotInfo.actualSQDist = sq_dist;
     }
     bool smbViolation() const {
         return mascotInfo.smbViolation;

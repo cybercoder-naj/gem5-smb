@@ -124,6 +124,7 @@ MASCOT::commit(Addr load_pc,
     assert(store_addr.first != 0);
     // Must be empty!
     assert(store2_addr.first == 0);
+    // Misprediction if base address don't match or load asked for longer than store
     misprediction = load_addr.first != store_addr.first || load_addr.second > store_addr.second;
     break;
   
@@ -136,6 +137,9 @@ MASCOT::commit(Addr load_pc,
   ++(*(memDepUnit->pathReads[prediction.tableIdx])); // reads an entry
   ++(*(memDepUnit->pathWrites[prediction.tableIdx])); // modifies it.
 
+  // "There are three types of misprediction that will lead to an allocation
+  //  in a table with a longer history... ...
+  //  Finally, when a load is predicted to depend on a prior store but no conflicts are detected."
   if (misprediction) {
     // Allocate non dependency in next table.
     allocateEntry(prediction.tableIdx + 1, load_pc, branch_history, actual_sq_dist, true);
@@ -160,6 +164,12 @@ MASCOT::violation(Addr load_pc,
     ++(*(memDepUnit->pathWrites[prediction.tableIdx])); // modifies it
   }
 
+  // "There are three types of misprediction that will lead to an allocation
+  //  in a table with a longer history. First, when a load is predicted not to
+  //  depend on any prior store but does have a dependence on one. Second,
+  //  when a load is predicted to  depend on a particular prior store but actually
+  //  conflicts with a different one (where either the predicted store has the
+  //  wrong address, or the conflict is with a younger store).""
   allocateEntry(prediction.tableIdx + 1, load_pc, branch_history, actual_sq_dist, false);
 }
 
@@ -190,9 +200,10 @@ MASCOT::allocateEntry(const unsigned startTableIdx,
   while (++idx < tables.size()) {
     hash = generateBranchHash(histories[idx], branch_history, 0);
     ++(*(memDepUnit->pathReads[idx])); // reads for eviction target
-    if (tables[idx].tryAllocate(load_pc, hash, sq_dist, non_dep, sqEntries))
+    if (tables[idx].tryAllocate(load_pc, hash, sq_dist, non_dep, sqEntries)) {
       ++(*(memDepUnit->pathWrites[idx])); // it was successful in writing it.
       return;
+    }
   }
 }
 
