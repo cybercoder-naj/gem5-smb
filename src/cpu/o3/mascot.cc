@@ -52,7 +52,8 @@ MASCOT::doPredict(Addr load_pc, InstSeqNum load_seq_num, BranchHistory branch_hi
     .type = NDEP, 
     .distances = {0, 0},
     .tableIdx = BASE_PREDICTOR_IDX,
-    .hash = 0
+    .hash = 0,
+    .fromTable = false
   };
   if (branch_history.empty())
     return prediction;
@@ -86,6 +87,7 @@ MASCOT::doPredict(Addr load_pc, InstSeqNum load_seq_num, BranchHistory branch_hi
     prediction.distances = entry->distances;
     prediction.tableIdx = i;
     prediction.hash = hash;
+    prediction.fromTable = true;
 
     // "A distance field of all 0s indicates that the entry is nondependent"
     if (entry->isNdep())
@@ -115,6 +117,12 @@ MASCOT::commit(Addr load_pc,
 
   switch (prediction.type)
   {
+  case NDEP:
+    assert(prediction.distances.first == 0);
+    assert(prediction.distances.second == 0);
+    misprediction = false;
+    break;
+
   case MDP:
     // misprediction if both addrs don't overlap
     misprediction = !(addrOverlap(load_addr, store_addr,  depCheckShift) || addrOverlap(load_addr, store2_addr, depCheckShift));
@@ -128,13 +136,14 @@ MASCOT::commit(Addr load_pc,
     // Misprediction if base address don't match or load asked for longer than store
     misprediction = load_addr.first != store_addr.first || load_addr.second > store_addr.second;
     break;
-  
-  default:
-    panic("NDEP type should not invoke MASCOT::commit.");
-    break;
   }
 
-  const bool should_bypass = load_addr.first == store_addr.first && load_addr.second <= store_addr.second;
+    const bool should_bypass =
+      prediction.type != NDEP &&
+      ((load_addr.first == store_addr.first &&
+        load_addr.second <= store_addr.second) ||
+       (load_addr.first == store2_addr.first &&
+        load_addr.second <= store2_addr.second));
 
   tables[prediction.tableIdx].commit(load_pc, prediction.hash, misprediction, should_bypass);
   ++(*(memDepUnit->pathReads[prediction.tableIdx])); // reads an entry
@@ -258,6 +267,7 @@ MASCOT::Table::tryAllocate(Addr load_pc, uint64_t hash, std::ptrdiff_t sq_dist, 
     if (entry == nullptr) // can't evict in this table
       return false;
 
+    entry->valid = true;
     entry->tag = getTag(load_pc, hash);
     entry->distances.first = non_dep ? NDEP_DISTANCE : sq_dist;
     entry->distances.second = NDEP_DISTANCE;
@@ -292,7 +302,7 @@ MASCOT::Table::getEntry(const Addr load_pc, const uint64_t hash) {
   const auto tag = getTag(load_pc, hash);
 
   for (auto way = 0; way < tableAssociativity; ++way) {
-    if (blocks[index][way].tag == tag)
+    if (blocks[index][way].valid && blocks[index][way].tag == tag)
       return &(blocks[index][way]);
   }
   return nullptr;

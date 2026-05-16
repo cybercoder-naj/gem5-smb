@@ -35,9 +35,11 @@ public:
     std::pair<std::ptrdiff_t, std::ptrdiff_t> distances;
     size_t tableIdx;
     uint64_t hash;
+    bool fromTable;
   };
 
   struct PredictorEntry {
+    bool valid;
     uint16_t tag = 0;                                             // 16 bits
     std::pair<std::ptrdiff_t, std::ptrdiff_t> distances = {0, 0}; // each 7 bits
     uint8_t confidence = 0;    // 3 bits (usefulness)
@@ -54,7 +56,7 @@ public:
               distances.second == NDEP_DISTANCE);
     }
     bool isHighConfidence() const { return confidence == MAX_CONFIDENCE; }
-    bool canEvict() const { return confidence == 0; }
+    bool canEvict() const { return !valid || confidence == 0; }
 
     void resetCanBypass() { bypassCounter = 0; }
     void incrCanBypass() {
@@ -146,7 +148,7 @@ private:
       blocks.resize(tableSize);
 
       for (auto &block : blocks)
-        block.resize(tableAssociativity);
+        block.resize(tableAssociativity, PredictorEntry());
     }
 
     /**
@@ -189,7 +191,8 @@ private:
 
     void clear() {
       for (auto &block : blocks)
-        block.clear();
+        for (auto &entry : block)
+          entry = PredictorEntry();
     }
 
   private:

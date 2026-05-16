@@ -42,12 +42,9 @@
 #include "cpu/o3/commit.hh"
 
 #include <algorithm>
-#include <set>
 #include <string>
 #include <sys/types.h>
 
-#include "base/compiler.hh"
-#include "base/loader/symtab.hh"
 #include "base/logging.hh"
 #include "commit.hh"
 #include "cpu/base.hh"
@@ -1051,8 +1048,11 @@ Commit::commitInsts()
                         committedBranchHistory.pop_back();
                 }
 
-                //update memdep predictor if this load was made to wait on a store by the depPred
-                if (head_inst->isLoad() && head_inst->mascotInfo.predicted()) {
+                // Update MASCOT on table-backed predictions, including
+                // non-dependence entries that need usefulness reinforcement.
+                const auto &mascot_pred = head_inst->mascotInfo.prediction;
+                if (head_inst->isLoad() &&
+                    (head_inst->mascotInfo.predicted() || mascot_pred.fromTable)) {
                     iewStage->instQueue.memDepUnit[tid].commit(head_inst, committedBranchHistory);
                 }
 
