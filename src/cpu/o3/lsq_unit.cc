@@ -1513,7 +1513,7 @@ LSQUnit::read(LSQRequest *request, ssize_t load_idx)
 
                     memDepViolator = load_inst;
                     ++stats.bypassedLoadMemOrderViolation;
-                    load_inst->setSmbViolation(std::distance(load_inst->sqIt, store_it));
+                    load_inst->setSmbViolation(std::distance(store_it, load_inst->sqIt));
 
                     auto req_s_dep = store_it->request()->getVaddr();
                     return std::make_shared<GenericISA::M5PanicFault>(
@@ -1614,7 +1614,7 @@ LSQUnit::read(LSQRequest *request, ssize_t load_idx)
 
                     memDepViolator = load_inst;
                     ++stats.bypassedLoadMemOrderViolation;
-                    load_inst->setSmbViolation(std::distance(load_inst->sqIt, store_it));
+                    load_inst->setSmbViolation(std::distance(store_it, load_inst->sqIt));
 
                     auto req_s_dep = store_it->request()->getVaddr();
                     return std::make_shared<GenericISA::M5PanicFault>(
