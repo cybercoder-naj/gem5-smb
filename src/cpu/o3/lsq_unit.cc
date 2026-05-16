@@ -1130,7 +1130,10 @@ LSQUnit::writeback(const DynInstPtr &inst, PacketPtr pkt)
                     DPRINTF(LSQUnit, "Bypassed load [sn:%lli] value check failed! "
                             "Speculated: %#llx, actual: %#llx\n",
                             inst->seqNum, before, after);
-                    inst->setSmbViolation(0);
+                    const auto sq_dist = inst->mascotInfo.prediction.distances.first != 0 ?
+                        inst->mascotInfo.prediction.distances.first :
+                        inst->mascotInfo.prediction.distances.second;
+                    inst->setSmbViolation(sq_dist);
                 }
             } else {
                 // Complete access to copy data to proper place.

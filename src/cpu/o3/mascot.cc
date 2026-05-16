@@ -69,8 +69,9 @@ MASCOT::doPredict(Addr load_pc, InstSeqNum load_seq_num, BranchHistory branch_hi
   if (historyBegin == branch_history.size()) return prediction; //no +1 branch
 
   auto table_limit_idx = 0;
+  const auto available_history = branch_history.size() - historyBegin;
   while (table_limit_idx + 1 < histories.size() &&
-         histories[table_limit_idx + 1] < branch_history.size()) { 
+         histories[table_limit_idx + 1] < available_history) { 
     ++table_limit_idx; 
   }
 
@@ -133,7 +134,9 @@ MASCOT::commit(Addr load_pc,
     break;
   }
 
-  tables[prediction.tableIdx].commit(load_pc, prediction.hash, misprediction);
+  const bool should_bypass = load_addr.first == store_addr.first && load_addr.second <= store_addr.second;
+
+  tables[prediction.tableIdx].commit(load_pc, prediction.hash, misprediction, should_bypass);
   ++(*(memDepUnit->pathReads[prediction.tableIdx])); // reads an entry
   ++(*(memDepUnit->pathWrites[prediction.tableIdx])); // modifies it.
 
@@ -142,7 +145,7 @@ MASCOT::commit(Addr load_pc,
   //  Finally, when a load is predicted to depend on a prior store but no conflicts are detected."
   if (misprediction) {
     // Allocate non dependency in next table.
-    allocateEntry(prediction.tableIdx + 1, load_pc, branch_history, actual_sq_dist, true);
+    allocateEntry(prediction.tableIdx + 1, load_pc, branch_history, actual_sq_dist, true, should_bypass);
     if (prediction.type == MDP) {
       ++(memDepUnit->stats.falseDependencies);
       ++(memDepUnit->stats.mascotMDPMispredictions);
@@ -163,7 +166,7 @@ MASCOT::violation(Addr load_pc,
   if (prediction.tableIdx != BASE_PREDICTOR_IDX) {
     // The prediction came from a table in MASCOT. 
     // update counters for next hash.
-    tables[prediction.tableIdx].commit(load_pc, prediction.hash, true);
+    tables[prediction.tableIdx].commit(load_pc, prediction.hash, true, false);
     ++(*(memDepUnit->pathReads[prediction.tableIdx])); // reads an entry
     ++(*(memDepUnit->pathWrites[prediction.tableIdx])); // modifies it
   }
@@ -182,7 +185,7 @@ MASCOT::violation(Addr load_pc,
   //  when a load is predicted to  depend on a particular prior store but actually
   //  conflicts with a different one (where either the predicted store has the
   //  wrong address, or the conflict is with a younger store).""
-  allocateEntry(prediction.tableIdx + 1, load_pc, branch_history, actual_sq_dist, false);
+  allocateEntry(prediction.tableIdx + 1, load_pc, branch_history, actual_sq_dist, false, false);
 }
 
 void
@@ -190,7 +193,8 @@ MASCOT::allocateEntry(const unsigned startTableIdx,
                       Addr load_pc,
                       BranchHistory branch_history,
                       std::ptrdiff_t sq_dist,
-                      bool non_dep) {
+                      bool non_dep,
+                      bool should_bypass) {
   if (startTableIdx >= tables.size()) return;
 
   auto idx = startTableIdx;
@@ -201,7 +205,7 @@ MASCOT::allocateEntry(const unsigned startTableIdx,
   uint64_t hash = generateBranchHash(histories[idx], branch_history, 0);
 
   ++(*(memDepUnit->pathReads[idx])); // reads for eviction target
-  if (tables[idx].tryAllocate(load_pc, hash, sq_dist, non_dep, sqEntries)) {
+  if (tables[idx].tryAllocate(load_pc, hash, sq_dist, non_dep, should_bypass, sqEntries)) {
     ++(*(memDepUnit->pathWrites[idx])); // it was successful in writing it.
     return;
   }
@@ -212,7 +216,7 @@ MASCOT::allocateEntry(const unsigned startTableIdx,
   while (++idx < tables.size()) {
     hash = generateBranchHash(histories[idx], branch_history, 0);
     ++(*(memDepUnit->pathReads[idx])); // reads for eviction target
-    if (tables[idx].tryAllocate(load_pc, hash, sq_dist, non_dep, sqEntries)) {
+    if (tables[idx].tryAllocate(load_pc, hash, sq_dist, non_dep, should_bypass, sqEntries)) {
       ++(*(memDepUnit->pathWrites[idx])); // it was successful in writing it.
       return;
     }
@@ -227,22 +231,26 @@ MASCOT::clear() {
 }
 
 void
-MASCOT::Table::commit(Addr load_pc, uint64_t hash, bool misprediction) {
+MASCOT::Table::commit(Addr load_pc, uint64_t hash, bool misprediction, bool should_bypass) {
   auto entry = getEntry(load_pc, hash);
   if (entry == nullptr)
     return;
 
   if (misprediction) {
     entry->decrConfidence();
-    entry->resetCanBypass();
   } else {
     entry->incrConfidence();
+  }
+
+  if (should_bypass) {
     entry->incrCanBypass();
+  } else {
+    entry->resetCanBypass();
   }
 }
 
 bool
-MASCOT::Table::tryAllocate(Addr load_pc, uint64_t hash, std::ptrdiff_t sq_dist, bool non_dep, unsigned sq_entries) {
+MASCOT::Table::tryAllocate(Addr load_pc, uint64_t hash, std::ptrdiff_t sq_dist, bool non_dep, bool should_bypass, unsigned sq_entries) {
   auto entry = getEntry(load_pc, hash);
   if (entry == nullptr) {
     // no entry exists, evict one and allocate
@@ -254,7 +262,7 @@ MASCOT::Table::tryAllocate(Addr load_pc, uint64_t hash, std::ptrdiff_t sq_dist, 
     entry->distances.first = non_dep ? NDEP_DISTANCE : sq_dist;
     entry->distances.second = NDEP_DISTANCE;
     entry->confidence = non_dep ? NDEP_CONFIDENCE : INIT_CONFIDENCE;
-    entry->bypassCounter = non_dep ? NDEP_BYPASS : INIT_BYPASS;
+    entry->bypassCounter = non_dep || !should_bypass ? NDEP_BYPASS : INIT_BYPASS;
 
     return true;
   }
@@ -265,7 +273,7 @@ MASCOT::Table::tryAllocate(Addr load_pc, uint64_t hash, std::ptrdiff_t sq_dist, 
       sq_dist < sq_entries / 2) {
     entry->distances.second = sq_dist;
     entry->confidence = non_dep ? NDEP_CONFIDENCE : INIT_CONFIDENCE;
-    entry->bypassCounter = non_dep ? NDEP_BYPASS : INIT_BYPASS;
+    entry->bypassCounter = non_dep || !should_bypass ? NDEP_BYPASS : INIT_BYPASS;
 
     return true;
   }
@@ -273,7 +281,7 @@ MASCOT::Table::tryAllocate(Addr load_pc, uint64_t hash, std::ptrdiff_t sq_dist, 
   entry->distances.first = non_dep ? NDEP_DISTANCE : sq_dist;
   entry->distances.second = NDEP_DISTANCE;
   entry->confidence = non_dep ? NDEP_CONFIDENCE : INIT_CONFIDENCE;
-  entry->bypassCounter = non_dep ? NDEP_BYPASS : INIT_BYPASS;
+  entry->bypassCounter = non_dep || !should_bypass ? NDEP_BYPASS : INIT_BYPASS;
 
   return true;
 }

@@ -11,7 +11,6 @@
 #include <cstdint>
 #include <vector>
 
-#include "base/circular_queue.hh"
 #include "base/types.hh"
 #include "cpu/inst_seq.hh"
 #include "cpu/o3/dyn_inst_ptr.hh"
@@ -165,10 +164,10 @@ private:
      * Invoke this function to change the counters in the entry.
      * @return false if the entry is not found.
      */
-    void commit(Addr load_pc, uint64_t hash, bool misprediction);
+    void commit(Addr load_pc, uint64_t hash, bool misprediction, bool should_bypass);
 
     bool tryAllocate(Addr load_pc, uint64_t hash, std::ptrdiff_t sq_dist,
-                     bool non_dep, unsigned sq_entries);
+                     bool non_dep, bool should_bypass, unsigned sq_entries);
 
     void decrConfidence(Addr load_pc, uint64_t hash) {
       const auto index = getIndex(load_pc, hash);
@@ -223,7 +222,7 @@ private:
 
   void allocateEntry(const unsigned startTableIdx, Addr load_pc,
                      BranchHistory branch_history, std::ptrdiff_t sq_dist,
-                     bool non_dep);
+                     bool non_dep, bool should_bypass);
 
   uint64_t foldHistory(std::bitset<BITSETSIZE> h, unsigned bits) {
     auto width = setBits + tagBits;
