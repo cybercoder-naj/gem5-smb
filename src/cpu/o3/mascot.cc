@@ -143,7 +143,12 @@ MASCOT::commit(Addr load_pc,
   if (misprediction) {
     // Allocate non dependency in next table.
     allocateEntry(prediction.tableIdx + 1, load_pc, branch_history, actual_sq_dist, true);
-    ++(memDepUnit->stats.falseDependencies);
+    if (prediction.type == MDP) {
+      ++(memDepUnit->stats.falseDependencies);
+      ++(memDepUnit->stats.mascotMDPMispredictions);
+    } else {
+      ++(memDepUnit->stats.mascotSMBMispredictions);
+    }
   } else {
     ++(memDepUnit->stats.correctPredictions);
   }
@@ -159,9 +164,16 @@ MASCOT::violation(Addr load_pc,
     // The prediction came from a table in MASCOT. 
     // update counters for next hash.
     tables[prediction.tableIdx].commit(load_pc, prediction.hash, true);
-    ++(memDepUnit->stats.falseDependencies);
     ++(*(memDepUnit->pathReads[prediction.tableIdx])); // reads an entry
     ++(*(memDepUnit->pathWrites[prediction.tableIdx])); // modifies it
+  }
+
+  if (prediction.type == NDEP) {
+    ++(memDepUnit->stats.mascotNDepMispredictions);
+  } else if (prediction.type == MDP) {
+    ++(memDepUnit->stats.mascotMDPMispredictions);
+  } else {
+    ++(memDepUnit->stats.mascotSMBMispredictions);
   }
 
   // "There are three types of misprediction that will lead to an allocation
