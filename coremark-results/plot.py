@@ -2,50 +2,42 @@ from pathlib import Path
 from tabulate import tabulate
 import argparse
 import logging
+import pathlib
 
-def get_property(benchmark_name, property_name):
+def get_property(smb_file: pathlib.Path, baseline_file: pathlib.Path, property_name: str) -> dict[str, float]:
     """Extracts a property value from baseline and smb stats files.
     
     Returns a dictionary with structure: { property_name: { baseline: value, smb: value } }
     """
-    script_dir = Path(__file__).resolve().parent
-    result = {}
+    result: dict[str, float] = {}
     
     # Get baseline value (from -stats-no-smb.txt)
-    baseline_file = script_dir / f"/home/nj421/gem5-smb/m5out/{benchmark_name}/no-smb/stats.txt"
-    if baseline_file.exists():
-        with open(baseline_file, 'r') as f:
-            for line in f:
-                if line.startswith(property_name):
-                    result["baseline"] = float(line.split()[1])
-                    break
-    else:
-        logging.warning(f"Baseline stats file not found for {benchmark_name}")
-        result["baseline"] = 0.0
+    with open(baseline_file, 'r') as f:
+        for line in f:
+            if line.startswith(property_name):
+                result["baseline"] = float(line.split()[1])
+                break
     
     # Get smb value (from -stats-smb.txt)
-    smb_file = script_dir / f"/home/nj421/gem5-smb/m5out/{benchmark_name}/smb/stats.txt"
-    if smb_file.exists():
-        with open(smb_file, 'r') as f:
-            for line in f:
-                if line.startswith(property_name):
-                    result["smb"] = float(line.split()[1])
-                    break
-    else:
-        logging.warning(f"SMB stats file not found for {benchmark_name}")
-        result["smb"] = 0.0
+    with open(smb_file, 'r') as f:
+        for line in f:
+            if line.startswith(property_name):
+                result["smb"] = float(line.split()[1])
+                break
     
     return result
 
+NUM_INSTS="simInsts"
 IPC="system.cpu.ipc"
 INSERTED_LOADS="system.cpu.MemDepUnit__0.insertedLoads"
+FALSE_DEPS="system.cpu.MemDepUnit__0.falseDependencies"
 BYPASSED="system.cpu.rename.bypassedLoads"
 BYPASSED_VALUE_CHECK_FAILED="system.cpu.commit.bypassedLoadValueCheckViolation"
 BYPASSED_MEM_ORDER_VIOLATION="system.cpu.lsq0.bypassedLoadMemOrderViolation"
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('-v', '--verbose', action='store_true', help='Enable verbose output')
+    _ = parser.add_argument('-v', '--verbose', action='store_true', help='Enable verbose output')
     args = parser.parse_args()
 
     logging.basicConfig(
@@ -53,26 +45,42 @@ if __name__ == "__main__":
         format='%(message)s'
     )
 
-    benchmark_properties = {}
+    benchmark_properties: dict[str, dict[str, dict[str, float]]] = {}
 
     script_dir = Path(__file__).resolve().parent
     for filename in script_dir.glob("*-stats-smb.txt"):
         logging.debug(f"Found SMB stats file: {filename}")
         benchmark_name = filename.stem.replace("-stats-smb", "")
 
-        ipc = get_property(benchmark_name, IPC)
+        script_dir = Path(__file__).resolve().parent
+        smb_file = script_dir / f"{benchmark_name}-stats-smb.txt"
+        if not smb_file.exists():
+            logging.warning(f"Could not open SMB stats file for {benchmark_name}")
+            continue
+        baseline_file = script_dir / f"{benchmark_name}-stats-no-smb.txt"
+        if not baseline_file.exists():
+            logging.warning(f"Could not open NO-SMB stats file for {benchmark_name}")
+            continue
+
+        ipc = get_property(smb_file, baseline_file, IPC)
         logging.debug(f"Extracted IPC for {benchmark_name}: {ipc}")
 
-        insertedLoads = get_property(benchmark_name, INSERTED_LOADS)
+        insertedLoads = get_property(smb_file, baseline_file, INSERTED_LOADS)
         logging.debug(f"Extracted insertedLoads for {benchmark_name}: {insertedLoads}")
 
-        bypassed = get_property(benchmark_name, BYPASSED)
+        bypassed = get_property(smb_file, baseline_file, BYPASSED)
         logging.debug(f"Extracted bypassedLoads for {benchmark_name}: {bypassed}")
 
-        bypassedValueCheckFailed = get_property(benchmark_name, BYPASSED_VALUE_CHECK_FAILED)
+        bypassedValueCheckFailed = get_property(smb_file, baseline_file, BYPASSED_VALUE_CHECK_FAILED)
         logging.debug(f"Extracted bypassedValueCheckFailed for {benchmark_name}: {bypassedValueCheckFailed}")
 
-        bypassMemOrderViolation = get_property(benchmark_name, BYPASSED_MEM_ORDER_VIOLATION)
+        bypassMemOrderViolation = get_property(smb_file, baseline_file, BYPASSED_MEM_ORDER_VIOLATION)
+        logging.debug(f"Extracted bypassedMemOrderViolation for {benchmark_name}: {bypassMemOrderViolation}")
+
+        num_insts = get_property(smb_file, baseline_file, NUM_INSTS)
+        logging.debug(f"Extracted bypassedMemOrderViolation for {benchmark_name}: {bypassMemOrderViolation}")
+
+        false_deps = get_property(smb_file, baseline_file, FALSE_DEPS)
         logging.debug(f"Extracted bypassedMemOrderViolation for {benchmark_name}: {bypassMemOrderViolation}")
 
         benchmark_properties[benchmark_name] = {
@@ -80,12 +88,15 @@ if __name__ == "__main__":
             "insertedLoads": insertedLoads,
             "ipc": ipc,
             "bypassedValueCheckFailed": bypassedValueCheckFailed,
-            "bypassedMemOrderViolation": bypassMemOrderViolation
+            "bypassedMemOrderViolation": bypassMemOrderViolation,
+            "numInsts": num_insts,
+            "falseDeps": false_deps
         }
 
     logging.info("\nBypassed percentage for each run:")
     
-    table_data = []
+    table1 = []
+    table2 = []
     for benchmark, properties in benchmark_properties.items():
         bypassed = properties["bypassedLoads"]["smb"]
         insertedLoads = properties["insertedLoads"]["smb"]
@@ -102,13 +113,25 @@ if __name__ == "__main__":
         mem_order_violation = properties["bypassedMemOrderViolation"]["smb"]
         mem_order_violation_percentage = (mem_order_violation / bypassed) * 100 if bypassed > 0 else 0
 
-        table_data.append([
-            benchmark,
+        table1.append([
+            benchmark[:benchmark.find('-')],
             f"{bypassed_percentage:.4f}%",
             f"{value_check_failed_percentage:.4f}%",
             f"{mem_order_violation_percentage:.4f}%",
-            f"{ipc_percentage:.4f}"
+            f"{ipc_percentage:.4f}",
+        ])
+
+        phast_mpki = properties["falseDeps"]["baseline"] / properties["numInsts"]["baseline"] * 1000
+        mascot_mpki = properties["falseDeps"]["smb"] / properties["numInsts"]["smb"] * 1000
+
+        table2.append([
+            benchmark[:benchmark.find('-')],
+            f"{phast_mpki:.4f}",
+            f"{mascot_mpki:.4f}",
         ])
     
-    headers = ["Benchmark", "Bypassed Loads %", "Value Check Failed %", "Memory Order Violations %", "IPC (Ratio to Baseline)"]
-    print(tabulate(table_data, headers=headers, tablefmt="grid"))
+    headers = ["Benchmark", "Bypassed Loads %", "Value Mismatch %", "Mem Violations %", "IPC Ratio"]
+    print(tabulate(table1, headers=headers, tablefmt="grid"), end="\n\n")
+
+    headers = ["Benchmark", "PHAST MPKI", "MASCOT MPKI"]
+    print(tabulate(table2, headers=headers, tablefmt="grid"), end="\n\n")

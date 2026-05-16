@@ -66,8 +66,7 @@ MASCOT::doPredict(Addr load_pc, InstSeqNum load_seq_num, BranchHistory branch_hi
   while (historyBegin < branch_history.size() && branch_history[historyBegin].seqNum > load_seq_num) {
       historyBegin++;
   }
-  //? bug?
-  if (historyBegin > branch_history.size()) return prediction; //no +1 branch
+  if (historyBegin == branch_history.size()) return prediction; //no +1 branch
 
   auto table_limit_idx = 0;
   while (table_limit_idx + 1 < histories.size() &&
@@ -86,7 +85,6 @@ MASCOT::doPredict(Addr load_pc, InstSeqNum load_seq_num, BranchHistory branch_hi
     prediction.distances = entry->distances;
     prediction.tableIdx = i;
     prediction.hash = hash;
-    ++(*(memDepUnit->pathReads[i])); //? Why was this pathWrites in PHAST
 
     // "A distance field of all 0s indicates that the entry is nondependent"
     if (entry->isNdep())
@@ -122,10 +120,11 @@ MASCOT::commit(Addr load_pc,
     break;
   
   case SMB:
+    // Must not be empty!
+    assert(store_addr.first != 0);
     // Must be empty!
     assert(store2_addr.first == 0);
-    if (store_addr.first != 0)
-      misprediction = load_addr.first != store_addr.first || load_addr.second > store_addr.second;
+    misprediction = load_addr.first != store_addr.first || load_addr.second > store_addr.second;
     break;
   
   default:

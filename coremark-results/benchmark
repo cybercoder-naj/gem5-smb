@@ -33,3 +33,5 @@ systemd-run --user --slice=workloads.slice --scope ./build/X86/gem5.fast \
   --cmd="$cmd" \
   $config \
   --options="-i1 -v0"
+
+cp m5out/$filename/smb/stats.txt $pwd/$filename-stats-smb.txt

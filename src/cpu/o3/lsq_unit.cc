@@ -349,7 +349,10 @@ LSQUnit::insertLoad(const DynInstPtr &load_inst)
 
         load_inst->smbPredStoreIt = smb_store_it;
 
-        
+        const auto& store_inst = smb_store_it->instruction();
+        if (store_inst->isExecuted() && store_inst->effAddrValid()) {
+          load_inst->mascotInfo.predStoreAddr = {store_inst->effAddr, store_inst->effSize};
+        }
     }
 
     // hardware transactional memory
