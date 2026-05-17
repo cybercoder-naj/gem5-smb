@@ -53,7 +53,6 @@ MASCOT::doPredict(Addr load_pc, InstSeqNum load_seq_num, BranchHistory branch_hi
     .distances = {0, 0},
     .tableIdx = BASE_PREDICTOR_IDX,
     .hash = 0,
-    .fromTable = false
   };
   if (branch_history.empty())
     return prediction;
@@ -67,7 +66,6 @@ MASCOT::doPredict(Addr load_pc, InstSeqNum load_seq_num, BranchHistory branch_hi
   while (historyBegin < branch_history.size() && branch_history[historyBegin].seqNum > load_seq_num) {
       historyBegin++;
   }
-  if (historyBegin == branch_history.size()) return prediction; //no +1 branch
 
   auto table_limit_idx = 0;
   const auto available_history = branch_history.size() - historyBegin;
@@ -87,7 +85,6 @@ MASCOT::doPredict(Addr load_pc, InstSeqNum load_seq_num, BranchHistory branch_hi
     prediction.distances = entry->distances;
     prediction.tableIdx = i;
     prediction.hash = hash;
-    prediction.fromTable = true;
 
     // "A distance field of all 0s indicates that the entry is nondependent"
     if (entry->isNdep())
@@ -145,9 +142,11 @@ MASCOT::commit(Addr load_pc,
       (load_addr.first == store2_addr.first &&
       load_addr.second <= store2_addr.second));
 
-  tables[prediction.tableIdx].commit(load_pc, prediction.hash, misprediction, should_bypass);
-  ++(*(memDepUnit->pathReads[prediction.tableIdx])); // reads an entry
-  ++(*(memDepUnit->pathWrites[prediction.tableIdx])); // modifies it.
+  if (prediction.tableIdx != BASE_PREDICTOR_IDX) {
+    tables[prediction.tableIdx].updateEntry(load_pc, prediction.hash, misprediction, should_bypass);
+    ++(*(memDepUnit->pathReads[prediction.tableIdx])); // reads an entry
+    ++(*(memDepUnit->pathWrites[prediction.tableIdx])); // modifies it.
+  }
 
   // "There are three types of misprediction that will lead to an allocation
   //  in a table with a longer history... ...
@@ -167,13 +166,11 @@ MASCOT::violation(Addr load_pc,
                   std::ptrdiff_t actual_sq_dist,
                   Prediction prediction,
                   BranchHistory branch_history) {
-  if (prediction.fromTable) {
-    assert(prediction.tableIdx != BASE_PREDICTOR_IDX);
-
+  if (prediction.tableIdx != BASE_PREDICTOR_IDX) {
     // The prediction came from a table in MASCOT. 
     // MASCOT wasted a prediction on the wrong dependency when the real dependency was elsewhere.
     // update counters for next hash.
-    tables[prediction.tableIdx].commit(load_pc, prediction.hash, true, false);
+    tables[prediction.tableIdx].updateEntry(load_pc, prediction.hash, true, false);
     ++(memDepUnit->stats.falseDependencies);
     ++(*(memDepUnit->pathReads[prediction.tableIdx])); // reads an entry
     ++(*(memDepUnit->pathWrites[prediction.tableIdx])); // modifies it
@@ -205,28 +202,24 @@ MASCOT::allocateEntry(const unsigned startTableIdx,
                       bool should_bypass) {
   if (startTableIdx >= tables.size()) return;
 
-  auto idx = startTableIdx;
-  // This is called from violation/commit only,
-  // where we pass the 'committedBranchHistory'
-  // so index = 0 is the youngest branch older than
-  // the load. so 0 is fine here.
-  uint64_t hash = generateBranchHash(histories[idx], branch_history, 0);
+  for (auto idx = startTableIdx; idx < tables.size(); ++idx) {
+    // This is called from violation/commit only,
+    // where we pass the 'committedBranchHistory'
+    // so index = 0 is the youngest branch older than
+    // the load. so 0 is fine here.
+    uint64_t hash = generateBranchHash(histories[idx], branch_history, 0);
 
-  ++(*(memDepUnit->pathReads[idx])); // reads for eviction target
-  if (tables[idx].tryAllocate(load_pc, hash, sq_dist, non_dep, should_bypass, sqEntries)) {
-    ++(*(memDepUnit->pathWrites[idx])); // it was successful in writing it.
-    return;
-  }
-
-  tables[idx].decrConfidence(load_pc, hash);
-  ++(*(memDepUnit->pathWrites[idx])); // writes to all entries in set.
-
-  while (++idx < tables.size()) {
-    hash = generateBranchHash(histories[idx], branch_history, 0);
     ++(*(memDepUnit->pathReads[idx])); // reads for eviction target
     if (tables[idx].tryAllocate(load_pc, hash, sq_dist, non_dep, should_bypass, sqEntries)) {
       ++(*(memDepUnit->pathWrites[idx])); // it was successful in writing it.
       return;
+    }
+
+    // Paper says to decrement only N_i table but
+    // provided code decrements both N_i and N_{i + 1}.
+    if (idx == startTableIdx) {
+      tables[idx].decrConfidence(load_pc, hash);
+      ++(*(memDepUnit->pathWrites[idx])); // writes to all entries in set.
     }
   }
 }
@@ -239,7 +232,7 @@ MASCOT::clear() {
 }
 
 void
-MASCOT::Table::commit(Addr load_pc, uint64_t hash, bool misprediction, bool should_bypass) {
+MASCOT::Table::updateEntry(Addr load_pc, uint64_t hash, bool misprediction, bool should_bypass) {
   auto entry = getEntry(load_pc, hash);
   if (entry == nullptr)
     return;
@@ -266,7 +259,6 @@ MASCOT::Table::tryAllocate(Addr load_pc, uint64_t hash, std::ptrdiff_t sq_dist, 
     if (entry == nullptr) // can't evict in this table
       return false;
 
-    entry->valid = true;
     entry->tag = getTag(load_pc, hash);
     entry->distances.first = non_dep ? NDEP_DISTANCE : sq_dist;
     entry->distances.second = NDEP_DISTANCE;
@@ -287,6 +279,10 @@ MASCOT::Table::tryAllocate(Addr load_pc, uint64_t hash, std::ptrdiff_t sq_dist, 
     return true;
   }
 
+  if (entry->confidence != 0)
+    // Don't replace the entry if there's still confidence in the entry.
+    return false;
+
   entry->distances.first = non_dep ? NDEP_DISTANCE : sq_dist;
   entry->distances.second = NDEP_DISTANCE;
   entry->confidence = non_dep ? NDEP_CONFIDENCE : INIT_CONFIDENCE;
@@ -301,7 +297,7 @@ MASCOT::Table::getEntry(const Addr load_pc, const uint64_t hash) {
   const auto tag = getTag(load_pc, hash);
 
   for (auto way = 0; way < tableAssociativity; ++way) {
-    if (blocks[index][way].valid && blocks[index][way].tag == tag)
+    if (blocks[index][way].tag == tag)
       return &(blocks[index][way]);
   }
   return nullptr;

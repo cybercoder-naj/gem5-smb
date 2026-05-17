@@ -35,11 +35,9 @@ public:
     std::pair<std::ptrdiff_t, std::ptrdiff_t> distances;
     size_t tableIdx;
     uint64_t hash;
-    bool fromTable;
   };
 
   struct PredictorEntry {
-    bool valid;
     uint16_t tag = 0;                                             // 16 bits
     std::pair<std::ptrdiff_t, std::ptrdiff_t> distances = {0, 0}; // each 7 bits
     uint8_t confidence = 0;    // 3 bits (usefulness)
@@ -56,7 +54,7 @@ public:
               distances.second == NDEP_DISTANCE);
     }
     bool isHighConfidence() const { return confidence == MAX_CONFIDENCE; }
-    bool canEvict() const { return !valid || confidence == 0; }
+    bool canEvict() const { return confidence == 0; }
 
     void resetCanBypass() { bypassCounter = 0; }
     void incrCanBypass() {
@@ -71,7 +69,9 @@ public:
       }
     }
     void incrConfidence() {
-      if (confidence < MAX_CONFIDENCE) {
+      if (isNdep() && confidence < MAX_NDEP_CONFIDENCE) {
+        ++confidence;
+      } else if (confidence < MAX_CONFIDENCE) {
         ++confidence;
       }
     }
@@ -132,6 +132,7 @@ public:
 private:
   static constexpr uint8_t MAX_DISTANCE = (1 << 7) - 1;
   static constexpr uint8_t MAX_CONFIDENCE = (1 << 3) - 1;
+  static constexpr uint8_t MAX_NDEP_CONFIDENCE = (1 << 2) - 1;
   static constexpr uint8_t MAX_BYPASS_COUNTER = (1 << 2) - 1;
 
   static constexpr uint8_t NDEP_DISTANCE = 0;
@@ -166,7 +167,7 @@ private:
      * Invoke this function to change the counters in the entry.
      * @return false if the entry is not found.
      */
-    void commit(Addr load_pc, uint64_t hash, bool misprediction, bool should_bypass);
+    void updateEntry(Addr load_pc, uint64_t hash, bool misprediction, bool should_bypass);
 
     bool tryAllocate(Addr load_pc, uint64_t hash, std::ptrdiff_t sq_dist,
                      bool non_dep, bool should_bypass, unsigned sq_entries);
@@ -252,7 +253,7 @@ private:
     constexpr unsigned targetBits = 5;
     const unsigned targetMask = (1 << targetBits) - 1;
 
-    std::bitset<BITSETSIZE> h = branch_history[end_idx].target & targetMask;
+    std::bitset<BITSETSIZE> h = 0; // Do not consider +1 branches
 
     unsigned bits = 60;
     unsigned items = 0;
