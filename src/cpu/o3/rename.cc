@@ -690,7 +690,10 @@ Rename::renameInsts(ThreadID tid)
                 // "MASCOT makes a prediction for each load in the decode stage."
                 // But it doesn't matter where it does the prediction in Gem5
                 inst->mascotInfo.prediction = iew_ptr->getMascot(tid)->predict(inst->pcState().instAddr(), inst->seqNum, cpu->getDecode()->getBranchHistory());
-                const auto& pred = inst->mascotInfo.prediction;
+                auto& pred = inst->mascotInfo.prediction;
+                if (pred.type == MASCOT::PredictionType::SMB)
+                    pred.type = MASCOT::PredictionType::MDP; // treat mascot as MDP only.
+
                 DPRINTF(Rename, 
                         "[tid:%i] Mascot prediction for load [sn:%llu] "
                         "type: %s; distance1: %u; distance2: %u\n",

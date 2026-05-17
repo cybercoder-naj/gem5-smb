@@ -28,12 +28,10 @@
 
 #include "cpu/o3/mem_dep_unit.hh"
 
-#include <map>
+#include <cassert>
 #include <memory>
 #include <vector>
 
-#include "base/compiler.hh"
-#include "base/debug.hh"
 #include "cpu/o3/dyn_inst.hh"
 #include "cpu/o3/inst_queue.hh"
 #include "cpu/o3/limits.hh"
@@ -124,11 +122,11 @@ MemDepUnit::MemDepUnitStats::MemDepUnitStats(statistics::Group *parent)
                "Number of MDP predictions by Mascot"),
       ADD_STAT(predictsSMB, statistics::units::Count::get(),
                "Number of SMB predictions by Mascot"),
-      ADD_STAT(mascotNDepMispredictions, statistics::units::Count::get(),
+      ADD_STAT(ndepViolations, statistics::units::Count::get(),
                "Number of MASCOT non-dependent predictions that violated"),
-      ADD_STAT(mascotMDPMispredictions, statistics::units::Count::get(),
+      ADD_STAT(mdpViolations, statistics::units::Count::get(),
                "Number of MASCOT MDP predictions that were incorrect"),
-      ADD_STAT(mascotSMBMispredictions, statistics::units::Count::get(),
+      ADD_STAT(smbViolations, statistics::units::Count::get(),
                "Number of MASCOT SMB predictions that were incorrect"),
       ADD_STAT(readsPath1, statistics::units::Count::get(),
                "Number of reads to path table 1."),
@@ -279,7 +277,7 @@ void MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory) {
       if (hash_it != memDepHash.end())
         dependencies.push_back(hash_it->second);
     } else {
-      // Rename did not bypass this load, check for MDP.
+      // It could have been SMB but rename could not bypass it. Check for MDP.
       if (pred.type != MASCOT::PredictionType::NDEP) {
         assert(pred.distances.first || pred.distances.second);
 
@@ -288,7 +286,6 @@ void MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory) {
             addSQDistanceDep(inst, pred.distances.first, dependencies) |
             addSQDistanceDep(inst, pred.distances.second, dependencies);
 
-        // It could have been SMB but rename could not bypass it.
         // If the dependencies were found, mark it as MDP, otherwise NDEP.
         pred.type = mascotInfo.mdpPredicted ? MASCOT::PredictionType::MDP
                                             : MASCOT::PredictionType::NDEP;

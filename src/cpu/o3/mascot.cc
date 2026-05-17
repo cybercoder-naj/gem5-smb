@@ -138,12 +138,12 @@ MASCOT::commit(Addr load_pc,
     break;
   }
 
-    const bool should_bypass =
-      prediction.type != NDEP &&
-      ((load_addr.first == store_addr.first &&
-        load_addr.second <= store_addr.second) ||
-       (load_addr.first == store2_addr.first &&
-        load_addr.second <= store2_addr.second));
+  const bool should_bypass =
+    prediction.type != NDEP &&
+    ((load_addr.first == store_addr.first &&
+      load_addr.second <= store_addr.second) ||
+      (load_addr.first == store2_addr.first &&
+      load_addr.second <= store2_addr.second));
 
   tables[prediction.tableIdx].commit(load_pc, prediction.hash, misprediction, should_bypass);
   ++(*(memDepUnit->pathReads[prediction.tableIdx])); // reads an entry
@@ -155,12 +155,7 @@ MASCOT::commit(Addr load_pc,
   if (misprediction) {
     // Allocate non dependency in next table.
     allocateEntry(prediction.tableIdx + 1, load_pc, branch_history, actual_sq_dist, true, should_bypass);
-    if (prediction.type == MDP) {
-      ++(memDepUnit->stats.falseDependencies);
-      ++(memDepUnit->stats.mascotMDPMispredictions);
-    } else {
-      ++(memDepUnit->stats.mascotSMBMispredictions);
-    }
+    ++(memDepUnit->stats.falseDependencies);
   } else {
     ++(memDepUnit->stats.correctPredictions);
   }
@@ -172,20 +167,24 @@ MASCOT::violation(Addr load_pc,
                   std::ptrdiff_t actual_sq_dist,
                   Prediction prediction,
                   BranchHistory branch_history) {
-  if (prediction.tableIdx != BASE_PREDICTOR_IDX) {
+  if (prediction.fromTable) {
+    assert(prediction.tableIdx != BASE_PREDICTOR_IDX);
+
     // The prediction came from a table in MASCOT. 
+    // MASCOT wasted a prediction on the wrong dependency when the real dependency was elsewhere.
     // update counters for next hash.
     tables[prediction.tableIdx].commit(load_pc, prediction.hash, true, false);
+    ++(memDepUnit->stats.falseDependencies);
     ++(*(memDepUnit->pathReads[prediction.tableIdx])); // reads an entry
     ++(*(memDepUnit->pathWrites[prediction.tableIdx])); // modifies it
   }
 
   if (prediction.type == NDEP) {
-    ++(memDepUnit->stats.mascotNDepMispredictions);
+    ++(memDepUnit->stats.ndepViolations);
   } else if (prediction.type == MDP) {
-    ++(memDepUnit->stats.mascotMDPMispredictions);
+    ++(memDepUnit->stats.mdpViolations);
   } else {
-    ++(memDepUnit->stats.mascotSMBMispredictions);
+    ++(memDepUnit->stats.smbViolations);
   }
 
   // "There are three types of misprediction that will lead to an allocation

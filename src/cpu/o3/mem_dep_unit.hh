@@ -220,9 +220,9 @@ class MemDepUnit
         statistics::Scalar predictsNDep;
         statistics::Scalar predictsMDP;
         statistics::Scalar predictsSMB;
-        statistics::Scalar mascotNDepMispredictions;
-        statistics::Scalar mascotMDPMispredictions;
-        statistics::Scalar mascotSMBMispredictions;
+        statistics::Scalar ndepViolations;
+        statistics::Scalar mdpViolations;
+        statistics::Scalar smbViolations;
         /* ==== Store Sets ==== */
         statistics::Scalar LFSTReads;
         statistics::Scalar LFSTWrites;

@@ -42,9 +42,6 @@
 #ifndef __CPU_O3_DYN_INST_HH__
 #define __CPU_O3_DYN_INST_HH__
 
-#include <algorithm>
-#include <array>
-#include <deque>
 #include <list>
 #include <string>
 
@@ -61,7 +58,6 @@
 #include "cpu/op_class.hh"
 #include "cpu/reg_class.hh"
 #include "cpu/static_inst.hh"
-#include "cpu/translation.hh"
 #include "debug/HtmCpu.hh"
 
 namespace gem5
