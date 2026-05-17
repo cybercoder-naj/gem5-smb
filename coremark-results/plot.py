@@ -128,20 +128,13 @@ if __name__ == "__main__":
 
         phast_mpki = (properties["falseDeps"]["baseline"] + properties["totalMemOrder"]["baseline"]) / properties["numInsts"]["baseline"] * 1000
         mascot_mpki = (properties["falseDeps"]["smb"] + properties["totalMemOrder"]["smb"]) / properties["numInsts"]["smb"] * 1000
-        # mascot_ndep = properties["mascotNDepMispredictions"]["smb"]
-        # mascot_mdp = properties["mascotMDPMispredictions"]["smb"]
-        # mascot_smb = properties["mascotSMBMispredictions"]["smb"]
-        
-        mpki_percentage = abs(phast_mpki - mascot_mpki) / phast_mpki * 100
+        mpki_percentage = (mascot_mpki - phast_mpki) / phast_mpki * 100
 
         table2.append([
             benchmark[:benchmark.find('-')],
             f"{phast_mpki:.4f}",
             f"{mascot_mpki:.4f}",
-            f"{'+' if mascot_mpki > phast_mpki else '-'}{mpki_percentage:.4f}%"
-            # f"{mascot_ndep:.4f}",
-            # f"{mascot_mdp:.4f}",
-            # f"{mascot_smb:.4f}",
+            f"{mpki_percentage:.2f}%"
         ])
     
     headers = ["Benchmark", "Loads Stalled %", "Mem Violations %", "IPC Ratio"]

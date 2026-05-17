@@ -69,8 +69,9 @@ public:
       }
     }
     void incrConfidence() {
-      if (isNdep() && confidence < MAX_NDEP_CONFIDENCE) {
-        ++confidence;
+      if (isNdep()) {
+        if (confidence < MAX_NDEP_CONFIDENCE)
+          ++confidence;
       } else if (confidence < MAX_CONFIDENCE) {
         ++confidence;
       }
@@ -257,8 +258,7 @@ private:
 
     unsigned bits = 60;
     unsigned items = 0;
-    for (long idx = end_idx - 1; idx >= start_idx && items < num_branches;
-         --idx) {
+    for (long idx = end_idx - 1; idx >= start_idx && items < num_branches; --idx) {
       if (!branch_history[idx].indirect) {
         h <<= 1;
         h[0] = branch_history[idx].taken;

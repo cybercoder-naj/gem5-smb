@@ -1051,8 +1051,7 @@ Commit::commitInsts()
                 // Update MASCOT on table-backed predictions, including
                 // non-dependence entries that need usefulness reinforcement.
                 const auto &mascot_pred = head_inst->mascotInfo.prediction;
-                if (head_inst->isLoad() &&
-                    (head_inst->mascotInfo.predicted() || mascot_pred.fromTable)) {
+                if (head_inst->isLoad()) {
                     iewStage->instQueue.memDepUnit[tid].commit(head_inst, committedBranchHistory);
                 }
 
