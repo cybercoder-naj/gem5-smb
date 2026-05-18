@@ -4,28 +4,29 @@ import argparse
 import logging
 import pathlib
 
-def get_property(smb_file: pathlib.Path, baseline_file: pathlib.Path, property_name: str) -> dict[str, float]:
-    """Extracts a property value from baseline and smb stats files.
+def get_properties(file: pathlib.Path, props: list[str]) -> dict[str, float]:
+    """Extracts properties from stats files.
     
-    Returns a dictionary with structure: { property_name: { baseline: value, smb: value } }
+    Returns a dictionary with structure: { property_name: value }
     """
-    result: dict[str, float] = {}
+    prop_values: dict[str, float] = {}
     
     # Get baseline value (from -stats-no-smb.txt)
-    with open(baseline_file, 'r') as f:
+    with open(file, 'r') as f:
         for line in f:
-            if line.startswith(property_name):
-                result["baseline"] = float(line.split()[1])
-                break
+            parts = line.split()
+            if len(parts) < 2:
+                continue
+
+            prop_name = parts[0]
+
+            if prop_name in props:
+                try:
+                    prop_values[prop_name] = float(parts[1])
+                except ValueError:
+                    continue
     
-    # Get smb value (from -stats-smb.txt)
-    with open(smb_file, 'r') as f:
-        for line in f:
-            if line.startswith(property_name):
-                result["smb"] = float(line.split()[1])
-                break
-    
-    return result
+    return prop_values
 
 NUM_INSTS="simInsts"
 IPC="system.cpu.ipc"
@@ -41,6 +42,23 @@ BYPASSED="system.cpu.rename.bypassedLoads"
 BYPASSED_VALUE_CHECK_FAILED="system.cpu.commit.bypassedLoadValueCheckViolation"
 BYPASSED_MEM_ORDER_VIOLATION="system.cpu.lsq0.bypassedLoadMemOrderViolation"
 TOTAL_MEM_ORDER_VIOLATIONS="system.cpu.commit.memOrderViolationEvents"
+
+properties = [
+    NUM_INSTS,
+    IPC,
+    INSERTED_LOADS,
+    FALSE_DEPS,
+    MASCOT_MDP_PREDICTIONS,
+    MASCOT_MDP_PREDICTIONS,
+    MASCOT_SMB_PREDICTIONS,
+    MASCOT_NDEP_MISPREDICTIONS,
+    MASCOT_MDP_MISPREDICTIONS,
+    MASCOT_SMB_MISPREDICTIONS,
+    BYPASSED,
+    BYPASSED_VALUE_CHECK_FAILED,
+    BYPASSED_MEM_ORDER_VIOLATION,
+    TOTAL_MEM_ORDER_VIOLATIONS
+]
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -69,37 +87,12 @@ if __name__ == "__main__":
             logging.warning(f"Could not open NO-SMB stats file for {benchmark_name}")
             continue
 
-        ipc = get_property(smb_file, baseline_file, IPC)
-        insertedLoads = get_property(smb_file, baseline_file, INSERTED_LOADS)
-        bypassed = get_property(smb_file, baseline_file, BYPASSED)
-        bypassedValueCheckFailed = get_property(smb_file, baseline_file, BYPASSED_VALUE_CHECK_FAILED)
-        bypassMemOrderViolation = get_property(smb_file, baseline_file, BYPASSED_MEM_ORDER_VIOLATION)
-        num_insts = get_property(smb_file, baseline_file, NUM_INSTS)
-        false_deps = get_property(smb_file, baseline_file, FALSE_DEPS)
-        total_mem_order= get_property(smb_file, baseline_file, TOTAL_MEM_ORDER_VIOLATIONS)
-        predictsNDep = get_property(smb_file, baseline_file, MASCOT_NDEP_PREDICTIONS)
-        predictsMDP = get_property(smb_file, baseline_file, MASCOT_MDP_PREDICTIONS)
-        predictsSMB = get_property(smb_file, baseline_file, MASCOT_SMB_PREDICTIONS)
-
-        mascot_ndep_mispredictions = get_property(smb_file, baseline_file, MASCOT_NDEP_MISPREDICTIONS)
-        mascot_mdp_mispredictions = get_property(smb_file, baseline_file, MASCOT_MDP_MISPREDICTIONS)
-        mascot_smb_mispredictions = get_property(smb_file, baseline_file, MASCOT_SMB_MISPREDICTIONS)
+        baseline_stats = get_properties(baseline_file, properties) 
+        smb_stats = get_properties(smb_file, properties) 
 
         benchmark_properties[benchmark_name] = {
-            "bypassedLoads": bypassed,
-            "insertedLoads": insertedLoads,
-            "ipc": ipc,
-            "bypassedValueCheckFailed": bypassedValueCheckFailed,
-            "bypassedMemOrderViolation": bypassMemOrderViolation,
-            "numInsts": num_insts,
-            "falseDeps": false_deps,
-            "mascotNDepMispredictions": mascot_ndep_mispredictions,
-            "mascotMDPMispredictions": mascot_mdp_mispredictions,
-            "mascotSMBMispredictions": mascot_smb_mispredictions,
-            "predictsNDep": predictsNDep,
-            "predictsSMB": predictsSMB,
-            "predictsMDP": predictsMDP,
-            "totalMemOrder": total_mem_order
+            'baseline': baseline_stats,
+            'smb': smb_stats
         }
 
     logging.info("\nBypassed percentage for each run:")
@@ -107,27 +100,23 @@ if __name__ == "__main__":
     table1 = []
     table2 = []
     for benchmark, properties in benchmark_properties.items():
-        bypassed = properties["bypassedLoads"]["smb"]
-        insertedLoads = properties["insertedLoads"]["smb"]
+        bypassed = properties["smb"][BYPASSED]
+        insertedLoads = properties["smb"][INSERTED_LOADS]
         if insertedLoads > 0:
             bypassed_percentage = (bypassed / insertedLoads) * 100
         else:
             bypassed_percentage = 0
 
-        ipc_percentage = properties["ipc"]["smb"] / properties["ipc"]["baseline"] if properties["ipc"]["baseline"] > 0 else 0
-
-        dependencePrediction = (properties["predictsSMB"]["smb"] + properties["predictsMDP"]["smb"]) / insertedLoads * 100
-        memOrderViolations = (properties["totalMemOrder"]["smb"]) / insertedLoads * 100
+        ipc_percentage = properties["smb"][IPC] / properties["baseline"][IPC] if properties["baseline"][IPC] > 0 else 0
 
         table1.append([
             benchmark[:benchmark.find('-')],
-            f"{dependencePrediction:.4f}%",
-            f"{memOrderViolations:.4f}%",
+            f"{bypassed_percentage:.4f}%",
             f"{ipc_percentage:.4f}",
         ])
 
-        phast_mpki = (properties["falseDeps"]["baseline"] + properties["totalMemOrder"]["baseline"]) / properties["numInsts"]["baseline"] * 1000
-        mascot_mpki = (properties["falseDeps"]["smb"] + properties["totalMemOrder"]["smb"]) / properties["numInsts"]["smb"] * 1000
+        phast_mpki = (properties["baseline"][FALSE_DEPS] + properties["baseline"][TOTAL_MEM_ORDER_VIOLATIONS]) / properties["baseline"][NUM_INSTS] * 1000
+        mascot_mpki = (properties["smb"][FALSE_DEPS] + properties["smb"][TOTAL_MEM_ORDER_VIOLATIONS]) / properties["smb"][NUM_INSTS] * 1000
         mpki_percentage = (mascot_mpki - phast_mpki) / phast_mpki * 100
 
         table2.append([
@@ -137,16 +126,13 @@ if __name__ == "__main__":
             f"{mpki_percentage:.2f}%"
         ])
     
-    headers = ["Benchmark", "Loads Stalled %", "Mem Violations %", "IPC Ratio"]
+    headers = ["Benchmark", "Bypassed Loads %", "IPC Ratio"]
     print(tabulate(table1, headers=headers, tablefmt="grid"), end="\n\n")
 
     headers = [
         "Benchmark",
         "PHAST MPKI",
         "MASCOT MPKI",
-        "% change",
-        # "Mascot NDEP violations",
-        # "Mascot MDP violations",
-        # "Mascot SMB violations",
+        "% improvement",
     ]
     print(tabulate(table2, headers=headers, tablefmt="grid"), end="\n\n")

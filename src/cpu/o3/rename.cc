@@ -691,8 +691,6 @@ Rename::renameInsts(ThreadID tid)
                 // But it doesn't matter where it does the prediction in Gem5
                 inst->mascotInfo.prediction = iew_ptr->getMascot(tid)->predict(inst->pcState().instAddr(), inst->seqNum, cpu->getDecode()->getBranchHistory());
                 auto& pred = inst->mascotInfo.prediction;
-                if (pred.type == MASCOT::PredictionType::SMB)
-                    pred.type = MASCOT::PredictionType::MDP; // treat mascot as MDP only.
 
                 DPRINTF(Rename, 
                         "[tid:%i] Mascot prediction for load [sn:%llu] "
