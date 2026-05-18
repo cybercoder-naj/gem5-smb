@@ -121,6 +121,7 @@ public:
    */
   void violation(Addr load_pc, InstSeqNum store_seq_num,
                  std::ptrdiff_t actual_sq_dist, Prediction prediction,
+                 bool mdpViolation, bool smbViolation,
                  BranchHistory branch_history);
 
   void clear();

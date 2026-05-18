@@ -97,8 +97,9 @@ if __name__ == "__main__":
 
     logging.info("\nBypassed percentage for each run:")
     
-    table1 = []
-    table2 = []
+    table1: list[list[str]] = []
+    table2: list[list[str]] = []
+    table3: list[list[str]] = []
     for benchmark, properties in benchmark_properties.items():
         bypassed = properties["smb"][BYPASSED]
         insertedLoads = properties["smb"][INSERTED_LOADS]
@@ -125,6 +126,20 @@ if __name__ == "__main__":
             f"{mascot_mpki:.4f}",
             f"{mpki_percentage:.2f}%"
         ])
+
+        predictedSMB = properties["smb"][MASCOT_SMB_PREDICTIONS]
+        mispredictedSMB = properties["smb"][MASCOT_SMB_MISPREDICTIONS]
+        correctSMBPredictions = bypassed - mispredictedSMB
+        smbAccuracy = (correctSMBPredictions / bypassed) * 100
+        table3.append([
+            benchmark[:benchmark.find('-')],
+            f"{predictedSMB}",
+            f"{bypassed}",
+            f"{correctSMBPredictions}",
+            f"{mispredictedSMB}",
+            f"{smbAccuracy:.2f}%"
+        ])
+
     
     headers = ["Benchmark", "Bypassed Loads %", "IPC Ratio"]
     print(tabulate(table1, headers=headers, tablefmt="grid"), end="\n\n")
@@ -136,3 +151,13 @@ if __name__ == "__main__":
         "% improvement",
     ]
     print(tabulate(table2, headers=headers, tablefmt="grid"), end="\n\n")
+
+    headers = [
+        "Benchmark",
+        "# SMB Predictions",
+        "# Loads Bypassed",
+        "# Correct Bypassing",
+        "# Bypassing Violations",
+        'Accuracy'
+    ]
+    print(tabulate(table3, headers=headers, tablefmt="grid"), end="\n\n")

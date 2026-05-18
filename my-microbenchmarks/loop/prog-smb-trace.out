@@ -1325,6 +1325,7 @@ O3CPU: Ticking main, O3CPU.
   60000: global: [sn:50] has 1 ready out of 4 sources. RTI 0)
   60000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 192, loadsInProgress: 0, loads dispatchedToLQ: 0
   60000: system.cpu.rename: [tid:0] Processing instruction [sn:60] with PC (0x401011=>0x401015).(0=>1).
+  60000: system.cpu.rename: [tid:0] Mascot prediction for load [sn:60] type: 0; distance1: 0; distance2: 0
   60000: system.cpu.rename: [tid:0] Looking up integer arch reg 1, got phys reg 41 (integer)
   60000: system.cpu.rename: [tid:0] Register 41 (flat: 41) (integer) is not ready.
   60000: system.cpu.rename: [tid:0] Looking up integer arch reg 6, got phys reg 40 (integer)
@@ -1715,6 +1716,7 @@ O3CPU: Ticking main, O3CPU.
   62000: system.cpu.rename: [tid:0] Processing instruction [sn:160] with PC (0x40102b=>0x40102d).(0=>1).
   62000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 192, loadsInProgress: 1, loads dispatchedToLQ: 0
   62000: system.cpu.rename: [tid:0] Processing instruction [sn:170] with PC (0x40102d=>0x40102f).(0=>1).
+  62000: system.cpu.rename: [tid:0] Mascot prediction for load [sn:170] type: 0; distance1: 0; distance2: 0
   62000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
   62000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
   62000: global: [sn:170] has 1 ready out of 4 sources. RTI 0)
@@ -1933,6 +1935,7 @@ O3CPU: Ticking main, O3CPU.
   63000: global: [sn:190] has 2 ready out of 4 sources. RTI 0)
   63000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 192, loadsInProgress: 2, loads dispatchedToLQ: 1
   63000: system.cpu.rename: [tid:0] Processing instruction [sn:200] with PC (0x40102f=>0x401031).(0=>1).
+  63000: system.cpu.rename: [tid:0] Mascot prediction for load [sn:200] type: 0; distance1: 0; distance2: 0
   63000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
   63000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
   63000: global: [sn:200] has 1 ready out of 4 sources. RTI 0)
@@ -1997,6 +2000,7 @@ O3CPU: Ticking main, O3CPU.
   63000: global: [sn:220] has 2 ready out of 4 sources. RTI 0)
   63000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 192, loadsInProgress: 3, loads dispatchedToLQ: 1
   63000: system.cpu.rename: [tid:0] Processing instruction [sn:230] with PC (0x401031=>0x401033).(0=>1).
+  63000: system.cpu.rename: [tid:0] Mascot prediction for load [sn:230] type: 0; distance1: 0; distance2: 0
   63000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
   63000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
   63000: global: [sn:230] has 1 ready out of 4 sources. RTI 0)
@@ -2289,6 +2293,7 @@ O3CPU: Ticking main, O3CPU.
   64000: global: [sn:250] has 2 ready out of 4 sources. RTI 0)
   64000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 191, loadsInProgress: 3, loads dispatchedToLQ: 0
   64000: system.cpu.rename: [tid:0] Processing instruction [sn:260] with PC (0x401033=>0x401035).(0=>1).
+  64000: system.cpu.rename: [tid:0] Mascot prediction for load [sn:260] type: 0; distance1: 0; distance2: 0
   64000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
   64000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
   64000: global: [sn:260] has 1 ready out of 4 sources. RTI 0)
@@ -2353,6 +2358,7 @@ O3CPU: Ticking main, O3CPU.
   64000: global: [sn:280] has 2 ready out of 4 sources. RTI 0)
   64000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 191, loadsInProgress: 4, loads dispatchedToLQ: 0
   64000: system.cpu.rename: [tid:0] Processing instruction [sn:290] with PC (0x401035=>0x401037).(0=>1).
+  64000: system.cpu.rename: [tid:0] Mascot prediction for load [sn:290] type: 0; distance1: 0; distance2: 0
   64000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
   64000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
   64000: global: [sn:290] has 1 ready out of 4 sources. RTI 0)
@@ -2626,6 +2632,7 @@ O3CPU: Ticking main, O3CPU.
   65000: global: [sn:310] has 2 ready out of 4 sources. RTI 0)
   65000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 190, loadsInProgress: 5, loads dispatchedToLQ: 1
   65000: system.cpu.rename: [tid:0] Processing instruction [sn:320] with PC (0x401037=>0x401039).(0=>1).
+  65000: system.cpu.rename: [tid:0] Mascot prediction for load [sn:320] type: 0; distance1: 0; distance2: 0
   65000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
   65000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
   65000: global: [sn:320] has 1 ready out of 4 sources. RTI 0)
@@ -2690,6 +2697,7 @@ O3CPU: Ticking main, O3CPU.
   65000: global: [sn:340] has 2 ready out of 4 sources. RTI 0)
   65000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 190, loadsInProgress: 6, loads dispatchedToLQ: 1
   65000: system.cpu.rename: [tid:0] Processing instruction [sn:350] with PC (0x401039=>0x40103b).(0=>1).
+  65000: system.cpu.rename: [tid:0] Mascot prediction for load [sn:350] type: 0; distance1: 0; distance2: 0
   65000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
   65000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
   65000: global: [sn:350] has 1 ready out of 4 sources. RTI 0)
@@ -2958,6 +2966,7 @@ O3CPU: Ticking main, O3CPU.
   66000: global: [sn:370] has 3 ready out of 4 sources. RTI 0)
   66000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 188, loadsInProgress: 6, loads dispatchedToLQ: 2
   66000: system.cpu.rename: [tid:0] Processing instruction [sn:380] with PC (0x40103b=>0x40103d).(0=>1).
+  66000: system.cpu.rename: [tid:0] Mascot prediction for load [sn:380] type: 0; distance1: 0; distance2: 0
   66000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
   66000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
   66000: global: [sn:380] has 1 ready out of 4 sources. RTI 0)
@@ -3025,6 +3034,7 @@ O3CPU: Ticking main, O3CPU.
   66000: global: [sn:400] has 3 ready out of 4 sources. RTI 0)
   66000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 188, loadsInProgress: 7, loads dispatchedToLQ: 2
   66000: system.cpu.rename: [tid:0] Processing instruction [sn:410] with PC (0x40103d=>0x40103f).(0=>1).
+  66000: system.cpu.rename: [tid:0] Mascot prediction for load [sn:410] type: 0; distance1: 0; distance2: 0
   66000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
   66000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
   66000: global: [sn:410] has 1 ready out of 4 sources. RTI 0)
@@ -3924,6 +3934,7 @@ O3CPU: Ticking main, O3CPU.
   71000: system.cpu.commit: [tid:0] [sn:60] Committing instruction with PC (0x401011=>0x401015).(0=>1)
   71000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x401011=>0x401015).(0=>1), [sn:60]
   71000: system.cpu: Removing committed instruction [tid:0] PC (0x401011=>0x401015).(0=>1) [sn:60]
+  71000: system.cpu.memDep0: Committing instruction PC 0x401011 [sn:60].
   71000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:70]
   71000: system.cpu.commit: [tid:0] [sn:70] Committing instruction with PC (0x401015=>0x401018).(0=>1)
   71000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x401015=>0x401018).(0=>1), [sn:70]
@@ -4582,6 +4593,7 @@ O3CPU: Ticking main, O3CPU.
   75000: global: [sn:450] has 4 ready out of 4 sources. RTI 0)
   75000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 192, loadsInProgress: 0, loads dispatchedToLQ: 0
   75000: system.cpu.rename: [tid:0] Processing instruction [sn:460] with PC (0x401011=>0x401015).(0=>1).
+  75000: system.cpu.rename: [tid:0] Mascot prediction for load [sn:460] type: 0; distance1: 0; distance2: 0
   75000: system.cpu.rename: [tid:0] Looking up integer arch reg 1, got phys reg 44 (integer)
   75000: system.cpu.rename: [tid:0] Register 44 (flat: 44) (integer) is ready.
   75000: global: [sn:460] has 1 ready out of 3 sources. RTI 0)
@@ -5233,6 +5245,7 @@ O3CPU: Ticking main, O3CPU.
   78000: system.cpu.rename: [tid:0] Processing instruction [sn:560] with PC (0x40102b=>0x40102d).(0=>1).
   78000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 192, loadsInProgress: 1, loads dispatchedToLQ: 1
   78000: system.cpu.rename: [tid:0] Processing instruction [sn:570] with PC (0x40102d=>0x40102f).(0=>1).
+  78000: system.cpu.rename: [tid:0] Mascot prediction for load [sn:570] type: 0; distance1: 0; distance2: 0
   78000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
   78000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
   78000: global: [sn:570] has 1 ready out of 4 sources. RTI 0)
@@ -5297,6 +5310,7 @@ O3CPU: Ticking main, O3CPU.
   78000: global: [sn:590] has 2 ready out of 4 sources. RTI 0)
   78000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 192, loadsInProgress: 2, loads dispatchedToLQ: 1
   78000: system.cpu.rename: [tid:0] Processing instruction [sn:600] with PC (0x40102f=>0x401031).(0=>1).
+  78000: system.cpu.rename: [tid:0] Mascot prediction for load [sn:600] type: 0; distance1: 0; distance2: 0
   78000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
   78000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
   78000: global: [sn:600] has 1 ready out of 4 sources. RTI 0)
@@ -5561,6 +5575,7 @@ O3CPU: Ticking main, O3CPU.
   79000: global: [sn:620] has 2 ready out of 4 sources. RTI 0)
   79000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 191, loadsInProgress: 2, loads dispatchedToLQ: 0
   79000: system.cpu.rename: [tid:0] Processing instruction [sn:630] with PC (0x401031=>0x401033).(0=>1).
+  79000: system.cpu.rename: [tid:0] Mascot prediction for load [sn:630] type: 0; distance1: 0; distance2: 0
   79000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
   79000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
   79000: global: [sn:630] has 1 ready out of 4 sources. RTI 0)
@@ -5625,6 +5640,7 @@ O3CPU: Ticking main, O3CPU.
   79000: global: [sn:650] has 2 ready out of 4 sources. RTI 0)
   79000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 191, loadsInProgress: 3, loads dispatchedToLQ: 0
   79000: system.cpu.rename: [tid:0] Processing instruction [sn:660] with PC (0x401033=>0x401035).(0=>1).
+  79000: system.cpu.rename: [tid:0] Mascot prediction for load [sn:660] type: 0; distance1: 0; distance2: 0
   79000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
   79000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
   79000: global: [sn:660] has 1 ready out of 4 sources. RTI 0)
@@ -5843,6 +5859,7 @@ O3CPU: Ticking main, O3CPU.
   80000: global: [sn:680] has 3 ready out of 4 sources. RTI 0)
   80000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 191, loadsInProgress: 4, loads dispatchedToLQ: 0
   80000: system.cpu.rename: [tid:0] Processing instruction [sn:690] with PC (0x401035=>0x401037).(0=>1).
+  80000: system.cpu.rename: [tid:0] Mascot prediction for load [sn:690] type: 0; distance1: 0; distance2: 0
   80000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
   80000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
   80000: global: [sn:690] has 1 ready out of 4 sources. RTI 0)
@@ -5910,6 +5927,7 @@ O3CPU: Ticking main, O3CPU.
   80000: global: [sn:710] has 3 ready out of 4 sources. RTI 0)
   80000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 191, loadsInProgress: 5, loads dispatchedToLQ: 0
   80000: system.cpu.rename: [tid:0] Processing instruction [sn:720] with PC (0x401037=>0x401039).(0=>1).
+  80000: system.cpu.rename: [tid:0] Mascot prediction for load [sn:720] type: 0; distance1: 0; distance2: 0
   80000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
   80000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
   80000: global: [sn:720] has 1 ready out of 4 sources. RTI 0)
@@ -6134,6 +6152,7 @@ O3CPU: Ticking main, O3CPU.
   81000: global: [sn:740] has 3 ready out of 4 sources. RTI 0)
   81000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 189, loadsInProgress: 6, loads dispatchedToLQ: 2
   81000: system.cpu.rename: [tid:0] Processing instruction [sn:750] with PC (0x401039=>0x40103b).(0=>1).
+  81000: system.cpu.rename: [tid:0] Mascot prediction for load [sn:750] type: 0; distance1: 0; distance2: 0
   81000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
   81000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
   81000: global: [sn:750] has 1 ready out of 4 sources. RTI 0)
@@ -6201,6 +6220,7 @@ O3CPU: Ticking main, O3CPU.
   81000: global: [sn:770] has 3 ready out of 4 sources. RTI 0)
   81000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 189, loadsInProgress: 7, loads dispatchedToLQ: 2
   81000: system.cpu.rename: [tid:0] Processing instruction [sn:780] with PC (0x40103b=>0x40103d).(0=>1).
+  81000: system.cpu.rename: [tid:0] Mascot prediction for load [sn:780] type: 0; distance1: 0; distance2: 0
   81000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
   81000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
   81000: global: [sn:780] has 1 ready out of 4 sources. RTI 0)
@@ -6433,6 +6453,7 @@ O3CPU: Ticking main, O3CPU.
   82000: global: [sn:800] has 3 ready out of 4 sources. RTI 0)
   82000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 187, loadsInProgress: 6, loads dispatchedToLQ: 2
   82000: system.cpu.rename: [tid:0] Processing instruction [sn:810] with PC (0x40103d=>0x40103f).(0=>1).
+  82000: system.cpu.rename: [tid:0] Mascot prediction for load [sn:810] type: 0; distance1: 0; distance2: 0
   82000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
   82000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
   82000: global: [sn:810] has 1 ready out of 4 sources. RTI 0)
@@ -7115,6 +7136,7 @@ O3CPU: Ticking main, O3CPU.
   86000: system.cpu.commit: [tid:0] [sn:460] Committing instruction with PC (0x401011=>0x401015).(0=>1)
   86000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x401011=>0x401015).(0=>1), [sn:460]
   86000: system.cpu: Removing committed instruction [tid:0] PC (0x401011=>0x401015).(0=>1) [sn:460]
+  86000: system.cpu.memDep0: Committing instruction PC 0x401011 [sn:460].
   86000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:470]
   86000: system.cpu.commit: [tid:0] [sn:470] Committing instruction with PC (0x401015=>0x401018).(0=>1)
   86000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x401015=>0x401018).(0=>1), [sn:470]
@@ -7803,6 +7825,7 @@ O3CPU: Ticking main, O3CPU.
   90000: global: [sn:850] has 4 ready out of 4 sources. RTI 0)
   90000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 192, loadsInProgress: 0, loads dispatchedToLQ: 0
   90000: system.cpu.rename: [tid:0] Processing instruction [sn:860] with PC (0x401011=>0x401015).(0=>1).
+  90000: system.cpu.rename: [tid:0] Mascot prediction for load [sn:860] type: 0; distance1: 0; distance2: 0
   90000: system.cpu.rename: [tid:0] Looking up integer arch reg 1, got phys reg 71 (integer)
   90000: system.cpu.rename: [tid:0] Register 71 (flat: 71) (integer) is ready.
   90000: global: [sn:860] has 1 ready out of 3 sources. RTI 0)
@@ -8659,6 +8682,7 @@ O3CPU: Ticking main, O3CPU.
   93000: global: [sn:950] has 2 ready out of 4 sources. RTI 0)
   93000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 192, loadsInProgress: 1, loads dispatchedToLQ: 1
   93000: system.cpu.rename: [tid:0] Processing instruction [sn:960] with PC (0x401011=>0x401015).(0=>1).
+  93000: system.cpu.rename: [tid:0] Mascot prediction for load [sn:960] type: 0; distance1: 0; distance2: 0
   93000: system.cpu.rename: [tid:0] Looking up integer arch reg 1, got phys reg 98 (integer)
   93000: system.cpu.rename: [tid:0] Register 98 (flat: 98) (integer) is not ready.
   93000: system.cpu.rename: [tid:0] Looking up integer arch reg 6, got phys reg 40 (integer)
@@ -9386,6 +9410,7 @@ O3CPU: Ticking main, O3CPU.
   95000: system.cpu.rename: [tid:0] Sending instructions to IEW.
   95000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 191, loadsInProgress: 1, loads dispatchedToLQ: 0
   95000: system.cpu.rename: [tid:0] Processing instruction [sn:1060] with PC (0x401011=>0x401015).(0=>1).
+  95000: system.cpu.rename: [tid:0] Mascot prediction for load [sn:1060] type: 0; distance1: 0; distance2: 0
   95000: system.cpu.rename: [tid:0] Looking up integer arch reg 1, got phys reg 105 (integer)
   95000: system.cpu.rename: [tid:0] Register 105 (flat: 105) (integer) is not ready.
   95000: system.cpu.rename: [tid:0] Looking up integer arch reg 6, got phys reg 40 (integer)
@@ -9788,6 +9813,7 @@ O3CPU: Ticking main, O3CPU.
   96000: global: [sn:1150] has 2 ready out of 4 sources. RTI 0)
   96000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 190, loadsInProgress: 2, loads dispatchedToLQ: 1
   96000: system.cpu.rename: [tid:0] Processing instruction [sn:1160] with PC (0x401011=>0x401015).(0=>1).
+  96000: system.cpu.rename: [tid:0] Mascot prediction for load [sn:1160] type: 0; distance1: 0; distance2: 0
   96000: system.cpu.rename: [tid:0] Looking up integer arch reg 1, got phys reg 112 (integer)
   96000: system.cpu.rename: [tid:0] Register 112 (flat: 112) (integer) is not ready.
   96000: system.cpu.rename: [tid:0] Looking up integer arch reg 6, got phys reg 40 (integer)
@@ -10438,6 +10464,7 @@ O3CPU: Ticking main, O3CPU.
   98000: global: [sn:1250] has 2 ready out of 4 sources. RTI 0)
   98000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 189, loadsInProgress: 2, loads dispatchedToLQ: 1
   98000: system.cpu.rename: [tid:0] Processing instruction [sn:1260] with PC (0x401011=>0x401015).(0=>1).
+  98000: system.cpu.rename: [tid:0] Mascot prediction for load [sn:1260] type: 0; distance1: 0; distance2: 0
   98000: system.cpu.rename: [tid:0] Looking up integer arch reg 1, got phys reg 119 (integer)
   98000: system.cpu.rename: [tid:0] Register 119 (flat: 119) (integer) is not ready.
   98000: system.cpu.rename: [tid:0] Looking up integer arch reg 6, got phys reg 40 (integer)
@@ -11021,6 +11048,7 @@ wbActual:1
   99000: system.cpu.commit: [tid:0] [sn:860] Committing instruction with PC (0x401011=>0x401015).(0=>1)
   99000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x401011=>0x401015).(0=>1), [sn:860]
   99000: system.cpu: Removing committed instruction [tid:0] PC (0x401011=>0x401015).(0=>1) [sn:860]
+  99000: system.cpu.memDep0: Committing instruction PC 0x401011 [sn:860].
   99000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:870]
   99000: system.cpu.commit: [tid:0] [sn:870] Committing instruction with PC (0x401015=>0x401018).(0=>1)
   99000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x401015=>0x401018).(0=>1), [sn:870]
@@ -11110,6 +11138,7 @@ O3CPU: Ticking main, O3CPU.
  100000: system.cpu.rename: [tid:0] Sending instructions to IEW.
  100000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 188, loadsInProgress: 1, loads dispatchedToLQ: 0
  100000: system.cpu.rename: [tid:0] Processing instruction [sn:1360] with PC (0x401011=>0x401015).(0=>1).
+ 100000: system.cpu.rename: [tid:0] Mascot prediction for load [sn:1360] type: 0; distance1: 0; distance2: 0
  100000: system.cpu.rename: [tid:0] Looking up integer arch reg 1, got phys reg 126 (integer)
  100000: system.cpu.rename: [tid:0] Register 126 (flat: 126) (integer) is not ready.
  100000: system.cpu.rename: [tid:0] Looking up integer arch reg 6, got phys reg 40 (integer)
@@ -11667,6 +11696,7 @@ O3CPU: Ticking main, O3CPU.
  101000: global: [sn:1450] has 2 ready out of 4 sources. RTI 0)
  101000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 188, loadsInProgress: 2, loads dispatchedToLQ: 1
  101000: system.cpu.rename: [tid:0] Processing instruction [sn:1460] with PC (0x401011=>0x401015).(0=>1).
+ 101000: system.cpu.rename: [tid:0] Mascot prediction for load [sn:1460] type: 0; distance1: 0; distance2: 0
  101000: system.cpu.rename: [tid:0] Looking up integer arch reg 1, got phys reg 133 (integer)
  101000: system.cpu.rename: [tid:0] Register 133 (flat: 133) (integer) is not ready.
  101000: system.cpu.rename: [tid:0] Looking up integer arch reg 6, got phys reg 40 (integer)
@@ -12224,6 +12254,7 @@ wbActual:3
  102000: system.cpu.commit: [tid:0] [sn:960] Committing instruction with PC (0x401011=>0x401015).(0=>1)
  102000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x401011=>0x401015).(0=>1), [sn:960]
  102000: system.cpu: Removing committed instruction [tid:0] PC (0x401011=>0x401015).(0=>1) [sn:960]
+ 102000: system.cpu.memDep0: Committing instruction PC 0x401011 [sn:960].
  102000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:970]
  102000: system.cpu.commit: [tid:0] [sn:970] Committing instruction with PC (0x401015=>0x401018).(0=>1)
  102000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x401015=>0x401018).(0=>1), [sn:970]
@@ -12436,6 +12467,7 @@ O3CPU: Ticking main, O3CPU.
  103000: global: [sn:1550] has 2 ready out of 4 sources. RTI 0)
  103000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 187, loadsInProgress: 2, loads dispatchedToLQ: 1
  103000: system.cpu.rename: [tid:0] Processing instruction [sn:1560] with PC (0x401011=>0x401015).(0=>1).
+ 103000: system.cpu.rename: [tid:0] Mascot prediction for load [sn:1560] type: 0; distance1: 0; distance2: 0
  103000: system.cpu.rename: [tid:0] Looking up integer arch reg 1, got phys reg 140 (integer)
  103000: system.cpu.rename: [tid:0] Register 140 (flat: 140) (integer) is not ready.
  103000: system.cpu.rename: [tid:0] Looking up integer arch reg 6, got phys reg 40 (integer)
@@ -13208,6 +13240,7 @@ O3CPU: Ticking main, O3CPU.
  105000: system.cpu.rename: [tid:0] Sending instructions to IEW.
  105000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 187, loadsInProgress: 1, loads dispatchedToLQ: 0
  105000: system.cpu.rename: [tid:0] Processing instruction [sn:1660] with PC (0x401011=>0x401015).(0=>1).
+ 105000: system.cpu.rename: [tid:0] Mascot prediction for load [sn:1660] type: 0; distance1: 0; distance2: 0
  105000: system.cpu.rename: [tid:0] Looking up integer arch reg 1, got phys reg 147 (integer)
  105000: system.cpu.rename: [tid:0] Register 147 (flat: 147) (integer) is not ready.
  105000: system.cpu.rename: [tid:0] Looking up integer arch reg 6, got phys reg 40 (integer)
@@ -13632,6 +13665,7 @@ O3CPU: Ticking main, O3CPU.
  106000: global: [sn:1750] has 2 ready out of 4 sources. RTI 0)
  106000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 186, loadsInProgress: 2, loads dispatchedToLQ: 1
  106000: system.cpu.rename: [tid:0] Processing instruction [sn:1760] with PC (0x401011=>0x401015).(0=>1).
+ 106000: system.cpu.rename: [tid:0] Mascot prediction for load [sn:1760] type: 0; distance1: 0; distance2: 0
  106000: system.cpu.rename: [tid:0] Looking up integer arch reg 1, got phys reg 154 (integer)
  106000: system.cpu.rename: [tid:0] Register 154 (flat: 154) (integer) is not ready.
  106000: system.cpu.rename: [tid:0] Looking up integer arch reg 6, got phys reg 40 (integer)
@@ -14192,6 +14226,7 @@ wbActual:2
  107000: system.cpu.commit: [tid:0] [sn:1060] Committing instruction with PC (0x401011=>0x401015).(0=>1)
  107000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x401011=>0x401015).(0=>1), [sn:1060]
  107000: system.cpu: Removing committed instruction [tid:0] PC (0x401011=>0x401015).(0=>1) [sn:1060]
+ 107000: system.cpu.memDep0: Committing instruction PC 0x401011 [sn:1060].
  107000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:1070]
  107000: system.cpu.commit: [tid:0] [sn:1070] Committing instruction with PC (0x401015=>0x401018).(0=>1)
  107000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x401015=>0x401018).(0=>1), [sn:1070]
@@ -14335,6 +14370,7 @@ O3CPU: Ticking main, O3CPU.
  108000: global: [sn:1850] has 2 ready out of 4 sources. RTI 0)
  108000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 185, loadsInProgress: 2, loads dispatchedToLQ: 1
  108000: system.cpu.rename: [tid:0] Processing instruction [sn:1860] with PC (0x401011=>0x401015).(0=>1).
+ 108000: system.cpu.rename: [tid:0] Mascot prediction for load [sn:1860] type: 0; distance1: 0; distance2: 0
  108000: system.cpu.rename: [tid:0] Looking up integer arch reg 1, got phys reg 161 (integer)
  108000: system.cpu.rename: [tid:0] Register 161 (flat: 161) (integer) is not ready.
  108000: system.cpu.rename: [tid:0] Looking up integer arch reg 6, got phys reg 40 (integer)
@@ -15184,6 +15220,7 @@ O3CPU: Ticking main, O3CPU.
  110000: system.cpu.rename: [tid:0] Sending instructions to IEW.
  110000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 185, loadsInProgress: 1, loads dispatchedToLQ: 0
  110000: system.cpu.rename: [tid:0] Processing instruction [sn:1960] with PC (0x401011=>0x401015).(0=>1).
+ 110000: system.cpu.rename: [tid:0] Mascot prediction for load [sn:1960] type: 0; distance1: 0; distance2: 0
  110000: system.cpu.rename: [tid:0] Looking up integer arch reg 1, got phys reg 168 (integer)
  110000: system.cpu.rename: [tid:0] Register 168 (flat: 168) (integer) is not ready.
  110000: system.cpu.rename: [tid:0] Looking up integer arch reg 6, got phys reg 40 (integer)
@@ -15466,6 +15503,7 @@ wbActual:4
  110000: system.cpu.commit: [tid:0] [sn:1160] Committing instruction with PC (0x401011=>0x401015).(0=>1)
  110000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x401011=>0x401015).(0=>1), [sn:1160]
  110000: system.cpu: Removing committed instruction [tid:0] PC (0x401011=>0x401015).(0=>1) [sn:1160]
+ 110000: system.cpu.memDep0: Committing instruction PC 0x401011 [sn:1160].
  110000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:1170]
  110000: system.cpu.commit: [tid:0] [sn:1170] Committing instruction with PC (0x401015=>0x401018).(0=>1)
  110000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x401015=>0x401018).(0=>1), [sn:1170]
@@ -15727,6 +15765,7 @@ O3CPU: Ticking main, O3CPU.
  111000: global: [sn:2050] has 2 ready out of 4 sources. RTI 0)
  111000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 184, loadsInProgress: 2, loads dispatchedToLQ: 1
  111000: system.cpu.rename: [tid:0] Processing instruction [sn:2060] with PC (0x401011=>0x401015).(0=>1).
+ 111000: system.cpu.rename: [tid:0] Mascot prediction for load [sn:2060] type: 0; distance1: 0; distance2: 0
  111000: system.cpu.rename: [tid:0] Looking up integer arch reg 1, got phys reg 175 (integer)
  111000: system.cpu.rename: [tid:0] Register 175 (flat: 175) (integer) is not ready.
  111000: system.cpu.rename: [tid:0] Looking up integer arch reg 6, got phys reg 40 (integer)
@@ -16549,6 +16588,7 @@ O3CPU: Ticking main, O3CPU.
  113000: global: [sn:2150] has 2 ready out of 4 sources. RTI 0)
  113000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 184, loadsInProgress: 2, loads dispatchedToLQ: 1
  113000: system.cpu.rename: [tid:0] Processing instruction [sn:2160] with PC (0x401011=>0x401015).(0=>1).
+ 113000: system.cpu.rename: [tid:0] Mascot prediction for load [sn:2160] type: 0; distance1: 0; distance2: 0
  113000: system.cpu.rename: [tid:0] Looking up integer arch reg 1, got phys reg 182 (integer)
  113000: system.cpu.rename: [tid:0] Register 182 (flat: 182) (integer) is not ready.
  113000: system.cpu.rename: [tid:0] Looking up integer arch reg 6, got phys reg 40 (integer)
@@ -17238,6 +17278,7 @@ O3CPU: Ticking main, O3CPU.
  115000: global: [sn:2250] has 2 ready out of 4 sources. RTI 0)
  115000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 183, loadsInProgress: 1, loads dispatchedToLQ: 0
  115000: system.cpu.rename: [tid:0] Processing instruction [sn:2260] with PC (0x401011=>0x401015).(0=>1).
+ 115000: system.cpu.rename: [tid:0] Mascot prediction for load [sn:2260] type: 0; distance1: 0; distance2: 0
  115000: system.cpu.rename: [tid:0] Looking up integer arch reg 1, got phys reg 189 (integer)
  115000: system.cpu.rename: [tid:0] Register 189 (flat: 189) (integer) is not ready.
  115000: system.cpu.rename: [tid:0] Looking up integer arch reg 6, got phys reg 40 (integer)
@@ -17451,6 +17492,7 @@ wbActual:3
  115000: system.cpu.commit: [tid:0] [sn:1260] Committing instruction with PC (0x401011=>0x401015).(0=>1)
  115000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x401011=>0x401015).(0=>1), [sn:1260]
  115000: system.cpu: Removing committed instruction [tid:0] PC (0x401011=>0x401015).(0=>1) [sn:1260]
+ 115000: system.cpu.memDep0: Committing instruction PC 0x401011 [sn:1260].
  115000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:1270]
  115000: system.cpu.commit: [tid:0] [sn:1270] Committing instruction with PC (0x401015=>0x401018).(0=>1)
  115000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x401015=>0x401018).(0=>1), [sn:1270]
@@ -17988,6 +18030,7 @@ O3CPU: Ticking main, O3CPU.
  117000: global: [sn:2350] has 2 ready out of 4 sources. RTI 0)
  117000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 183, loadsInProgress: 1, loads dispatchedToLQ: 0
  117000: system.cpu.rename: [tid:0] Processing instruction [sn:2360] with PC (0x401011=>0x401015).(0=>1).
+ 117000: system.cpu.rename: [tid:0] Mascot prediction for load [sn:2360] type: 0; distance1: 0; distance2: 0
  117000: system.cpu.rename: [tid:0] Looking up integer arch reg 1, got phys reg 196 (integer)
  117000: system.cpu.rename: [tid:0] Register 196 (flat: 196) (integer) is not ready.
  117000: system.cpu.rename: [tid:0] Looking up integer arch reg 6, got phys reg 40 (integer)
@@ -18571,6 +18614,7 @@ wbActual:2
  118000: system.cpu.commit: [tid:0] [sn:1360] Committing instruction with PC (0x401011=>0x401015).(0=>1)
  118000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x401011=>0x401015).(0=>1), [sn:1360]
  118000: system.cpu: Removing committed instruction [tid:0] PC (0x401011=>0x401015).(0=>1) [sn:1360]
+ 118000: system.cpu.memDep0: Committing instruction PC 0x401011 [sn:1360].
  118000: system.cpu.commit: Trying to commit head instruction, [tid:0] [sn:1370]
  118000: system.cpu.commit: [tid:0] [sn:1370] Committing instruction with PC (0x401015=>0x401018).(0=>1)
  118000: system.cpu.rob: [tid:0] Retiring head instruction, instruction PC (0x401015=>0x401018).(0=>1), [sn:1370]
@@ -18790,6 +18834,7 @@ O3CPU: Ticking main, O3CPU.
  119000: global: [sn:2450] has 2 ready out of 4 sources. RTI 0)
  119000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 182, loadsInProgress: 1, loads dispatchedToLQ: 0
  119000: system.cpu.rename: [tid:0] Processing instruction [sn:2460] with PC (0x401011=>0x401015).(0=>1).
+ 119000: system.cpu.rename: [tid:0] Mascot prediction for load [sn:2460] type: 0; distance1: 0; distance2: 0
  119000: system.cpu.rename: [tid:0] Looking up integer arch reg 1, got phys reg 203 (integer)
  119000: system.cpu.rename: [tid:0] Register 203 (flat: 203) (integer) is not ready.
  119000: system.cpu.rename: [tid:0] Looking up integer arch reg 6, got phys reg 40 (integer)
@@ -22950,6 +22995,7 @@ O3CPU: Ticking main, O3CPU.
  137000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 192, loadsInProgress: 0, loads dispatchedToLQ: 0
  137000: system.cpu.rename: [tid:0] Removing [sn:2630] PC:(0x40102d=>0x40102f).(0=>1) from rename skidBuffer
  137000: system.cpu.rename: [tid:0] Processing instruction [sn:2630] with PC (0x40102d=>0x40102f).(0=>1).
+ 137000: system.cpu.rename: [tid:0] Mascot prediction for load [sn:2630] type: 0; distance1: 0; distance2: 0
  137000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
  137000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
  137000: global: [sn:2630] has 1 ready out of 4 sources. RTI 0)
@@ -23254,6 +23300,7 @@ O3CPU: Ticking main, O3CPU.
  139000: system.cpu.rename: [tid:0] Sending instructions to IEW.
  139000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 192, loadsInProgress: 1, loads dispatchedToLQ: 0
  139000: system.cpu.rename: [tid:0] Processing instruction [sn:2660] with PC (0x40102f=>0x401031).(0=>1).
+ 139000: system.cpu.rename: [tid:0] Mascot prediction for load [sn:2660] type: 0; distance1: 0; distance2: 0
  139000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
  139000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
  139000: global: [sn:2660] has 1 ready out of 4 sources. RTI 0)
@@ -23318,6 +23365,7 @@ O3CPU: Ticking main, O3CPU.
  139000: global: [sn:2680] has 2 ready out of 4 sources. RTI 0)
  139000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 192, loadsInProgress: 2, loads dispatchedToLQ: 0
  139000: system.cpu.rename: [tid:0] Processing instruction [sn:2690] with PC (0x401031=>0x401033).(0=>1).
+ 139000: system.cpu.rename: [tid:0] Mascot prediction for load [sn:2690] type: 0; distance1: 0; distance2: 0
  139000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
  139000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
  139000: global: [sn:2690] has 1 ready out of 4 sources. RTI 0)
@@ -23517,6 +23565,7 @@ O3CPU: Ticking main, O3CPU.
  140000: system.cpu.rename: [tid:0] Sending instructions to IEW.
  140000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 191, loadsInProgress: 3, loads dispatchedToLQ: 1
  140000: system.cpu.rename: [tid:0] Processing instruction [sn:2720] with PC (0x401033=>0x401035).(0=>1).
+ 140000: system.cpu.rename: [tid:0] Mascot prediction for load [sn:2720] type: 0; distance1: 0; distance2: 0
  140000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
  140000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
  140000: global: [sn:2720] has 1 ready out of 4 sources. RTI 0)
@@ -23581,6 +23630,7 @@ O3CPU: Ticking main, O3CPU.
  140000: global: [sn:2740] has 2 ready out of 4 sources. RTI 0)
  140000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 191, loadsInProgress: 4, loads dispatchedToLQ: 1
  140000: system.cpu.rename: [tid:0] Processing instruction [sn:2750] with PC (0x401035=>0x401037).(0=>1).
+ 140000: system.cpu.rename: [tid:0] Mascot prediction for load [sn:2750] type: 0; distance1: 0; distance2: 0
  140000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
  140000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
  140000: global: [sn:2750] has 1 ready out of 4 sources. RTI 0)
@@ -24011,6 +24061,7 @@ O3CPU: Ticking main, O3CPU.
  142000: system.cpu.rename: [tid:0] Sending instructions to IEW.
  142000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 189, loadsInProgress: 4, loads dispatchedToLQ: 2
  142000: system.cpu.rename: [tid:0] Processing instruction [sn:2780] with PC (0x401037=>0x401039).(0=>1).
+ 142000: system.cpu.rename: [tid:0] Mascot prediction for load [sn:2780] type: 0; distance1: 0; distance2: 0
  142000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
  142000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
  142000: global: [sn:2780] has 1 ready out of 4 sources. RTI 0)
@@ -24078,6 +24129,7 @@ O3CPU: Ticking main, O3CPU.
  142000: global: [sn:2800] has 3 ready out of 4 sources. RTI 0)
  142000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 189, loadsInProgress: 5, loads dispatchedToLQ: 2
  142000: system.cpu.rename: [tid:0] Processing instruction [sn:2810] with PC (0x401039=>0x40103b).(0=>1).
+ 142000: system.cpu.rename: [tid:0] Mascot prediction for load [sn:2810] type: 0; distance1: 0; distance2: 0
  142000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
  142000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
  142000: global: [sn:2810] has 1 ready out of 4 sources. RTI 0)
@@ -24279,6 +24331,7 @@ O3CPU: Ticking main, O3CPU.
  143000: system.cpu.rename: [tid:0] Sending instructions to IEW.
  143000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 189, loadsInProgress: 4, loads dispatchedToLQ: 2
  143000: system.cpu.rename: [tid:0] Processing instruction [sn:2840] with PC (0x40103b=>0x40103d).(0=>1).
+ 143000: system.cpu.rename: [tid:0] Mascot prediction for load [sn:2840] type: 0; distance1: 0; distance2: 0
  143000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
  143000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
  143000: global: [sn:2840] has 1 ready out of 4 sources. RTI 0)
@@ -24346,6 +24399,7 @@ O3CPU: Ticking main, O3CPU.
  143000: global: [sn:2860] has 3 ready out of 4 sources. RTI 0)
  143000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 189, loadsInProgress: 5, loads dispatchedToLQ: 2
  143000: system.cpu.rename: [tid:0] Processing instruction [sn:2870] with PC (0x40103d=>0x40103f).(0=>1).
+ 143000: system.cpu.rename: [tid:0] Mascot prediction for load [sn:2870] type: 0; distance1: 0; distance2: 0
  143000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
  143000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
  143000: global: [sn:2870] has 1 ready out of 4 sources. RTI 0)
@@ -24495,6 +24549,7 @@ O3CPU: Ticking main, O3CPU.
  144000: system.cpu.rename: [tid:0] Sending instructions to IEW.
  144000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 187, loadsInProgress: 4, loads dispatchedToLQ: 0
  144000: system.cpu.rename: [tid:0] Processing instruction [sn:2900] with PC (0x40103f=>0x401041).(0=>1).
+ 144000: system.cpu.rename: [tid:0] Mascot prediction for load [sn:2900] type: 0; distance1: 0; distance2: 0
  144000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
  144000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
  144000: global: [sn:2900] has 1 ready out of 4 sources. RTI 0)
@@ -24562,6 +24617,7 @@ O3CPU: Ticking main, O3CPU.
  144000: global: [sn:2920] has 3 ready out of 4 sources. RTI 0)
  144000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 187, loadsInProgress: 5, loads dispatchedToLQ: 0
  144000: system.cpu.rename: [tid:0] Processing instruction [sn:2930] with PC (0x401041=>0x401043).(0=>1).
+ 144000: system.cpu.rename: [tid:0] Mascot prediction for load [sn:2930] type: 0; distance1: 0; distance2: 0
  144000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
  144000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
  144000: global: [sn:2930] has 1 ready out of 4 sources. RTI 0)
@@ -24753,6 +24809,7 @@ O3CPU: Ticking main, O3CPU.
  145000: system.cpu.rename: [tid:0] Sending instructions to IEW.
  145000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 185, loadsInProgress: 6, loads dispatchedToLQ: 2
  145000: system.cpu.rename: [tid:0] Processing instruction [sn:2960] with PC (0x401043=>0x401045).(0=>1).
+ 145000: system.cpu.rename: [tid:0] Mascot prediction for load [sn:2960] type: 0; distance1: 0; distance2: 0
  145000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
  145000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
  145000: global: [sn:2960] has 1 ready out of 4 sources. RTI 0)
@@ -24820,6 +24877,7 @@ O3CPU: Ticking main, O3CPU.
  145000: global: [sn:2980] has 3 ready out of 4 sources. RTI 0)
  145000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 185, loadsInProgress: 7, loads dispatchedToLQ: 2
  145000: system.cpu.rename: [tid:0] Processing instruction [sn:2990] with PC (0x401045=>0x401047).(0=>1).
+ 145000: system.cpu.rename: [tid:0] Mascot prediction for load [sn:2990] type: 0; distance1: 0; distance2: 0
  145000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
  145000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
  145000: global: [sn:2990] has 1 ready out of 4 sources. RTI 0)
@@ -25006,6 +25064,7 @@ O3CPU: Ticking main, O3CPU.
  146000: system.cpu.rename: [tid:0] Sending instructions to IEW.
  146000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 183, loadsInProgress: 6, loads dispatchedToLQ: 2
  146000: system.cpu.rename: [tid:0] Processing instruction [sn:3020] with PC (0x401047=>0x401049).(0=>1).
+ 146000: system.cpu.rename: [tid:0] Mascot prediction for load [sn:3020] type: 0; distance1: 0; distance2: 0
  146000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
  146000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
  146000: global: [sn:3020] has 1 ready out of 4 sources. RTI 0)
@@ -25073,6 +25132,7 @@ O3CPU: Ticking main, O3CPU.
  146000: global: [sn:3040] has 3 ready out of 4 sources. RTI 0)
  146000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 183, loadsInProgress: 7, loads dispatchedToLQ: 2
  146000: system.cpu.rename: [tid:0] Processing instruction [sn:3050] with PC (0x401049=>0x40104b).(0=>1).
+ 146000: system.cpu.rename: [tid:0] Mascot prediction for load [sn:3050] type: 0; distance1: 0; distance2: 0
  146000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
  146000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
  146000: global: [sn:3050] has 1 ready out of 4 sources. RTI 0)
@@ -25261,6 +25321,7 @@ O3CPU: Ticking main, O3CPU.
  147000: system.cpu.rename: [tid:0] Sending instructions to IEW.
  147000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 183, loadsInProgress: 6, loads dispatchedToLQ: 2
  147000: system.cpu.rename: [tid:0] Processing instruction [sn:3080] with PC (0x40104b=>0x40104d).(0=>1).
+ 147000: system.cpu.rename: [tid:0] Mascot prediction for load [sn:3080] type: 0; distance1: 0; distance2: 0
  147000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
  147000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
  147000: global: [sn:3080] has 1 ready out of 4 sources. RTI 0)
@@ -25328,6 +25389,7 @@ O3CPU: Ticking main, O3CPU.
  147000: global: [sn:3100] has 3 ready out of 4 sources. RTI 0)
  147000: system.cpu.rename: calcFreeLQEntries: free lqEntries: 183, loadsInProgress: 7, loads dispatchedToLQ: 2
  147000: system.cpu.rename: [tid:0] Processing instruction [sn:3110] with PC (0x40104d=>0x40104f).(0=>1).
+ 147000: system.cpu.rename: [tid:0] Mascot prediction for load [sn:3110] type: 0; distance1: 0; distance2: 0
  147000: system.cpu.rename: [tid:0] Looking up invalid arch reg 0, got phys reg 4294967295 (invalid)
  147000: system.cpu.rename: [tid:0] Register 4294967295 (flat: 4294967295) (invalid) is ready.
  147000: global: [sn:3110] has 1 ready out of 4 sources. RTI 0)

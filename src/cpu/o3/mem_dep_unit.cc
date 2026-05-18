@@ -287,8 +287,12 @@ void MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory) {
             addSQDistanceDep(inst, pred.distances.second, dependencies);
 
         // If the dependencies were found, mark it as MDP, otherwise NDEP.
-        pred.type = mascotInfo.mdpPredicted ? MASCOT::PredictionType::MDP
-                                            : MASCOT::PredictionType::NDEP;
+        if (mascotInfo.mdpPredicted) {
+          pred.type = MASCOT::PredictionType::MDP;
+        } else {
+          pred.type = MASCOT::PredictionType::NDEP;
+          pred.distances = {0, 0};
+        }
       }
     }
   }
@@ -680,7 +684,10 @@ void MemDepUnit::violation(const DynInstPtr &violating_load,
   mascot.violation(violating_load->pcState().instAddr(),
                    violating_load->mascotInfo.violatingStoreSeqNum,
                    violating_load->mascotInfo.actualSQDist,
-                   violating_load->mascotInfo.prediction, branchHistory);
+                   violating_load->mascotInfo.prediction,
+                   violating_load->mascotInfo.mdpViolation,
+                   violating_load->mascotInfo.smbViolation,
+                   branchHistory);
 }
 
 void MemDepUnit::issue(const DynInstPtr &inst) {

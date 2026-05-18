@@ -327,22 +327,24 @@ LSQUnit::insertLoad(const DynInstPtr &load_inst)
         assert(smb_store_seqnum);
 
         auto smb_store_it = getStoreInStoreQueue(smb_store_seqnum);
-        panic_if(smb_store_it == storeQueue.end(), 
-                 "Could not find matching store sequence number %llu for bypassed load [sn:%lli]\n",
-                 smb_store_seqnum, load_inst->seqNum);
 
         // Assert that smb_store_it is still inflight
-        assert(smb_store_it->valid());
-        assert(smb_store_it.idx() >= getStoreHead());
-        if (smb_store_it->instruction()->isCompleted()) {
-            assert(smb_store_it->instruction()->sqIt <= storeWBIt);
-        }
+        if (smb_store_it == storeQueue.end()) {
+          // The store JUST committed...
+          load_inst->smbPredStoreIt = storeWBIt;
+        } else {
+          assert(smb_store_it->valid());
+          assert(smb_store_it.idx() >= getStoreHead());
+          if (smb_store_it->instruction()->isCompleted()) {
+              assert(smb_store_it->instruction()->sqIt <= storeWBIt);
+          }
 
-        load_inst->smbPredStoreIt = smb_store_it;
+          load_inst->smbPredStoreIt = smb_store_it;
 
-        const auto& store_inst = smb_store_it->instruction();
-        if (store_inst->isExecuted() && store_inst->effAddrValid()) {
-          load_inst->mascotInfo.predStoreAddr = {store_inst->effAddr, store_inst->effSize};
+          const auto& store_inst = smb_store_it->instruction();
+          if (store_inst->isExecuted() && store_inst->effAddrValid()) {
+            load_inst->mascotInfo.predStoreAddr = {store_inst->effAddr, store_inst->effSize};
+          }
         }
     }
 
@@ -1130,6 +1132,10 @@ LSQUnit::writeback(const DynInstPtr &inst, PacketPtr pkt)
                     DPRINTF(LSQUnit, "Bypassed load [sn:%lli] value check failed! "
                             "Speculated: %#llx, actual: %#llx\n",
                             inst->seqNum, before, after);
+
+                    // The store is still the correct store, it's just that
+                    // the value received from it is wrong. Can still keep 
+                    // MDP
                     const auto sq_dist = inst->mascotInfo.prediction.distances.first != 0 ?
                         inst->mascotInfo.prediction.distances.first :
                         inst->mascotInfo.prediction.distances.second;

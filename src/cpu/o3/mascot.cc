@@ -70,7 +70,7 @@ MASCOT::doPredict(Addr load_pc, InstSeqNum load_seq_num, BranchHistory branch_hi
   auto table_limit_idx = 0;
   const auto available_history = branch_history.size() - historyBegin;
   while (table_limit_idx + 1 < histories.size() &&
-         histories[table_limit_idx + 1] < available_history) { 
+         histories[table_limit_idx + 1] <= available_history) { 
     ++table_limit_idx; 
   }
 
@@ -165,12 +165,14 @@ MASCOT::violation(Addr load_pc,
                   InstSeqNum store_seq_num,
                   std::ptrdiff_t actual_sq_dist,
                   Prediction prediction,
+                  bool mdpViolation,
+                  bool smbViolation,
                   BranchHistory branch_history) {
   if (prediction.tableIdx != BASE_PREDICTOR_IDX) {
     // The prediction came from a table in MASCOT. 
     // MASCOT wasted a prediction on the wrong dependency when the real dependency was elsewhere.
     // update counters for next hash.
-    tables[prediction.tableIdx].updateEntry(load_pc, prediction.hash, true, false);
+    tables[prediction.tableIdx].updateEntry(load_pc, prediction.hash, mdpViolation, !smbViolation);
     ++(memDepUnit->stats.falseDependencies);
     ++(*(memDepUnit->pathReads[prediction.tableIdx])); // reads an entry
     ++(*(memDepUnit->pathWrites[prediction.tableIdx])); // modifies it
@@ -202,7 +204,7 @@ MASCOT::allocateEntry(const unsigned startTableIdx,
                       bool should_bypass) {
   if (startTableIdx >= tables.size()) return;
 
-  for (auto idx = startTableIdx; idx < tables.size(); ++idx) {
+  for (auto idx = startTableIdx; idx < tables.size() && histories[idx] < branch_history.size(); ++idx) {
     // This is called from violation/commit only,
     // where we pass the 'committedBranchHistory'
     // so index = 0 is the youngest branch older than

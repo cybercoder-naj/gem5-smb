@@ -1299,7 +1299,7 @@ Rename::buildBypassMoveInst(ThreadID tid, const DynInstPtr &bypassed_load, RegId
         instruction->markSrcRegReady(1);
 
     instruction->renameDestReg(0, new_phys_reg, prev_phys_reg); // new mapping
-    DPRINTF(Rename, "[tid:%i] [sn:%lli] Newer load phys reg %i.\n", tid, seq, prev_phys_reg->index());
+    DPRINTF(Rename, "[tid:%i] [sn:%lli] Newer load phys reg %i.\n", tid, seq, new_phys_reg->index());
     scoreboard->unsetReg(new_phys_reg);
 
     ++stats.renamedOperands;
