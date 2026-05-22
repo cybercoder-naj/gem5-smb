@@ -331,7 +331,8 @@ LSQUnit::insertLoad(const DynInstPtr &load_inst)
         // Assert that smb_store_it is still inflight
         if (smb_store_it == storeQueue.end()) {
           // The store JUST committed...
-          load_inst->smbPredStoreIt = storeWBIt;
+          // Don't narrow the search window for mem order violations
+          load_inst->smbPredStoreIt = storeQueue.begin();
         } else {
           assert(smb_store_it->valid());
           assert(smb_store_it.idx() >= getStoreHead());

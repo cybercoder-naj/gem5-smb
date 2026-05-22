@@ -50,10 +50,10 @@ public:
     /** true if counter is saturated and we have exactly one distance value */
     bool canBypass() const {
       return bypassCounter == MAX_BYPASS_COUNTER &&
+             confidence == MAX_CONFIDENCE &&
              (distances.first == NDEP_DISTANCE ^
               distances.second == NDEP_DISTANCE);
     }
-    bool isHighConfidence() const { return confidence == MAX_CONFIDENCE; }
     bool canEvict() const { return confidence == 0; }
 
     void resetCanBypass() { bypassCounter = 0; }

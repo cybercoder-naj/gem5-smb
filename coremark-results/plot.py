@@ -97,67 +97,30 @@ if __name__ == "__main__":
 
     logging.info("\nBypassed percentage for each run:")
     
-    table1: list[list[str]] = []
-    table2: list[list[str]] = []
-    table3: list[list[str]] = []
+    table: list[list[str]] = []
     for benchmark, properties in benchmark_properties.items():
-        bypassed = properties["smb"][BYPASSED]
         insertedLoads = properties["smb"][INSERTED_LOADS]
-        if insertedLoads > 0:
-            bypassed_percentage = (bypassed / insertedLoads) * 100
-        else:
-            bypassed_percentage = 0
-
-        ipc_percentage = properties["smb"][IPC] / properties["baseline"][IPC] if properties["baseline"][IPC] > 0 else 0
-
-        table1.append([
-            benchmark[:benchmark.find('-')],
-            f"{bypassed_percentage:.4f}%",
-            f"{ipc_percentage:.4f}",
-        ])
-
-        phast_mpki = (properties["baseline"][FALSE_DEPS] + properties["baseline"][TOTAL_MEM_ORDER_VIOLATIONS]) / properties["baseline"][NUM_INSTS] * 1000
-        mascot_mpki = (properties["smb"][FALSE_DEPS] + properties["smb"][TOTAL_MEM_ORDER_VIOLATIONS]) / properties["smb"][NUM_INSTS] * 1000
-        mpki_percentage = (mascot_mpki - phast_mpki) / phast_mpki * 100
-
-        table2.append([
-            benchmark[:benchmark.find('-')],
-            f"{phast_mpki:.4f}",
-            f"{mascot_mpki:.4f}",
-            f"{mpki_percentage:.2f}%"
-        ])
-
         predictedSMB = properties["smb"][MASCOT_SMB_PREDICTIONS]
-        mispredictedSMB = properties["smb"][MASCOT_SMB_MISPREDICTIONS]
-        correctSMBPredictions = bypassed - mispredictedSMB
-        smbAccuracy = (correctSMBPredictions / bypassed) * 100
-        table3.append([
-            benchmark[:benchmark.find('-')],
-            f"{predictedSMB}",
-            f"{bypassed}",
-            f"{correctSMBPredictions}",
-            f"{mispredictedSMB}",
-            f"{smbAccuracy:.2f}%"
+        bypassedLoads = properties["smb"][BYPASSED]
+        smbViolations = properties["smb"][MASCOT_SMB_MISPREDICTIONS]
+        smbSuccesses = bypassedLoads - smbViolations
+
+        bypassPredPct = (predictedSMB / insertedLoads) * 100
+        actualBypassPct = (bypassedLoads / predictedSMB) * 100
+        successRate = (smbSuccesses / bypassedLoads) * 100
+        violationRate = (smbViolations / bypassedLoads) * 100
+
+        ipcPct = (properties["smb"][IPC] / properties["baseline"][IPC])
+
+        table.append([
+            benchmark,
+            f"{bypassPredPct:.4f}%",
+            f"{actualBypassPct:.4f}%",
+            f"{successRate:.4f}%",
+            f"{violationRate:.4f}%",
+            f"{ipcPct:.4f}"
         ])
 
     
-    headers = ["Benchmark", "Bypassed Loads %", "IPC Ratio"]
-    print(tabulate(table1, headers=headers, tablefmt="grid"), end="\n\n")
-
-    headers = [
-        "Benchmark",
-        "PHAST MPKI",
-        "MASCOT MPKI",
-        "% improvement",
-    ]
-    print(tabulate(table2, headers=headers, tablefmt="grid"), end="\n\n")
-
-    headers = [
-        "Benchmark",
-        "# SMB Predictions",
-        "# Loads Bypassed",
-        "# Correct Bypassing",
-        "# Bypassing Violations",
-        'Accuracy'
-    ]
-    print(tabulate(table3, headers=headers, tablefmt="grid"), end="\n\n")
+    headers = ["Benchmark", "SMB Pred %", "Actual bypass %", "Correct bypass %", "Violation %", "IPC Ratio"]
+    print(tabulate(table, headers=headers, tablefmt="grid"), end="\n\n")

@@ -776,36 +776,38 @@ Rename::renameInsts(ThreadID tid)
                     assert(sq_dist > 0);
                     DPRINTFR(SMBCoverage, "smbDist: %u; freeSQ: %i; sq_size: %i\n", sq_dist, calcFreeSQEntries(tid), storeQueue.size());
 
-                    const auto sq_idx = storeQueue.size() - sq_dist;
-                    const auto& sq_entry = storeQueue[sq_idx];
-
                     if (sq_dist > storeQueue.size()) {
                         ++stats.bypassingStoreOutsideWindow;
-                    } else if (sq_entry.isStore) {
-                        DPRINTF(Rename,
-                            "[tid:%i] [sn:%llu] "
-                            "SMB Predictor predicted store with sequence number "
-                            "%llu as source of load.\n",
-                            tid, inst->seqNum, sq_entry.seqNum);
+                    } else {
+                        auto sq_it = storeQueue.end();
+                        sq_it -= sq_dist;
+                        
+                        if (sq_it->isStore) {
+                          DPRINTF(Rename,
+                              "[tid:%i] [sn:%llu] "
+                              "SMB Predictor predicted store with sequence number "
+                              "%llu as source of load.\n",
+                              tid, inst->seqNum, sq_it->seqNum);
 
-                        DPRINTFR(SMBCoverage, "load_sn:%llu; store_sn:%llu\n", inst->seqNum, sq_entry.seqNum);
+                          DPRINTFR(SMBCoverage, "load_sn:%llu; store_sn:%llu\n", inst->seqNum, sq_it->seqNum);
 
-                        inst->setBypassedLoad(sq_entry.seqNum);
-                        ++stats.bypassedLoads;
+                          inst->setBypassedLoad(sq_it->seqNum);
+                          ++stats.bypassedLoads;
 
-                        DynInstPtr bypassMove = buildBypassMoveInst(tid, inst, sq_entry.archReg, sq_entry.physReg);
-                        inst->bypassMoveInst = bypassMove;
+                          DynInstPtr bypassMove = buildBypassMoveInst(tid, inst, sq_it->archReg, sq_it->physReg);
+                          inst->bypassMoveInst = bypassMove;
 
-                        ++toDecode->renameInfo[tid].bypassMoves;
+                          ++toDecode->renameInfo[tid].bypassMoves;
 
-                        // We don't add to historyBuffer for cleanup when
-                        // instruction commits or squashes.
-                        // Because we are reusing existing physical registers
-                        // and their life remains unchanged.
+                          // We don't add to historyBuffer for cleanup when
+                          // instruction commits or squashes.
+                          // Because we are reusing existing physical registers
+                          // and their life remains unchanged.
 
-                        // Put in reverse order so bypassMove is sent to IEW first. 
-                        insts_to_rename.push_front(inst);
-                        inst = bypassMove;
+                          // Put in reverse order so bypassMove is sent to IEW first. 
+                          insts_to_rename.push_front(inst);
+                          inst = bypassMove;
+                        }
                     }
                 }
             }

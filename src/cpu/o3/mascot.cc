@@ -94,7 +94,7 @@ MASCOT::doPredict(Addr load_pc, InstSeqNum load_seq_num, BranchHistory branch_hi
     //  is made regardless of the value of the usefulness field, 
     //  whereas speculative memory bypassing is only predicted if both the 
     //  usefulness and bypassing counters are saturated."
-    prediction.type = entry->isHighConfidence() && entry->canBypass() ? SMB : MDP;
+    prediction.type = entry->canBypass() ? SMB : MDP;
 
     return prediction;
   }
@@ -128,8 +128,8 @@ MASCOT::commit(Addr load_pc,
   case SMB:
     // Must not be empty!
     assert(store_addr.first != 0);
-    // Must be empty!
-    assert(store2_addr.first == 0);
+    // Must be empty! OR they are the same address.
+    assert(store2_addr.first == 0 || store_addr.first == store2_addr.first);
     // Misprediction if base address don't match or load asked for longer than store
     misprediction = load_addr.first != store_addr.first || load_addr.second > store_addr.second;
     break;
