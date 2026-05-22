@@ -219,7 +219,7 @@ MASCOT::allocateEntry(const unsigned startTableIdx,
 
     // Paper says to decrement only N_i table but
     // provided code decrements both N_i and N_{i + 1}.
-    if (idx == startTableIdx) {
+    if (idx <= startTableIdx + 1) {
       tables[idx].decrConfidence(load_pc, hash);
       ++(*(memDepUnit->pathWrites[idx])); // writes to all entries in set.
     }
