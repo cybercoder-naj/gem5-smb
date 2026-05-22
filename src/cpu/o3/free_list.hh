@@ -44,14 +44,11 @@
 
 #include <algorithm>
 #include <array>
-#include <iostream>
 #include <queue>
 
-#include "base/logging.hh"
-#include "base/trace.hh"
-#include "cpu/o3/comm.hh"
+#include <set>
+
 #include "cpu/o3/regfile.hh"
-#include "debug/FreeList.hh"
 
 namespace gem5
 {
@@ -75,12 +72,25 @@ class SimpleFreeList
     /** The actual free list */
     std::queue<PhysRegIdPtr> freeRegs;
 
+#if TRACING_ON
+    /** Track registered registers to prevent duplicates */
+    std::set<PhysRegIdPtr> registeredRegs;
+#endif
+
   public:
 
     SimpleFreeList() {};
 
     /** Add a physical register to the free list */
-    void addReg(PhysRegIdPtr reg) { freeRegs.push(reg); }
+    void addReg(PhysRegIdPtr reg) { 
+ #if TRACING_ON
+        panic_if(registeredRegs.count(reg),
+                 "Attempted to add duplicate register %d (%d) to free list",
+                 reg->index(), reg->flatIndex());
+        registeredRegs.insert(reg);
+#endif     
+      freeRegs.push(reg); 
+    }
 
     /** Add physical registers to the free list */
     template<class InputIt>
@@ -97,6 +107,9 @@ class SimpleFreeList
         assert(!freeRegs.empty());
         PhysRegIdPtr free_reg = freeRegs.front();
         freeRegs.pop();
+#if TRACING_ON
+        registeredRegs.erase(free_reg);
+#endif
         return free_reg;
     }
 

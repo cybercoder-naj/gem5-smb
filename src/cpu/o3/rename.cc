@@ -41,9 +41,11 @@
 
 #include "cpu/o3/rename.hh"
 
+#include <cassert>
 #include <cstdio>
 #include <list>
 
+#include "base/trace.hh"
 #include "cpu/o3/bypass_move_inst.hh"
 #include "cpu/o3/cpu.hh"
 #include "cpu/o3/dyn_inst.hh"
@@ -53,6 +55,7 @@
 #include "debug/Activity.hh"
 #include "debug/O3PipeView.hh"
 #include "debug/Rename.hh"
+#include "debug/SMBCoverage.hh"
 #include "params/BaseO3CPU.hh"
 
 namespace gem5
@@ -767,15 +770,16 @@ Rename::renameInsts(ThreadID tid)
 
             if (inst->isBypassable()) {
                 const auto& pred = inst->mascotInfo.prediction;
-                const auto sq_dist = pred.distances.first != 0 ? pred.distances.first : pred.distances.second;
+                if (pred.type == MASCOT::PredictionType::SMB) {
+                    const auto sq_dist = pred.distances.first != 0 ? pred.distances.first : pred.distances.second;
 
-                if (pred.type == MASCOT::PredictionType::SMB &&
-                    sq_dist > 0 && sq_dist <= storeQueue.size()) {
+                    assert(sq_dist > 0);
+                    DPRINTFR(SMBCoverage, "smbDist: %u; freeSQ: %i; sq_size: %i\n", sq_dist, calcFreeSQEntries(tid), storeQueue.size());
+
                     const auto sq_idx = storeQueue.size() - sq_dist;
                     const auto& sq_entry = storeQueue[sq_idx];
 
-                    const auto latest_retired_inst = commit_ptr->getRetiredSeqNum(tid);
-                    if (sq_entry.seqNum <= latest_retired_inst || !iew_ptr->ldstQueue.isStoreInStoreQueue(tid, sq_entry.seqNum)) {
+                    if (sq_dist > storeQueue.size()) {
                         ++stats.bypassingStoreOutsideWindow;
                     } else if (sq_entry.isStore) {
                         DPRINTF(Rename,
@@ -783,6 +787,8 @@ Rename::renameInsts(ThreadID tid)
                             "SMB Predictor predicted store with sequence number "
                             "%llu as source of load.\n",
                             tid, inst->seqNum, sq_entry.seqNum);
+
+                        DPRINTFR(SMBCoverage, "load_sn:%llu; store_sn:%llu\n", inst->seqNum, sq_entry.seqNum);
 
                         inst->setBypassedLoad(sq_entry.seqNum);
                         ++stats.bypassedLoads;

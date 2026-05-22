@@ -73,6 +73,7 @@ if env['CONF']['BUILD_ISA']:
     DebugFlag('Rename')
     DebugFlag('Scoreboard')
     DebugFlag('SMB')
+    DebugFlag('SMBCoverage')
     DebugFlag('StoreSet')
     DebugFlag('Writeback')
 
