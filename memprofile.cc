@@ -1,23 +1,38 @@
+#include <array>
+#include <cinttypes>
 #include <cstdint>
-#include <iomanip>
-#include <iostream>
+#include <cstdio>
 #include <fstream>
-#include <optional>
-#include <sstream>
+#include <iostream>
 #include <string>
 #include <unordered_map>
-#include <unordered_set>
 
-using namespace std;
+constexpr uint64_t SQSize = 114;
+
+struct MemBody {
+    uint64_t storePc;
+    uint64_t baseAddr;
+    uint64_t instSeqNum;
+};
+
+struct SQEntry {
+    uint64_t instSeqNum;
+    bool isStore;
+    bool isBypassable;
+};
 
 int main(int argc, char* argv[]) {
+    using namespace std;
+
     if (argc != 3) {
-        cerr << "Usage: " << argv[0] << " <memtrace_file> <predictions_file>\n";
+        cerr << "Usage: " << argv[0]
+             << " <memtrace_file> <predictions_file>\n";
         return 1;
     }
 
     ifstream infile(argv[1]);
     ofstream outfile(argv[2]);
+
     if (!infile) {
         cerr << "Error opening memtrace file\n";
         return 1;
@@ -28,12 +43,26 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    // Address to last PC writer
-    unordered_map<uint64_t, uint64_t> memory {};
-    unordered_set<uint64_t> invalid_loads {};
+    // =========================================================================
+    // Memory state
+    // =========================================================================
 
-    // LoadPC -> StorePC
-    unordered_map<uint64_t, uint64_t> deps {};
+    // byte-address -> producer store
+    unordered_map<uint64_t, MemBody> memory;
+    memory.reserve(1 << 20);
+
+    // ring-buffer SQ
+    array<SQEntry, SQSize> storeQueue {};
+
+    // instSeqNum -> logical SQ position
+    unordered_map<uint64_t, uint64_t> seqToPos;
+    seqToPos.reserve(256);
+
+    uint64_t tail = 0;
+
+    // =========================================================================
+    // Main loop
+    // =========================================================================
 
     string line;
 
@@ -41,55 +70,157 @@ int main(int argc, char* argv[]) {
         if (line.empty() || line[0] == '#')
             continue;
 
-        stringstream ss(line);
-
         uint64_t seq;
-        uint64_t pc, addr;
+        uint64_t pc;
+        uint64_t addr;
         uint32_t size;
+        int bypassable;
         char op;
 
-        if (!(ss >> seq >> hex >> pc >> hex >> addr >> size >> op)) continue;
+        if (sscanf(line.c_str(),
+                   "%" SCNu64 " %" SCNx64 " %" SCNx64 " %u %d %c",
+                   &seq,
+                   &pc,
+                   &addr,
+                   &size,
+                   &bypassable,
+                   &op) != 6) {
+            continue;
+        }
+
+        // =====================================================================
+        // Allocate / Atomic
+        // =====================================================================
+
+        if (op == 'A') {
+            uint64_t slot = tail % SQSize;
+
+            // remove overwritten entry
+            seqToPos.erase(storeQueue[slot].instSeqNum);
+
+            storeQueue[slot] = {
+                seq,
+                false,
+                false
+            };
+
+            seqToPos[seq] = tail;
+            ++tail;
+
+            continue;
+        }
+
+        // =====================================================================
+        // Store
+        // =====================================================================
 
         if (op == 'S') {
-            for (auto addr_byte = addr; addr_byte < addr + size; ++addr_byte)
-                memory[addr_byte] = pc;
-        } else if (op == 'L') {
-            bool valid_dep = true;
-            optional<uint64_t> store_pc = nullopt;
+            uint64_t slot = tail % SQSize;
 
-            for (auto addr_byte = addr; addr_byte < addr + size; ++addr_byte) {
-                auto mem_it = memory.find(addr_byte);
-                if (mem_it == memory.end()) {
-                    valid_dep = false;
-                    break;
-                }
-                if (!store_pc.has_value()) {
-                    store_pc = mem_it->second;
-                } else if (store_pc.value() != memory[addr_byte]) {
-                    valid_dep = false;
-                    break;
-                }
+            // remove overwritten entry
+            seqToPos.erase(storeQueue[slot].instSeqNum);
+
+            storeQueue[slot] = {
+                seq,
+                true,
+                bypassable == 1
+            };
+
+            seqToPos[seq] = tail;
+            ++tail;
+
+            MemBody body {
+                pc,
+                addr,
+                seq
+            };
+
+            // byte-granularity tracking
+            for (uint64_t a = addr; a < addr + size; ++a) {
+                memory[a] = body;
             }
 
-            if (store_pc.has_value() && valid_dep) {
-                if (deps.count(pc) && deps[pc] != store_pc)
-                    invalid_loads.insert(pc);
-                else
-                    deps[pc] = store_pc.value();
-            }
-        } else {
-            cerr << "Unrecognised character: " << op << std::endl;
-            exit(1);
+            continue;
         }
-    }
 
-    for (const auto& [load_pc, store_pc] : deps) {
-        if (!invalid_loads.count(load_pc))
-            outfile << hex << load_pc << " " << hex << store_pc << "\n";
+        // =====================================================================
+        // Load
+        // =====================================================================
+
+        if (op == 'L') {
+            bool validDep = true;
+            MemBody* storeInfo = nullptr;
+
+            for (uint64_t a = addr; a < addr + size; ++a) {
+                auto memIt = memory.find(a);
+
+                if (memIt == memory.end()) {
+                    validDep = false;
+                    break;
+                }
+
+                MemBody& mem = memIt->second;
+
+                // ensure full forwarding from same store
+                if (mem.baseAddr != addr) {
+                    validDep = false;
+                    break;
+                }
+
+                if (!storeInfo) {
+                    storeInfo = &mem;
+                } else if (storeInfo->storePc != mem.storePc) {
+                    validDep = false;
+                    break;
+                }
+            }
+
+            if (!validDep || !storeInfo) {
+                outfile << hex << pc << " 0\n";
+                continue;
+            }
+
+            // ================================================================
+            // SQ lookup
+            // ================================================================
+
+            auto posIt = seqToPos.find(storeInfo->instSeqNum);
+
+            if (posIt == seqToPos.end()) {
+                outfile << hex << pc << " 0\n";
+                continue;
+            }
+
+            uint64_t pos = posIt->second;
+
+            SQEntry& entry = storeQueue[pos % SQSize];
+
+            // overwritten ring-buffer protection
+            if (entry.instSeqNum != storeInfo->instSeqNum) {
+                outfile << hex << pc << " 0\n";
+                continue;
+            }
+
+            if (!entry.isStore || !entry.isBypassable) {
+                outfile << hex << pc << " 0\n";
+                continue;
+            }
+
+            uint64_t distance = tail - pos;
+
+            outfile << hex << pc
+                    << " "
+                    << dec << distance
+                    << "\n";
+
+            continue;
+        }
+
+        cerr << "Unrecognized op: " << op << "\n";
+        return 1;
     }
 
     outfile.flush();
-    outfile.close();
-    infile.close();
+
     return 0;
 }

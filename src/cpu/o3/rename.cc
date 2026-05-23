@@ -696,6 +696,9 @@ Rename::renameInsts(ThreadID tid)
                 inst->mascotInfo.prediction = iew_ptr->getMascot(tid)->predict(inst->pcState().instAddr(), inst->seqNum, cpu->getDecode()->getBranchHistory());
                 auto& pred = inst->mascotInfo.prediction;
 
+                if (pred.type == MASCOT::PredictionType::SMB)
+                    pred.type = MASCOT::PredictionType::MDP;
+
                 DPRINTF(Rename, 
                         "[tid:%i] Mascot prediction for load [sn:%llu] "
                         "type: %s; distance1: %u; distance2: %u\n",

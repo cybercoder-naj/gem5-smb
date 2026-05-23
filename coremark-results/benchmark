@@ -27,6 +27,7 @@ config="--cpu-type=DerivO3CPU \
     --l1i-hwp-type=StridePrefetcher \
     --l2-hwp-type=StridePrefetcher"
 
+export MEM_TRACE_FILE="$HOME/memtraces-v2/$filename.memtrace"
 systemd-run --user --slice=workloads.slice --scope ./build/X86/gem5.opt \
   --outdir=m5out/$filename/smb \
   --debug-flags=SMBCoverage \

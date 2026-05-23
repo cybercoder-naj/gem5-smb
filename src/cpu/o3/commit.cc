@@ -54,6 +54,7 @@
 #include "cpu/o3/dyn_inst.hh"
 #include "cpu/o3/limits.hh"
 #include "cpu/o3/thread_state.hh"
+#include "cpu/reg_class.hh"
 #include "cpu/timebuf.hh"
 #include "debug/Activity.hh"
 #include "debug/Commit.hh"
@@ -930,13 +931,20 @@ Commit::dumpMemInstruction(const DynInstPtr &head_inst) {
     Addr pc_state = head_inst->pcState().instAddr();
     Addr eff_addr = head_inst->effAddr;
     unsigned int eff_size = head_inst->effSize;
-    bool is_load = head_inst->isLoad();
+    char type = head_inst->isLoad() ? 'L' : head_inst->isStore() ? 'S' : 'A';
+    bool bypassable = (head_inst->isLoad() || head_inst->isStore()) && !head_inst->isRMW() && !head_inst->isRMWA();
+
+    if (head_inst->isLoad())
+      bypassable &= head_inst->destRegIdx(0).classValue() == RegClassType::IntRegClass;
+    else if (head_inst->isStore())
+      bypassable &= head_inst->srcRegIdx(2).classValue() == RegClassType::IntRegClass;
 
     memTraceFile << seq_num << " "
         << std::hex << pc_state << " "
         << std::hex << eff_addr << " "
         << std::dec << eff_size << " "
-        << (is_load ? "L" : "S") << "\n";
+        << bypassable << " "
+        << type << "\n";
 }
 
 void
