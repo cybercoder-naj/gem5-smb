@@ -14,12 +14,12 @@
       "-fno-builtin-calloc",
       "-fno-builtin-realloc",
       "-fno-builtin-free",
-      "-g",
       "-O3",
       "-DMAGIC_ENUM_RANGE_MAX=0x100",
       "-DNUMBER_BITS_PER_SET=128",
       "-DPROTOCOL_MESI_Two_Level",
-      "-DTRACING_ON=1",
+      "-DNDEBUG",
+      "-DTRACING_ON=0",
       "-Iext/fputils/include",
       "-Iext/nomali/include",
       "-Iext/drampower/src",
@@ -38,12 +38,12 @@
       "-Isrc/systemc/ext/systemc_home/include",
       "-Ibuild/X86/systemc/ext",
       "-o",
-      "build/X86/cpu/o3/rename.o",
-      "src/cpu/o3/rename.cc"
+      "build/X86/cpu/o3/smb.fo",
+      "src/cpu/o3/smb.cc"
     ],
-    "directory": "/home/nj421/gem5-mascot",
-    "file": "/home/nj421/gem5-mascot/src/cpu/o3/rename.cc",
-    "output": "/home/nj421/gem5-mascot/build/X86/cpu/o3/rename.o"
+    "directory": "/home/nj421/gem5-smb",
+    "file": "/home/nj421/gem5-smb/src/cpu/o3/smb.cc",
+    "output": "/home/nj421/gem5-smb/build/X86/cpu/o3/smb.fo"
   },
   {
     "arguments": [
@@ -60,12 +60,12 @@
       "-fno-builtin-calloc",
       "-fno-builtin-realloc",
       "-fno-builtin-free",
-      "-g",
       "-O3",
       "-DMAGIC_ENUM_RANGE_MAX=0x100",
       "-DNUMBER_BITS_PER_SET=128",
       "-DPROTOCOL_MESI_Two_Level",
-      "-DTRACING_ON=1",
+      "-DNDEBUG",
+      "-DTRACING_ON=0",
       "-Iext/fputils/include",
       "-Iext/nomali/include",
       "-Iext/drampower/src",
@@ -84,11 +84,11 @@
       "-Isrc/systemc/ext/systemc_home/include",
       "-Ibuild/X86/systemc/ext",
       "-o",
-      "build/X86/base/date.o",
+      "build/X86/base/date.fo",
       "src/base/date.cc"
     ],
-    "directory": "/home/nj421/gem5-mascot",
-    "file": "/home/nj421/gem5-mascot/src/base/date.cc",
-    "output": "/home/nj421/gem5-mascot/build/X86/base/date.o"
+    "directory": "/home/nj421/gem5-smb",
+    "file": "/home/nj421/gem5-smb/src/base/date.cc",
+    "output": "/home/nj421/gem5-smb/build/X86/base/date.fo"
   }
 ]

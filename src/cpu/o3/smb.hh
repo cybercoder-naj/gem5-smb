@@ -5,12 +5,15 @@
 #ifndef __CPU_O3_SMB_HH__
 #define __CPU_O3_SMB_HH__
 
+#include <cstdint>
 #include <fstream>
+#include <optional>
 #include <string>
-#include <unordered_map>
+#include <vector>
 
 #include "base/types.hh"
 #include "cpu/o3/dyn_inst_ptr.hh"
+#include "cpu/o3/mascot.hh"
 
 namespace gem5
 {
@@ -18,15 +21,22 @@ namespace gem5
 namespace o3
 {
 
+struct PredictionEntry {
+  std::optional<InstSeqNum> instSeqNum;
+  Addr loadPC;
+  uint64_t sqDist;
+};
+
 /** The speculative memory bypass predictor. */
 class SMB
 {
   private:
     /** The object name, for DPRINTF. */
     const std::string _name;
-    std::unordered_map<Addr, Addr> predictions;
-    std::unordered_map<Addr, InstSeqNum> storeAddrToSeqNum;
-    std::unordered_map<InstSeqNum, Addr> loadSeqNumToAddr;
+    std::fstream infile;
+
+    std::vector<PredictionEntry> predictions;
+    uint64_t predIdx = 0;
 
   public:
     /** Constructor. */
@@ -37,17 +47,11 @@ class SMB
 
     std::string name() const { return _name; }
 
-    InstSeqNum predictSourceStore(InstSeqNum load_seq_num);
+    MASCOT::Prediction predict(Addr load_pc, InstSeqNum load_seq_num, BranchHistory branch_history);
 
-    void registerMemoryAccess(const Addr addr, InstSeqNum seq_num, bool is_store) {
-        if (is_store) {
-            storeAddrToSeqNum[addr] = seq_num;
-        } else {
-            loadSeqNumToAddr[seq_num] = addr;
-        }
-    }
+    bool nextPrediction();
 
-    void squash(); 
+    void squash(InstSeqNum squashed_seq_num); 
 
     void removeUpTo(InstSeqNum seq_num);
 

@@ -4,11 +4,16 @@
 
 #include "cpu/o3/smb.hh"
 
-#include <fstream>
-#include <sstream>
 
 #include "base/trace.hh"
+#include "cpu/o3/dyn_inst_ptr.hh"
+#include "cpu/o3/mascot.hh"
 #include "debug/SMB.hh"
+#include <cassert>
+#include <cstdint>
+#include <cstdio>
+#include <optional>
+#include <string>
 
 namespace gem5
 {
@@ -17,9 +22,7 @@ namespace o3
 {
 
 SMB::SMB(const std::string &_my_name) :
-    _name(_my_name),
-    storeAddrToSeqNum(),
-    loadSeqNumToAddr()
+    _name(_my_name)
 {
   const char* env = std::getenv("SMB_PREDICTIONS_FILE");
   if (!env) {
@@ -27,95 +30,84 @@ SMB::SMB(const std::string &_my_name) :
     return;
   }
 
-  std::ifstream infile;
   infile.open(env);
   if (!infile.is_open()) {
     DPRINTF(SMB, "Could not open SMB predictions file\n");
   }
 
-  std::string line;
-  while (std::getline(infile, line)) {
-    if (line.empty()) continue;
-
-    std::stringstream ss(line);
-    Addr l_pc, s_pc;
-    if (!(ss >> std::hex >> l_pc >> std::hex >> s_pc)) continue;
-
-    predictions[l_pc] = s_pc;
-  }
-  infile.close();
+  predIdx = 0;
 }
 
-InstSeqNum
-SMB::predictSourceStore(InstSeqNum load_seq_num)
+MASCOT::Prediction
+SMB::predict(Addr load_pc, InstSeqNum inst_seq_num, BranchHistory branch_history)
 {
-  Addr load_pc = loadSeqNumToAddr[load_seq_num];
-  if (load_pc == 0) {
-    return 0;
+  MASCOT::Prediction pred {
+    .type = MASCOT::PredictionType::SMB,
+    .distances = {0, 0},
+    .tableIdx = -1u,
+    .hash = 0,
+  };
+
+  if (predIdx >= predictions.size())
+    if (!nextPrediction()) {
+      return pred;
+    } 
+
+  auto &pred_entry = predictions[predIdx++];
+  assert(pred_entry.loadPC == load_pc);
+  assert(!pred_entry.instSeqNum.has_value());
+  pred_entry.instSeqNum = inst_seq_num;
+
+  pred.distances.first = pred_entry.sqDist; 
+
+  return pred;
+}
+
+bool
+SMB::nextPrediction() {
+  DPRINTF(SMB, "Getting line number %i", predIdx + 1);
+
+  std::string line;
+  while(std::getline(infile, line)) {
+    if (line.empty()) continue;  
+
+    PredictionEntry entry {
+      .instSeqNum = std::nullopt,
+      .loadPC = 0,
+      .sqDist = 0
+    };
+
+    if (sscanf(line.c_str(), "%" SCNx64 " %" SCNu64, &entry.loadPC, &entry.sqDist) != 2) continue;
+
+    predictions.push_back(entry);
+    return true;
   }
 
-  if (predictions.count(load_pc)) {
-    InstSeqNum store_seq_num = storeAddrToSeqNum[predictions[load_pc]];
-    return store_seq_num;
-  }
-  
-  // std::string line;
-  // while (std::getline(infile, line)) {
-  //   if (line.empty()) continue;
-
-  //   std::stringstream ss(line);
-  //   Addr l_pc, s_pc;
-  //   if (!(ss >> std::hex >> l_pc >> std::hex >> s_pc)) continue;
-
-  //   if (l_pc == load_pc) {
-  //     InstSeqNum store_seq_num = storeAddrToSeqNum[s_pc];
-  //     assert(store_seq_num != 0);
-  //     return store_seq_num;
-  //   }
-
-  //   predictions[l_pc] = s_pc;
-  // }
-
-
-  return 0;
+  infile.close();
+  return false;
 }
 
 void
-SMB::squash()
+SMB::squash(InstSeqNum squashed_seq_num)
 {
-  loadSeqNumToAddr.clear();
-  storeAddrToSeqNum.clear();
+  while (predIdx - 1 >= 0 &&
+          predictions[predIdx - 1].instSeqNum > squashed_seq_num)
+    --predIdx;
 }
 
 void 
 SMB::removeUpTo(InstSeqNum seq_num)
 {
-  // Remove any predictions that are associated with loads that have sequence numbers less than or equal to the committed sequence number.
-  for (auto it = loadSeqNumToAddr.begin(); it != loadSeqNumToAddr.end(); ) {
-    if (it->first <= seq_num) {
-      it = loadSeqNumToAddr.erase(it);
-    } else {
-      ++it;
-    }
-  }
-
-  for (auto it = storeAddrToSeqNum.begin(); it != storeAddrToSeqNum.end(); ) {
-    if (it->second <= seq_num) {
-      it = storeAddrToSeqNum.erase(it);
-    } else {
-      ++it;
-    }
+  for (auto it = predictions.begin(); it != predictions.end(); ) {
+    if (it->instSeqNum.has_value() && it->instSeqNum.value() <= seq_num)
+      it = predictions.erase(it);
+    else break;
   }
 }
 
 bool
 SMB::deletePrediction(Addr load_addr)
 {
-  auto it = predictions.find(load_addr);
-  if (it != predictions.end()) {
-    predictions.erase(it);
-    return true;
-  }
   return false;
 }
 
