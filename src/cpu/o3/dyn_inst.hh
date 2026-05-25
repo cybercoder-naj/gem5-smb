@@ -372,11 +372,7 @@ class DynInst : public ExecContext, public RefCounted
     }
     bool shouldDumpIntoMemtrace() const {
         // This is specific to x86
-        return isBypassable() ||
-                (staticInst->isStore() &&
-                !staticInst->isRMW() && 
-                !staticInst->isRMWA() &&
-                staticInst->srcRegIdx(2).classValue() == RegClassType::IntRegClass);
+      return isLoad() || isStore() || isAtomic();
     }
     bool isBypassedLoad() const {
         return staticInst->isLoad() && instFlags.test(BypassedLoad);

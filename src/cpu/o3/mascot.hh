@@ -294,8 +294,8 @@ struct MascotInfo {
   bool mdpViolation = false;
   bool mdpPredicted = false;
 
-  bool violation() const { return smbViolation || mdpViolation; }
-  bool predicted() const { return smbPredicted || mdpPredicted; }
+  bool violation() const { return mdpViolation; }
+  bool predicted() const { return mdpPredicted; }
 };
 
 } // namespace o3

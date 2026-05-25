@@ -689,18 +689,6 @@ Rename::renameInsts(ThreadID tid)
 
                 break;
             }
-
-            if (inst->isLoad()) {
-                // "MASCOT makes a prediction for each load in the decode stage."
-                // But it doesn't matter where it does the prediction in Gem5
-                inst->mascotInfo.prediction = iew_ptr->getMascot(tid)->predict(inst->pcState().instAddr(), inst->seqNum, cpu->getDecode()->getBranchHistory());
-                auto& pred = inst->mascotInfo.prediction;
-
-                DPRINTF(Rename, 
-                        "[tid:%i] Mascot prediction for load [sn:%llu] "
-                        "type: %s; distance1: %u; distance2: %u\n",
-                        tid, inst->seqNum, pred.type, pred.distances.first, pred.distances.second);
-            }
         } else {
             DPRINTF(Rename, 
                     "[tid:%i] "
@@ -770,9 +758,13 @@ Rename::renameInsts(ThreadID tid)
             }
 
             if (inst->isBypassable()) {
-                const auto& pred = inst->mascotInfo.prediction;
+                const auto& pred = smb->predict(inst->pcState().instAddr(), inst->seqNum, cpu->getDecode()->getBranchHistory());
                 if (pred.type == MASCOT::PredictionType::SMB) {
                     const auto sq_dist = pred.distances.first != 0 ? pred.distances.first : pred.distances.second;
+                    DPRINTF(Rename, 
+                        "[tid:%i] Oracle prediction for load [sn:%llu] "
+                        "distance: %u\n",
+                        tid, inst->seqNum, pred.distances.first);
 
                     assert(sq_dist > 0);
                     DPRINTFR(SMBCoverage, "smbDist: %u; freeSQ: %i; sq_size: %i\n", sq_dist, calcFreeSQEntries(tid), storeQueue.size());

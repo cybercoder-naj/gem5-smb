@@ -9,7 +9,6 @@
 #include <fstream>
 #include <optional>
 #include <string>
-#include <vector>
 
 #include "base/types.hh"
 #include "cpu/o3/dyn_inst_ptr.hh"
@@ -35,8 +34,8 @@ class SMB
     const std::string _name;
     std::fstream infile;
 
-    std::vector<PredictionEntry> predictions;
-    uint64_t predIdx = 0;
+    std::deque<PredictionEntry> predictions;
+    std::deque<PredictionEntry>::iterator dispatchIt;
 
   public:
     /** Constructor. */

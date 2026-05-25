@@ -53,6 +53,7 @@
 #include "cpu/o3/cpu.hh"
 #include "cpu/o3/dyn_inst.hh"
 #include "cpu/o3/limits.hh"
+#include "cpu/o3/mascot.hh"
 #include "cpu/o3/thread_state.hh"
 #include "cpu/reg_class.hh"
 #include "cpu/timebuf.hh"
@@ -1014,8 +1015,8 @@ Commit::commitInsts()
 
             // MemDepUnit training
             // only want to report a violation when we're not on a misspeculated path
-            if (head_inst->squashedDueToMemOrder && !updatedMemDep
-                && head_inst->isLoad() && head_inst->mascotInfo.violation()) {
+            if (head_inst->squashedDueToMemOrder && !updatedMemDep && 
+                head_inst->isLoad() && head_inst->mascotInfo.violation()) {
                 iewStage->instQueue.violation(head_inst, committedBranchHistory);
                 updatedMemDep = true;
                 ++stats.memOrderViolationEvents;

@@ -5,6 +5,7 @@
 #include "cpu/o3/smb.hh"
 
 
+#include "base/debug.hh"
 #include "base/trace.hh"
 #include "cpu/o3/dyn_inst_ptr.hh"
 #include "cpu/o3/mascot.hh"
@@ -12,6 +13,7 @@
 #include <cassert>
 #include <cstdint>
 #include <cstdio>
+#include <iterator>
 #include <optional>
 #include <string>
 
@@ -22,7 +24,8 @@ namespace o3
 {
 
 SMB::SMB(const std::string &_my_name) :
-    _name(_my_name)
+    _name(_my_name),
+    dispatchIt(predictions.end())
 {
   const char* env = std::getenv("SMB_PREDICTIONS_FILE");
   if (!env) {
@@ -34,38 +37,41 @@ SMB::SMB(const std::string &_my_name) :
   if (!infile.is_open()) {
     DPRINTF(SMB, "Could not open SMB predictions file\n");
   }
-
-  predIdx = 0;
 }
 
 MASCOT::Prediction
 SMB::predict(Addr load_pc, InstSeqNum inst_seq_num, BranchHistory branch_history)
 {
   MASCOT::Prediction pred {
-    .type = MASCOT::PredictionType::SMB,
+    .type = MASCOT::PredictionType::NDEP,
     .distances = {0, 0},
     .tableIdx = -1u,
     .hash = 0,
   };
 
-  if (predIdx >= predictions.size())
-    if (!nextPrediction()) {
+  if (dispatchIt == predictions.end()) {
+    if (!nextPrediction())
       return pred;
-    } 
+    dispatchIt = std::prev(predictions.end());
+  }
 
-  auto &pred_entry = predictions[predIdx++];
-  assert(pred_entry.loadPC == load_pc);
-  assert(!pred_entry.instSeqNum.has_value());
-  pred_entry.instSeqNum = inst_seq_num;
+  assert(dispatchIt->loadPC == load_pc);
+  assert(!dispatchIt->instSeqNum.has_value());
 
-  pred.distances.first = pred_entry.sqDist; 
+  dispatchIt->instSeqNum = inst_seq_num;
+
+  if (dispatchIt->sqDist > 0)
+    pred.type = MASCOT::PredictionType::SMB;
+  pred.distances.first = dispatchIt->sqDist; 
+
+  ++dispatchIt;
 
   return pred;
 }
 
 bool
 SMB::nextPrediction() {
-  DPRINTF(SMB, "Getting line number %i", predIdx + 1);
+  DPRINTF(SMB, "Getting new line \n");
 
   std::string line;
   while(std::getline(infile, line)) {
@@ -77,7 +83,11 @@ SMB::nextPrediction() {
       .sqDist = 0
     };
 
-    if (sscanf(line.c_str(), "%" SCNx64 " %" SCNu64, &entry.loadPC, &entry.sqDist) != 2) continue;
+    if (sscanf(line.c_str(), 
+               "%" SCNx64 " %" SCNu64, 
+               &entry.loadPC,
+               &entry.sqDist) != 2) 
+      continue;
 
     predictions.push_back(entry);
     return true;
@@ -90,18 +100,27 @@ SMB::nextPrediction() {
 void
 SMB::squash(InstSeqNum squashed_seq_num)
 {
-  while (predIdx - 1 >= 0 &&
-          predictions[predIdx - 1].instSeqNum > squashed_seq_num)
-    --predIdx;
+  while (dispatchIt != predictions.begin()) {
+    auto prev = std::prev(dispatchIt);
+    if (!prev->instSeqNum.has_value() ||
+        prev->instSeqNum.value() <= squashed_seq_num)
+      break;
+    prev->instSeqNum = std::nullopt;
+    dispatchIt = prev;
+  }
 }
 
 void 
 SMB::removeUpTo(InstSeqNum seq_num)
 {
-  for (auto it = predictions.begin(); it != predictions.end(); ) {
-    if (it->instSeqNum.has_value() && it->instSeqNum.value() <= seq_num)
-      it = predictions.erase(it);
-    else break;
+  while (!predictions.empty()) {
+    auto &front = predictions.front();
+    if (!front.instSeqNum.has_value() ||
+        front.instSeqNum.value() > seq_num)
+      break;
+
+    assert(dispatchIt != predictions.begin());
+    predictions.pop_front();
   }
 }
 

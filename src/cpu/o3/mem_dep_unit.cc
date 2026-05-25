@@ -35,6 +35,7 @@
 #include "cpu/o3/dyn_inst.hh"
 #include "cpu/o3/inst_queue.hh"
 #include "cpu/o3/limits.hh"
+#include "cpu/o3/mascot.hh"
 #include "debug/MemDepUnit.hh"
 #include "params/BaseO3CPU.hh"
 
@@ -263,36 +264,31 @@ void MemDepUnit::insert(const DynInstPtr &inst, BranchHistory branchHistory) {
   inst_entry->listIt = --(instList[tid].end());
 
   std::vector<MemDepEntryPtr> dependencies;
-  if (inst->isLoad()) {
-    auto &mascotInfo = inst->mascotInfo;
-    auto &pred = mascotInfo.prediction;
-
-    if (mascotInfo.predicted()) {
-      // Rename stage has marked this has SMB Bypassed
-      assert(pred.type == MASCOT::PredictionType::SMB);
-      assert(inst->isBypassedLoad());
-      assert(pred.distances.first != 0 ^ pred.distances.second != 0);
-
-      MemDepHashIt hash_it = memDepHash.find(mascotInfo.smbStoreSeqNum);
+  if (inst->isBypassedLoad()) {
+      MemDepHashIt hash_it = memDepHash.find(inst->mascotInfo.smbStoreSeqNum);
       if (hash_it != memDepHash.end())
         dependencies.push_back(hash_it->second);
-    } else {
-      // It could have been SMB but rename could not bypass it. Check for MDP.
-      if (pred.type != MASCOT::PredictionType::NDEP) {
-        assert(pred.distances.first || pred.distances.second);
+  }
+  else if (inst->isLoad()) {
+    const auto &pred = mascot.predict(inst->pcState().instAddr(), inst->seqNum, branchHistory);
 
-        // make a MASCOT prediction, as long as the SQ distance is valid
-        mascotInfo.mdpPredicted =
-            addSQDistanceDep(inst, pred.distances.first, dependencies) |
-            addSQDistanceDep(inst, pred.distances.second, dependencies);
+    if (pred.type != MASCOT::PredictionType::NDEP) {
+      assert(pred.distances.first || pred.distances.second);
 
-        // If the dependencies were found, mark it as MDP, otherwise NDEP.
-        if (mascotInfo.mdpPredicted) {
-          pred.type = MASCOT::PredictionType::MDP;
-        } else {
-          pred.type = MASCOT::PredictionType::NDEP;
-          pred.distances = {0, 0};
-        }
+      // make a MASCOT prediction, as long as the SQ distance is valid
+      inst->mascotInfo.mdpPredicted =
+          addSQDistanceDep(inst, pred.distances.first, dependencies) |
+          addSQDistanceDep(inst, pred.distances.second, dependencies);
+
+      // If the dependencies were found, mark it as MDP, otherwise NDEP.
+      if (inst->mascotInfo.mdpPredicted) {
+        inst->mascotInfo.prediction.type = MASCOT::PredictionType::MDP;
+        inst->mascotInfo.prediction.distances = pred.distances;
+        inst->mascotInfo.prediction.hash = pred.hash;
+        inst->mascotInfo.prediction.tableIdx = pred.tableIdx;
+      } else {
+        inst->mascotInfo.prediction.type = MASCOT::PredictionType::NDEP;
+        inst->mascotInfo.prediction.distances = {0, 0};
       }
     }
   }
