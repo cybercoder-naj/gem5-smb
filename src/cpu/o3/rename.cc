@@ -757,9 +757,9 @@ Rename::renameInsts(ThreadID tid)
                 storeQueue.back() = sqEntry;
             }
 
-            if (inst->isBypassable()) {
+            if (inst->isLoad()) {
                 const auto& pred = smb->predict(inst->pcState().instAddr(), inst->seqNum, cpu->getDecode()->getBranchHistory());
-                if (pred.type == MASCOT::PredictionType::SMB) {
+                if (inst->isBypassable() && pred.type == MASCOT::PredictionType::SMB) {
                     const auto sq_dist = pred.distances.first != 0 ? pred.distances.first : pred.distances.second;
                     DPRINTF(Rename, 
                         "[tid:%i] Oracle prediction for load [sn:%llu] "
