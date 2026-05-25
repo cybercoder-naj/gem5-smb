@@ -43,6 +43,7 @@
 
 #include "arch/generic/debugfaults.hh"
 #include "base/str.hh"
+#include "base/trace.hh"
 #include "cpu/checker/cpu.hh"
 #include "cpu/o3/dyn_inst.hh"
 #include "cpu/o3/limits.hh"
@@ -1126,6 +1127,7 @@ LSQUnit::writeback(const DynInstPtr &inst, PacketPtr pkt)
                 PhysRegIdPtr dest_reg = inst->renamedDestIdx(0);
 
                 auto before = cpu->getReg(dest_reg, tid);
+                DPRINTF(LSQUnit, "Bypassed Load PC %s [sn:%llu] is writing back to dest register.\n", inst->pcState(), inst->seqNum);
                 inst->completeAcc(pkt);
                 auto after = cpu->getReg(dest_reg, tid);
 
@@ -1144,6 +1146,7 @@ LSQUnit::writeback(const DynInstPtr &inst, PacketPtr pkt)
                 }
             } else {
                 // Complete access to copy data to proper place.
+                DPRINTF(LSQUnit, "Load PC %s [sn:%llu] is writing back to dest register.\n", inst->pcState(), inst->seqNum);
                 inst->completeAcc(pkt);
             }
         } else {
@@ -1409,10 +1412,10 @@ LSQUnit::read(LSQRequest *request, ssize_t load_idx)
     }
 
     DPRINTF(LSQUnit, "Read called, load idx: %i, store idx: %i, "
-            "storeHead: %i addr: %#x%s\n",
+            "storeHead: %i, paddr: %#x%s, vaddr: %#x, size: %u\n",
             load_idx - 1, load_inst->sqIt._idx, storeQueue.head() - 1,
             request->mainReq()->getPaddr(), request->isSplit() ? " split" :
-            "");
+            "", request->mainReq()->getVaddr(), request->mainReq()->getSize());
 
     if (request->mainReq()->isLLSC()) {
         // Disable recording the result temporarily.  Writing to misc
@@ -1447,6 +1450,10 @@ LSQUnit::read(LSQRequest *request, ssize_t load_idx)
     if (load_inst->isBypassedLoad() && load_inst->smbPredStoreIt > end_it) 
         end_it = load_inst->smbPredStoreIt;
     assert (store_it >= end_it);
+
+    DPRINTF(LSQUnit, "Looking from stores [sn:%llu] exclusive down to [sn:%llu] inclusive.\n", 
+        store_it->instruction()->seqNum, end_it->instruction()->seqNum);
+    
     // End once we've reached the top of the LSQ
     while (store_it != end_it && !load_inst->isDataPrefetch()) {
         // Move the index to one younger
@@ -1454,6 +1461,9 @@ LSQUnit::read(LSQRequest *request, ssize_t load_idx)
         assert(store_it->valid());
         assert(store_it->instruction()->seqNum < load_inst->seqNum);
         int store_size = store_it->size();
+
+        DPRINTF(LSQUnit, "Candidate store [sn:%llu] with effAddr: %llx; size: %u; data .\n", 
+            store_it->instruction()->seqNum, store_it->instruction()->effAddr, store_size);
 
         // Cache maintenance instructions go down via the store
         // path but they carry no data and they shouldn't be
@@ -1511,6 +1521,19 @@ LSQUnit::read(LSQRequest *request, ssize_t load_idx)
             }
 
             if (coverage == AddrRangeCoverage::FullAddrRangeCoverage) {
+                // Get shift amount for offset into the store's data.
+                int shift_amt = request->mainReq()->getVaddr() -
+                    store_it->instruction()->effAddr;
+
+                auto store_data = store_it->data();
+                auto size = store_size;
+
+                uint64_t value = 0;
+                memcpy(&value, store_data, size);
+
+                DPRINTF(LSQUnit, "Store PC %s [sn:%llu] at SQIdx: %i has full coverage. Value in store: %lli.\n",
+                    store_it->instruction()->pcState(), store_it->instruction()->seqNum, store_it.idx(), value);
+
                 if (load_inst->isBypassedLoad() && 
                         (store_it->instruction()->seqNum != load_inst->mascotInfo.smbStoreSeqNum || req_s != st_s)) {
                     
@@ -1531,10 +1554,6 @@ LSQUnit::read(LSQRequest *request, ssize_t load_idx)
                         "inst [sn:%lli] and [sn:%lli] at address %#x\n",
                         store_it->instruction()->seqNum, load_inst->seqNum, req_s_dep);
                 }
-
-                // Get shift amount for offset into the store's data.
-                int shift_amt = request->mainReq()->getVaddr() -
-                    store_it->instruction()->effAddr;
 
                 // Allocate memory if this is the first time a load is issued.
                 if (!load_inst->memData) {
@@ -1666,7 +1685,7 @@ LSQUnit::read(LSQRequest *request, ssize_t load_idx)
     }
 
     // If there's no forwarding case, then go access memory
-    DPRINTF(LSQUnit, "Doing memory access for inst [sn:%lli] PC %s\n",
+    DPRINTF(LSQUnit, "No Forwarding case found. Doing memory access for inst [sn:%lli] PC %s\n",
             load_inst->seqNum, load_inst->pcState());
 
     // Allocate memory if this is the first time a load is issued.

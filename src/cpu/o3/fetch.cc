@@ -1096,9 +1096,8 @@ retrieveDestRegMask(const std::string& disassembly) {
 
     std::regex re(R"(ld\s+([a-zA-Z0-9]+),)");
     std::smatch match;
-    if (!std::regex_search(disassembly, match, re)) {
-        panic("Register not found.");
-    }
+    panic_if(!std::regex_search(disassembly, match, re),
+        "Disassembly failed regex: %s ", disassembly); 
     
     auto reg = match[1].str();
     auto regWidth = regWidths[reg];

@@ -370,6 +370,7 @@ class DynInst : public ExecContext, public RefCounted
         return staticInst->isLoad() && 
                 !staticInst->isRMW() && 
                 !staticInst->isRMWA() &&
+                !staticInst->isDelayedCommit() &&
                 destRegIdx(0).classValue() == RegClassType::IntRegClass;
     }
     bool shouldDumpIntoMemtrace() const {
