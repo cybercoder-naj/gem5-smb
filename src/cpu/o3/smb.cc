@@ -42,6 +42,7 @@ SMB::SMB(const std::string &_my_name) :
 MASCOT::Prediction
 SMB::predict(Addr load_pc, InstSeqNum inst_seq_num, BranchHistory branch_history)
 {
+  DPRINTF(SMB, "Predicting for Load PC %llx [sn:%llu].\n", load_pc, inst_seq_num);
   MASCOT::Prediction pred {
     .type = MASCOT::PredictionType::NDEP,
     .distances = {0, 0},
@@ -100,6 +101,7 @@ SMB::nextPrediction() {
 void
 SMB::squash(InstSeqNum squashed_seq_num)
 {
+  DPRINTF(SMB, "Squashing until %llu\n", squashed_seq_num);
   while (dispatchIt != predictions.begin()) {
     auto prev = std::prev(dispatchIt);
     if (!prev->instSeqNum.has_value() ||
@@ -113,6 +115,7 @@ SMB::squash(InstSeqNum squashed_seq_num)
 void 
 SMB::removeUpTo(InstSeqNum seq_num)
 {
+  DPRINTF(SMB, "Removing upto %llu\n", seq_num);
   while (!predictions.empty()) {
     auto &front = predictions.front();
     if (!front.instSeqNum.has_value() ||

@@ -31,8 +31,8 @@ config="--cpu-type=DerivO3CPU \
 export SMB_PREDICTIONS_FILE="$HOME/memtraces-v2/$filename.predictions"
 systemd-run --user --slice=workloads.slice --scope ./build/X86/gem5.opt \
   --outdir=m5out/$filename/smb \
-  --debug-flags=SMBCoverage \
-  --debug-file=smb-coverage.txt \
+  --debug-flags=Rename,SMB \
+  --debug-file=trace.out \
   configs/deprecated/example/se.py \
   --cmd="$cmd" \
   $config \

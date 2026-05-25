@@ -404,6 +404,7 @@ Rename::squash(const InstSeqNum &squash_seq_num, ThreadID tid)
     skidBuffer[tid].clear();
 
     doSquash(squash_seq_num, tid);
+    smb->squash(squash_seq_num);
 }
 
 void
@@ -454,6 +455,7 @@ Rename::tick()
 
             removeFromHistory(fromCommit->commitInfo[tid].doneSeqNum,
                                   tid);
+            smb->removeUpTo(fromCommit->commitInfo[tid].doneSeqNum);
         }
     }
 
