@@ -551,6 +551,7 @@ class Rename
         statistics::Scalar skidInsts;
         /** Number of loads that are bypassed. */
         statistics::Scalar bypassedLoads;
+        statistics::Scalar smbStoreOutsideInstWindow;
     } stats;
 };
 

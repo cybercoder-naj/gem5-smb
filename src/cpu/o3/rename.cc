@@ -49,7 +49,6 @@
 #include "cpu/o3/limits.hh"
 #include "cpu/reg_class.hh"
 #include "debug/Activity.hh"
-#include "debug/O3PipeView.hh"
 #include "debug/Rename.hh"
 #include "params/BaseO3CPU.hh"
 
@@ -150,7 +149,9 @@ Rename::RenameStats::RenameStats(statistics::Group *parent)
       ADD_STAT(skidInsts, statistics::units::Count::get(),
                "count of insts added to the skid buffer"),
       ADD_STAT(bypassedLoads, statistics::units::Count::get(),
-               "count of bypassed loads renamed")
+               "count of bypassed loads renamed"),
+      ADD_STAT(smbStoreOutsideInstWindow, statistics::units::Count::get(),
+               "count of loads bypassed with store outside inst window")
 {
     squashCycles.prereq(squashCycles);
     idleCycles.prereq(idleCycles);
@@ -753,7 +754,7 @@ Rename::renameInsts(ThreadID tid)
                     const auto doneSeqNum = commit_ptr->getDoneSeqNum(tid);
                     if (doneSeqNum >= smb_store_seqnum) {
                         //? is this required
-                        // ++stats.smbStoreOutsideInstWindow;
+                        ++stats.smbStoreOutsideInstWindow;
                     } else {
                         inst->setBypassedLoad(smb_store_seqnum);
                         ++stats.bypassedLoads;

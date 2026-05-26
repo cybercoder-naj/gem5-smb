@@ -340,29 +340,6 @@ LSQUnit::insertLoad(const DynInstPtr &load_inst)
 
     if (load_inst->isBypassedLoad()) {
         assert(load_inst->smbStoreSeqNum != 0);
-
-        auto smb_store_it = storeQueue.end();
-        --smb_store_it;
-
-        // Assert that smb_store_it is still inflight
-        assert(smb_store_it->valid());
-        assert(smb_store_it.idx() >= getStoreHead());
-        if (smb_store_it->instruction()->isCompleted()) {
-            assert(smb_store_it->instruction()->sqIt <= storeWBIt);
-        }
-
-        while (smb_store_it != storeQueue.begin()) {
-            if (smb_store_it->instruction()->seqNum == load_inst->smbStoreSeqNum) {
-                break;
-            }
-            --smb_store_it;
-        }
-        if (smb_store_it == storeQueue.begin() && smb_store_it->instruction()->seqNum != load_inst->smbStoreSeqNum) {
-            panic("Could not find matching store sequence number %llu for bypassed load [sn:%lli]\n",
-                  load_inst->smbStoreSeqNum, load_inst->seqNum);
-        }
-
-        load_inst->smbPredStoreIt = smb_store_it;
     }
 
     // hardware transactional memory
@@ -1450,13 +1427,13 @@ LSQUnit::read(LSQRequest *request, ssize_t load_idx)
 
     // Check the SQ for any previous stores that might lead to forwarding
     auto store_it = load_inst->sqIt;
-    auto end_it = storeWBIt;
-    // Narrow the window only if the source store hasn't written back yet. If it has the load goes to cache.
-    if (load_inst->isBypassedLoad() && load_inst->smbPredStoreIt > end_it) 
-        end_it = load_inst->smbPredStoreIt;
-    assert (store_it >= end_it);
+    assert(store_it >= storeWBIt);
+
+    DPRINTF(LSQUnit, "Looking from stores from SQIdx %i exclusive down to %i inclusive.\n", 
+        store_it.idx(), storeWBIt.idx());
+    
     // End once we've reached the top of the LSQ
-    while (store_it != end_it && !load_inst->isDataPrefetch()) {
+    while (store_it != storeWBIt && !load_inst->isDataPrefetch()) {
         // Move the index to one younger
         store_it--;
         assert(store_it->valid());
@@ -1519,8 +1496,13 @@ LSQUnit::read(LSQRequest *request, ssize_t load_idx)
             }
 
             if (coverage == AddrRangeCoverage::FullAddrRangeCoverage) {
-                if (load_inst->isBypassedLoad() && store_it->instruction()->seqNum != load_inst->smbStoreSeqNum) {
-                    DPRINTF(LSQUnit, "Memory order violation detected for bypassed load [sn:%lli]."
+                if (load_inst->isBypassedLoad() && 
+                        (store_it->instruction()->seqNum != load_inst->smbStoreSeqNum || req_s != st_s)) {
+                    
+                    // Full address is faulting for bypass loads iff
+                    // The full coverage is found in an intervening store (checked with seqNum)
+                    // OR At the bypassing store, the base address don't match.
+                    DPRINTF(LSQUnit, "Memory order violation detected for bypassed load [sn:%lli]. "
                         "Found intervening store [sn:%lli] at address %#x with full coverage.\n",
                         load_inst->seqNum, store_it->instruction()->seqNum, request->mainReq()->getVaddr());
 
@@ -1620,7 +1602,7 @@ LSQUnit::read(LSQRequest *request, ssize_t load_idx)
                 }
 
                 if (load_inst->isBypassedLoad()) {
-                    DPRINTF(LSQUnit, "Memory order violation detected for bypassed load [sn:%lli]."
+                    DPRINTF(LSQUnit, "Memory order violation detected for bypassed load [sn:%lli]. "
                         "Found intervening store [sn:%lli] at address %#x with partial coverage.\n",
                         load_inst->seqNum, store_it->instruction()->seqNum, request->mainReq()->getVaddr());
 
@@ -1666,6 +1648,18 @@ LSQUnit::read(LSQRequest *request, ssize_t load_idx)
         }
     }
 
+    if (load_inst->isBypassedLoad()) {
+        DPRINTF(LSQUnit, "Memory order violation detected for bypassed load [sn:%lli]. "
+            "Store [sn:%lli] was not found in the store queue.\n",
+            load_inst->seqNum, load_inst->smbStoreSeqNum);
+
+        memDepViolator = load_inst;
+        ++stats.bypassedLoadMemOrderViolation;
+        load_inst->setSmbViolation();
+        return std::make_shared<GenericISA::M5PanicFault>(
+            "Detected fault with load inst [sn:%lli]", load_inst->seqNum);
+    }
+
     // If there's no forwarding case, then go access memory
     DPRINTF(LSQUnit, "Doing memory access for inst [sn:%lli] PC %s\n",
             load_inst->seqNum, load_inst->pcState());
@@ -1674,7 +1668,6 @@ LSQUnit::read(LSQRequest *request, ssize_t load_idx)
     if (!load_inst->memData) {
         load_inst->memData = new uint8_t[request->mainReq()->getSize()];
     }
-
 
     // hardware transactional memory
     if (request->mainReq()->isHTMCmd()) {
