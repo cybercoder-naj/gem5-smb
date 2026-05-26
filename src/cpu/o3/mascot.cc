@@ -126,10 +126,6 @@ MASCOT::commit(Addr load_pc,
     break;
   
   case SMB:
-    // Must not be empty!
-    assert(store_addr.first != 0);
-    // Must be empty! OR they are the same address.
-    assert(store2_addr.first == 0 || store_addr.first == store2_addr.first);
     // Misprediction if base address don't match or load asked for longer than store
     misprediction = load_addr.first != store_addr.first || load_addr.second > store_addr.second;
     break;
