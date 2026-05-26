@@ -1253,6 +1253,16 @@ Commit::commitHead(const DynInstPtr &head_inst, unsigned inst_num)
         head_inst->setCompleted();
     }
 
+    if (head_inst->mascotInfo.violation()) {
+        assert(head_inst->mascotInfo.smbViolation); // Load check violation
+
+        iewStage->instQueue.violation(head_inst, committedBranchHistory);
+        commitStatus[tid] = ROBSquashingDueToMemOrder;
+        ++stats.bypassedLoadValueCheckViolation;
+        squashAll(tid);
+        return false;
+    }
+
     if (inst_fault != NoFault) {
         DPRINTF(Commit, "Inst [tid:%i] [sn:%llu] PC %s has a fault\n",
                 tid, head_inst->seqNum, head_inst->pcState());
@@ -1330,16 +1340,6 @@ Commit::commitHead(const DynInstPtr &head_inst, unsigned inst_num)
 
         // Generate trap squash event.
         generateTrapEvent(tid, inst_fault);
-        return false;
-    }
-
-    if (head_inst->mascotInfo.violation()) {
-        assert(head_inst->mascotInfo.smbViolation); // Load check violation
-
-        iewStage->instQueue.violation(head_inst, committedBranchHistory);
-        commitStatus[tid] = ROBSquashingDueToMemOrder;
-        ++stats.bypassedLoadValueCheckViolation;
-        squashAll(tid);
         return false;
     }
 

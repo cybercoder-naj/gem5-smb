@@ -55,6 +55,8 @@
 #include "debug/O3PipeView.hh"
 #include "mem/packet.hh"
 #include "mem/request.hh"
+#include <cstdint>
+#include <cstring>
 
 namespace gem5
 {
@@ -1451,8 +1453,8 @@ LSQUnit::read(LSQRequest *request, ssize_t load_idx)
         end_it = load_inst->smbPredStoreIt;
     assert (store_it >= end_it);
 
-    DPRINTF(LSQUnit, "Looking from stores [sn:%llu] exclusive down to [sn:%llu] inclusive.\n", 
-        store_it->instruction()->seqNum, end_it->instruction()->seqNum);
+    DPRINTF(LSQUnit, "Looking from stores from SQIdx %i exclusive down to %i inclusive.\n", 
+        store_it.idx(), end_it.idx());
     
     // End once we've reached the top of the LSQ
     while (store_it != end_it && !load_inst->isDataPrefetch()) {
@@ -1462,8 +1464,13 @@ LSQUnit::read(LSQRequest *request, ssize_t load_idx)
         assert(store_it->instruction()->seqNum < load_inst->seqNum);
         int store_size = store_it->size();
 
-        DPRINTF(LSQUnit, "Candidate store [sn:%llu] with effAddr: %llx; size: %u; data .\n", 
-            store_it->instruction()->seqNum, store_it->instruction()->effAddr, store_size);
+        int64_t value = 0;
+        if (store_it->isAllZeros())
+          memset(&value, 0, store_size);
+        else memcpy(&value, store_it->data(), store_size);
+
+        DPRINTF(LSQUnit, "Candidate store [sn:%llu] with effAddr: %llx; size: %u; data: %llx\n", 
+            store_it->instruction()->seqNum, store_it->instruction()->effAddr, store_size, value);
 
         // Cache maintenance instructions go down via the store
         // path but they carry no data and they shouldn't be
@@ -1521,19 +1528,6 @@ LSQUnit::read(LSQRequest *request, ssize_t load_idx)
             }
 
             if (coverage == AddrRangeCoverage::FullAddrRangeCoverage) {
-                // Get shift amount for offset into the store's data.
-                int shift_amt = request->mainReq()->getVaddr() -
-                    store_it->instruction()->effAddr;
-
-                auto store_data = store_it->data();
-                auto size = store_size;
-
-                uint64_t value = 0;
-                memcpy(&value, store_data, size);
-
-                DPRINTF(LSQUnit, "Store PC %s [sn:%llu] at SQIdx: %i has full coverage. Value in store: %lli.\n",
-                    store_it->instruction()->pcState(), store_it->instruction()->seqNum, store_it.idx(), value);
-
                 if (load_inst->isBypassedLoad() && 
                         (store_it->instruction()->seqNum != load_inst->mascotInfo.smbStoreSeqNum || req_s != st_s)) {
                     
@@ -1555,6 +1549,10 @@ LSQUnit::read(LSQRequest *request, ssize_t load_idx)
                         store_it->instruction()->seqNum, load_inst->seqNum, req_s_dep);
                 }
 
+                // Get shift amount for offset into the store's data.
+                int shift_amt = request->mainReq()->getVaddr() -
+                    store_it->instruction()->effAddr;
+
                 // Allocate memory if this is the first time a load is issued.
                 if (!load_inst->memData) {
                     load_inst->memData =
@@ -1568,9 +1566,11 @@ LSQUnit::read(LSQRequest *request, ssize_t load_idx)
                         store_it->data() + shift_amt,
                         request->mainReq()->getSize());
 
-                DPRINTF(LSQUnit, "Forwarding from store idx %i to load to "
-                        "addr %#x\n", store_it._idx,
-                        request->mainReq()->getVaddr());
+                uint64_t fwd_value = 0;
+                memcpy(&fwd_value, load_inst->memData, request->mainReq()->getSize());
+
+                DPRINTF(LSQUnit, "Forwarding from store idx %i to load to vaddr %#x, data: %#x\n", 
+                    store_it._idx, request->mainReq()->getVaddr(), fwd_value);
 
                 load_inst->mascotInfo.mdpForwardedFrom = store_it->instruction()->seqNum;
 
