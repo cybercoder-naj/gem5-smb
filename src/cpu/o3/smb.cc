@@ -56,7 +56,10 @@ SMB::predict(Addr load_pc, InstSeqNum inst_seq_num, BranchHistory branch_history
     dispatchIt = std::prev(predictions.end());
   }
 
-  assert(dispatchIt->loadPC == load_pc);
+  if (dispatchIt->loadPC != load_pc) {
+    // must have gone through a bad path.. wait for it to go through a good path (hopefully)
+    return pred;
+  }
   assert(!dispatchIt->instSeqNum.has_value());
 
   dispatchIt->instSeqNum = inst_seq_num;
