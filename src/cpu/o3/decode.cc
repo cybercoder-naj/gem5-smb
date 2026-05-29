@@ -84,7 +84,6 @@ Decode::Decode(CPU *_cpu, const BaseO3CPUParams &params)
         bdelayDoneSeqNum[tid] = 0;
         squashInst[tid] = nullptr;
         squashAfterDelaySlot[tid] = 0;
-        renameBypassMoves[tid] = 0;
     }
 }
 
@@ -499,7 +498,6 @@ Decode::checkSignalsAndUpdate(ThreadID tid)
     //     check if squashing is not high.  Switch to running this cycle.
 
     // Update the per thread stall statuses.
-    readBypassMoves(tid);
     readStallSignals(tid);
 
     // Check squash signals from commit.
@@ -542,16 +540,6 @@ Decode::checkSignalsAndUpdate(ThreadID tid)
     // If we've reached this point, we have not gotten any signals that
     // cause decode to change its status.  Decode remains the same as before.
     return false;
-}
-
-void
-Decode::readBypassMoves(ThreadID tid)
-{
-    renameBypassMoves[tid] = fromRename->renameInfo[tid].bypassMoves;
-
-    DPRINTF(Decode, "[tid:%i] Bypass moves from Rename: %i\n",
-            tid, 
-            renameBypassMoves[tid]);
 }
 
 void
@@ -640,7 +628,6 @@ Decode::decodeInsts(ThreadID tid)
     // instructions coming from fetch, depending on decode's status.
     int insts_available = decodeStatus[tid] == Unblocking ?
         skidBuffer[tid].size() : insts[tid].size();
-    insts_available -= renameBypassMoves[tid];
 
     if (insts_available == 0) {
         DPRINTF(Decode, "[tid:%i] Nothing to do, breaking out"

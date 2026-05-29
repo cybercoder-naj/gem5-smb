@@ -43,6 +43,7 @@
 #define __CPU_O3_LSQ_HH__
 
 #include <cassert>
+#include <cstddef>
 #include <cstdint>
 #include <list>
 #include <map>
@@ -740,6 +741,13 @@ class LSQ
 
     /** Returns the sequence number of the head of the store queue. */
     InstSeqNum getStoreHeadSeqNum(ThreadID tid);
+
+    /** 
+     * Returns the store given the store queue distance from back.
+     * - 0 returns storeQueue.end()
+     * - n returns the nth store from the end.
+     */
+    DynInstPtr getStoreByDistance(ThreadID tid, std::ptrdiff_t distance);
 
     /** Check if the store by seqeunce number exists in the store queue. */
     bool isStoreInStoreQueue(ThreadID tid, InstSeqNum store_seqnum);

@@ -285,6 +285,9 @@ class IEW
     /** Sorts instructions coming from rename into lists separated by thread. */
     void sortInsts();
 
+    /** Renames the destination registers of an instruction. */
+    DynInstPtr buildBypassMoveInst(ThreadID tid, const DynInstPtr &bypassed_load, RegId store_src, PhysRegIdPtr store_phys_reg);
+
   public:
     /** Ticks IEW stage, causing Dispatch, the IQ, the LSQ, Execute, and
      * Writeback to run for one cycle.
@@ -448,6 +451,10 @@ class IEW
         statistics::Scalar predictedTakenIncorrect;
         /** Stat for total number of incorrect predicted not taken branches. */
         statistics::Scalar predictedNotTakenIncorrect;
+        /** Number of loads that are bypassed. */
+        statistics::Scalar bypassedLoads;
+        /** Number of predicted stores that committed. */
+        statistics::Scalar bypassingStoreOutsideWindow;
         /** Stat for total number of mispredicted branches detected at
          *  execute. */
         statistics::Formula branchMispredicts;
