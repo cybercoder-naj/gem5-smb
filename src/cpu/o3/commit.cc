@@ -982,8 +982,6 @@ Commit::commitInsts()
             }
         }
 
-        // ThreadID commit_thread = getCommittingThread();
-
         if (commit_thread == -1 || !rob->isHeadReady(commit_thread))
             break;
 
@@ -1048,13 +1046,6 @@ Commit::commitInsts()
                         committedBranchHistory.pop_back();
                 }
 
-                // Update MASCOT on table-backed predictions, including
-                // non-dependence entries that need usefulness reinforcement.
-                const auto &mascot_pred = head_inst->mascotInfo.prediction;
-                if (head_inst->isLoad()) {
-                    iewStage->instQueue.memDepUnit[tid].commit(head_inst, committedBranchHistory);
-                }
-
                 // hardware transactional memory
 
                 // update nesting depth
@@ -1106,6 +1097,25 @@ Commit::commitInsts()
                 // others squash everything and restart fetch
                 if (head_inst->isSquashAfter())
                     squashAfter(tid, head_inst);
+
+                if (head_inst->isLoad()) {
+                    if (head_inst->mascotInfo.violation()) {
+                        // An SMB load-value-check violation: this load has now
+                        // committed with the correct value, but every younger
+                        // instruction consumed the bypassed (incorrect) value. Arm a
+                        // plain squash-after so that, starting next cycle, all younger
+                        // instructions are squashed and re-fetched. squashAfter() also
+                        // moves commit into SquashAfterPending, which stops us from
+                        // committing any younger instruction this cycle.
+                        assert(head_inst->mascotInfo.smbViolation);
+
+                        iewStage->instQueue.violation(head_inst, committedBranchHistory);
+                        ++stats.bypassedLoadValueCheckViolation;
+
+                        squashAfter(tid, head_inst);
+                    } else 
+                        iewStage->instQueue.memDepUnit[tid].commit(head_inst, committedBranchHistory);
+                }
 
                 if (drainPending) {
                     if (pc[tid]->microPC() == 0 && interrupt == NoFault &&
@@ -1251,16 +1261,6 @@ Commit::commitHead(const DynInstPtr &head_inst, unsigned inst_num)
     // Stores mark themselves as completed.
     if (!head_inst->isStore() && inst_fault == NoFault) {
         head_inst->setCompleted();
-    }
-
-    if (head_inst->mascotInfo.violation()) {
-        assert(head_inst->mascotInfo.smbViolation); // Load check violation
-
-        iewStage->instQueue.violation(head_inst, committedBranchHistory);
-        commitStatus[tid] = ROBSquashingDueToMemOrder;
-        ++stats.bypassedLoadValueCheckViolation;
-        squashAll(tid);
-        return false;
     }
 
     if (inst_fault != NoFault) {
