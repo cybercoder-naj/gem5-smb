@@ -870,12 +870,13 @@ Fetch::tick()
 
     // Send instructions enqueued into the fetch queue to decode.
     // Limit rate by fetchWidth.  Stall if decode is stalled.
-    unsigned insts_to_decode = 0;
-    unsigned available_insts = 0;
+    unsigned processed_insts = 0;
+    unsigned remaining_insts = 0;
+    unsigned available_insts = decodeWidth - fromRename->renameInfo->bypassMoves;
 
     for (auto tid : *activeThreads) {
         if (!stalls[tid].decode) {
-            available_insts += fetchQueue[tid].size();
+            remaining_insts += fetchQueue[tid].size();
         }
     }
 
@@ -884,7 +885,7 @@ Fetch::tick()
     std::advance(tid_itr,
             random_mt.random<uint8_t>(0, activeThreads->size() - 1));
 
-    while (available_insts != 0 && insts_to_decode < decodeWidth) {
+    while (remaining_insts != 0 && processed_insts < available_insts) {
         ThreadID tid = *tid_itr;
         if (!stalls[tid].decode && !fetchQueue[tid].empty()) {
             const auto& inst = fetchQueue[tid].front();
@@ -895,8 +896,8 @@ Fetch::tick()
 
             wroteToTimeBuffer = true;
             fetchQueue[tid].pop_front();
-            insts_to_decode++;
-            available_insts--;
+            processed_insts++;
+            remaining_insts--;
         }
 
         tid_itr++;

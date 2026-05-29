@@ -42,6 +42,7 @@
 #ifndef __CPU_O3_RENAME_HH__
 #define __CPU_O3_RENAME_HH__
 
+#include <fstream>
 #include <list>
 #include <utility>
 

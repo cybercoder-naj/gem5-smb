@@ -18,7 +18,7 @@ namespace branch_prediction
 class TAGE_EMILIO: public BPredUnit
 {
   private:
-    tagescl::Tage_SC_L<tagescl::CONFIG_128KB> tage;
+    tagescl::Tage_SC_L<tagescl::CONFIG_64KB> tage;
 
   protected:
     virtual bool predict(ThreadID tid, Addr branch_pc, bool cond_branch,

@@ -99,10 +99,13 @@ if __name__ == "__main__":
     
     table: list[list[str]] = []
     for benchmark, properties in benchmark_properties.items():
+        totalInsts = properties["smb"][NUM_INSTS]
         insertedLoads = properties["smb"][INSERTED_LOADS]
         predictedSMB = properties["smb"][MASCOT_SMB_PREDICTIONS]
         bypassedLoads = properties["smb"][BYPASSED]
+        mdpViolations = properties["smb"][MASCOT_MDP_MISPREDICTIONS]
         smbViolations = properties["smb"][MASCOT_SMB_MISPREDICTIONS]
+        ndepViolations = properties["smb"][MASCOT_NDEP_MISPREDICTIONS]
         smbSuccesses = bypassedLoads - smbViolations
 
         bypassPredPct = (predictedSMB / insertedLoads) * 100
@@ -112,15 +115,18 @@ if __name__ == "__main__":
 
         ipcPct = (properties["smb"][IPC] / properties["baseline"][IPC])
 
+        mascotMPKI = (mdpViolations + smbViolations + ndepViolations) / totalInsts * 1000
+
         table.append([
             benchmark,
             f"{bypassPredPct:.4f}%",
             f"{actualBypassPct:.4f}%",
             f"{successRate:.4f}%",
             f"{violationRate:.4f}%",
+            f"{mascotMPKI:.4f}",
             f"{ipcPct:.4f}"
         ])
 
     
-    headers = ["Benchmark", "SMB Pred %", "Actual bypass %", "Correct bypass %", "Violation %", "IPC Ratio"]
+    headers = ["Benchmark", "SMB Pred %", "Actual bypass %", "Correct bypass %", "Violation %", "Mascot MPKI", "IPC Ratio"]
     print(tabulate(table, headers=headers, tablefmt="grid"), end="\n\n")

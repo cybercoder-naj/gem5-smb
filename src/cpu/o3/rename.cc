@@ -55,6 +55,7 @@
 #include "debug/Activity.hh"
 #include "debug/O3PipeView.hh"
 #include "debug/Rename.hh"
+#include "debug/SMBCoverage.hh"
 #include "params/BaseO3CPU.hh"
 
 namespace gem5
@@ -773,7 +774,7 @@ Rename::renameInsts(ThreadID tid)
                     const auto sq_dist = pred.distances.first != 0 ? pred.distances.first : pred.distances.second;
 
                     assert(sq_dist > 0);
-                    cprintf("smbDist: %u; freeSQ: %i; sq_size: %i\n", sq_dist, calcFreeSQEntries(tid), storeQueue.size());
+                    DPRINTFR(SMBCoverage, "smbDist: %u; freeSQ: %i; sq_size: %i\n", sq_dist, calcFreeSQEntries(tid), storeQueue.size());
 
                     if (sq_dist > storeQueue.size()) {
                         ++stats.bypassingStoreOutsideWindow;
