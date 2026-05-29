@@ -563,6 +563,8 @@ class LSQUnit
     /** Returns the sequence number of the head store instruction. */
     InstSeqNum getStoreHeadSeqNum();
 
+    DynInstPtr getStoreByDistance(std::ptrdiff_t distance);
+
     /** Check if the store by seqeunce number exists in the store queue. */
     bool isStoreInStoreQueue(InstSeqNum store_seqnum);
 

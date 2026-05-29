@@ -55,6 +55,7 @@
 #include "debug/O3PipeView.hh"
 #include "mem/packet.hh"
 #include "mem/request.hh"
+#include <cassert>
 #include <cstdint>
 #include <cstring>
 
@@ -329,6 +330,9 @@ LSQUnit::insertLoad(const DynInstPtr &load_inst)
         auto smb_store_seqnum = load_inst->mascotInfo.smbStoreSeqNum;
         assert(smb_store_seqnum);
 
+        // @todo 
+        // iew.cc:dispatchInst makes the bypass load.
+        // attach the src store inst there so you don't have to find it again
         auto smb_store_it = getStoreInStoreQueue(smb_store_seqnum);
 
         if (smb_store_it != storeQueue.end()) {
@@ -1780,6 +1784,17 @@ LSQUnit::getStoreInStoreQueue(InstSeqNum store_seqnum) {
 bool 
 LSQUnit::isStoreInStoreQueue(InstSeqNum store_seqnum) {
     return getStoreInStoreQueue(store_seqnum) != storeQueue.end();
+}
+
+DynInstPtr 
+LSQUnit::getStoreByDistance(std::ptrdiff_t distance) {
+  assert(distance <= storeQueue.size());
+
+  auto sq_it = storeQueue.end();
+  sq_it -= distance;
+
+  assert(sq_it->valid());
+  return sq_it->instruction();
 }
 
 } // namespace o3

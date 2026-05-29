@@ -260,9 +260,6 @@ class Rename
     /** Renames the destination registers of an instruction. */
     void renameDestRegs(const DynInstPtr &inst, ThreadID tid);
 
-    /** Renames the destination registers of an instruction. */
-    DynInstPtr buildBypassMoveInst(ThreadID tid, const DynInstPtr &bypassed_load, RegId store_src, PhysRegIdPtr store_phys_reg);
-
     /** Calculates the number of free ROB entries for a specific thread. */
     int calcFreeROBEntries(ThreadID tid);
 
@@ -558,10 +555,6 @@ class Rename
         statistics::Scalar tempSerializing;
         /** Number of instructions inserted into skid buffers. */
         statistics::Scalar skidInsts;
-        /** Number of loads that are bypassed. */
-        statistics::Scalar bypassedLoads;
-        /** Number of predicted stores that committed. */
-        statistics::Scalar bypassingStoreOutsideWindow;
     } stats;
 };
 

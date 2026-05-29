@@ -334,6 +334,11 @@ LSQ::getStoreHeadSeqNum(ThreadID tid)
     return thread.at(tid).getStoreHeadSeqNum();
 }
 
+DynInstPtr 
+LSQ::getStoreByDistance(ThreadID tid, std::ptrdiff_t distance) {
+  return thread.at(tid).getStoreByDistance(distance);
+}
+
 bool 
 LSQ::isStoreInStoreQueue(ThreadID tid, InstSeqNum store_seqnum) {
     return thread.at(tid).isStoreInStoreQueue(store_seqnum);

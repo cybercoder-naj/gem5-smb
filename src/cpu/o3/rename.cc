@@ -44,10 +44,10 @@
 #include <cassert>
 #include <cstdint>
 #include <cstdio>
+#include <fcntl.h>
 #include <list>
 
 #include "base/trace.hh"
-#include "cpu/o3/bypass_move_inst.hh"
 #include "cpu/o3/cpu.hh"
 #include "cpu/o3/dyn_inst.hh"
 #include "cpu/o3/limits.hh"
@@ -153,11 +153,7 @@ Rename::RenameStats::RenameStats(statistics::Group *parent)
       ADD_STAT(tempSerializing, statistics::units::Count::get(),
                "count of temporary serializing insts renamed"),
       ADD_STAT(skidInsts, statistics::units::Count::get(),
-               "count of insts added to the skid buffer"),
-      ADD_STAT(bypassedLoads, statistics::units::Count::get(),
-               "count of bypassed loads renamed"),
-      ADD_STAT(bypassingStoreOutsideWindow, statistics::units::Count::get(),
-               "count of attempted bypassing stores that were commited")
+               "count of insts added to the skid buffer")
 {
     squashCycles.prereq(squashCycles);
     idleCycles.prereq(idleCycles);
@@ -758,52 +754,6 @@ Rename::renameInsts(ThreadID tid)
                 storeQueue.advance_tail();
                 storeQueue.back() = sqEntry;
             }
-
-            if (inst->isLoad()) {
-                const auto& pred = smb->predict(inst->pcState().instAddr(), inst->seqNum, cpu->getDecode()->getBranchHistory());
-                if (inst->isBypassable() && pred.type == MASCOT::PredictionType::SMB) {
-                    const auto sq_dist = pred.distances.first != 0 ? pred.distances.first : pred.distances.second;
-                    DPRINTF(Rename, 
-                        "[tid:%i] Oracle prediction for load [sn:%llu] "
-                        "distance: %u\n",
-                        tid, inst->seqNum, pred.distances.first);
-
-                    assert(sq_dist > 0);
-                    DPRINTFR(SMBCoverage, "smbDist: %u; freeSQ: %i; sq_size: %i\n", sq_dist, calcFreeSQEntries(tid), storeQueue.size());
-
-                    if (sq_dist > storeQueue.size()) {
-                        ++stats.bypassingStoreOutsideWindow;
-                    } else {
-                        auto sq_it = storeQueue.end();
-                        sq_it -= sq_dist;
-                        
-                        if (sq_it->isStore) {
-                          DPRINTF(Rename,
-                              "[tid:%i] [sn:%llu] "
-                              "SMB Predictor predicted store with sequence number "
-                              "%llu as source of load.\n",
-                              tid, inst->seqNum, sq_it->seqNum);
-
-                          inst->setBypassedLoad(sq_it->seqNum);
-                          ++stats.bypassedLoads;
-
-                          DynInstPtr bypassMove = buildBypassMoveInst(tid, inst, sq_it->archReg, sq_it->physReg);
-                          inst->bypassMoveInst = bypassMove;
-
-                          ++toDecode->renameInfo[tid].bypassMoves;
-
-                          // We don't add to historyBuffer for cleanup when
-                          // instruction commits or squashes.
-                          // Because we are reusing existing physical registers
-                          // and their life remains unchanged.
-
-                          // Put in reverse order so bypassMove is sent to IEW first. 
-                          insts_to_rename.push_front(inst);
-                          inst = bypassMove;
-                        }
-                    }
-                }
-            }
         }
 
         if (inst->isAtomic() || inst->isStore()) {
@@ -1246,65 +1196,6 @@ Rename::renameDestRegs(const DynInstPtr &inst, ThreadID tid)
 
         ++stats.renamedOperands;
     }
-}
-
-DynInstPtr
-Rename::buildBypassMoveInst(ThreadID tid, const DynInstPtr &bypassed_load, RegId store_src, PhysRegIdPtr store_phys_reg)
-{
-    // NOTE that all this is ULTRA specific to x86.
-    // ICBA to go through gem5 isa frontend.
-    auto prev_phys_reg = bypassed_load->prevDestIdx(0);
-    auto new_phys_reg = bypassed_load->renamedDestIdx(0);
-
-    // Get a sequence number.
-    InstSeqNum seq = bypassed_load->seqNum - 5; // Give it a sequence number slightly before the load, so it maintains the ordering.
-    RegId load_dest = bypassed_load->destRegIdx(0);
-
-    StaticInstPtr staticInst = buildBypassMoveStaticInst(store_src, load_dest, load_dest, bypassed_load->destRegMask);
-
-    DynInst::Arrays arrays;
-    arrays.numSrcs = staticInst->numSrcRegs();
-    arrays.numDests = staticInst->numDestRegs();
-
-    auto& pc = bypassed_load->pcState();
-
-    // Create a new DynInst from the instruction fetched.
-    DynInstPtr instruction = new (arrays) DynInst(
-            arrays, staticInst, nullptr, pc, pc, seq, cpu);
-    instruction->setTid(tid);
-    instruction->setThreadState(cpu->thread[tid]);
-
-    instruction->traceData = NULL;
-
-    // Add instruction to the CPU's list of instructions.
-    instruction->setInstListIt(cpu->insertBefore(bypassed_load, instruction));
-
-    auto *isa = instruction->tcBase()->getIsaPtr();
-    instruction->flattenedDestIdx(0, load_dest.flatten(*isa));
-    instruction->setBypassMove();
-
-    DPRINTF(Rename, "[tid:%i] Bypass Move Instruction created [sn:%lli]. Dest reg mask %llx.\n", tid, seq, bypassed_load->destRegMask);
-
-    bool partial_write = bypassed_load->destRegMask != UINT64_MAX && bypassed_load->destRegMask != UINT32_MAX;
-
-    instruction->renameSrcReg(0, store_phys_reg);
-    DPRINTF(Rename, "[tid:%i] [sn:%lli] Store source phys reg %i.\n", tid, seq, store_phys_reg->index());
-    if (partial_write) {
-        DPRINTF(Rename, "[tid:%i] [sn:%lli] Older load phys reg %i.\n", tid, seq, prev_phys_reg->index());
-        instruction->renameSrcReg(1, prev_phys_reg); // previous mapping
-    }
-
-    if (scoreboard->getReg(store_phys_reg))
-        instruction->markSrcRegReady(0);
-    if (partial_write && scoreboard->getReg(prev_phys_reg))
-        instruction->markSrcRegReady(1);
-
-    instruction->renameDestReg(0, new_phys_reg, prev_phys_reg); // new mapping
-    DPRINTF(Rename, "[tid:%i] [sn:%lli] Newer load phys reg %i.\n", tid, seq, new_phys_reg->index());
-    scoreboard->unsetReg(new_phys_reg);
-
-    ++stats.renamedOperands;
-    return instruction;
 }
 
 int

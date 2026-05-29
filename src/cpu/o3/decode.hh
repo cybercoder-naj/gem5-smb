@@ -197,9 +197,6 @@ class Decode
      */
     void squash(const DynInstPtr &inst, ThreadID tid);
 
-    /** Gets the number of free entries for a specific thread. */
-    void readBypassMoves(ThreadID tid);
-
   public:
     /** Squashes due to commit signalling a squash. Changes status to
      * squashing and clears block/unblock signals as needed.
@@ -253,11 +250,6 @@ class Decode
      * cycle. Used to tell CPU if there is activity this cycle.
      */
     bool wroteToTimeBuffer;
-
-    /** Free entries impact the amount of instructions that
-     * can be decoded.
-     */
-    unsigned renameBypassMoves[MaxThreads];
 
     /** Source of possible stalls. */
     struct Stalls
