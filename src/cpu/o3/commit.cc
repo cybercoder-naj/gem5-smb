@@ -985,8 +985,6 @@ Commit::commitInsts()
             }
         }
 
-        // ThreadID commit_thread = getCommittingThread();
-
         if (commit_thread == -1 || !rob->isHeadReady(commit_thread))
             break;
 
@@ -1110,6 +1108,11 @@ Commit::commitInsts()
                 // others squash everything and restart fetch
                 if (head_inst->isSquashAfter())
                     squashAfter(tid, head_inst);
+
+                if (head_inst->isLoad() && head_inst->smbViolation()) {
+                    ++stats.bypassedLoadValueCheckViolation;
+                    squashAfter(tid, head_inst);
+                }
 
                 if (drainPending) {
                     if (pc[tid]->microPC() == 0 && interrupt == NoFault &&
@@ -1334,13 +1337,6 @@ Commit::commitHead(const DynInstPtr &head_inst, unsigned inst_num)
 
         // Generate trap squash event.
         generateTrapEvent(tid, inst_fault);
-        return false;
-    }
-
-    if (head_inst->isBypassedLoad() && head_inst->smbViolation()) {
-        commitStatus[tid] = ROBSquashing;
-        ++stats.bypassedLoadValueCheckViolation;
-        squashAll(tid);
         return false;
     }
 
