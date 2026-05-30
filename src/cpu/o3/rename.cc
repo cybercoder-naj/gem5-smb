@@ -42,6 +42,7 @@
 #include "cpu/o3/rename.hh"
 
 #include <cassert>
+#include <cstdint>
 #include <cstdio>
 #include <list>
 
@@ -1290,7 +1291,7 @@ Rename::buildBypassMoveInst(ThreadID tid, const DynInstPtr &bypassed_load, RegId
 
     DPRINTF(Rename, "[tid:%i] Bypass Move Instruction created [sn:%lli]. Dest reg mask %llx.\n", tid, seq, bypassed_load->destRegMask);
 
-    bool partial_write = bypassed_load->destRegMask != UINT64_MAX;
+    bool partial_write = bypassed_load->destRegMask != UINT64_MAX && bypassed_load->destRegMask != UINT32_MAX;
 
     instruction->renameSrcReg(0, store_phys_reg);
     DPRINTF(Rename, "[tid:%i] [sn:%lli] Store source phys reg %i.\n", tid, seq, store_phys_reg->index());

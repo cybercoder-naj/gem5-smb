@@ -31,7 +31,7 @@ class BypassMoveStaticInst : public StaticInst
     uint64_t _destRegMask;
 
     bool isPartialWrite() const {
-      return _destRegMask != UINT64_MAX;
+      return _destRegMask != UINT64_MAX && _destRegMask != UINT32_MAX;
     }
 
   public:
@@ -76,12 +76,8 @@ class BypassMoveStaticInst : public StaticInst
         RegVal prev_load = xc->getRegOperand(this, 1);  // Second operand
 
         result = (src_data & _destRegMask) | (prev_load & ~_destRegMask);
-
-        if (_destRegMask == UINT32_MAX) {
-          result &= _destRegMask; // 32-bit instructions automatically zeros the upper 32 bits.
-        }
       } else 
-        result = src_data;
+        result = src_data & _destRegMask; // zero extends 32-bit dest mask
 
       // Write back result
       xc->setRegOperand(this, 0, result);  // Write to dest register (index 0)
