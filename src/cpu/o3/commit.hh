@@ -137,9 +137,6 @@ class Commit
     /** Mark the thread as processing a trap. */
     void processTrapEvent(ThreadID tid);
 
-    /** Monotonically increasing sequence number of the last committed instruction. */
-    InstSeqNum doneSeqNum[MaxThreads];
-
     std::ofstream memTraceFile;
 
   public:
@@ -235,11 +232,7 @@ class Commit
      */
     void generateTCEvent(ThreadID tid);
 
-    InstSeqNum getDoneSeqNum(ThreadID tid) const { return doneSeqNum[tid]; }
-    void setDoneSeqNum(ThreadID tid, InstSeqNum seq_num) { 
-      assert(doneSeqNum[tid] <= seq_num);
-      doneSeqNum[tid] = seq_num; 
-    }
+    InstSeqNum getRetiredSeqNum(ThreadID tid) const { return rob->getRetiredSeqNum(tid); }
 
   private:
     /** Updates the overall status of commit with the nextStatus, and

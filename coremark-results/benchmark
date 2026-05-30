@@ -2,23 +2,11 @@
 
 set -e
 
-# Usage: ./coremark-results/benchmark <prog> [--smb-only/--baseline-only]
+# Usage: ./coremark-results/benchmark <prog>
 pwd=$(dirname $0)
 prog=$1
-shift
 
-smb_only=false
-baseline_only=false
-
-while [[ $# -gt 0 ]]; do
-  case $1 in
-    --smb-only) smb_only=true; shift;;
-    --baseline-only) baseline_only=true; shift;;
-    *) echo "Unknown argument: $1"; exit 1;;
-  esac
-done
-
-scons build/X86/gem5.fast --ignore-style -j$(nproc)
+scons build/X86/gem5.opt --ignore-style -j$(nproc)
 g++ -O3 -o memprofile memprofile.cc
 
 if ! which $prog; then
@@ -30,7 +18,7 @@ cmd=$(which $prog)
 # basename is prog filename without path, with extension
 basename=$(basename $cmd)
 filename="${basename%.*}"
-cptBase="/home/nj421/gem5-smb/coremark-results/checkpoints"
+# cptBase="/home/nj421/gem5-smb/coremark-results/checkpoints"
 
 config="--cpu-type=DerivO3CPU \
     --caches --l2cache \
@@ -39,29 +27,14 @@ config="--cpu-type=DerivO3CPU \
     --l1i-hwp-type=StridePrefetcher \
     --l2-hwp-type=StridePrefetcher"
 
-export MEM_TRACE_FILE="$pwd/$filename.memtrace"
-if [ "$smb_only" = false ]; then
-  systemd-run --user --slice=workloads.slice --scope ./build/X86/gem5.fast \
-    --outdir=/home/nj421/gem5-smb/m5out/$filename/no-smb \
-    configs/deprecated/example/se.py \
-    --cmd="$cmd" \
-    $config \
-    --options="-i1 -v0"
-  cp m5out/stats.txt $pwd/$filename-stats-no-smb.txt
-fi
-
-if [ "$baseline_only" = true ]; then
-  exit 0
-fi
-
-export SMB_PREDICTIONS_FILE="$pwd/$filename.predictions"
-./memprofile $MEM_TRACE_FILE $SMB_PREDICTIONS_FILE
-unset MEM_TRACE_FILE
-systemd-run --user --slice=workloads.slice --scope ./build/X86/gem5.fast \
-  --outdir=/home/nj421/gem5-smb/m5out/$filename/smb \
+systemd-run --user --slice=workloads.slice --scope ./build/X86/gem5.opt \
+  --outdir=m5out/$filename/smb \
+  --debug-flags=SMBCoverage \
+  --debug-file=smb-coverage.txt \
   configs/deprecated/example/se.py \
   --cmd="$cmd" \
   $config \
   --options="-i1 -v0"
 
-cp m5out/stats.txt $pwd/$filename-stats-smb.txt
+cp m5out/$filename/smb/stats.txt $pwd/$filename-stats-smb.txt
+cp m5out/$filename/smb/smb-coverage.txt $pwd/$filename-smb-coverage.txt

@@ -423,7 +423,7 @@ class CPU : public BaseCPU
     /** The decode stage. */
     Decode decode;
 
-    /** The SMB predictor. */
+    /** The file-based SMB predictor. Unused */
     SMB smb;
 
     /** The dispatch stage. */

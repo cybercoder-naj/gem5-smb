@@ -96,9 +96,8 @@ ROB::ROB(CPU *_cpu, const BaseO3CPUParams &params)
 
     for (ThreadID tid = numThreads; tid < MaxThreads; tid++) {
         maxEntries[tid] = 0;
+        retiredSeqNum[tid] = 0;
     }
-
-    depCheckShift = params.LSQDepCheckShift;
 
     resetState();
 }
@@ -244,6 +243,7 @@ ROB::retireHead(ThreadID tid)
     InstIt head_it = instList[tid].begin();
 
     DynInstPtr head_inst = std::move(*head_it);
+    setRetiredSeqNum(tid, head_inst->seqNum);
     instList[tid].erase(head_it);
 
     assert(head_inst->readyToCommit());

@@ -89,6 +89,9 @@ class ROB
     /** ROB resource sharing policy for SMT mode. */
     SMTQueuePolicy robPolicy;
 
+    /** Monotonically increasing sequence number of the last committed instruction. */
+    InstSeqNum retiredSeqNum[MaxThreads];
+
   public:
     /** ROB constructor.
      *  @param _cpu   The cpu object pointer.
@@ -97,6 +100,12 @@ class ROB
     ROB(CPU *_cpu, const BaseO3CPUParams &params);
 
     std::string name() const;
+
+    InstSeqNum getRetiredSeqNum(ThreadID tid) const { return retiredSeqNum[tid]; }
+    void setRetiredSeqNum(ThreadID tid, InstSeqNum seq_num) { 
+      assert(retiredSeqNum[tid] <= seq_num);
+      retiredSeqNum[tid] = seq_num; 
+    }
 
     /** Sets pointer to the list of active threads.
      *  @param at_ptr Pointer to the list of active threads.
@@ -274,8 +283,6 @@ class ROB
 
     /** Pointer to the CPU. */
     CPU *cpu;
-
-    unsigned depCheckShift;
 
     /** Active Threads in CPU */
     std::list<ThreadID> *activeThreads;

@@ -57,6 +57,7 @@
 #include "cpu/inst_seq.hh"
 #include "cpu/o3/dyn_inst_ptr.hh"
 #include "cpu/o3/limits.hh"
+#include "cpu/o3/mascot.hh"
 #include "cpu/o3/phast.hh"
 //#include "cpu/o3/store_set.hh"
 //#include "cpu/o3/store_set_xs.hh"
@@ -181,19 +182,20 @@ class MemDepUnit
     void squash(const InstSeqNum &squashed_num, ThreadID tid);
 
     /** Indicates an ordering violation between a store and a younger load. */
-    void violation(InstSeqNum store_seq_num, Addr store_pc, const DynInstPtr &violating_load,
-                   BranchHistory branchHistory);
+    void violation(const DynInstPtr &violating_load, BranchHistory branchHistory);
 
     /** Issues the given instruction */
     void issue(const DynInstPtr &inst);
 
     /** Commits the given instruction */
-    void commit(const DynInstPtr &inst);
+    void commit(const DynInstPtr &inst, BranchHistory branch_history);
 
     /** Debugging function to dump the lists of instructions. */
     void dumpLists();
 
     Cycles curCycle();
+
+    MASCOT* getMascot() { return &mascot; };
 
     /** The thread id of this memory dependence unit. */
     int id;
@@ -214,7 +216,14 @@ class MemDepUnit
         statistics::Scalar falseDependencies;
         /* Number of true dependencies predicted by depPred */
         statistics::Scalar correctPredictions;
-        /** ==== Store Sets ==== */
+        /* ==== MASCOT ==== */
+        statistics::Scalar predictsNDep;
+        statistics::Scalar predictsMDP;
+        statistics::Scalar predictsSMB;
+        statistics::Scalar ndepViolations;
+        statistics::Scalar mdpViolations;
+        statistics::Scalar smbViolations;
+        /* ==== Store Sets ==== */
         statistics::Scalar LFSTReads;
         statistics::Scalar LFSTWrites;
         /**  Sorry for this. Need to track reads/writes for each
@@ -329,6 +338,11 @@ class MemDepUnit
      *  upon.
      */
     PHAST depPred;
+
+    /**
+     * SMB + MDP Predictor
+     */
+    MASCOT mascot;
 
     /** Sequence numbers of outstanding load barriers. */
     std::unordered_set<InstSeqNum> loadBarrierSNs;

@@ -42,9 +42,6 @@
 #ifndef __CPU_O3_DYN_INST_HH__
 #define __CPU_O3_DYN_INST_HH__
 
-#include <algorithm>
-#include <array>
-#include <deque>
 #include <list>
 #include <string>
 
@@ -61,7 +58,6 @@
 #include "cpu/op_class.hh"
 #include "cpu/reg_class.hh"
 #include "cpu/static_inst.hh"
-#include "cpu/translation.hh"
 #include "debug/HtmCpu.hh"
 
 namespace gem5
@@ -162,8 +158,6 @@ class DynInst : public ExecContext, public RefCounted
         Committed,               /// Instruction has committed
         Squashed,                /// Instruction is squashed
         SquashedInIQ,            /// Instruction is squashed in the IQ
-        SquashedInLSQ,           /// Instruction is squashed in the LSQ
-        SquashedInROB,           /// Instruction is squashed in the ROB
         PinnedRegsRenamed,       /// Pinned registers are renamed
         PinnedRegsWritten,       /// Pinned registers are written back
         PinnedRegsSquashDone,    /// Regs pinning status updated after squash
@@ -362,40 +356,18 @@ class DynInst : public ExecContext, public RefCounted
     ssize_t sqIdx = -1;
     typename LSQUnit::SQIterator sqIt;
 
-    /** Info needed for each load for PHAST */
-    struct MemDepInfo {
-        /** Store this load received its data from, if any */
-        InstSeqNum forwardedFrom = 0;
-        /** Youngest store this load violated with */
-        InstSeqNum violatingStoreSeqNum = 0;
-        Addr violatingStorePC = 0;
-        /** Relative offset into the SQ for dependent store*/
-        std::ptrdiff_t storeQueueDistance;
-        /** Memory location of store this load was predicted dependent on */
-        /** Pairs to account for when tracking two stores with one entry*/
-        std::pair<Addr, Addr> predStoreAddrs = {0,0};
-        std::pair<int, int> predStoreSizes = {0,0};
-        /** Predicted information validated at commit */
-        unsigned predBranchHistLength = 0;
-        uint64_t predictorHash = 0;
-        /** Was this load predicted to be dependent by the depPred? */
-        bool predicted = false;
-    } memDepInfo;
-
     /////////////////////// SMB Data //////////////////////
 
-    InstSeqNum smbStoreSeqNum = 0;
-    bool _smbViolation = false;
-    DynInstPtr bypassMoveInst = nullptr;
+    MascotInfo mascotInfo;
 
-    /** Iterator of the SQ pointing to the SMB predicted source store. */
-    typename LSQUnit::SQIterator smbPredStoreIt;
+    DynInstPtr bypassMoveInst = nullptr;
 
     bool isBypassable() const {
         // This is specific to x86
         return staticInst->isLoad() && 
                 !staticInst->isRMW() && 
                 !staticInst->isRMWA() &&
+                !staticInst->isDelayedCommit() &&
                 destRegIdx(0).classValue() == RegClassType::IntRegClass;
     }
     bool shouldDumpIntoMemtrace() const {
@@ -409,17 +381,21 @@ class DynInst : public ExecContext, public RefCounted
     bool isBypassedLoad() const {
         return staticInst->isLoad() && instFlags.test(BypassedLoad);
     }
-    void setBypassedLoad(InstSeqNum seq_num) {
+    void setBypassedLoad(InstSeqNum store_seqnum) {
         assert(isBypassable());
         instFlags.set(BypassedLoad);
-        smbStoreSeqNum = seq_num;
+        
+        mascotInfo.smbPredicted = true;
+        mascotInfo.smbStoreSeqNum = store_seqnum;
     }
-    void setSmbViolation() {
+    void setSmbViolation(std::ptrdiff_t sq_dist) {
         assert(isBypassedLoad());
-        _smbViolation = true;
+        mascotInfo.smbViolation = true;
+        mascotInfo.violatingStoreSeqNum = mascotInfo.smbStoreSeqNum;
+        mascotInfo.actualSQDist = sq_dist;
     }
     bool smbViolation() const {
-        return _smbViolation;
+        return mascotInfo.smbViolation;
     }
 
     bool _skipExecution = false;
@@ -898,12 +874,6 @@ class DynInst : public ExecContext, public RefCounted
     /** Returns whether or not this instruction is in the LSQ. */
     bool isInLSQ() const { return status[LsqEntry]; }
 
-    /** Sets this instruction as squashed in the LSQ. */
-    void setSquashedInLSQ() { status.set(SquashedInLSQ); status.set(Squashed);}
-
-    /** Returns whether or not this instruction is squashed in the LSQ. */
-    bool isSquashedInLSQ() const { return status[SquashedInLSQ]; }
-
 
     //Reorder Buffer Functions
     //-----------------------
@@ -915,12 +885,6 @@ class DynInst : public ExecContext, public RefCounted
 
     /** Returns whether or not this instruction is in the ROB. */
     bool isInROB() const { return status[RobEntry]; }
-
-    /** Sets this instruction as squashed in the ROB. */
-    void setSquashedInROB() { status.set(SquashedInROB); }
-
-    /** Returns whether or not this instruction is squashed in the ROB. */
-    bool isSquashedInROB() const { return status[SquashedInROB]; }
 
     /** Returns whether pinned registers are renamed */
     bool isPinnedRegsRenamed() const { return status[PinnedRegsRenamed]; }

@@ -169,7 +169,6 @@ CPU::CPU(const BaseO3CPUParams &params)
     decode.setDecodeQueue(&decodeQueue);
     rename.setDecodeQueue(&decodeQueue);
     rename.setRenameQueue(&renameQueue);
-    rename.setSMBPredictor(&smb);
     iew.setRenameQueue(&renameQueue);
     iew.setIEWQueue(&iewQueue);
     commit.setIEWQueue(&iewQueue);
@@ -178,6 +177,8 @@ CPU::CPU(const BaseO3CPUParams &params)
     commit.setIEWStage(&iew);
     rename.setIEWStage(&iew);
     rename.setCommitStage(&commit);
+
+    rename.setSMBPredictor(&smb);
 
     ThreadID active_threads;
     if (FullSystem) {

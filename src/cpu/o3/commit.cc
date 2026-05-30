@@ -42,12 +42,9 @@
 #include "cpu/o3/commit.hh"
 
 #include <algorithm>
-#include <set>
 #include <string>
 #include <sys/types.h>
 
-#include "base/compiler.hh"
-#include "base/loader/symtab.hh"
 #include "base/logging.hh"
 #include "commit.hh"
 #include "cpu/base.hh"
@@ -131,7 +128,6 @@ Commit::Commit(CPU *_cpu, const BaseO3CPUParams &params)
         renameMap[tid] = nullptr;
         htmStarts[tid] = 0;
         htmStops[tid] = 0;
-        doneSeqNum[tid] = 0;
     }
     interrupt = NoFault;
 
@@ -523,7 +519,8 @@ Commit::squashAll(ThreadID tid)
     // Hopefully nothing breaks.)
     youngestSeqNum[tid] = lastCommitedSeqNum[tid];
 
-    rob->squash(squashed_inst, tid, false);
+    bool squashDueToMemOrder = commitStatus[tid] == ROBSquashingDueToMemOrder;
+    rob->squash(squashed_inst, tid, squashDueToMemOrder);
     changedROBNumEntries[tid] = true;
 
     // Send back the sequence number of the squashed instruction.
@@ -985,8 +982,6 @@ Commit::commitInsts()
             }
         }
 
-        // ThreadID commit_thread = getCommittingThread();
-
         if (commit_thread == -1 || !rob->isHeadReady(commit_thread))
             break;
 
@@ -1009,13 +1004,11 @@ Commit::commitInsts()
 
             rob->retireHead(commit_thread);
 
-            // PHAST training
+            // MemDepUnit training
             // only want to report a violation when we're not on a misspeculated path
             if (head_inst->squashedDueToMemOrder && !updatedMemDep
-                && head_inst->isLoad() && head_inst->memDepInfo.violatingStoreSeqNum) {
-                iewStage->instQueue.violation(head_inst->memDepInfo.violatingStoreSeqNum,
-                                              head_inst->memDepInfo.violatingStorePC,
-                                              head_inst, committedBranchHistory);
+                && head_inst->isLoad() && head_inst->mascotInfo.violation()) {
+                iewStage->instQueue.violation(head_inst, committedBranchHistory);
                 updatedMemDep = true;
                 ++stats.memOrderViolationEvents;
             }
@@ -1053,11 +1046,6 @@ Commit::commitInsts()
                         committedBranchHistory.pop_back();
                 }
 
-                //update memdep predictor if this load was made to wait on a store by the depPred
-                if (head_inst->isLoad() && head_inst->memDepInfo.predicted) {
-                    iewStage->instQueue.memDepUnit[tid].commit(head_inst);
-                }
-
                 // hardware transactional memory
 
                 // update nesting depth
@@ -1079,7 +1067,6 @@ Commit::commitInsts()
 
                 // Set the doneSeqNum to the youngest committed instruction.
                 toIEW->commitInfo[tid].doneSeqNum = head_inst->seqNum;
-                setDoneSeqNum(tid, head_inst->seqNum);
 
                 if (tid == 0)
                     canHandleInterrupts = !head_inst->isDelayedCommit();
@@ -1110,6 +1097,25 @@ Commit::commitInsts()
                 // others squash everything and restart fetch
                 if (head_inst->isSquashAfter())
                     squashAfter(tid, head_inst);
+
+                if (head_inst->isLoad()) {
+                    if (head_inst->mascotInfo.violation()) {
+                        // An SMB load-value-check violation: this load has now
+                        // committed with the correct value, but every younger
+                        // instruction consumed the bypassed (incorrect) value. Arm a
+                        // plain squash-after so that, starting next cycle, all younger
+                        // instructions are squashed and re-fetched. squashAfter() also
+                        // moves commit into SquashAfterPending, which stops us from
+                        // committing any younger instruction this cycle.
+                        assert(head_inst->mascotInfo.smbViolation);
+
+                        iewStage->instQueue.violation(head_inst, committedBranchHistory);
+                        ++stats.bypassedLoadValueCheckViolation;
+
+                        squashAfter(tid, head_inst);
+                    } else 
+                        iewStage->instQueue.memDepUnit[tid].commit(head_inst, committedBranchHistory);
+                }
 
                 if (drainPending) {
                     if (pc[tid]->microPC() == 0 && interrupt == NoFault &&
@@ -1334,13 +1340,6 @@ Commit::commitHead(const DynInstPtr &head_inst, unsigned inst_num)
 
         // Generate trap squash event.
         generateTrapEvent(tid, inst_fault);
-        return false;
-    }
-
-    if (head_inst->isBypassedLoad() && head_inst->smbViolation()) {
-        commitStatus[tid] = ROBSquashing;
-        ++stats.bypassedLoadValueCheckViolation;
-        squashAll(tid);
         return false;
     }
 

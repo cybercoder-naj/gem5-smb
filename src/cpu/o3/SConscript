@@ -48,6 +48,7 @@ if env['CONF']['BUILD_ISA']:
     Source('inst_queue.cc')
     Source('lsq.cc')
     Source('lsq_unit.cc')
+    Source('mascot.cc')
     Source('mem_dep_unit.cc')
     Source('regfile.cc')
     Source('rename.cc')
@@ -72,6 +73,7 @@ if env['CONF']['BUILD_ISA']:
     DebugFlag('Rename')
     DebugFlag('Scoreboard')
     DebugFlag('SMB')
+    DebugFlag('SMBCoverage')
     DebugFlag('StoreSet')
     DebugFlag('Writeback')
 

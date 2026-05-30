@@ -334,6 +334,11 @@ LSQ::getStoreHeadSeqNum(ThreadID tid)
     return thread.at(tid).getStoreHeadSeqNum();
 }
 
+bool 
+LSQ::isStoreInStoreQueue(ThreadID tid, InstSeqNum store_seqnum) {
+    return thread.at(tid).isStoreInStoreQueue(store_seqnum);
+}
+
 int LSQ::getCount(ThreadID tid) { return thread.at(tid).getCount(); }
 
 int LSQ::numLoads(ThreadID tid) { return thread.at(tid).numLoads(); }

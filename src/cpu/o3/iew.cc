@@ -1588,5 +1588,10 @@ IEW::checkMisprediction(const DynInstPtr& inst)
     }
 }
 
+MASCOT*
+IEW::getMascot(ThreadID tid) {
+    return instQueue.memDepUnit[tid].getMascot();
+}
+
 } // namespace o3
 } // namespace gem5

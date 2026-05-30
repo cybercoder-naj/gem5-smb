@@ -237,8 +237,6 @@ class LSQUnit
     /** Takes over from another CPU's thread. */
     void takeOverFrom();
 
-    /** Inserts an instruction. */
-    void insert(const DynInstPtr &inst);
     /** Inserts a load instruction. */
     void insertLoad(const DynInstPtr &load_inst);
     /** Inserts a store instruction. */
@@ -565,11 +563,16 @@ class LSQUnit
     /** Returns the sequence number of the head store instruction. */
     InstSeqNum getStoreHeadSeqNum();
 
+    /** Check if the store by seqeunce number exists in the store queue. */
+    bool isStoreInStoreQueue(InstSeqNum store_seqnum);
+
     /** Returns whether or not the LSQ unit is stalled. */
     bool isStalled()  { return stalled; }
-  public:
+
     typedef typename CircularQueue<LQEntry>::iterator LQIterator;
     typedef typename CircularQueue<SQEntry>::iterator SQIterator;
+
+    SQIterator getStoreInStoreQueue(InstSeqNum store_seqnum);
 };
 
 } // namespace o3

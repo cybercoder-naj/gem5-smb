@@ -741,6 +741,9 @@ class LSQ
     /** Returns the sequence number of the head of the store queue. */
     InstSeqNum getStoreHeadSeqNum(ThreadID tid);
 
+    /** Check if the store by seqeunce number exists in the store queue. */
+    bool isStoreInStoreQueue(ThreadID tid, InstSeqNum store_seqnum);
+
     /** Returns the number of instructions in all of the queues. */
     int getCount();
     /** Returns the number of instructions in the queues of one thread. */
