@@ -1253,10 +1253,11 @@ Rename::buildBypassMoveInst(ThreadID tid, const DynInstPtr &bypassed_load)
     auto *isa = instruction->tcBase()->getIsaPtr();
     instruction->flattenedDestIdx(0, load_dest.flatten(*isa));
 
-    bool partial_write = bypassed_load->destRegMask != UINT64_MAX;
     instruction->setBypassMove();
 
     DPRINTF(Rename, "[tid:%i] Bypass Move Instruction created [sn:%lli]. Dest reg mask %llx.\n", tid, seq, bypassed_load->destRegMask);
+
+    bool partial_write = bypassed_load->destRegMask != UINT64_MAX && bypassed_load->destRegMask != UINT32_MAX;
 
     instruction->renameSrcReg(0, store_phys_reg);
     DPRINTF(Rename, "[tid:%i] [sn:%lli] Store source phys reg %i.\n", tid, seq, store_phys_reg->index());
