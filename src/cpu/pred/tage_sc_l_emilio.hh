@@ -1,11 +1,8 @@
 #ifndef __CPU_PRED_TAGE_EMILIO_HH__
 #define __CPU_PRED_TAGE_EMILIO_HH__
 
-#include <vector>
-
 #include "base/types.hh"
 #include "cpu/pred/bpred_unit.hh"
-#include "cpu/pred/tage_base.hh"
 #include "params/TAGE_EMILIO.hh"
 #include "cpu/pred/tagescl/tagescl.hpp"
 
@@ -18,7 +15,7 @@ namespace branch_prediction
 class TAGE_EMILIO: public BPredUnit
 {
   private:
-    tagescl::Tage_SC_L<tagescl::CONFIG_128KB> tage;
+    tagescl::Tage_SC_L<tagescl::CONFIG_64KB> tage;
 
   protected:
     virtual bool predict(ThreadID tid, Addr branch_pc, bool cond_branch,

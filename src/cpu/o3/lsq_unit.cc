@@ -42,18 +42,18 @@
 #include "cpu/o3/lsq_unit.hh"
 
 #include "arch/generic/debugfaults.hh"
-#include "base/str.hh"
+#include "base/trace.hh"
 #include "cpu/checker/cpu.hh"
 #include "cpu/o3/dyn_inst.hh"
 #include "cpu/o3/limits.hh"
 #include "cpu/o3/lsq.hh"
-#include "debug/Activity.hh"
 #include "debug/HtmCpu.hh"
-#include "debug/IEW.hh"
 #include "debug/LSQUnit.hh"
 #include "debug/O3PipeView.hh"
+#include "debug/SMBCoverage.hh"
 #include "mem/packet.hh"
 #include "mem/request.hh"
+#include <cstddef>
 
 namespace gem5
 {
@@ -340,6 +340,12 @@ LSQUnit::insertLoad(const DynInstPtr &load_inst)
 
     if (load_inst->isBypassedLoad()) {
         assert(load_inst->smbStoreSeqNum != 0);
+
+        auto smb_store_it = getStoreInStoreQueue(load_inst->smbStoreSeqNum);
+        if (smb_store_it != storeQueue.end()) {
+            const auto dist = std::distance(smb_store_it, load_inst->sqIt);
+            DPRINTFR(SMBCoverage, "sqDist: %i; sqSize: %i\n", dist, storeQueue.size());
+        }
     }
 
     // hardware transactional memory
@@ -1496,8 +1502,7 @@ LSQUnit::read(LSQRequest *request, ssize_t load_idx)
             }
 
             if (coverage == AddrRangeCoverage::FullAddrRangeCoverage) {
-                if (load_inst->isBypassedLoad() && 
-                        (store_it->instruction()->seqNum != load_inst->smbStoreSeqNum || req_s != st_s)) {
+                if (load_inst->isBypassedLoad() && store_it->instruction()->seqNum != load_inst->smbStoreSeqNum) {
                     
                     // Full address is faulting for bypass loads iff
                     // The full coverage is found in an intervening store (checked with seqNum)
@@ -1648,18 +1653,6 @@ LSQUnit::read(LSQRequest *request, ssize_t load_idx)
         }
     }
 
-    if (load_inst->isBypassedLoad()) {
-        DPRINTF(LSQUnit, "Memory order violation detected for bypassed load [sn:%lli]. "
-            "Store [sn:%lli] was not found in the store queue.\n",
-            load_inst->seqNum, load_inst->smbStoreSeqNum);
-
-        memDepViolator = load_inst;
-        ++stats.bypassedLoadMemOrderViolation;
-        load_inst->setSmbViolation();
-        return std::make_shared<GenericISA::M5PanicFault>(
-            "Detected fault with load inst [sn:%lli]", load_inst->seqNum);
-    }
-
     // If there's no forwarding case, then go access memory
     DPRINTF(LSQUnit, "Doing memory access for inst [sn:%lli] PC %s\n",
             load_inst->seqNum, load_inst->pcState());
@@ -1737,6 +1730,22 @@ LSQUnit::getStoreHeadSeqNum()
         return storeQueue.front().instruction()->seqNum;
     else
         return 0;
+}
+
+LSQUnit::SQIterator 
+LSQUnit::getStoreInStoreQueue(InstSeqNum store_seqnum) {
+  auto it = storeQueue.begin();
+  while (it != storeQueue.end()) {
+    if (it->instruction()->seqNum == store_seqnum)
+      return it;
+    ++it;
+  }
+  return it;
+}
+
+bool
+LSQUnit::isStoreInStoreQueue(InstSeqNum store_seqnum) {
+  return getStoreInStoreQueue(store_seqnum) != storeQueue.end();
 }
 
 } // namespace o3

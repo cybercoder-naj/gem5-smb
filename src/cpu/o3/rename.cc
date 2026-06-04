@@ -41,6 +41,7 @@
 
 #include "cpu/o3/rename.hh"
 
+#include <algorithm>
 #include <list>
 
 #include "cpu/o3/bypass_move_inst.hh"
@@ -50,6 +51,7 @@
 #include "cpu/reg_class.hh"
 #include "debug/Activity.hh"
 #include "debug/Rename.hh"
+#include "debug/O3PipeView.hh"
 #include "params/BaseO3CPU.hh"
 
 namespace gem5
@@ -65,7 +67,8 @@ Rename::Rename(CPU *_cpu, const BaseO3CPUParams &params)
       commitToRenameDelay(params.commitToRenameDelay),
       renameWidth(params.renameWidth),
       numThreads(params.numThreads),
-      stats(_cpu)
+      stats(_cpu),
+      storeQueue(params.SQEntries)
 {
     if (renameWidth > MaxWidth)
         fatal("renameWidth (%d) is larger than compiled limit (%d),\n"
@@ -86,8 +89,6 @@ Rename::Rename(CPU *_cpu, const BaseO3CPUParams &params)
         serializeInst[tid] = nullptr;
         serializeOnNextInst[tid] = false;
     }
-
-    storeRegs.clear();
 }
 
 std::string
@@ -742,6 +743,16 @@ Rename::renameInsts(ThreadID tid)
 
             renameDestRegs(inst, inst->threadNumber);
 
+            if (inst->isStore() || inst->isAtomic()) {
+              StoreQueueEntry sqEntry {
+                .seqNum = inst->seqNum,
+                .archReg = inst->srcRegIdx(2),
+                .physReg = inst->renamedSrcIdx(2),
+                .isStore = true
+              };
+              storeQueue.push_back(sqEntry);
+            }
+
             if (inst->isBypassable()) {
                 const InstSeqNum smb_store_seqnum = smb->predictSourceStore(inst->seqNum);
                 if (smb_store_seqnum != 0) {
@@ -751,15 +762,18 @@ Rename::renameInsts(ThreadID tid)
                             "%llu as source of load.\n",
                             tid, inst->seqNum, smb_store_seqnum);
 
-                    const auto doneSeqNum = commit_ptr->getDoneSeqNum(tid);
-                    if (doneSeqNum >= smb_store_seqnum) {
+                    auto store_it = std::find_if(storeQueue.begin(), storeQueue.end(),
+                      [smb_store_seqnum](const StoreQueueEntry& entry) { 
+                        return entry.seqNum == smb_store_seqnum;
+                      });
+                    if (store_it == storeQueue.end()) {
                         //? is this required
                         ++stats.smbStoreOutsideInstWindow;
-                    } else {
+                    } else if (store_it->isStore) {
                         inst->setBypassedLoad(smb_store_seqnum);
                         ++stats.bypassedLoads;
 
-                        DynInstPtr bypassMove = buildBypassMoveInst(tid, inst);
+                        DynInstPtr bypassMove = buildBypassMoveInst(tid, inst, *store_it);
                         inst->bypassMoveInst = bypassMove;
                         
                         ++toDecode->renameInfo[tid].bypassMoves;
@@ -1032,8 +1046,11 @@ Rename::doSquash(const InstSeqNum &squashed_seq_num, ThreadID tid)
         ++stats.undoneMaps;
     }
 
-    smb->squash();
-    storeRegs.clear();
+    smb->squash(squashed_seq_num);
+
+    while (storeQueue.size() > 0 && storeQueue.back().seqNum > squashed_seq_num) {
+      storeQueue.pop_back();
+    }
 }
 
 void
@@ -1082,6 +1099,10 @@ Rename::removeFromHistory(InstSeqNum inst_seq_num, ThreadID tid)
         ++stats.committedMaps;
 
         historyBuffer[tid].erase(hb_it--);
+    }
+
+    while (storeQueue.size() > 0 && storeQueue.front().seqNum <= inst_seq_num) {
+      storeQueue.pop_front();
     }
 }
 
@@ -1154,10 +1175,6 @@ Rename::renameSrcRegs(const DynInstPtr &inst, ThreadID tid)
                     renamed_reg->className());
         }
 
-        if (inst->isStore() && src_idx == 2) {
-            storeRegs[inst->seqNum] = std::make_pair(src_reg, renamed_reg); 
-        }
-
         ++stats.lookups;
     }
 }
@@ -1217,7 +1234,7 @@ Rename::renameDestRegs(const DynInstPtr &inst, ThreadID tid)
 }
 
 DynInstPtr
-Rename::buildBypassMoveInst(ThreadID tid, const DynInstPtr &bypassed_load)
+Rename::buildBypassMoveInst(ThreadID tid, const DynInstPtr &bypassed_load, const StoreQueueEntry& entry)
 {
     assert(bypassed_load->isBypassedLoad());
 
@@ -1225,13 +1242,12 @@ Rename::buildBypassMoveInst(ThreadID tid, const DynInstPtr &bypassed_load)
     // ICBA to go through gem5 isa frontend.
     auto prev_phys_reg = bypassed_load->prevDestIdx(0);
     auto new_phys_reg = bypassed_load->renamedDestIdx(0);
-    const auto& [store_src, store_phys_reg] = storeRegs[bypassed_load->smbStoreSeqNum];
 
     // Get a sequence number.
     InstSeqNum seq = bypassed_load->seqNum - 5; // Give it a sequence number slightly before the load, so it maintains the ordering.
     RegId load_dest = bypassed_load->destRegIdx(0);
 
-    StaticInstPtr staticInst = buildBypassMoveStaticInst(store_src, load_dest, load_dest, bypassed_load->destRegMask);
+    StaticInstPtr staticInst = buildBypassMoveStaticInst(entry.archReg, load_dest, load_dest, bypassed_load->destRegMask);
 
     DynInst::Arrays arrays;
     arrays.numSrcs = staticInst->numSrcRegs();
@@ -1259,14 +1275,14 @@ Rename::buildBypassMoveInst(ThreadID tid, const DynInstPtr &bypassed_load)
 
     bool partial_write = bypassed_load->destRegMask != UINT64_MAX && bypassed_load->destRegMask != UINT32_MAX;
 
-    instruction->renameSrcReg(0, store_phys_reg);
-    DPRINTF(Rename, "[tid:%i] [sn:%lli] Store source phys reg %i.\n", tid, seq, store_phys_reg->index());
+    instruction->renameSrcReg(0, entry.physReg);
+    DPRINTF(Rename, "[tid:%i] [sn:%lli] Store source phys reg %i.\n", tid, seq, entry.physReg->index());
     if (partial_write) {
         DPRINTF(Rename, "[tid:%i] [sn:%lli] Older load phys reg %i.\n", tid, seq, prev_phys_reg->index());
         instruction->renameSrcReg(1, prev_phys_reg); // previous mapping
     }
 
-    if (scoreboard->getReg(store_phys_reg))
+    if (scoreboard->getReg(entry.physReg))
         instruction->markSrcRegReady(0);
     if (partial_write && scoreboard->getReg(prev_phys_reg))
         instruction->markSrcRegReady(1);

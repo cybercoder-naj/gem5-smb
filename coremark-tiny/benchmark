@@ -36,7 +36,7 @@ export MEM_TRACE_FILE="$pwd/$basename.memtrace"
   --cmd=$cmd \
   $config \
   -o="-i1 -v0" \
-  -I 500000
+  -I 1000000
 
 cp m5out/stats.txt $pwd/$basename-stats-no-smb.txt
 export SMB_PREDICTIONS_FILE="$pwd/$basename.predictions"
@@ -50,6 +50,6 @@ unset MEM_TRACE_FILE
   --cmd=$cmd \
   $config \
   -o="-i1 -v0" \
-  -I 500000
+  -I 1000000
 
 cp m5out/stats.txt $pwd/$basename-stats-smb.txt

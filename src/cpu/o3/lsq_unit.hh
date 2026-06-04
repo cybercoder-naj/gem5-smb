@@ -567,9 +567,12 @@ class LSQUnit
 
     /** Returns whether or not the LSQ unit is stalled. */
     bool isStalled()  { return stalled; }
-  public:
+
     typedef typename CircularQueue<LQEntry>::iterator LQIterator;
     typedef typename CircularQueue<SQEntry>::iterator SQIterator;
+
+    SQIterator getStoreInStoreQueue(InstSeqNum store_seqnum);
+    bool isStoreInStoreQueue(InstSeqNum store_seqnum);
 };
 
 } // namespace o3

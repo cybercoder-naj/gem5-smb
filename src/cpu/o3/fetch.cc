@@ -872,6 +872,7 @@ Fetch::tick()
     // Limit rate by fetchWidth.  Stall if decode is stalled.
     unsigned insts_to_decode = 0;
     unsigned available_insts = 0;
+    unsigned effWidth = decodeWidth - fromRename->renameInfo->bypassMoves;
 
     for (auto tid : *activeThreads) {
         if (!stalls[tid].decode) {
@@ -884,7 +885,7 @@ Fetch::tick()
     std::advance(tid_itr,
             random_mt.random<uint8_t>(0, activeThreads->size() - 1));
 
-    while (available_insts != 0 && insts_to_decode < decodeWidth) {
+    while (available_insts != 0 && insts_to_decode < effWidth) {
         ThreadID tid = *tid_itr;
         if (!stalls[tid].decode && !fetchQueue[tid].empty()) {
             const auto& inst = fetchQueue[tid].front();

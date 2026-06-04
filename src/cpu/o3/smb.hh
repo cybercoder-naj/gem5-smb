@@ -10,6 +10,7 @@
 #include <unordered_map>
 
 #include "base/types.hh"
+#include "cpu/inst_seq.hh"
 #include "cpu/o3/dyn_inst_ptr.hh"
 
 namespace gem5
@@ -47,7 +48,7 @@ class SMB
         }
     }
 
-    void squash(); 
+    void squash(InstSeqNum squashed_inst_seq); 
 
     void removeUpTo(InstSeqNum seq_num);
 

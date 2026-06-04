@@ -91,7 +91,7 @@ class SimpleBTB(BranchTargetBuffer):
     cxx_class = "gem5::branch_prediction::SimpleBTB"
     cxx_header = "cpu/pred/simple_btb.hh"
 
-    numEntries = Param.Unsigned(4096, "Number of BTB entries")
+    numEntries = Param.Unsigned(8192, "Number of BTB entries")
     tagBits = Param.Unsigned(16, "Size of the BTB tags, in bits")
     instShiftAmt = Param.Unsigned(
         Parent.instShiftAmt, "Number of bits to shift instructions by"

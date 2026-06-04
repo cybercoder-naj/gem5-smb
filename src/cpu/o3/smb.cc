@@ -4,6 +4,7 @@
 
 #include "cpu/o3/smb.hh"
 
+#include <algorithm>
 #include <fstream>
 #include <sstream>
 
@@ -59,32 +60,28 @@ SMB::predictSourceStore(InstSeqNum load_seq_num)
     return store_seq_num;
   }
   
-  // std::string line;
-  // while (std::getline(infile, line)) {
-  //   if (line.empty()) continue;
-
-  //   std::stringstream ss(line);
-  //   Addr l_pc, s_pc;
-  //   if (!(ss >> std::hex >> l_pc >> std::hex >> s_pc)) continue;
-
-  //   if (l_pc == load_pc) {
-  //     InstSeqNum store_seq_num = storeAddrToSeqNum[s_pc];
-  //     assert(store_seq_num != 0);
-  //     return store_seq_num;
-  //   }
-
-  //   predictions[l_pc] = s_pc;
-  // }
-
-
   return 0;
 }
 
 void
-SMB::squash()
+SMB::squash(InstSeqNum squashed_inst_seq)
 {
-  loadSeqNumToAddr.clear();
-  storeAddrToSeqNum.clear();
+  // Remove any predictions that are associated with loads that have sequence numbers less than or equal to the committed sequence number.
+  for (auto it = loadSeqNumToAddr.begin(); it != loadSeqNumToAddr.end(); ) {
+    if (it->first > squashed_inst_seq) {
+      it = loadSeqNumToAddr.erase(it);
+    } else {
+      ++it;
+    }
+  }
+
+  for (auto it = storeAddrToSeqNum.begin(); it != storeAddrToSeqNum.end(); ) {
+    if (it->second > squashed_inst_seq) {
+      it = storeAddrToSeqNum.erase(it);
+    } else {
+      ++it;
+    }
+  }
 }
 
 void 
