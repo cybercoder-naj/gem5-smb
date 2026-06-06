@@ -51,6 +51,7 @@
 #include "cpu/o3/limits.hh"
 #include "cpu/o3/lsq.hh"
 #include "cpu/o3/scoreboard.hh"
+#include "cpu/o3/smb.hh"
 #include "cpu/timebuf.hh"
 #include "debug/IEW.hh"
 #include "sim/probe/probe.hh"
@@ -200,6 +201,9 @@ class IEW
     /** Resets entries of the IQ and the LSQ. */
     void resetEntries();
 
+    /** Sets pointer to file based SMB predictor. */
+    void setSMBPredictor(SMB *smb_ptr);
+
     /** Tells the CPU to wakeup if it has descheduled itself due to no
      * activity. Used mainly by the LdWritebackEvent.
      */
@@ -341,6 +345,9 @@ class IEW
 
     /** Scoreboard pointer. */
     Scoreboard* scoreboard;
+
+    /** The file-based SMB predictor. */
+    SMB *smb;
 
   private:
     /** CPU pointer. */

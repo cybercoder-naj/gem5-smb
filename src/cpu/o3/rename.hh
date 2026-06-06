@@ -148,9 +148,6 @@ class Rename
     /** Sets pointer to IEW stage. Used only for initialization. */
     void setIEWStage(IEW *iew_stage) { iew_ptr = iew_stage; }
 
-    /** Sets pointer to file based SMB predictor. */
-    void setSMBPredictor(SMB *smb_ptr);
-
     /** Sets pointer to commit stage. Used only for initialization. */
     void
     setCommitStage(Commit *commit_stage)
@@ -352,9 +349,6 @@ class Rename
 
     /** Wire to get decode's output from decode queue. */
     TimeBuffer<DecodeStruct>::wire fromDecode;
-
-    /** The file-based SMB predictor. Unused */
-    SMB *smb;
 
     /** Queue of all instructions coming from decode this cycle. */
     InstQueue insts[MaxThreads];

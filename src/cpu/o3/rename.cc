@@ -56,7 +56,6 @@
 #include "debug/Activity.hh"
 #include "debug/O3PipeView.hh"
 #include "debug/Rename.hh"
-#include "debug/SMBCoverage.hh"
 #include "params/BaseO3CPU.hh"
 
 namespace gem5
@@ -217,12 +216,6 @@ Rename::setRenameQueue(TimeBuffer<RenameStruct> *rq_ptr)
 
     // Setup wire to write information to future stages.
     toIEW = renameQueue->getWire(0);
-}
-
-void
-Rename::setSMBPredictor(SMB *smb_ptr)
-{
-    smb = smb_ptr;
 }
 
 void
@@ -400,7 +393,6 @@ Rename::squash(const InstSeqNum &squash_seq_num, ThreadID tid)
     skidBuffer[tid].clear();
 
     doSquash(squash_seq_num, tid);
-    smb->squash(squash_seq_num);
 }
 
 void
@@ -451,7 +443,6 @@ Rename::tick()
 
             removeFromHistory(fromCommit->commitInfo[tid].doneSeqNum,
                                   tid);
-            smb->removeUpTo(fromCommit->commitInfo[tid].doneSeqNum);
         }
     }
 

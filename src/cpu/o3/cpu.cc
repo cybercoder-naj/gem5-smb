@@ -178,7 +178,7 @@ CPU::CPU(const BaseO3CPUParams &params)
     rename.setIEWStage(&iew);
     rename.setCommitStage(&commit);
 
-    rename.setSMBPredictor(&smb);
+    iew.setSMBPredictor(&smb);
 
     ThreadID active_threads;
     if (FullSystem) {

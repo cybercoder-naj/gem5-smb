@@ -50,6 +50,7 @@
 #include "cpu/checker/cpu.hh"
 #include "cpu/o3/bypass_move_inst.hh"
 #include "cpu/o3/dyn_inst.hh"
+#include "cpu/o3/dyn_inst_ptr.hh"
 #include "cpu/o3/fu_pool.hh"
 #include "cpu/o3/limits.hh"
 #include "cpu/timebuf.hh"
@@ -316,6 +317,12 @@ IEW::setScoreboard(Scoreboard *sb_ptr)
     scoreboard = sb_ptr;
 }
 
+void
+IEW::setSMBPredictor(SMB *smb_ptr)
+{
+    smb = smb_ptr;
+}
+
 bool
 IEW::isDrained() const
 {
@@ -390,6 +397,7 @@ IEW::squash(ThreadID tid)
 
     // Tell the LDSTQ to start squashing.
     ldstQueue.squash(fromCommit->commitInfo[tid].doneSeqNum, tid);
+    smb->squash(fromCommit->commitInfo[tid].doneSeqNum);
     updatedQueues = true;
 
     // Clear the skid buffer in case it has any data in it.
@@ -984,39 +992,38 @@ IEW::dispatchInsts(ThreadID tid)
         } else if (inst->isLoad()) {
             DPRINTF(IEW, "[tid:%i] Issue: Memory instruction encountered.\n", tid);
 
-            if (inst->isBypassable()) {
-                const auto& pred = inst->mascotInfo.prediction;
-                if (pred.type == MASCOT::PredictionType::SMB) {
-                    const auto sq_dist = pred.distances.first != 0 ? pred.distances.first : pred.distances.second;
+            const auto& pred = smb->predict(inst->pcState().instAddr(), inst->seqNum);
+            if (pred.type == MASCOT::PredictionType::SMB) {
+                const auto sq_dist = pred.distances.first != 0 ? pred.distances.first : pred.distances.second;
 
-                    assert(sq_dist > 0);
-                    DPRINTFR(SMBCoverage, "smbDist: %u; freeSQ: %i; sq_size: %i\n", 
-                             sq_dist, ldstQueue.numFreeStoreEntries(tid), ldstQueue.numStores(tid));
+                assert(sq_dist > 0);
+                DPRINTFR(SMBCoverage, "smbDist: %u; freeSQ: %i; sq_size: %i\n", 
+                          sq_dist, ldstQueue.numFreeStoreEntries(tid), ldstQueue.numStores(tid));
 
-                    if (sq_dist > ldstQueue.numStores(tid)) {
-                        // todo
+                if (sq_dist > ldstQueue.numStores(tid)) {
+                    ++iewStats.bypassingStoreOutsideWindow;
+                } else {
+                    DynInstPtr src_store = ldstQueue.getStoreByDistance(tid, sq_dist);
+                    if (!src_store->isStore() || src_store->isCompleted()) {
                         ++iewStats.bypassingStoreOutsideWindow;
                     } else {
-                        auto src_store = ldstQueue.getStoreByDistance(tid, sq_dist);
-                        if (src_store->isStore()) { // because SQ has atomics too
-                            DPRINTF(IEW,
-                                "[tid:%i] [sn:%llu] "
-                                "SMB predicted store with sequence number "
-                                "%llu as source of load.\n",
-                                tid, inst->seqNum, src_store->seqNum);
+                        DPRINTF(IEW,
+                            "[tid:%i] [sn:%llu] "
+                            "SMB predicted store with sequence number "
+                            "%llu as source of load.\n",
+                            tid, inst->seqNum, src_store->seqNum);
 
-                            inst->setBypassedLoad(src_store->seqNum);
-                            ++iewStats.bypassedLoads;
+                        inst->setBypassedLoad(src_store->seqNum);
+                        ++iewStats.bypassedLoads;
 
-                            // Specific to x86-64
-                            DynInstPtr bypassMove = buildBypassMoveInst(tid, inst, 
-                                                                        src_store->srcRegIdx(2), 
-                                                                        src_store->renamedSrcIdx(2));
-                            inst->bypassMoveInst = bypassMove;
+                        // Specific to x86-64
+                        DynInstPtr bypassMove = buildBypassMoveInst(tid, inst, 
+                                                                    src_store->srcRegIdx(2), 
+                                                                    src_store->renamedSrcIdx(2));
+                        inst->bypassMoveInst = bypassMove;
 
-                            instQueue.insert(bypassMove);
-                            ++dis_num_inst;
-                        }
+                        instQueue.insert(bypassMove);
+                        ++dis_num_inst;
                     }
                 }
             }
@@ -1514,6 +1521,8 @@ IEW::tick()
 
             updateLSQNextCycle = true;
             instQueue.commit(fromCommit->commitInfo[tid].doneSeqNum,tid);
+
+            smb->removeUpTo(fromCommit->commitInfo[tid].doneSeqNum);
         }
 
         if (fromCommit->commitInfo[tid].nonSpecSeqNum != 0) {

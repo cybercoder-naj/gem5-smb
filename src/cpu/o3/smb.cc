@@ -40,7 +40,7 @@ SMB::SMB(const std::string &_my_name) :
 }
 
 MASCOT::Prediction
-SMB::predict(Addr load_pc, InstSeqNum inst_seq_num, BranchHistory branch_history)
+SMB::predict(Addr load_pc, InstSeqNum inst_seq_num)
 {
   DPRINTF(SMB, "Predicting for Load PC %llx [sn:%llu].\n", load_pc, inst_seq_num);
   MASCOT::Prediction pred {

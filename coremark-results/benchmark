@@ -6,7 +6,7 @@ set -e
 pwd=$(dirname $0)
 prog=$1
 
-scons build/X86/gem5.opt --ignore-style -j$(nproc)
+scons build/X86/gem5.fast --ignore-style -j$(nproc)
 g++ -O3 -o memprofile memprofile.cc
 
 if ! which $prog; then
@@ -26,16 +26,11 @@ config="--cpu-type=DerivO3CPU \
     --l1i-hwp-type=StridePrefetcher \
     --l2-hwp-type=StridePrefetcher"
 
-# export MEM_TRACE_FILE="$HOME/memtraces-v2/$filename.memtrace"
-export SMB_PREDICTIONS_FILE="$HOME/memtraces-v2/$filename.predictions"
-systemd-run --user --slice=workloads.slice --scope ./build/X86/gem5.opt \
-  --outdir=m5out/$filename/smb \
-  --debug-flags=SMBCoverage \
-  --debug-file=smb-coverage.gz \
+export MEM_TRACE_FILE="$HOME/memtraces-v2/$filename.memtrace"
+# export SMB_PREDICTIONS_FILE="$HOME/memtraces-v2/$filename.predictions"
+systemd-run --user --slice=workloads.slice --scope ./build/X86/gem5.fast \
+  --outdir=m5out/$filename/no-smb \
   configs/deprecated/example/se.py \
   --cmd="$cmd" \
   $config \
   --options="-i1 -v0"
-
-cp m5out/$filename/smb/stats.txt $pwd/$filename-stats-smb.txt
-cp m5out/$filename/smb/smb-coverage.txt $pwd/$filename-smb-coverage.txt

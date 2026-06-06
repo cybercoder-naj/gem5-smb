@@ -46,7 +46,7 @@ class SMB
 
     std::string name() const { return _name; }
 
-    MASCOT::Prediction predict(Addr load_pc, InstSeqNum load_seq_num, BranchHistory branch_history);
+    MASCOT::Prediction predict(Addr load_pc, InstSeqNum load_seq_num);
 
     bool nextPrediction();
 
