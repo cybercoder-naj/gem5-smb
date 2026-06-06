@@ -28,6 +28,7 @@ basename=${prog%%.*}
 cmd=$(which $prog)
 config="--cpu-type=DerivO3CPU --caches --l2cache --l1d_size=64KiB --l1i_size=64KiB --l2_size=2MB --l1d-hwp-type=StridePrefetcher --l1i-hwp-type=StridePrefetcher --l2-hwp-type=StridePrefetcher"
 
+export SMB_PREDICTIONS_FILE="$HOME/memtraces-v2/sha-test.predictions"
 ./build/X86/gem5.opt \
   $debugflags \
   --debug-file=../$pwd/$basename-smb-trace.out \

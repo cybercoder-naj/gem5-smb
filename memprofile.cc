@@ -148,6 +148,11 @@ int main(int argc, char* argv[]) {
         // =====================================================================
 
         if (op == 'L') {
+            if (bypassable == 0) {
+                outfile << hex << pc << " 0\n";
+                continue;
+            }
+
             bool validDep = true;
             MemBody* storeInfo = nullptr;
 

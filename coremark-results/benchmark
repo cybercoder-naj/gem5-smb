@@ -18,7 +18,6 @@ cmd=$(which $prog)
 # basename is prog filename without path, with extension
 basename=$(basename $cmd)
 filename="${basename%.*}"
-# cptBase="/home/nj421/gem5-smb/coremark-results/checkpoints"
 
 config="--cpu-type=DerivO3CPU \
     --caches --l2cache \
@@ -31,8 +30,8 @@ config="--cpu-type=DerivO3CPU \
 export SMB_PREDICTIONS_FILE="$HOME/memtraces-v2/$filename.predictions"
 systemd-run --user --slice=workloads.slice --scope ./build/X86/gem5.opt \
   --outdir=m5out/$filename/smb \
-  --debug-flags=Rename,SMB \
-  --debug-file=trace.out \
+  --debug-flags=SMBCoverage \
+  --debug-file=smb-coverage.gz \
   configs/deprecated/example/se.py \
   --cmd="$cmd" \
   $config \

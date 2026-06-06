@@ -1107,23 +1107,20 @@ Commit::commitInsts()
                 if (head_inst->isSquashAfter())
                     squashAfter(tid, head_inst);
 
-                if (head_inst->isLoad()) {
-                    if (head_inst->mascotInfo.violation()) {
-                        // An SMB load-value-check violation: this load has now
-                        // committed with the correct value, but every younger
-                        // instruction consumed the bypassed (incorrect) value. Arm a
-                        // plain squash-after so that, starting next cycle, all younger
-                        // instructions are squashed and re-fetched. squashAfter() also
-                        // moves commit into SquashAfterPending, which stops us from
-                        // committing any younger instruction this cycle.
-                        assert(head_inst->mascotInfo.smbViolation);
+                if (head_inst->isLoad() && head_inst->smbViolation()) {
+                    // An SMB load-value-check violation: this load has now
+                    // committed with the correct value, but every younger
+                    // instruction consumed the bypassed (incorrect) value. Arm a
+                    // plain squash-after so that, starting next cycle, all younger
+                    // instructions are squashed and re-fetched. squashAfter() also
+                    // moves commit into SquashAfterPending, which stops us from
+                    // committing any younger instruction this cycle.
+                    assert(head_inst->mascotInfo.smbViolation);
 
-                        iewStage->instQueue.violation(head_inst, committedBranchHistory);
-                        ++stats.bypassedLoadValueCheckViolation;
+                    iewStage->instQueue.violation(head_inst, committedBranchHistory);
+                    ++stats.bypassedLoadValueCheckViolation;
 
-                        squashAfter(tid, head_inst);
-                    } else 
-                        iewStage->instQueue.memDepUnit[tid].commit(head_inst, committedBranchHistory);
+                    squashAfter(tid, head_inst);
                 }
 
                 if (drainPending) {
