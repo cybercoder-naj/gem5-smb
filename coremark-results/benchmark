@@ -26,8 +26,8 @@ config="--cpu-type=DerivO3CPU \
     --l1i-hwp-type=StridePrefetcher \
     --l2-hwp-type=StridePrefetcher"
 
-export MEM_TRACE_FILE="$HOME/memtraces-v2/$filename.memtrace"
-# export SMB_PREDICTIONS_FILE="$HOME/memtraces-v2/$filename.predictions"
+# export MEM_TRACE_FILE="$HOME/memtraces-v2/$filename.memtrace"
+export SMB_PREDICTIONS_FILE="$HOME/memtraces-v2/$filename.predictions"
 systemd-run --user --slice=workloads.slice --scope ./build/X86/gem5.fast \
   --outdir=m5out/$filename/no-smb \
   configs/deprecated/example/se.py \

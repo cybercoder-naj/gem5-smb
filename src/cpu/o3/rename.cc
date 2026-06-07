@@ -453,7 +453,7 @@ Rename::tick()
         storesInProgress[tid] -= fromIEW->iewInfo[tid].dispatchedToSQ;
         assert(loadsInProgress[tid] >= 0);
         assert(storesInProgress[tid] >= 0);
-        assert(instsInProgress[tid] >=0);
+        assert(instsInProgress[tid] >= 0);
     }
 
 }

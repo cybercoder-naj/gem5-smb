@@ -1004,7 +1004,7 @@ IEW::dispatchInsts(ThreadID tid)
                     ++iewStats.bypassingStoreOutsideWindow;
                 } else {
                     DynInstPtr src_store = ldstQueue.getStoreByDistance(tid, sq_dist);
-                    if (!src_store->isStore() || src_store->isCompleted()) {
+                    if ( !src_store->isStore() || src_store->isCompleted()) {
                         ++iewStats.bypassingStoreOutsideWindow;
                     } else {
                         DPRINTF(IEW,
@@ -1023,7 +1023,27 @@ IEW::dispatchInsts(ThreadID tid)
                         inst->bypassMoveInst = bypassMove;
 
                         instQueue.insert(bypassMove);
+
+                        toRename->iewInfo[tid].dispatched++;
+                        ++iewStats.dispatchedInsts;
+                        ppDispatch->notify(inst);
+
                         ++dis_num_inst;
+
+                        if (instQueue.isFull()) {
+                          DPRINTF(IEW, "[tid:%i] Issue: IQ has become full.\n", tid);
+
+                          // Call function to start blocking.
+                          block(tid);
+
+                          // Set unblock to false. Special case where we are using
+                          // skidbuffer (unblocking) instructions but then we still
+                          // get full in the IQ.
+                          toRename->iewUnblock[tid] = false;
+
+                          ++iewStats.iqFullEvents;
+                          break;
+                        }
                     }
                 }
             }
