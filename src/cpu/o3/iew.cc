@@ -553,9 +553,6 @@ IEW::cacheUnblocked()
 void
 IEW::instToCommit(const DynInstPtr& inst)
 {
-    if (inst->isBypassMove())
-      return; // bypass moves don't need to writeback or sent to commit
-
     // This function should not be called after writebackInsts in a
     // single cycle.  That will cause problems with an instruction
     // being added to the queue to commit without being processed by

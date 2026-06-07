@@ -31,10 +31,10 @@ public:
   enum PredictionType { NDEP, MDP, SMB };
 
   struct Prediction {
-    PredictionType type;
-    std::pair<std::ptrdiff_t, std::ptrdiff_t> distances;
-    size_t tableIdx;
-    uint64_t hash;
+    PredictionType type = NDEP;
+    std::pair<std::ptrdiff_t, std::ptrdiff_t> distances = {0, 0};
+    size_t tableIdx = -1ul; // BASE_PREDICTOR_IDX: "no table" sentinel
+    uint64_t hash = 0;
   };
 
   struct PredictorEntry {

@@ -46,7 +46,7 @@ SMB::predict(Addr load_pc, InstSeqNum inst_seq_num)
   MASCOT::Prediction pred {
     .type = MASCOT::PredictionType::NDEP,
     .distances = {0, 0},
-    .tableIdx = -1u,
+    .tableIdx = -1ul,
     .hash = 0,
   };
 

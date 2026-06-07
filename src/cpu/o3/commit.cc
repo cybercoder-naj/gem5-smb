@@ -1024,11 +1024,12 @@ Commit::commitInsts()
             // only want to report a violation when we're not on a misspeculated path
             if (head_inst->squashedDueToMemOrder && !updatedMemDep && 
                 head_inst->isLoad() && head_inst->mascotInfo.violation()) {
-                iewStage->instQueue.violation(head_inst, committedBranchHistory);
+                if (!head_inst->isBypassedLoad())
+                    iewStage->instQueue.violation(head_inst, committedBranchHistory);
                 updatedMemDep = true;
 
                 if (head_inst->isBypassedLoad())
-                  ++stats.bypassedMemOrderViolationEvents;
+                    ++stats.bypassedMemOrderViolationEvents;
                 else ++stats.memOrderViolationEvents;
             }
 

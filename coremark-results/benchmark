@@ -6,7 +6,7 @@ set -e
 pwd=$(dirname $0)
 prog=$1
 
-scons build/X86/gem5.fast --ignore-style -j$(nproc)
+scons build/X86/gem5.opt --ignore-style -j$(nproc)
 g++ -O3 -o memprofile memprofile.cc
 
 if ! which $prog; then
@@ -28,8 +28,10 @@ config="--cpu-type=DerivO3CPU \
 
 # export MEM_TRACE_FILE="$HOME/memtraces-v2/$filename.memtrace"
 export SMB_PREDICTIONS_FILE="$HOME/memtraces-v2/$filename.predictions"
-systemd-run --user --slice=workloads.slice --scope ./build/X86/gem5.fast \
-  --outdir=m5out/$filename/no-smb \
+systemd-run --user --slice=workloads.slice --scope ./build/X86/gem5.opt \
+  --debug-flags=SMBCoverage \
+  --debug-file=smb-coverage.gz \
+  --outdir=m5out/$filename/smb \
   configs/deprecated/example/se.py \
   --cmd="$cmd" \
   $config \
