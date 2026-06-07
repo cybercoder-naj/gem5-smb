@@ -41,7 +41,7 @@ config="--cpu-type=DerivO3CPU --caches --l2cache --l1d_size=64KiB --l1i_size=64K
 export SMB_PREDICTIONS_FILE="$HOME/memtraces-v2/$filename.predictions"
 systemd-run --user --slice=workloads.slice --scope ./build/X86/gem5.opt \
   --debug-flags=O3CPUAll \
-  --debug-file=../$pwd/$filename-smb-trace.out.gz \
+  --debug-file=../$pwd/$filename-smb-trace.out \
   $debug_start \
   configs/deprecated/example/se.py \
   --cmd="$cmd" \

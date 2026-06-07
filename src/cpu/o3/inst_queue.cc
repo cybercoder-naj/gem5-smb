@@ -1265,7 +1265,6 @@ InstructionQueue::doSquash(ThreadID tid)
                     // leaves more room for error.
 
                     if (!squashed_inst->readySrcIdx(src_reg_idx) &&
-                        !squashed_inst->isBypassMove() &&
                         !src_reg->isFixedMapping()) {
                         dependGraph.remove(src_reg->flatIndex(),
                                            squashed_inst);

@@ -1024,7 +1024,6 @@ IEW::dispatchInsts(ThreadID tid)
 
                         instQueue.insert(bypassMove);
 
-                        toRename->iewInfo[tid].dispatched++;
                         ++iewStats.dispatchedInsts;
                         ppDispatch->notify(inst);
 
