@@ -1415,8 +1415,8 @@ InstructionQueue::addToProducers(const DynInstPtr &new_inst)
 
         if (!new_inst->isBypassMove() && !dependGraph.empty(dest_reg->flatIndex())) {
             dependGraph.dump();
-            panic("Dependency graph %i (%s) (flat: %i) not empty!",
-                  dest_reg->index(), dest_reg->className(),
+            panic("[sn:%llu] tries to set reg %i (%s) (flat: %i) but dependGraph is not empty!",
+                  new_inst->seqNum, dest_reg->index(), dest_reg->className(),
                   dest_reg->flatIndex());
         }
 

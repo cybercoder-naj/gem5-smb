@@ -45,6 +45,7 @@
 
 #include "cpu/o3/iew.hh"
 
+#include <cstdint>
 #include <queue>
 
 #include "cpu/checker/cpu.hh"
@@ -1694,7 +1695,7 @@ IEW::buildBypassMoveInst(ThreadID tid, const DynInstPtr &bypassed_load, RegId st
 
     DPRINTF(IEW, "[tid:%i] Bypass Move Instruction created [sn:%lli]. Dest reg mask %llx.\n", tid, seq, bypassed_load->destRegMask);
 
-    bool partial_write = bypassed_load->destRegMask != UINT64_MAX;
+    bool partial_write = bypassed_load->destRegMask != UINT64_MAX && bypassed_load->destRegMask != UINT32_MAX;
 
     instruction->renameSrcReg(0, store_phys_reg);
     DPRINTF(IEW, "[tid:%i] [sn:%lli] Store source phys reg %i.\n", tid, seq, store_phys_reg->index());
