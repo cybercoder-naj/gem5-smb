@@ -44,6 +44,7 @@
 #include <limits>
 #include <vector>
 
+#include "base/cprintf.hh"
 #include "base/logging.hh"
 #include "cpu/o3/dyn_inst.hh"
 #include "cpu/o3/fu_pool.hh"
@@ -1353,6 +1354,9 @@ InstructionQueue::addToDependents(const DynInstPtr &new_inst)
     int8_t total_src_regs = new_inst->numSrcRegs();
     bool return_val = false;
 
+    if (new_inst->seqNum == 62848135)
+      cprintf("FARTS adding to dependents.\n");
+
     for (int src_reg_idx = 0;
          src_reg_idx < total_src_regs;
          src_reg_idx++)
@@ -1373,6 +1377,8 @@ InstructionQueue::addToDependents(const DynInstPtr &new_inst)
                         new_inst->pcState(), src_reg->index(),
                         src_reg->className());
 
+                if (new_inst->seqNum == 62848135)
+                    cprintf("dependGraph[%i].empty(): %i\n", src_reg->flatIndex(), dependGraph.empty(src_reg->flatIndex()));
                 dependGraph.insert(src_reg->flatIndex(), new_inst);
 
                 // Change the return value to indicate that something
@@ -1413,11 +1419,14 @@ InstructionQueue::addToProducers(const DynInstPtr &new_inst)
             continue;
         }
 
-        if (!new_inst->isBypassMove() && !dependGraph.empty(dest_reg->flatIndex())) {
+        if (!dependGraph.empty(dest_reg->flatIndex())) {
+            auto inst = dependGraph.pop(dest_reg->flatIndex());
+
             dependGraph.dump();
-            panic("[sn:%llu] tries to set reg %i (%s) (flat: %i) but dependGraph is not empty!",
-                  new_inst->seqNum, dest_reg->index(), dest_reg->className(),
-                  dest_reg->flatIndex());
+            panic("[sn:%llu] tries to set reg %i (%s) (flat: %i) but dependGraph is not empty!\n"
+                "Instruction [sn:%llu] is squashed:%i ; issued: %i; numSrcs: %i; dest reg: %i",
+                  new_inst->seqNum, dest_reg->index(), dest_reg->className(), dest_reg->flatIndex(), 
+                  inst->seqNum, inst->isSquashed(), inst->isIssued(), inst->numSrcRegs(), inst->renamedDestIdx(0)->flatIndex());
         }
 
         dependGraph.setInst(dest_reg->flatIndex(), new_inst);
@@ -1433,6 +1442,9 @@ InstructionQueue::addIfReady(const DynInstPtr &inst)
     // If the instruction now has all of its source registers
     // available, then add it to the list of ready instructions.
     if (inst->readyToIssue()) {
+
+        if (inst->seqNum == 62848135)
+          cprintf("FARTS ready to issue;\n");
 
         //Add the instruction to the proper ready list.
         if (inst->isMemRef()) {

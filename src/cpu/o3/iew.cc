@@ -48,6 +48,7 @@
 #include <cstdint>
 #include <queue>
 
+#include "base/cprintf.hh"
 #include "cpu/checker/cpu.hh"
 #include "cpu/o3/bypass_move_inst.hh"
 #include "cpu/o3/dyn_inst.hh"
@@ -1002,7 +1003,7 @@ IEW::dispatchInsts(ThreadID tid)
                     ++iewStats.bypassingStoreOutsideWindow;
                 } else {
                     DynInstPtr src_store = ldstQueue.getStoreByDistance(tid, sq_dist);
-                    if ( !src_store->isStore() || src_store->isCompleted()) {
+                    if (!src_store->isStore() || src_store->isCompleted() || src_store->isSquashed()) {
                         ++iewStats.bypassingStoreOutsideWindow;
                     } else {
                         DPRINTF(IEW,
@@ -1015,10 +1016,16 @@ IEW::dispatchInsts(ThreadID tid)
                         ++iewStats.bypassedLoads;
 
                         // Specific to x86-64
+                        auto store_phys_reg = src_store->renamedSrcIdx(2);
                         DynInstPtr bypassMove = buildBypassMoveInst(tid, inst, 
                                                                     src_store->srcRegIdx(2), 
-                                                                    src_store->renamedSrcIdx(2));
-                        inst->bypassMoveInst = bypassMove;
+                                                                    store_phys_reg);
+                        if (bypassMove->seqNum == 62848135) {
+                          cprintf("FARTS 62848135 has been created\n");
+                          for (auto i = 0; i < bypassMove->numSrcRegs(); ++i)
+                            cprintf("FARTS source reg %i: %i\n", i, bypassMove->renamedSrcIdx(i)->flatIndex());
+                          inst->bypassMoveInst = bypassMove;
+                        }
 
                         instQueue.insert(bypassMove);
 
