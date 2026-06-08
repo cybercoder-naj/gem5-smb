@@ -518,6 +518,9 @@ class Commit
 
         /* Number of squashes due to bypass load violations. */
         statistics::Scalar bypassedLoadValueCheckViolation;
+
+        /* Number of squashes due to bypass load mem order violations. */
+        statistics::Scalar bypassedMemOrderViolation;
     } stats;
 };
 
