@@ -45,12 +45,9 @@
 
 #include "cpu/o3/iew.hh"
 
-#include <cstdint>
 #include <queue>
 
-#include "base/cprintf.hh"
 #include "cpu/checker/cpu.hh"
-#include "cpu/o3/bypass_move_inst.hh"
 #include "cpu/o3/dyn_inst.hh"
 #include "cpu/o3/dyn_inst_ptr.hh"
 #include "cpu/o3/fu_pool.hh"
@@ -60,7 +57,6 @@
 #include "debug/Drain.hh"
 #include "debug/IEW.hh"
 #include "debug/O3PipeView.hh"
-#include "debug/SMBCoverage.hh"
 #include "params/BaseO3CPU.hh"
 
 namespace gem5
@@ -191,11 +187,7 @@ IEW::IEWStats::IEWStats(CPU *cpu)
              "Insts written-back per cycle"),
     ADD_STAT(wbFanout, statistics::units::Rate<
                 statistics::units::Count, statistics::units::Count>::get(),
-             "Average fanout of values written-back"),
-    ADD_STAT(bypassedLoads, statistics::units::Count::get(),
-              "count of bypassed loads renamed"),
-    ADD_STAT(bypassingStoreOutsideWindow, statistics::units::Count::get(),
-              "count of attempted bypassing stores that were commited")
+             "Average fanout of values written-back")
 {
     instsToCommit
         .init(cpu->numThreads)
@@ -319,12 +311,6 @@ IEW::setScoreboard(Scoreboard *sb_ptr)
     scoreboard = sb_ptr;
 }
 
-void
-IEW::setSMBPredictor(SMB *smb_ptr)
-{
-    smb = smb_ptr;
-}
-
 bool
 IEW::isDrained() const
 {
@@ -399,7 +385,6 @@ IEW::squash(ThreadID tid)
 
     // Tell the LDSTQ to start squashing.
     ldstQueue.squash(fromCommit->commitInfo[tid].doneSeqNum, tid);
-    smb->squash(fromCommit->commitInfo[tid].doneSeqNum);
     updatedQueues = true;
 
     // Clear the skid buffer in case it has any data in it.
@@ -870,13 +855,15 @@ IEW::dispatchInsts(ThreadID tid)
         dispatchStatus[tid] == Unblocking ?
         skidBuffer[tid] : insts[tid];
 
+    int insts_to_add = insts_to_dispatch.size();
+
     DynInstPtr inst;
     bool add_to_iq = false;
     int dis_num_inst = 0;
 
     // Loop through the instructions, putting them in the instruction
     // queue.
-    for ( ; !insts_to_dispatch.empty() &&
+    for ( ; dis_num_inst < insts_to_add &&
               dis_num_inst < dispatchWidth;
           ++dis_num_inst)
     {
@@ -990,67 +977,6 @@ IEW::dispatchInsts(ThreadID tid)
             toRename->iewInfo[tid].dispatchedToSQ++;
         } else if (inst->isLoad()) {
             DPRINTF(IEW, "[tid:%i] Issue: Memory instruction encountered.\n", tid);
-
-            const auto& pred = smb->predict(inst->pcState().instAddr(), inst->seqNum);
-            if (pred.type == MASCOT::PredictionType::SMB) {
-                const auto sq_dist = pred.distances.first != 0 ? pred.distances.first : pred.distances.second;
-
-                assert(sq_dist > 0);
-                DPRINTFR(SMBCoverage, "smbDist: %u; freeSQ: %i; sq_size: %i\n", 
-                          sq_dist, ldstQueue.numFreeStoreEntries(tid), ldstQueue.numStores(tid));
-
-                if (sq_dist > ldstQueue.numStores(tid)) {
-                    ++iewStats.bypassingStoreOutsideWindow;
-                } else {
-                    DynInstPtr src_store = ldstQueue.getStoreByDistance(tid, sq_dist);
-                    if (!src_store->isStore() || src_store->isCompleted() || src_store->isSquashed()) {
-                        ++iewStats.bypassingStoreOutsideWindow;
-                    } else {
-                        DPRINTF(IEW,
-                            "[tid:%i] [sn:%llu] "
-                            "SMB predicted store with sequence number "
-                            "%llu as source of load.\n",
-                            tid, inst->seqNum, src_store->seqNum);
-
-                        inst->setBypassedLoad(src_store->seqNum);
-                        ++iewStats.bypassedLoads;
-
-                        // Specific to x86-64
-                        auto store_phys_reg = src_store->renamedSrcIdx(2);
-                        DynInstPtr bypassMove = buildBypassMoveInst(tid, inst, 
-                                                                    src_store->srcRegIdx(2), 
-                                                                    store_phys_reg);
-                        if (bypassMove->seqNum == 62848135) {
-                          cprintf("FARTS 62848135 has been created\n");
-                          for (auto i = 0; i < bypassMove->numSrcRegs(); ++i)
-                            cprintf("FARTS source reg %i: %i\n", i, bypassMove->renamedSrcIdx(i)->flatIndex());
-                          inst->bypassMoveInst = bypassMove;
-                        }
-
-                        instQueue.insert(bypassMove);
-
-                        ++iewStats.dispatchedInsts;
-                        ppDispatch->notify(inst);
-
-                        ++dis_num_inst;
-
-                        if (instQueue.isFull()) {
-                          DPRINTF(IEW, "[tid:%i] Issue: IQ has become full.\n", tid);
-
-                          // Call function to start blocking.
-                          block(tid);
-
-                          // Set unblock to false. Special case where we are using
-                          // skidbuffer (unblocking) instructions but then we still
-                          // get full in the IQ.
-                          toRename->iewUnblock[tid] = false;
-
-                          ++iewStats.iqFullEvents;
-                          break;
-                        }
-                    }
-                }
-            }
 
             // Reserve a spot in the load store queue for this
             // memory access.
@@ -1545,8 +1471,6 @@ IEW::tick()
 
             updateLSQNextCycle = true;
             instQueue.commit(fromCommit->commitInfo[tid].doneSeqNum,tid);
-
-            smb->removeUpTo(fromCommit->commitInfo[tid].doneSeqNum);
         }
 
         if (fromCommit->commitInfo[tid].nonSpecSeqNum != 0) {
@@ -1660,64 +1584,6 @@ IEW::checkMisprediction(const DynInstPtr& inst)
             }
         }
     }
-}
-
-DynInstPtr
-IEW::buildBypassMoveInst(ThreadID tid, const DynInstPtr &bypassed_load, RegId store_src, PhysRegIdPtr store_phys_reg)
-{
-    // NOTE that all this is ULTRA specific to x86.
-    // ICBA to go through gem5 isa frontend.
-    auto prev_phys_reg = bypassed_load->prevDestIdx(0);
-    auto new_phys_reg = bypassed_load->renamedDestIdx(0);
-
-    // Get a sequence number.
-    InstSeqNum seq = bypassed_load->seqNum - 5; // Give it a sequence number slightly before the load, so it maintains the ordering.
-    RegId load_dest = bypassed_load->destRegIdx(0);
-
-    StaticInstPtr staticInst = buildBypassMoveStaticInst(store_src, load_dest, load_dest, bypassed_load->destRegMask);
-
-    DynInst::Arrays arrays;
-    arrays.numSrcs = staticInst->numSrcRegs();
-    arrays.numDests = staticInst->numDestRegs();
-
-    auto& pc = bypassed_load->pcState();
-
-    // Create a new DynInst from the instruction fetched.
-    DynInstPtr instruction = new (arrays) DynInst(
-            arrays, staticInst, nullptr, pc, pc, seq, cpu);
-    instruction->setTid(tid);
-    instruction->setThreadState(cpu->thread[tid]);
-
-    instruction->traceData = NULL;
-
-    // Add instruction to the CPU's list of instructions.
-    instruction->setInstListIt(cpu->insertBefore(bypassed_load, instruction));
-
-    auto *isa = instruction->tcBase()->getIsaPtr();
-    instruction->flattenedDestIdx(0, load_dest.flatten(*isa));
-    instruction->setBypassMove();
-
-    DPRINTF(IEW, "[tid:%i] Bypass Move Instruction created [sn:%lli]. Dest reg mask %llx.\n", tid, seq, bypassed_load->destRegMask);
-
-    bool partial_write = bypassed_load->destRegMask != UINT64_MAX && bypassed_load->destRegMask != UINT32_MAX;
-
-    instruction->renameSrcReg(0, store_phys_reg);
-    DPRINTF(IEW, "[tid:%i] [sn:%lli] Store source phys reg %i.\n", tid, seq, store_phys_reg->index());
-    if (partial_write) {
-        DPRINTF(IEW, "[tid:%i] [sn:%lli] Older load phys reg %i.\n", tid, seq, prev_phys_reg->index());
-        instruction->renameSrcReg(1, prev_phys_reg); // previous mapping
-    }
-
-    if (scoreboard->getReg(store_phys_reg))
-        instruction->markSrcRegReady(0);
-    if (partial_write && scoreboard->getReg(prev_phys_reg))
-        instruction->markSrcRegReady(1);
-
-    instruction->renameDestReg(0, new_phys_reg, prev_phys_reg); // new mapping
-    DPRINTF(IEW, "[tid:%i] [sn:%lli] Newer load phys reg %i.\n", tid, seq, new_phys_reg->index());
-    scoreboard->unsetReg(new_phys_reg);
-
-    return instruction;
 }
 
 MASCOT*

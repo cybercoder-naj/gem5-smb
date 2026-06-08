@@ -48,6 +48,7 @@
 
 #include "base/circular_queue.hh"
 #include "base/statistics.hh"
+#include "cpu/inst_seq.hh"
 #include "cpu/o3/comm.hh"
 #include "cpu/o3/commit.hh"
 #include "cpu/o3/dyn_inst_ptr.hh"
@@ -148,6 +149,9 @@ class Rename
     /** Sets pointer to IEW stage. Used only for initialization. */
     void setIEWStage(IEW *iew_stage) { iew_ptr = iew_stage; }
 
+    /** Sets pointer to file based SMB predictor. */
+    void setSMBPredictor(SMB *smb_ptr);
+
     /** Sets pointer to commit stage. Used only for initialization. */
     void
     setCommitStage(Commit *commit_stage)
@@ -177,6 +181,9 @@ class Rename
 
     /** Sets pointer to the free list. */
     void setFreeList(UnifiedFreeList *fl_ptr);
+
+    /** Renames the destination registers of an instruction. */
+    DynInstPtr buildBypassMoveInst(ThreadID tid, const DynInstPtr &bypassed_load, RegId store_src, PhysRegIdPtr store_phys_reg);
 
     /** Sets pointer to the scoreboard. */
     void setScoreboard(Scoreboard *_scoreboard);
@@ -284,6 +291,8 @@ class Rename
     /** Checks the signals and updates the status. */
     bool checkSignalsAndUpdate(ThreadID tid);
 
+    bool hasHistory(InstSeqNum seq_num);
+
     /** Either serializes on the next instruction available in the InstQueue,
      * or records that it must serialize on the next instruction to enter
      * rename.
@@ -349,6 +358,9 @@ class Rename
 
     /** Wire to get decode's output from decode queue. */
     TimeBuffer<DecodeStruct>::wire fromDecode;
+
+    /** The file-based SMB predictor. */
+    SMB *smb;
 
     /** Queue of all instructions coming from decode this cycle. */
     InstQueue insts[MaxThreads];
@@ -549,6 +561,10 @@ class Rename
         statistics::Scalar tempSerializing;
         /** Number of instructions inserted into skid buffers. */
         statistics::Scalar skidInsts;
+        /** Number of loads that are bypassed. */
+        statistics::Scalar bypassedLoads;
+        /** Number of predicted stores that committed. */
+        statistics::Scalar bypassingStoreOutsideWindow;
     } stats;
 };
 

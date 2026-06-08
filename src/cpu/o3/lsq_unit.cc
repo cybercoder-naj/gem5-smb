@@ -328,9 +328,6 @@ LSQUnit::insertLoad(const DynInstPtr &load_inst)
         auto smb_store_seqnum = load_inst->mascotInfo.smbStoreSeqNum;
         assert(smb_store_seqnum);
 
-        // @todo 
-        // iew.cc:dispatchInst makes the bypass load.
-        // attach the src store inst there so you don't have to find it again
         auto smb_store_it = getStoreInStoreQueue(smb_store_seqnum);
 
         if (smb_store_it != storeQueue.end()) {

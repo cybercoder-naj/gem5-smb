@@ -41,6 +41,7 @@
 
 #include "cpu/o3/rename.hh"
 
+#include <algorithm>
 #include <cassert>
 #include <cstdint>
 #include <cstdio>
@@ -48,6 +49,8 @@
 #include <list>
 
 #include "base/trace.hh"
+#include "cpu/inst_seq.hh"
+#include "cpu/o3/bypass_move_inst.hh"
 #include "cpu/o3/cpu.hh"
 #include "cpu/o3/dyn_inst.hh"
 #include "cpu/o3/limits.hh"
@@ -56,6 +59,7 @@
 #include "debug/Activity.hh"
 #include "debug/O3PipeView.hh"
 #include "debug/Rename.hh"
+#include "debug/SMBCoverage.hh" 
 #include "params/BaseO3CPU.hh"
 
 namespace gem5
@@ -71,7 +75,6 @@ Rename::Rename(CPU *_cpu, const BaseO3CPUParams &params)
       commitToRenameDelay(params.commitToRenameDelay),
       renameWidth(params.renameWidth),
       numThreads(params.numThreads),
-      storeQueue((1 << 7) - 1), // MAX DISTANCE IN MASCOT
       stats(_cpu)
 {
     if (renameWidth > MaxWidth)
@@ -152,7 +155,11 @@ Rename::RenameStats::RenameStats(statistics::Group *parent)
       ADD_STAT(tempSerializing, statistics::units::Count::get(),
                "count of temporary serializing insts renamed"),
       ADD_STAT(skidInsts, statistics::units::Count::get(),
-               "count of insts added to the skid buffer")
+               "count of insts added to the skid buffer"),
+      ADD_STAT(bypassedLoads, statistics::units::Count::get(),
+                "count of bypassed loads renamed"),
+      ADD_STAT(bypassingStoreOutsideWindow, statistics::units::Count::get(),
+                "count of attempted bypassing stores that were commited")
 {
     squashCycles.prereq(squashCycles);
     idleCycles.prereq(idleCycles);
@@ -393,6 +400,7 @@ Rename::squash(const InstSeqNum &squash_seq_num, ThreadID tid)
     skidBuffer[tid].clear();
 
     doSquash(squash_seq_num, tid);
+    smb->squash(fromCommit->commitInfo[tid].doneSeqNum);
 }
 
 void
@@ -443,6 +451,7 @@ Rename::tick()
 
             removeFromHistory(fromCommit->commitInfo[tid].doneSeqNum,
                                   tid);
+            smb->removeUpTo(fromCommit->commitInfo[tid].doneSeqNum);
         }
     }
 
@@ -734,16 +743,51 @@ Rename::renameInsts(ThreadID tid)
 
             renameDestRegs(inst, inst->threadNumber);
 
-            if (inst->isStore() || inst->isAtomic()) {
-                StoreQueueEntry sqEntry {
-                    .seqNum = inst->seqNum,
-                    .archReg = inst->srcRegIdx(2),
-                    .physReg = inst->renamedSrcIdx(2),
-                    .isStore = inst->isStore()
-                };
+            if (inst->isBypassable()) {
+              const auto& pred = smb->predict(inst->pcState().instAddr(), inst->seqNum);
+              if (pred.type == MASCOT::PredictionType::SMB) {
+                  const auto sq_dist = pred.distances.first != 0 ? pred.distances.first : pred.distances.second;
 
-                storeQueue.advance_tail();
-                storeQueue.back() = sqEntry;
+                  assert(sq_dist > 0);
+                  DPRINTFR(SMBCoverage, "smbDist: %u; freeSQ: %i; sq_size: %i\n", 
+                            sq_dist, iew_ptr->ldstQueue.numFreeStoreEntries(tid), iew_ptr->ldstQueue.numStores(tid));
+
+                  if (sq_dist > iew_ptr->ldstQueue.numStores(tid)) {
+                      ++stats.bypassingStoreOutsideWindow;
+                  } else {
+                      DynInstPtr src_store = iew_ptr->ldstQueue.getStoreByDistance(tid, sq_dist);
+                      if (!src_store->isStore() || src_store->isCompleted() || src_store->isSquashed() || !hasHistory(src_store)) {
+                          ++stats.bypassingStoreOutsideWindow;
+                      } else {
+                          DPRINTF(IEW,
+                              "[tid:%i] [sn:%llu] "
+                              "SMB predicted store with sequence number "
+                              "%llu as source of load.\n",
+                              tid, inst->seqNum, src_store->seqNum);
+
+                          inst->setBypassedLoad(src_store->seqNum);
+                          ++stats.bypassedLoads;
+
+                          // Specific to x86-64
+                          auto store_phys_reg = src_store->renamedSrcIdx(2);
+                          DynInstPtr bypassMove = buildBypassMoveInst(tid, inst, 
+                                                                      src_store->srcRegIdx(2), 
+                                                                      store_phys_reg);
+                          inst->bypassMoveInst = bypassMove;
+
+                          ++toDecode->renameInfo[tid].bypassMoves;
+
+                          // We don't add to historyBuffer for cleanup when
+                          // instruction commits or squashes.
+                          // Because we are reusing existing physical registers
+                          // and their life remains unchanged.
+
+                          // Put in reverse order so bypassMove is sent to IEW first. 
+                          insts_to_rename.push_front(inst);
+                          inst = bypassMove;
+                      }
+                  }
+              }
             }
         }
 
@@ -1001,11 +1045,6 @@ Rename::doSquash(const InstSeqNum &squashed_seq_num, ThreadID tid)
 
         ++stats.undoneMaps;
     }
-
-    // Clean up storeQueue entries for squashed instructions
-    while (storeQueue.size() > 0 && storeQueue.back().seqNum > squashed_seq_num) {
-        storeQueue.pop_back();
-    }
 }
 
 void
@@ -1054,11 +1093,6 @@ Rename::removeFromHistory(InstSeqNum inst_seq_num, ThreadID tid)
         ++stats.committedMaps;
 
         historyBuffer[tid].erase(hb_it--);
-    }
-
-    // Clean up storeQueue entries for done instructions
-    while (storeQueue.size() > 0 && storeQueue.front().seqNum <= inst_seq_num) {
-        storeQueue.pop_front();
     }
 }
 
@@ -1496,6 +1530,79 @@ Rename::dumpHistory()
             buf_it++;
         }
     }
+}
+
+
+void
+Rename::setSMBPredictor(SMB *smb_ptr)
+{
+    smb = smb_ptr;
+}
+
+DynInstPtr
+Rename::buildBypassMoveInst(ThreadID tid, const DynInstPtr &bypassed_load, RegId store_src, PhysRegIdPtr store_phys_reg)
+{
+    // NOTE that all this is ULTRA specific to x86.
+    // ICBA to go through gem5 isa frontend.
+    auto prev_phys_reg = bypassed_load->prevDestIdx(0);
+    auto new_phys_reg = bypassed_load->renamedDestIdx(0);
+
+    // Get a sequence number.
+    InstSeqNum seq = bypassed_load->seqNum - 5; // Give it a sequence number slightly before the load, so it maintains the ordering.
+    RegId load_dest = bypassed_load->destRegIdx(0);
+
+    StaticInstPtr staticInst = buildBypassMoveStaticInst(store_src, load_dest, load_dest, bypassed_load->destRegMask);
+
+    DynInst::Arrays arrays;
+    arrays.numSrcs = staticInst->numSrcRegs();
+    arrays.numDests = staticInst->numDestRegs();
+
+    auto& pc = bypassed_load->pcState();
+
+    // Create a new DynInst from the instruction fetched.
+    DynInstPtr instruction = new (arrays) DynInst(
+            arrays, staticInst, nullptr, pc, pc, seq, cpu);
+    instruction->setTid(tid);
+    instruction->setThreadState(cpu->thread[tid]);
+
+    instruction->traceData = NULL;
+
+    // Add instruction to the CPU's list of instructions.
+    instruction->setInstListIt(cpu->insertBefore(bypassed_load, instruction));
+
+    auto *isa = instruction->tcBase()->getIsaPtr();
+    instruction->flattenedDestIdx(0, load_dest.flatten(*isa));
+    instruction->setBypassMove();
+
+    DPRINTF(IEW, "[tid:%i] Bypass Move Instruction created [sn:%lli]. Dest reg mask %llx.\n", tid, seq, bypassed_load->destRegMask);
+
+    bool partial_write = bypassed_load->destRegMask != UINT64_MAX && bypassed_load->destRegMask != UINT32_MAX;
+
+    instruction->renameSrcReg(0, store_phys_reg);
+    DPRINTF(IEW, "[tid:%i] [sn:%lli] Store source phys reg %i.\n", tid, seq, store_phys_reg->index());
+    if (partial_write) {
+        DPRINTF(IEW, "[tid:%i] [sn:%lli] Older load phys reg %i.\n", tid, seq, prev_phys_reg->index());
+        instruction->renameSrcReg(1, prev_phys_reg); // previous mapping
+    }
+
+    if (scoreboard->getReg(store_phys_reg))
+        instruction->markSrcRegReady(0);
+    if (partial_write && scoreboard->getReg(prev_phys_reg))
+        instruction->markSrcRegReady(1);
+
+    instruction->renameDestReg(0, new_phys_reg, prev_phys_reg); // new mapping
+    DPRINTF(IEW, "[tid:%i] [sn:%lli] Newer load phys reg %i.\n", tid, seq, new_phys_reg->index());
+    scoreboard->unsetReg(new_phys_reg);
+
+    return instruction;
+}
+
+bool 
+Rename::hasHistory(InstSeqNum seq_num) {
+  auto hb_it = std::find_if(historyBuffer->begin(),
+                            historyBuffer->end(),
+                            [seq_num](const RenameHistory& hb) { return hb.instSeqNum == seq_num; });
+  return hb_it != historyBuffer->end();
 }
 
 } // namespace o3

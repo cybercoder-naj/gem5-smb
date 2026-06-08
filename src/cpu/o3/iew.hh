@@ -51,9 +51,7 @@
 #include "cpu/o3/limits.hh"
 #include "cpu/o3/lsq.hh"
 #include "cpu/o3/scoreboard.hh"
-#include "cpu/o3/smb.hh"
 #include "cpu/timebuf.hh"
-#include "debug/IEW.hh"
 #include "sim/probe/probe.hh"
 
 namespace gem5
@@ -201,9 +199,6 @@ class IEW
     /** Resets entries of the IQ and the LSQ. */
     void resetEntries();
 
-    /** Sets pointer to file based SMB predictor. */
-    void setSMBPredictor(SMB *smb_ptr);
-
     /** Tells the CPU to wakeup if it has descheduled itself due to no
      * activity. Used mainly by the LdWritebackEvent.
      */
@@ -289,9 +284,6 @@ class IEW
     /** Sorts instructions coming from rename into lists separated by thread. */
     void sortInsts();
 
-    /** Renames the destination registers of an instruction. */
-    DynInstPtr buildBypassMoveInst(ThreadID tid, const DynInstPtr &bypassed_load, RegId store_src, PhysRegIdPtr store_phys_reg);
-
   public:
     /** Ticks IEW stage, causing Dispatch, the IQ, the LSQ, Execute, and
      * Writeback to run for one cycle.
@@ -345,9 +337,6 @@ class IEW
 
     /** Scoreboard pointer. */
     Scoreboard* scoreboard;
-
-    /** The file-based SMB predictor. */
-    SMB *smb;
 
   private:
     /** CPU pointer. */
@@ -458,10 +447,6 @@ class IEW
         statistics::Scalar predictedTakenIncorrect;
         /** Stat for total number of incorrect predicted not taken branches. */
         statistics::Scalar predictedNotTakenIncorrect;
-        /** Number of loads that are bypassed. */
-        statistics::Scalar bypassedLoads;
-        /** Number of predicted stores that committed. */
-        statistics::Scalar bypassingStoreOutsideWindow;
         /** Stat for total number of mispredicted branches detected at
          *  execute. */
         statistics::Formula branchMispredicts;
