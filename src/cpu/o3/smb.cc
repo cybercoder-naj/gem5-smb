@@ -51,13 +51,16 @@ SMB::predict(Addr load_pc, InstSeqNum inst_seq_num)
   };
 
   if (dispatchIt == predictions.end()) {
-    if (!nextPrediction())
+    if (!nextPrediction()) {
+      DPRINTF(SMB, "SMB file has reached EOF\n");
       return pred;
+    }
     dispatchIt = std::prev(predictions.end());
   }
 
   if (dispatchIt->loadPC != load_pc) {
     // must have gone through a bad path.. wait for it to go through a good path (hopefully)
+    DPRINTF(SMB, "PC %llx [sn:%llu] is not the next load. Waiting for PC %llx\n", load_pc, inst_seq_num, dispatchIt->loadPC);
     return pred;
   }
   assert(!dispatchIt->instSeqNum.has_value());
@@ -70,6 +73,7 @@ SMB::predict(Addr load_pc, InstSeqNum inst_seq_num)
 
   ++dispatchIt;
 
+  DPRINTF(SMB, "Successful prediction for [sn:%llu] with distance %i", inst_seq_num, pred.distances.first);
   return pred;
 }
 

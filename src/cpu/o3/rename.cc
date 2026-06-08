@@ -75,6 +75,7 @@ Rename::Rename(CPU *_cpu, const BaseO3CPUParams &params)
       commitToRenameDelay(params.commitToRenameDelay),
       renameWidth(params.renameWidth),
       numThreads(params.numThreads),
+      storeQueue((1 << 7) - 1), // MAX DISTANCE IN MASCOT
       stats(_cpu)
 {
     if (renameWidth > MaxWidth)
@@ -743,7 +744,19 @@ Rename::renameInsts(ThreadID tid)
 
             renameDestRegs(inst, inst->threadNumber);
 
-            if (inst->isBypassable()) {
+            if (inst->isStore() || inst->isAtomic()) {
+                StoreQueueEntry sqEntry {
+                    .seqNum = inst->seqNum,
+                    .archReg = inst->srcRegIdx(2),
+                    .physReg = inst->renamedSrcIdx(2),
+                    .isStore = inst->isStore()
+                };
+
+                storeQueue.advance_tail();
+                storeQueue.back() = sqEntry;
+            }
+
+            if (inst->isLoad()) {
               const auto& pred = smb->predict(inst->pcState().instAddr(), inst->seqNum);
               if (pred.type == MASCOT::PredictionType::SMB) {
                   const auto sq_dist = pred.distances.first != 0 ? pred.distances.first : pred.distances.second;
@@ -752,27 +765,28 @@ Rename::renameInsts(ThreadID tid)
                   DPRINTFR(SMBCoverage, "smbDist: %u; freeSQ: %i; sq_size: %i\n", 
                             sq_dist, iew_ptr->ldstQueue.numFreeStoreEntries(tid), iew_ptr->ldstQueue.numStores(tid));
 
-                  if (sq_dist > iew_ptr->ldstQueue.numStores(tid)) {
+                  if (sq_dist > storeQueue.size()) {
                       ++stats.bypassingStoreOutsideWindow;
                   } else {
-                      DynInstPtr src_store = iew_ptr->ldstQueue.getStoreByDistance(tid, sq_dist);
-                      if (!src_store->isStore() || src_store->isCompleted() || src_store->isSquashed() || !hasHistory(src_store)) {
+                      auto sq_it = storeQueue.end();
+                      sq_it -= sq_dist;
+
+                      if (!sq_it->isStore) {
                           ++stats.bypassingStoreOutsideWindow;
                       } else {
                           DPRINTF(IEW,
                               "[tid:%i] [sn:%llu] "
                               "SMB predicted store with sequence number "
                               "%llu as source of load.\n",
-                              tid, inst->seqNum, src_store->seqNum);
+                              tid, inst->seqNum, sq_it->seqNum);
 
-                          inst->setBypassedLoad(src_store->seqNum);
+                          inst->setBypassedLoad(sq_it->seqNum);
                           ++stats.bypassedLoads;
 
                           // Specific to x86-64
-                          auto store_phys_reg = src_store->renamedSrcIdx(2);
                           DynInstPtr bypassMove = buildBypassMoveInst(tid, inst, 
-                                                                      src_store->srcRegIdx(2), 
-                                                                      store_phys_reg);
+                                                                      sq_it->archReg, 
+                                                                      sq_it->physReg);
                           inst->bypassMoveInst = bypassMove;
 
                           ++toDecode->renameInfo[tid].bypassMoves;
@@ -1045,6 +1059,11 @@ Rename::doSquash(const InstSeqNum &squashed_seq_num, ThreadID tid)
 
         ++stats.undoneMaps;
     }
+
+    // Clean up storeQueue entries for squashed instructions
+    while (storeQueue.size() > 0 && storeQueue.back().seqNum > squashed_seq_num) {
+        storeQueue.pop_back();
+    }
 }
 
 void
@@ -1093,6 +1112,11 @@ Rename::removeFromHistory(InstSeqNum inst_seq_num, ThreadID tid)
         ++stats.committedMaps;
 
         historyBuffer[tid].erase(hb_it--);
+    }
+
+    // Clean up storeQueue entries for done instructions
+    while (storeQueue.size() > 0 && storeQueue.front().seqNum <= inst_seq_num) {
+        storeQueue.pop_front();
     }
 }
 
