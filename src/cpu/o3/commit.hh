@@ -509,6 +509,9 @@ class Commit
         /** Number of memory order violations. */
         statistics::Scalar memOrderViolationEvents;
 
+        /** Tota number of memory ordering violations for bypassed loads. */
+        statistics::Scalar bypassedMemOrderViolation;
+
         /* Number of squashes due to bypass load violations. */
         statistics::Scalar bypassedLoadValueCheckViolation;
     } stats;

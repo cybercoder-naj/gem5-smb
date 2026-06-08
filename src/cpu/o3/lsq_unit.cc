@@ -266,8 +266,6 @@ LSQUnit::LSQUnitStats::LSQUnitStats(statistics::Group *parent)
                "squashed"),
       ADD_STAT(memOrderViolation, statistics::units::Count::get(),
                "Number of memory ordering violations"),
-      ADD_STAT(bypassedLoadMemOrderViolation, statistics::units::Count::get(),
-               "Number of memory ordering violations for bypassed loads"),
       ADD_STAT(squashedStores, statistics::units::Count::get(),
                "Number of stores squashed"),
       ADD_STAT(rescheduledLoads, statistics::units::Count::get(),
@@ -1530,7 +1528,6 @@ LSQUnit::read(LSQRequest *request, ssize_t load_idx)
                         load_inst->seqNum, store_it->instruction()->seqNum, request->mainReq()->getVaddr());
 
                     memDepViolator = load_inst;
-                    ++stats.bypassedLoadMemOrderViolation;
                     load_inst->setSmbViolation(std::distance(store_it, load_inst->sqIt));
 
                     auto req_s_dep = store_it->request()->getVaddr();
@@ -1633,7 +1630,6 @@ LSQUnit::read(LSQRequest *request, ssize_t load_idx)
                         load_inst->seqNum, store_it->instruction()->seqNum, request->mainReq()->getVaddr());
 
                     memDepViolator = load_inst;
-                    ++stats.bypassedLoadMemOrderViolation;
                     load_inst->setSmbViolation(std::distance(store_it, load_inst->sqIt));
 
                     auto req_s_dep = store_it->request()->getVaddr();
@@ -1671,20 +1667,20 @@ LSQUnit::read(LSQRequest *request, ssize_t load_idx)
                 request->discard();
                 load_entry.setRequest(nullptr);
                 return NoFault;
+            } else {
+                // No coverage
+                if (load_inst->isBypassedLoad() && load_inst->mascotInfo.smbStoreSeqNum == store_it->instruction()->seqNum) {
+                    DPRINTF(LSQUnit, "Memory order violation detected for bypassed load [sn:%lli]. "
+                        "Store [sn:%lli] has no address overlap with load.\n",
+                        load_inst->seqNum, load_inst->mascotInfo.smbStoreSeqNum);
+
+                    memDepViolator = load_inst;
+                    load_inst->setSmbViolation(0); // Non dependency distance
+                    return std::make_shared<GenericISA::M5PanicFault>(
+                        "Detected fault with load inst [sn:%lli]", load_inst->seqNum);
+                }
             }
         }
-    }
-
-    if (load_inst->isBypassedLoad()) {
-        DPRINTF(LSQUnit, "Memory order violation detected for bypassed load [sn:%lli]. "
-            "Store [sn:%lli] was not found in the store queue.\n",
-            load_inst->seqNum, load_inst->mascotInfo.smbStoreSeqNum);
-
-        memDepViolator = load_inst;
-        ++stats.bypassedLoadMemOrderViolation;
-        load_inst->setSmbViolation(0); // Non dependency distance
-        return std::make_shared<GenericISA::M5PanicFault>(
-            "Detected fault with load inst [sn:%lli]", load_inst->seqNum);
     }
 
     // If there's no forwarding case, then go access memory

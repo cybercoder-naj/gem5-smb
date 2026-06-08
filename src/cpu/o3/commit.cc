@@ -185,6 +185,8 @@ Commit::CommitStats::CommitStats(CPU *cpu, Commit *commit)
                "Class of committed instruction"),
       ADD_STAT(memOrderViolationEvents, statistics::units::Count::get(),
                "Number of memory order violations"),
+      ADD_STAT(bypassedMemOrderViolation, statistics::units::Count::get(),
+               "Number of memory order violations"),
       ADD_STAT(bypassedLoadValueCheckViolation, statistics::units::Count::get(),
                "Number of bypassed load violations"),
       ADD_STAT(commitEligibleSamples, statistics::units::Cycle::get(),
@@ -1010,7 +1012,10 @@ Commit::commitInsts()
                 && head_inst->isLoad() && head_inst->mascotInfo.violation()) {
                 iewStage->instQueue.violation(head_inst, committedBranchHistory);
                 updatedMemDep = true;
-                ++stats.memOrderViolationEvents;
+
+                if (head_inst->isBypassedLoad())
+                    ++stats.bypassedMemOrderViolation;
+                else ++stats.memOrderViolationEvents;
             }
 
             ++stats.commitSquashedInsts;
