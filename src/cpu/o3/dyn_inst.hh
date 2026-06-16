@@ -367,16 +367,14 @@ class DynInst : public ExecContext, public RefCounted
         return staticInst->isLoad() && 
                 !staticInst->isRMW() && 
                 !staticInst->isRMWA() &&
-                !staticInst->isDelayedCommit() &&
-                destRegIdx(0).classValue() == RegClassType::IntRegClass;
+                !staticInst->isDelayedCommit();
     }
     bool shouldDumpIntoMemtrace() const {
         // This is specific to x86
         return isBypassable() ||
                 (staticInst->isStore() &&
                 !staticInst->isRMW() && 
-                !staticInst->isRMWA() &&
-                staticInst->srcRegIdx(2).classValue() == RegClassType::IntRegClass);
+                !staticInst->isRMWA());
     }
     bool isBypassedLoad() const {
         return staticInst->isLoad() && instFlags.test(BypassedLoad);

@@ -1406,7 +1406,11 @@ Commit::getInsts()
         const DynInstPtr &inst = fromRename->insts[inst_num];
         ThreadID tid = inst->threadNumber;
 
-        if (!inst->isSquashed() &&
+        if (inst->isBypassMove()) {
+            DPRINTF(Commit, "[tid:%i] [sn:%llu] "
+                    "Instruction PC %s is a bypass move, skipping.\n",
+                    tid, inst->seqNum, inst->pcState());
+        } else if (!inst->isSquashed() &&
             commitStatus[tid] != ROBSquashing &&
             commitStatus[tid] != TrapPending) {
             changedROBNumEntries[tid] = true;

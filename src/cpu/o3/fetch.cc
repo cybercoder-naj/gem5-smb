@@ -42,6 +42,7 @@
 #include "cpu/o3/fetch.hh"
 
 #include <algorithm>
+#include <cstdint>
 #include <cstring>
 #include <list>
 #include <map>
@@ -49,6 +50,7 @@
 #include <queue>
 
 #include "arch/generic/tlb.hh"
+#include "base/logging.hh"
 #include "base/random.hh"
 #include "base/types.hh"
 #include "cpu/base.hh"
@@ -1095,10 +1097,15 @@ retrieveDestRegMask(const std::string& disassembly) {
         {"r15", 8},
     };    
 
-    std::regex re(R"(ld\s+([a-zA-Z0-9]+),)");
+    std::regex intLd(R"(ld\s+([a-zA-Z0-9]+),)");
+    std::regex fpLd(R"(ldfp\s+(%xmm\d+_(high|low)),)");
     std::smatch match;
-    panic_if(!std::regex_search(disassembly, match, re),
-        "Disassembly failed regex: %s ", disassembly); 
+    if(!std::regex_search(disassembly, match, intLd)) {
+      if (std::regex_search(disassembly, match, fpLd)) {
+        return UINT64_MAX;
+      }
+      panic("Disassembly failed regex: %s ", disassembly);
+    }
     
     auto reg = match[1].str();
     auto regWidth = regWidths[reg];
